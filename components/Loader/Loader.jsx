@@ -1,166 +1,123 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 
 /**
- * PremiumLoader - A high-end, futuristic loading component
- * Featuring glassmorphism, nested motion animations, and tactical aesthetics.
- *
- * @param {boolean} fullScreen - Whether the loader should cover the entire screen. Defaults to true.
+ * AtomicPulseLoader - A sophisticated, orbit-based futuristic loader.
+ * Features 3-axis orbital rings and a core "singularity" glow.
  */
 export default function PremiumLoader({ fullScreen = true }) {
-  const [progress, setProgress] = useState(0);
-
-  // Simulate progress for a more "active" feel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) return 0;
-        return prev + Math.floor(Math.random() * 8) + 1;
-      });
-    }, 150);
-    return () => clearInterval(interval);
-  }, []);
-
   const containerClasses = fullScreen
-    ? "fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-[var(--background)]/80 backdrop-blur-xl"
-    : "relative w-full py-12 flex flex-col items-center justify-center overflow-hidden rounded-2xl bg-[var(--card)]/30 border border-[var(--border)] backdrop-blur-sm";
+    ? "fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050508] overflow-hidden"
+    : "relative w-full py-24 flex flex-col items-center justify-center bg-transparent overflow-hidden";
 
   return (
     <div className={containerClasses}>
-      {/* Animated Background Highlights (Only for Full Screen) */}
-      {fullScreen && (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.1, 0.2, 0.1],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--accent)] blur-[120px]"
-          />
-          <motion.div
-            animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.05, 0.15, 0.05],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--accent)] blur-[150px]"
-          />
-        </div>
-      )}
+      {/* Background Ambient Depth */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[var(--accent)]/5 blur-[120px] rounded-full" />
+      </div>
 
-      {/* Main Loader Container */}
-      <div className="relative z-10 flex flex-col items-center">
+      <div className="relative flex flex-col items-center">
 
-        {/* The "Core" Spinner */}
-        <div className={`relative ${fullScreen ? 'w-32 h-32' : 'w-24 h-24'} flex items-center justify-center`}>
+        {/* Orbital Assembly */}
+        <div className="relative w-32 h-32 flex items-center justify-center">
 
-          {/* Outer Ring - Dashed Tactical */}
+          {/* Ring 1 - Vertical Orbit */}
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-0 rounded-full border-2 border-dashed border-[var(--accent)]/30"
-          />
+            animate={{ rotateX: 360, rotateY: 360 }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0 rounded-full border border-[var(--accent)]/20"
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_15px_var(--accent)]" />
+          </motion.div>
 
-          {/* Middle Ring - Glowing Sweep */}
+          {/* Ring 2 - Slanted Orbit */}
           <motion.div
-            animate={{ rotate: -360 }}
+            animate={{ rotateX: -360, rotateZ: 360 }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-3 rounded-full border-2 border-transparent border-t-[var(--accent)] border-r-[var(--accent)]/20 shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]"
-            style={{
-              boxShadow: '0 0 15px var(--accent)',
-              filter: 'drop-shadow(0 0 5px var(--accent))'
-            }}
-          />
+            className="absolute inset-4 rounded-full border border-[var(--accent)]/15"
+            style={{ transformStyle: "preserve-3d", rotate: "45deg" }}
+          >
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[var(--accent-hover)] shadow-[0_0_10px_var(--accent-hover)]" />
+          </motion.div>
 
-          {/* Inner Ring - Rapid Reverse */}
+          {/* Ring 3 - Horizontal Orbit */}
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-6 rounded-full border border-[var(--accent)]/40 border-b-[var(--accent)] shadow-[inset_0_0_10px_rgba(var(--accent-rgb),0.2)]"
-          />
+            animate={{ rotateY: 360, rotateZ: -360 }}
+            transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-8 rounded-full border border-[var(--accent)]/10"
+            style={{ transformStyle: "preserve-3d", rotate: "-45deg" }}
+          >
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-white shadow-[0_0_8px_white]" />
+          </motion.div>
 
-          {/* Center Pulsing Orb */}
-          <motion.div
-            animate={{
-              scale: [0.85, 1.15, 0.85],
-              opacity: [0.6, 1, 0.6],
-            }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-4 h-4 rounded-full bg-[var(--accent)] shadow-[0_0_25px_var(--accent)]"
-          />
-
-          {/* Scanning Line Effect */}
+          {/* The Nucleus */}
           <motion.div
             animate={{
-              translateY: [-60, 60, -60],
-              opacity: [0, 0.5, 0],
+              scale: [0.8, 1.2, 0.8],
+              opacity: [0.4, 0.7, 0.4],
+              boxShadow: [
+                "0 0 20px rgba(var(--accent-rgb), 0.2)",
+                "0 0 50px rgba(var(--accent-rgb), 0.5)",
+                "0 0 20px rgba(var(--accent-rgb), 0.2)"
+              ]
             }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-            className="absolute left-[-20%] right-[-20%] h-[1px] bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent blur-[1px]"
-          />
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="w-6 h-6 rounded-full bg-[var(--accent)] relative z-10"
+          >
+            <div className="absolute inset-0 rounded-full bg-white/20 blur-[2px]" />
+          </motion.div>
+
         </div>
 
-        {/* Loading Information */}
-        <div className={`${fullScreen ? 'mt-12' : 'mt-8'} text-center`}>
+        {/* Brand/Status Module */}
+        <div className="mt-12 text-center">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center gap-2"
+            className="flex flex-col items-center"
           >
-            {/* Status Text */}
-            <div className="flex items-center gap-1 overflow-hidden">
-              {['L', 'O', 'A', 'D', 'I', 'N', 'G'].map((char, i) => (
-                <motion.span
-                  key={i}
-                  animate={{
-                    opacity: [0.3, 1, 0.3],
-                    scale: [1, 1.1, 1]
-                  }}
-                  transition={{
-                    delay: i * 0.1,
-                    repeat: Infinity,
-                    duration: 1.5,
-                  }}
-                  className={`${fullScreen ? 'text-sm' : 'text-xs'} font-bold tracking-[0.3em] text-[var(--foreground)]`}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </div>
-
-            {/* Sub-status with Progress */}
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-[9px] uppercase font-medium tracking-widest text-[var(--muted)]">
-                {progress < 40 ? "Initializing..." : progress < 80 ? "Loading Data..." : "Optimizing Assets..."} {progress}%
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-1 h-1 rounded-full bg-[var(--accent)] animate-ping" />
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/90">
+                Tronics <span className="text-[var(--accent)]">Core</span>
               </span>
-
-              {/* Progress Bar Mini */}
-              <div className={`${fullScreen ? 'w-48' : 'w-32'} h-[2px] bg-[var(--border)] rounded-full overflow-hidden mt-1`}>
-                <motion.div
-                  className="h-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]"
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
             </div>
+
+            <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-[var(--accent)]/40 to-transparent" />
+
+            <motion.p
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="mt-3 text-[8px] font-bold uppercase tracking-[0.2em] text-white/30"
+            >
+              Establishing Secure Connection...
+            </motion.p>
           </motion.div>
         </div>
+
       </div>
 
-      {/* Tactical Ornament: Corners (Only for Full Screen) */}
+      {/* Decorative HUD Elements */}
       {fullScreen && (
-        <div className="absolute inset-8 pointer-events-none border border-[var(--accent)]/10">
-          <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[var(--accent)]/50" />
-          <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[var(--accent)]/50" />
-          <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[var(--accent)]/50" />
-          <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[var(--accent)]/50" />
+        <>
+          <div className="absolute top-12 left-12 w-24 h-px bg-gradient-to-r from-[var(--accent)]/30 to-transparent" />
+          <div className="absolute top-12 left-12 w-px h-12 bg-gradient-to-b from-[var(--accent)]/30 to-transparent" />
 
-          <div className="absolute top-1/2 left-0 w-2 h-[1px] bg-[var(--accent)]/30" />
-          <div className="absolute top-1/2 right-0 w-2 h-[1px] bg-[var(--accent)]/30" />
-        </div>
+          <div className="absolute bottom-12 right-12 w-24 h-px bg-gradient-to-l from-[var(--accent)]/30 to-transparent" />
+          <div className="absolute bottom-12 right-12 w-px h-12 bg-gradient-to-t from-[var(--accent)]/30 to-transparent" />
+
+          <div className="absolute bottom-12 left-12 opacity-10">
+            <div className="grid grid-cols-2 gap-1 font-mono text-[7px] text-white">
+              <span>SYS_AUTH:</span> <span className="text-[var(--accent)]">OK</span>
+              <span>DATA_SYNC:</span> <span className="text-[var(--accent)]">WAIT</span>
+              <span>ENCR_LAY:</span> <span className="text-[var(--accent)]">AES-256</span>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
