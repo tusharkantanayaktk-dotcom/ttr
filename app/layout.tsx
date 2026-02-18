@@ -11,9 +11,8 @@ import { FEATURE_FLAGS } from "@/lib/config";
 
 
 export const metadata: Metadata = {
-  title: "Mewji – MLBB Diamond Top Up | Instant & Secure",
-  description: "Mewji is a fast and secure Mobile Legends (MLBB) diamond top-up platform. Instant delivery, safe payments, and 24/7 automated service.",
-
+  title: "Tronics Store – MLBB Diamond Top Up | Instant & Secure",
+  description: "Tronics Store is a fast and secure Mobile Legends (MLBB) diamond top-up platform. Instant delivery, safe payments, and 24/7 automated service.",
 };
 
 export default function RootLayout({

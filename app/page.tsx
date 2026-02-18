@@ -2,15 +2,14 @@
 import HomeSection from "@/components/Home/Home";
 
 export const metadata = {
-  title: "Mewji – MLBB Diamond Top Up | Instant & Secure",
+  title: "Tronics Store – MLBB Diamond Top Up | Instant & Secure",
   description:
-    "Mewji is a fast and secure Mobile Legends (MLBB) diamond top-up platform. Instant delivery, safe payments, and 24/7 automated service.",
+    "Tronics Store is a fast and secure Mobile Legends (MLBB) diamond top-up platform. Instant delivery, safe payments, and 24/7 automated service.",
   keywords: [
- "MLBB top up",
+    "MLBB top up",
     "buy MLBB diamonds",
     "Mobile Legends recharge",
-    "Mewji top up",
-
+    "Tronics Store top up",
   ],
 };
 
