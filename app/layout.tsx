@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import SocialFloat from "@/components/SocialFloat/SocialFloat";
+import ChatBot from "@/components/ChatBot/ChatBot";
 import Maintenance from "@/components/Maintenance/Maintenance";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -29,6 +30,7 @@ export default function RootLayout({
           <main className="pt-20">{children}</main>
           <Footer />
           <SocialFloat />
+          <ChatBot />
           {FEATURE_FLAGS.MAINTENANCE_MODE && <Maintenance />}
         </GoogleOAuthProvider>
 
