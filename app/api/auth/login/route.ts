@@ -10,6 +10,10 @@ export async function POST(request: Request) {
 
     const { user, password } = body; // email or phone
 
+    // Get IP address
+    const forwardedFor = request.headers.get("x-forwarded-for");
+    const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "Unknown IP";
+
     /* ================= BASIC VALIDATION ================= */
     if (!user || !password || typeof user !== "string" || typeof password !== "string") {
       return Response.json(
@@ -64,6 +68,11 @@ export async function POST(request: Request) {
         { status: 401 }
       );
     }
+
+    // Update tracking info
+    foundUser.lastLogin = new Date();
+    foundUser.lastIp = ip;
+    await foundUser.save();
 
     /* ================= JWT GENERATION ================= */
     const token = jwt.sign(

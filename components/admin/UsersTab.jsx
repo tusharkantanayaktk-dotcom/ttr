@@ -20,7 +20,12 @@ import {
   Users,
   IdCard,
   Crown,
-  Type
+  Type,
+  Activity,
+  Globe,
+  TrendingUp,
+  UserPlus,
+  UserCheck
 } from "lucide-react";
 
 export default function UsersTab() {
@@ -47,9 +52,35 @@ export default function UsersTab() {
     totalPages: 1,
   });
 
+  const [stats, setStats] = useState({
+    "1d": { newUsers: 0, activeUsers: 0 },
+    "7d": { newUsers: 0, activeUsers: 0 },
+    "30d": { newUsers: 0, activeUsers: 0 },
+  });
+  const [statsLoading, setStatsLoading] = useState(true);
+
   useEffect(() => {
     fetchUsers();
+    fetchStats();
   }, [page, limit, search, filters]);
+
+  const fetchStats = async () => {
+    try {
+      setStatsLoading(true);
+      const token = sessionStorage.getItem("token");
+      const res = await fetch("/api/admin/users/stats", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStats(data.data);
+      }
+    } catch (err) {
+      console.error("Fetch stats failed", err);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
 
   const fetchUsers = async () => {
     try {
@@ -151,6 +182,28 @@ export default function UsersTab() {
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
+      </div>
+
+      {/* ================= STATS CARDS ================= */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatCard
+          title="Last 24 Hours"
+          newUsers={stats["1d"].newUsers}
+          activeUsers={stats["1d"].activeUsers}
+          loading={statsLoading}
+        />
+        <StatCard
+          title="Last 7 Days"
+          newUsers={stats["7d"].newUsers}
+          activeUsers={stats["7d"].activeUsers}
+          loading={statsLoading}
+        />
+        <StatCard
+          title="Last 30 Days"
+          newUsers={stats["30d"].newUsers}
+          activeUsers={stats["30d"].activeUsers}
+          loading={statsLoading}
+        />
       </div>
 
       {/* ================= SEARCH & FILTERS ================= */}
@@ -400,6 +453,17 @@ export default function UsersTab() {
                 <DrawerSection icon={<Mail size={18} />} title="Contact Details">
                   <DrawerDetail label="Email Address" value={selectedUser.email} />
                   <DrawerDetail label="Phone Number" value={selectedUser.phone || "Not provided"} />
+                </DrawerSection>
+
+                <DrawerSection icon={<Activity size={18} />} title="Activity & Tracking">
+                  <DrawerDetail
+                    label="Last Login"
+                    value={selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleString(undefined, { dateStyle: 'long', timeStyle: 'short' }) : "Never"}
+                  />
+                  <DrawerDetail
+                    label="IP Address"
+                    value={selectedUser.lastIp || "Unknown"}
+                  />
                 </DrawerSection>
 
                 <DrawerSection icon={<Shield size={18} />} title="Account Management">
@@ -652,6 +716,49 @@ function DrawerDetail({ label, value }) {
       <span className="text-sm font-medium text-[var(--foreground)]">
         {value || "Not available"}
       </span>
+    </div>
+  );
+}
+
+function StatCard({ title, newUsers, activeUsers, loading }) {
+  if (loading) {
+    return (
+      <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] animate-pulse flex flex-col justify-between h-32">
+        <div className="h-4 bg-[var(--foreground)]/10 rounded w-1/3 mb-4"></div>
+        <div className="space-y-3">
+          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
+          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] relative overflow-hidden group">
+      <div className="absolute -right-4 -top-4 w-24 h-24 bg-[var(--accent)]/5 rounded-full blur-2xl group-hover:bg-[var(--accent)]/10 transition-colors duration-500" />
+
+      <div className="flex items-center justify-between mb-4 relative z-10">
+        <h3 className="text-sm font-bold text-[var(--foreground)]">{title}</h3>
+        <TrendingUp size={16} className="text-[var(--accent)]/60" />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 relative z-10">
+        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
+          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
+            <UserPlus size={12} className="text-blue-500" />
+            <span className="text-[10px] font-semibold uppercase tracking-wider">New</span>
+          </div>
+          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">{newUsers}</span>
+        </div>
+
+        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
+          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
+            <UserCheck size={12} className="text-emerald-500" />
+            <span className="text-[10px] font-semibold uppercase tracking-wider">Active</span>
+          </div>
+          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">{activeUsers}</span>
+        </div>
+      </div>
     </div>
   );
 }

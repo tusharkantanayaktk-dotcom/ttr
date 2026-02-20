@@ -22,7 +22,10 @@ import {
   Smartphone,
   ChevronDown,
   ShoppingBag,
-  Target
+  Target,
+  TrendingUp,
+  Activity,
+  Package
 } from "lucide-react";
 
 export default function OrdersTab() {
@@ -47,9 +50,36 @@ export default function OrdersTab() {
     totalPages: 1,
   });
 
+  const [stats, setStats] = useState({
+    "1d": { count: 0, totalValue: 0 },
+    "7d": { count: 0, totalValue: 0 },
+    "30d": { count: 0, totalValue: 0 },
+  });
+  const [statsLoading, setStatsLoading] = useState(true);
+
   useEffect(() => {
     fetchOrders();
+    fetchStats();
   }, [page, limit, search, filters]);
+
+  /* ================= FETCH STATS ================= */
+  const fetchStats = async () => {
+    try {
+      setStatsLoading(true);
+      const token = sessionStorage.getItem("token");
+      const res = await fetch("/api/admin/orders/stats", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStats(data.data);
+      }
+    } catch (err) {
+      console.error("Fetch stats failed", err);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
 
   /* ================= FETCH ORDERS ================= */
   const fetchOrders = async () => {
@@ -161,6 +191,28 @@ export default function OrdersTab() {
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
+      </div>
+
+      {/* ================= STATS CARDS ================= */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatCard
+          title="Last 24 Hours"
+          count={stats["1d"].count}
+          totalValue={stats["1d"].totalValue}
+          loading={statsLoading}
+        />
+        <StatCard
+          title="Last 7 Days"
+          count={stats["7d"].count}
+          totalValue={stats["7d"].totalValue}
+          loading={statsLoading}
+        />
+        <StatCard
+          title="Last 30 Days"
+          count={stats["30d"].count}
+          totalValue={stats["30d"].totalValue}
+          loading={statsLoading}
+        />
       </div>
 
       {/* ================= FILTERS & SEARCH ================= */}
@@ -604,6 +656,49 @@ function DrawerDetail({ label, value, emphasize }) {
       <span className={`text-xs font-bold text-right truncate ${emphasize ? "text-[var(--accent)] italic uppercase" : "text-[var(--foreground)]"}`}>
         {value || "N/A"}
       </span>
+    </div>
+  );
+}
+
+function StatCard({ title, count, totalValue, loading }) {
+  if (loading) {
+    return (
+      <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] animate-pulse flex flex-col justify-between h-32">
+        <div className="h-4 bg-[var(--foreground)]/10 rounded w-1/3 mb-4"></div>
+        <div className="space-y-3">
+          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
+          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] relative overflow-hidden group">
+      <div className="absolute -right-4 -top-4 w-24 h-24 bg-[var(--accent)]/5 rounded-full blur-2xl group-hover:bg-[var(--accent)]/10 transition-colors duration-500" />
+
+      <div className="flex items-center justify-between mb-4 relative z-10">
+        <h3 className="text-sm font-bold text-[var(--foreground)]">{title}</h3>
+        <TrendingUp size={16} className="text-[var(--accent)]/60" />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 relative z-10">
+        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
+          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
+            <Package size={12} className="text-blue-500" />
+            <span className="text-[10px] font-semibold uppercase tracking-wider">Count</span>
+          </div>
+          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">{count}</span>
+        </div>
+
+        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
+          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
+            <IndianRupee size={12} className="text-emerald-500" />
+            <span className="text-[10px] font-semibold uppercase tracking-wider">Revenue</span>
+          </div>
+          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">₹{Number(totalValue || 0).toLocaleString()}</span>
+        </div>
+      </div>
     </div>
   );
 }

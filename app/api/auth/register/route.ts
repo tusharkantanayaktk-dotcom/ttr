@@ -8,6 +8,10 @@ export async function POST(request: Request) {
     await connectDB();
     const body = await request.json();
 
+    // Get IP address
+    const forwardedFor = request.headers.get("x-forwarded-for");
+    const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "Unknown IP";
+
     const { name, email, phone, password } = body;
 
     /* ================= BASIC VALIDATION ================= */
@@ -52,6 +56,8 @@ export async function POST(request: Request) {
       wallet: 0,
       order: 0,
       userType: "user",
+      lastLogin: new Date(),
+      lastIp: ip,
     });
 
     return Response.json(

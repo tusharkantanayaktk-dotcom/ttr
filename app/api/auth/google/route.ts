@@ -11,6 +11,10 @@ export async function POST(req: Request) {
     await connectDB();
     const { token } = await req.json();
 
+    // Get IP address
+    const forwardedFor = req.headers.get("x-forwarded-for");
+    const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "Unknown IP";
+
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -41,7 +45,13 @@ export async function POST(req: Request) {
         wallet: 0,
         order: 0,
         userType: "user",
+        lastLogin: new Date(),
+        lastIp: ip,
       });
+    } else {
+      user.lastLogin = new Date();
+      user.lastIp = ip;
+      await user.save();
     }
 
     /* ================= JWT ================= */
