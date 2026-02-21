@@ -3,132 +3,116 @@
 import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 import {
-  FiCode,
   FiLayout,
+  FiCode,
   FiServer,
-  FiTerminal
+  FiArrowRight
 } from "react-icons/fi";
 
 const SERVICES = [
   {
     icon: FiLayout,
-    label: "UI/UX",
-    title: "WEB DESIGN",
+    title: "Web Design",
+    description: "Modern, high-conversion interfaces designed for impact.",
   },
   {
     icon: FiCode,
-    label: "DEV",
-    title: "FULL-STACK",
+    title: "Development",
+    description: "Scalable full-stack applications built with precision.",
   },
   {
     icon: FiServer,
-    label: "OPS",
-    title: "SERVER MGMT",
+    title: "Operations",
+    description: "Performance-optimized server and cloud management.",
   },
 ];
 
 export default function HomeServices() {
   return (
-    <section className="py-8 px-4 bg-[var(--background)] relative overflow-hidden">
-      {/* Background Ambient Glow */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[var(--accent)]/5 blur-[100px] rounded-full pointer-events-none" />
+    <section className="py-24 px-6 bg-[var(--background)]">
+      <div className="max-w-5xl mx-auto">
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.98 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="
-          max-w-5xl mx-auto
-          relative rounded-[1.5rem]
-          bg-gradient-to-br from-[var(--card)]/90 to-[var(--card)]/40
-          backdrop-blur-xl
-          border border-[var(--border)]/50
-          p-5 md:p-8
-          overflow-hidden
-          shadow-2xl shadow-black/20
-          flex flex-col md:flex-row items-center gap-8 justify-between
-          group
-        "
-      >
-        {/* SCANLINE EFFECT */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.05)_50%)] z-0 bg-[length:100%_4px] pointer-events-none opacity-10" />
-
-        {/* --- LEFT: TITLE & CTA --- */}
-        <div className="flex flex-col md:items-start items-center text-center md:text-left gap-4 z-10 max-w-sm">
-          <div className="flex items-center gap-2">
-            <span className="flex h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent)]" />
-            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">System ID: SVC-PRO</span>
-          </div>
-
-          <h3 className="text-xl md:text-2xl font-black text-[var(--foreground)] leading-tight tracking-tight">
-            CUSTOM <span className="text-[var(--accent)] italic">DIGITAL SOLUTIONS</span>
-          </h3>
-
-          <p className="text-[var(--muted)] text-[11px] font-bold uppercase tracking-wider leading-relaxed opacity-70 max-w-[280px]">
-            Tactical development & high-performance infrastructure deployment.
-          </p>
-
-          <motion.a
-            href="https://wa.me/919178521537"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group/btn relative inline-flex items-center gap-3 px-6 py-3 rounded-lg bg-[var(--accent)] overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_var(--accent)]/40"
-            whileTap={{ scale: 0.98 }}
+        {/* --- HEADER --- */}
+        <div className="mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-3 mb-4"
           >
-            <FaWhatsapp className="text-xl text-white z-10" />
-            <div className="flex flex-col items-start leading-none z-10 text-white">
-              <span className="text-[8px] uppercase tracking-widest font-black opacity-80">Sync Link</span>
-              <span className="text-sm font-black tracking-tight">+91 63723 05866</span>
-            </div>
-          </motion.a>
+            <div className="h-px w-8 bg-[var(--accent)]" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--accent)]">Solutions</span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-semibold text-[var(--foreground)] tracking-tight"
+          >
+            Our Services
+          </motion.h2>
         </div>
 
-        {/* --- RIGHT: SERVICE GRID --- */}
-        <div className="grid grid-cols-3 gap-3 w-full md:w-auto z-10">
+        {/* --- GRID --- */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {SERVICES.map((service, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 * i }}
-              className="
-                relative overflow-hidden
-                flex flex-col items-center gap-2
-                p-4 rounded-xl
-                bg-[var(--background)]/40
-                border border-[var(--border)]/50
-                hover:border-[var(--accent)]/40
-                transition-all duration-500
-                min-w-[90px] sm:min-w-[120px]
-                group/card
-              "
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 * i + 0.2 }}
+              className="group cursor-default"
             >
-              {/* Card Scanline */}
-              <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/30 to-transparent top-0 group-hover/card:animate-scan-y pointer-events-none" />
-
-              <div className="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]/50 text-[var(--accent)] group-hover/card:scale-110 group-hover/card:border-[var(--accent)]/30 transition-all duration-500">
-                <service.icon size={18} />
+              <div className="text-[var(--accent)] mb-6 transition-transform duration-500 group-hover:scale-110">
+                <service.icon size={32} strokeWidth={1.5} />
               </div>
 
-              <div className="flex flex-col items-center">
-                <span className="text-[8px] font-black text-[var(--accent)] tracking-[0.15em] opacity-70">{service.label}</span>
-                <span className="text-[10px] font-black text-[var(--foreground)] mt-0.5">{service.title}</span>
-              </div>
+              <h3 className="text-xl font-medium text-[var(--foreground)] mb-3 tracking-tight group-hover:text-[var(--accent)] transition-colors">
+                {service.title}
+              </h3>
 
-              {/* Decorative Brackets */}
-              <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-[var(--border)]/20 group-hover/card:border-[var(--accent)]/30 transition-colors" />
-              <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-[var(--border)]/20 group-hover/card:border-[var(--accent)]/30 transition-colors" />
+              <p className="text-[var(--muted)] text-sm leading-relaxed mb-6 opacity-70">
+                {service.description}
+              </p>
+
+              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                Details <FiArrowRight />
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* DECORATIVE TERMINAL TAG */}
-        <div className="absolute bottom-3 right-5 hidden md:flex items-center gap-2 opacity-20 select-none">
-          <span className="text-[8px] font-black uppercase tracking-[0.2em]">Data.active</span>
-          <FiTerminal className="text-xs" />
-        </div>
-      </motion.div>
+        {/* --- CTA --- */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="mt-24 pt-12 border-t border-[var(--border)] group"
+        >
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="text-center md:text-left">
+              <h4 className="text-2xl font-medium mb-2">Ready to start?</h4>
+              <p className="text-[var(--muted)] text-sm">Let&apos;s build something exceptional together.</p>
+            </div>
+
+            <motion.a
+              href="https://wa.me/919178521537"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 px-10 py-5 rounded-full bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--accent)] hover:text-white transition-all duration-500 shadow-2xl font-bold uppercase tracking-widest text-xs"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <FaWhatsapp className="text-xl" />
+              <span>Sync with us</span>
+            </motion.a>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiFilter, FiX, FiSearch, FiZap, FiBox, FiActivity } from "react-icons/fi";
+import { FiFilter, FiX, FiSearch, FiZap, FiBox, FiActivity, FiArrowRight } from "react-icons/fi";
 import logo from "@/public/logo.png";
 import GamesFilterModal from "@/components/Games/GamesFilterModal";
 
@@ -89,29 +89,6 @@ export default function GamesPage() {
     return filtered;
   };
 
-  /* ================= PIN MLBB GAME ================= */
-  const injectSpecialGame = (cat: any) => {
-    if (
-      !cat.categoryTitle
-        ?.toLowerCase()
-        .includes("mobile legends")
-    ) {
-      return cat.gameId;
-    }
-
-    const specialGame = games.find(
-      (g) => g.gameName === SPECIAL_MLBB_GAME
-    );
-
-    if (!specialGame) return cat.gameId;
-
-    const withoutDuplicate = cat.gameId.filter(
-      (g: any) => g.gameName !== SPECIAL_MLBB_GAME
-    );
-
-    return [specialGame, ...withoutDuplicate];
-  };
-
   /* ================= GAME CARD ================= */
   const GameCard = ({ game }: any) => {
     const disabled = isOutOfStock(game.gameName);
@@ -119,48 +96,41 @@ export default function GamesPage() {
     return (
       <motion.div
         layout
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        whileHover={!disabled ? { y: -8, transition: { duration: 0.3, ease: "easeOut" } } : {}}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, delay: 0.05 }}
+        className="group"
       >
         <Link
           href={disabled ? "#" : `/games/${game.gameSlug}`}
-          className={`group relative flex flex-col items-center p-1.5 md:p-2.5 rounded-[1.5rem]
-          bg-gradient-to-b from-[var(--card)]/60 to-[var(--card)]/20 backdrop-blur-xl 
-          border border-[var(--border)]/40 transition-all duration-500 overflow-hidden
-          ${disabled
-              ? "opacity-50 grayscale cursor-not-allowed"
-              : "hover:border-[var(--accent)]/60 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
-            }`}
+          className={`flex flex-col gap-4 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         >
           {/* IMAGE WRAPPER */}
-          <div className="relative w-full aspect-square overflow-hidden rounded-[1.2rem] bg-black/40 shadow-inner">
+          <div className="relative aspect-square overflow-hidden rounded-[2.5rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-500 group-hover:border-[var(--accent)]/50 group-hover:shadow-2xl">
             <Image
               src={game.gameImageId?.image || logo}
               alt={game.gameName}
               fill
               className={`object-cover transition-transform duration-700 ease-out
-              ${disabled ? "blur-[2px]" : "group-hover:scale-110"}`}
+              ${disabled ? "grayscale opacity-40 blur-[2px]" : "group-hover:scale-110"}`}
             />
 
-            {/* HIGH-TECH OVERLAY LAYER */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20 opacity-40 group-hover:opacity-20 transition-opacity" />
-
-            {/* SCANLINE EFFECT */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.02),rgba(0,255,0,0.01),rgba(0,0,255,0.02))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-20" />
+            {/* OVERLAY */}
+            {!disabled && (
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            )}
 
             {/* TAG */}
             {!disabled && game.tagId && (
-              <div className="absolute top-2 left-2 z-20">
+              <div className="absolute top-4 left-4 z-20">
                 <span
-                  className="text-[8px] md:text-[9px] px-2 py-0.5 rounded-lg font-black uppercase tracking-widest backdrop-blur-md border border-white/20 shadow-xl inline-flex items-center gap-1"
+                  className="text-[9px] px-3 py-1 rounded-full font-bold uppercase tracking-widest backdrop-blur-md border border-white/10 shadow-lg inline-flex items-center gap-1.5"
                   style={{
                     background: game.tagId.tagBackground,
                     color: game.tagId.tagColor,
                   }}
                 >
-                  <div className="w-1 h-1 rounded-full bg-current animate-pulse" />
+                  <div className="w-1 h-1 rounded-full bg-current" />
                   {game.tagId.tagName}
                 </span>
               </div>
@@ -168,34 +138,29 @@ export default function GamesPage() {
 
             {/* STOCK INDICATOR */}
             {disabled && (
-              <div className="absolute inset-0 z-20 flex items-center justify-center backdrop-blur-[2px]">
-                <span className="text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1.5 bg-red-600/90 text-white rounded-lg shadow-2xl border border-red-400/30">
-                  OOS
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-[10px] font-black uppercase tracking-widest bg-red-500 text-white px-3 py-1 rounded-full">
+                  Unavailable
                 </span>
               </div>
             )}
           </div>
 
           {/* INFO SECTION */}
-          <div className="w-full mt-3 px-1 space-y-0.5 pb-1">
-            <h3 className="text-[11px] md:text-[13px] font-black text-[var(--foreground)] truncate 
-                         group-hover:text-[var(--accent)] transition-colors uppercase tracking-tight">
-              {game.gameName}
-            </h3>
+          <div className="px-2 space-y-1">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-[var(--foreground)] truncate group-hover:text-[var(--accent)] transition-colors tracking-tight">
+                {game.gameName}
+              </h3>
+              {!disabled && (
+                <FiArrowRight className="text-[var(--accent)] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" size={14} />
+              )}
+            </div>
             {game.gameFrom && (
-              <div className="flex items-center justify-center gap-1.5">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--border)]/50 to-transparent" />
-                <p className="text-[8px] md:text-[9px] text-[var(--muted)] truncate font-bold uppercase tracking-[0.1em] shrink-0">
-                  {game.gameFrom}
-                </p>
-                <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[var(--border)]/50 to-transparent" />
-              </div>
+              <p className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-widest opacity-60">
+                {game.gameFrom}
+              </p>
             )}
-          </div>
-
-          {/* DECORATIVE CORNER */}
-          <div className="absolute top-0 right-0 p-1">
-            <div className="w-4 h-4 border-t-2 border-r-2 border-[var(--accent)]/0 group-hover:border-[var(--accent)]/40 transition-all duration-500 rounded-tr-xl" />
           </div>
         </Link>
       </motion.div>
@@ -203,56 +168,45 @@ export default function GamesPage() {
   };
 
   const SectionHeader = ({ title, count, icon: Icon }: any) => (
-    <div className="flex items-center gap-4 mb-8 px-1">
-      <div className="relative group">
-        <div className="absolute inset-0 bg-[var(--accent)]/30 blur-xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
-        <div className="relative p-2.5 rounded-xl bg-[var(--accent)] text-black shadow-[0_0_20px_rgba(var(--accent-rgb),0.4)]">
-          <Icon size={22} />
+    <div className="flex items-center justify-between mb-12">
+      <div className="flex items-center gap-4">
+        <div className="w-12 h-12 rounded-2xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
+          <Icon size={20} />
+        </div>
+        <div>
+          <h2 className="text-2xl md:text-3xl font-bold text-[var(--foreground)] tracking-tight">
+            {title}
+          </h2>
+          {count !== undefined && (
+            <p className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-[0.2em] opacity-60 mt-0.5">
+              Showing {count} Available
+            </p>
+          )}
         </div>
       </div>
-      <div className="flex flex-col">
-        <h2 className="text-xl md:text-3xl font-black text-[var(--foreground)] tracking-[–0.05em] uppercase italic leading-none">
-          {title}
-        </h2>
-        {count !== undefined && (
-          <div className="flex items-center gap-2 mt-1.5">
-            <div className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-            <p className="text-[10px] text-[var(--muted)] font-black uppercase tracking-[0.25em]">
-              {count} Units Detected
-            </p>
-          </div>
-        )}
-      </div>
-      <div className="flex-1 h-[1px] bg-gradient-to-r from-[var(--border)] via-[var(--border)]/20 to-transparent ml-6 opacity-40" />
     </div>
   );
 
   return (
-    <section className="min-h-screen bg-[var(--background)] relative overflow-hidden">
-      {/* GLOBAL GRID OVERLAY */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none -z-10" />
-
-      {/* AMBIENT EFFECTS */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[var(--accent)]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[var(--accent)]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+    <div className="min-h-screen bg-[var(--background)] pb-24">
+      {/* AMBIENT BACKGROUND */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
 
       {/* ================= FILTER BAR ================= */}
-      <div className="sticky top-0 md:top-[64px] z-40 bg-[var(--background)]/60 backdrop-blur-2xl border-b border-[var(--border)]/50">
-        <div className="max-w-7xl mx-auto px-4 py-5 flex items-center gap-4">
+      <div className="sticky top-0 md:top-[64px] z-40 bg-[var(--background)]/80 backdrop-blur-xl border-b border-[var(--border)]/40 py-3">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center gap-2 md:gap-4">
 
           {/* SEARCH */}
           <div className="relative flex-1 group">
-            <div className="absolute inset-0 bg-[var(--accent)]/5 rounded-2xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity" />
-            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors z-10" />
+            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-[var(--muted)]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="COMMAND SEARCH..."
-              className="w-full h-12 pl-12 pr-12 rounded-2xl border border-[var(--border)]/50 
-                       bg-[var(--card)]/40 text-xs font-black tracking-widest outline-none transition-all
-                       focus:border-[var(--accent)]/50 focus:ring-4 focus:ring-[var(--accent)]/5 uppercase
-                       placeholder:text-[var(--muted)]/40"
+              placeholder="Search gaming nodes..."
+              className="w-full h-11 pl-10 pr-10 rounded-xl border border-[var(--border)]/50 
+                       bg-[var(--card)]/40 text-[13px] font-medium outline-none transition-all
+                       focus:border-[var(--accent)]/30 focus:bg-[var(--card)]/60"
             />
             <AnimatePresence>
               {searchQuery && (
@@ -261,132 +215,115 @@ export default function GamesPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-xl text-[var(--muted)] hover:bg-red-500/10 hover:text-red-500 transition-all z-20"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-red-500 transition-colors"
                 >
-                  <FiX size={18} />
+                  <FiX size={14} />
                 </motion.button>
               )}
             </AnimatePresence>
           </div>
 
-          {/* ACTIONS */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowFilter(true)}
-              className="relative flex items-center justify-center gap-3 h-12 px-6 rounded-2xl 
-                       bg-white text-black font-black text-xs uppercase tracking-widest
-                       hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all
-                       hover:scale-105 active:scale-95 shadow-xl"
-            >
-              <FiFilter size={20} />
-              <span className="hidden sm:inline">Module Filter</span>
-              {activeFilterCount > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-[24px] h-[24px] flex items-center justify-center text-[10px] rounded-full bg-[var(--accent)] text-black font-black border-2 border-white shadow-lg">
-                  {activeFilterCount}
-                </span>
-              )}
-            </button>
-          </div>
+          {/* FILTER ACTION */}
+          <button
+            onClick={() => setShowFilter(true)}
+            className="flex items-center gap-2 h-11 px-4 md:px-6 rounded-xl 
+                     bg-[var(--foreground)] text-[var(--background)] font-bold text-xs uppercase tracking-tight
+                     hover:bg-[var(--accent)] hover:text-white transition-all active:scale-95 shrink-0"
+          >
+            <FiFilter size={16} />
+            <span className="hidden sm:inline">Filter</span>
+            {activeFilterCount > 0 && (
+              <span className="w-4 h-4 flex items-center justify-center text-[9px] rounded-full bg-[var(--accent)] text-white font-black border border-[var(--foreground)]">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
         </div>
       </div>
 
       {/* ================= CONTENT ================= */}
-      <div className="max-w-7xl mx-auto px-4 py-16 space-y-24">
+      <div className="max-w-7xl mx-auto px-6 mt-16 space-y-32">
 
-        {/* ALL GAMES SECTION */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        {/* GAMES SECTION */}
+        <section>
           <SectionHeader
-            title="Active Products"
+            title="Gaming Collection"
             count={processGames(games).length}
             icon={FiBox}
           />
-          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-8 lg:gap-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-x-8 gap-y-12">
             {processGames(games).map((game: any, i: number) => (
               <GameCard key={i} game={game} />
             ))}
           </div>
-        </motion.div>
+        </section>
 
         {/* OTT SECTION */}
         {otts?.items?.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
+          <section>
             <SectionHeader title={otts.title} icon={FiZap} />
-            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-10">
+            <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-x-8 gap-y-12">
               {otts.items.map((ott: any) => (
-                <motion.div
-                  key={ott.slug}
-                  whileHover={{ y: -8 }}
-                >
-                  <Link
-                    href={`/games/ott/${ott.slug}`}
-                    className="group relative flex flex-col p-1.5 rounded-[1.5rem] bg-[var(--card)]/40 backdrop-blur-xl border border-[var(--border)]/40 transition-all duration-500 overflow-hidden"
-                  >
-                    <div className="relative w-full aspect-[3/4] overflow-hidden rounded-[1.2rem]">
-                      <Image src={ott.image} alt={ott.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <p className="text-xs md:text-sm font-black text-white italic truncate uppercase tracking-tight">
-                          {ott.name}
-                        </p>
-                        <p className="text-[8px] md:text-[9px] text-[var(--accent)] font-black uppercase tracking-[0.2em] mt-0.5">
+                <motion.div key={ott.slug} className="group cursor-pointer">
+                  <Link href={`/games/ott/${ott.slug}`} className="flex flex-col gap-4">
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-[2.5rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-500 group-hover:border-[var(--accent)]/50 group-hover:shadow-2xl">
+                      <Image src={ott.image} alt={ott.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <p className="text-[10px] text-[var(--accent)] font-bold uppercase tracking-[0.2em] mb-1">
                           {ott.category}
                         </p>
+                        <h4 className="text-sm font-bold text-white truncate uppercase">
+                          {ott.name}
+                        </h4>
                       </div>
                     </div>
                   </Link>
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </section>
         )}
 
         {/* MEMBERSHIP SECTION */}
         {memberships?.items?.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
+          <section>
             <SectionHeader title={memberships.title} icon={FiActivity} />
-            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {memberships.items.map((plan: any) => (
-                <motion.div
-                  key={plan.slug}
-                  whileHover={{ y: -10 }}
-                >
+                <motion.div key={plan.slug} className="group">
                   <Link
                     href={`/games/membership/${plan.slug}`}
-                    className="group relative flex flex-col p-2 rounded-[2rem] bg-gradient-to-br from-[var(--accent)]/10 to-transparent backdrop-blur-xl border border-[var(--accent)]/30 transition-all duration-500"
+                    className="relative flex flex-col p-8 rounded-[3rem] bg-[var(--card)] border border-[var(--border)]/40 hover:border-[var(--accent)]/50 transition-all group-hover:shadow-2xl overflow-hidden"
                   >
-                    <div className="relative w-full aspect-square overflow-hidden rounded-[1.5rem] bg-black/60 shadow-2xl">
-                      <Image src={plan.image} alt={plan.name} fill className="object-cover group-hover:scale-110 transition-transform duration-1000" />
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)] opacity-[0.03] blur-[60px]" />
+
+                    <div className="flex items-start justify-between mb-8">
+                      <div className="w-16 h-16 relative rounded-2xl overflow-hidden border border-[var(--border)]">
+                        <Image src={plan.image} alt={plan.name} fill className="object-cover" />
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center">
+                        <FiZap size={18} />
+                      </div>
                     </div>
-                    <div className="mt-5 pb-3 text-center">
-                      <p className="text-[13px] font-black text-[var(--foreground)] uppercase tracking-tighter italic">
+
+                    <div className="space-y-4">
+                      <h4 className="text-xl font-bold text-[var(--foreground)] uppercase italic tracking-tighter">
                         {plan.name}
-                      </p>
-                      <div className="inline-block mt-2 px-3 py-1 rounded-full bg-[var(--accent)] text-black text-[9px] font-black uppercase tracking-widest shadow-lg">
+                      </h4>
+                      <div className="inline-flex px-4 py-1.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-[10px] font-bold uppercase tracking-widest">
                         {plan.duration}
                       </div>
                     </div>
-                    {/* PREMIUM INDICATOR */}
-                    <div className="absolute top-4 right-4 p-2 bg-white text-black rounded-full shadow-2xl scale-90 group-hover:scale-100 transition-transform">
-                      <FiZap size={14} />
+
+                    <div className="mt-8 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">
+                      Activate Profile <FiArrowRight />
                     </div>
                   </Link>
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </section>
         )}
       </div>
 
@@ -403,6 +340,6 @@ export default function GamesPage() {
           />
         )}
       </AnimatePresence>
-    </section>
+    </div>
   );
 }

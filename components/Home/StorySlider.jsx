@@ -2,148 +2,126 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
 const storyData = [
-  // {
-  //   id: 1,
-  //   title: "Value Pass",
-  //   image:
-  //     "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768671923/WhatsApp_Image_2026-01-17_at_22.58.12_nfcotg.jpg",
-  //   link: "/games/value-pass-ml948",
-  //   color: "from-pink-500 to-rose-500",
-  // },
   {
     id: 2,
     title: "MLBB India",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500739/kapkap_20260115220221554_sys_inhh1f.jpg",
+    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500739/kapkap_20260115220221554_sys_inhh1f.jpg",
     link: "/games/mobile-legends988",
-    color: "from-blue-500 to-cyan-500",
+    color: "from-blue-400 to-indigo-600",
+    isLive: true
   },
   {
     id: 3,
-    title: "BGMI",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768502877/WhatsApp_Image_2026-01-16_at_00.15.15_sbkqaz.jpg",
+    title: "BGMI UC",
+    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768502877/WhatsApp_Image_2026-01-16_at_00.15.15_sbkqaz.jpg",
     link: "/games/pubg-mobile138",
-    color: "from-amber-400 to-orange-500",
+    color: "from-orange-400 to-red-600",
+    isLive: true
   },
   {
     id: 4,
-    title: "MLBB Double",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500738/kapkap_20260115220013809_sys_zicwwk.jpg",
+    title: "Double Pack",
+    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500738/kapkap_20260115220013809_sys_zicwwk.jpg",
     link: "/games/mlbb-double332",
-    color: "from-purple-500 to-indigo-500",
+    color: "from-purple-400 to-rose-600",
+    isLive: false
   },
   {
     id: 5,
-    title: "Membership",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+    title: "Member",
+    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
     link: "/games/membership/silver-membership",
-    color: "from-emerald-400 to-teal-500",
+    color: "from-emerald-400 to-teal-600",
+    isLive: false
   },
 ];
 
 export default function StorySlider() {
   const containerRef = useRef(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-
-  // Check scroll capability
-  const checkScroll = () => {
-    if (containerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-    }
-  };
-
-  useEffect(() => {
-    checkScroll();
-    window.addEventListener("resize", checkScroll);
-    return () => window.removeEventListener("resize", checkScroll);
-  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
+      transition: { staggerChildren: 0.1 }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, scale: 0.5, y: 20 },
+    hidden: { opacity: 0, scale: 0.9, y: 10 },
     visible: {
       opacity: 1,
       scale: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 300, damping: 20 }
+      transition: { type: "spring", stiffness: 400, damping: 30 }
     }
   };
 
   return (
-    <section className="relative w-full max-w-7xl mx-auto mt-4 px-2">
+    <section className="relative w-full max-w-7xl mx-auto mt-2 md:mt-4 px-4 overflow-hidden">
       <motion.div
         ref={containerRef}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        onScroll={checkScroll}
-        className="flex gap-4 overflow-x-auto px-4 py-4
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex gap-6 md:gap-10 overflow-x-auto py-6
         [scrollbar-width:none]
-        [&::-webkit-scrollbar]:hidden touch-pan-x"
-        style={{ scrollSnapType: "x mandatory" }}
+        [&::-webkit-scrollbar]:hidden touch-pan-x snap-x"
       >
-        {storyData.map((item, i) => (
-          <motion.div key={item.id} variants={itemVariants} className="flex-shrink-0 scroll-snap-align-start">
+        {storyData.map((item) => (
+          <motion.div key={item.id} variants={itemVariants} className="flex-shrink-0 snap-start">
             <Link
               href={item.link}
-              className="group flex flex-col items-center gap-2 cursor-pointer relative"
+              className="group flex flex-col items-center gap-3 cursor-pointer"
             >
-              {/* IMAGE CONTAINER */}
-              <div className="relative w-[72px] h-[72px] md:w-[84px] md:h-[84px]">
+              {/* COMPACT AVATAR */}
+              <div className="relative">
+                {/* ACTIVE RING */}
+                <div className={`
+                  absolute -inset-1.5 rounded-full border border-white/5 bg-gradient-to-tr ${item.color} 
+                  opacity-30 group-hover:opacity-100 transition-opacity duration-500 scale-90 group-hover:scale-110 
+                  blur-md group-hover:blur-lg
+                `} />
 
-                {/* Rotating Border Ring */}
-                <div
-                  className={`absolute -inset-[3px] rounded-full bg-linear-to-tr ${item.color} p-[2px] opacity-80 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-180`}
-                >
-                  <div className="w-full h-full rounded-full bg-[var(--background)]" />
+                <div className={`
+                  relative w-16 h-16 md:w-20 md:h-20 rounded-full 
+                  p-[3px] bg-gradient-to-tr ${item.color} 
+                  shadow-xl transition-transform duration-500 
+                  group-active:scale-90
+                `}>
+                  <div className="w-full h-full rounded-full border-[2.5px] border-[var(--background)] overflow-hidden relative">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      sizes="100px"
+                      className="object-cover transition-transform duration-700 group-hover:scale-115 grayscale group-hover:grayscale-0"
+                    />
+                    {/* GLASS SHINE */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
                 </div>
 
-                {/* Image Circle */}
-                <div className="absolute inset-0 rounded-full border-[3px] border-[var(--background)] overflow-hidden z-10">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="100px"
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-
-                  {/* Glass Shine Effect */}
-                  <div className="absolute inset-0 bg-linear-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                </div>
-
-                {/* Hot Badge (Static) */}
-                {i < 2 && (
-                  <div className="absolute bottom-0 right-0 z-20">
-                    <div className="bg-red-600 text-[8px] text-white font-bold px-1.5 py-0.5 rounded-full border-2 border-[var(--background)] shadow-sm">
-                      HOT
+                {/* LIVE INDICATOR */}
+                {item.isLive && (
+                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
+                    <div className="flex items-center gap-1 bg-white text-black text-[9px] font-black px-2 py-0.5 rounded-full shadow-2xl border border-black/5 uppercase tracking-tighter italic">
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
+                      </span>
+                      Trending
                     </div>
                   </div>
                 )}
               </div>
 
               {/* TITLE */}
-              <span className="text-[10px] md:text-xs font-semibold text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors duration-300 text-center max-w-[80px] truncate leading-tight">
+              <span className="text-[10px] md:text-[11px] font-black text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors duration-300 uppercase tracking-widest text-center">
                 {item.title}
               </span>
             </Link>

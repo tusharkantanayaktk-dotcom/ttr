@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiChevronLeft, FiChevronRight, FiArrowRight } from "react-icons/fi";
 import logo from "@/public/logo.png";
 import Loader from "@/components/Loader/Loader";
 
@@ -14,13 +16,11 @@ export default function GameBannerCarousel() {
   /* ================= FETCH ================= */
   useEffect(() => {
     let active = true;
-
     (async () => {
       try {
         const res = await fetch("/api/game-banners");
         const json = await res.json();
         if (!active) return;
-
         setBanners(json?.data || []);
       } catch {
         if (active) setBanners([]);
@@ -28,29 +28,20 @@ export default function GameBannerCarousel() {
         if (active) setLoading(false);
       }
     })();
-
     return () => (active = false);
   }, []);
 
   /* ================= AUTOPLAY ================= */
   useEffect(() => {
     if (banners.length <= 1) return;
-
     const id = setInterval(() => {
       setCurrent((prev) => (prev + 1) % banners.length);
-    }, 4500);
-
+    }, 6000);
     return () => clearInterval(id);
   }, [banners.length]);
 
-  /* ================= CONTROLS ================= */
-  const goNext = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % banners.length);
-  }, [banners.length]);
-
-  const goPrev = useCallback(() => {
-    setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
-  }, [banners.length]);
+  const goNext = useCallback(() => setCurrent((prev) => (prev + 1) % banners.length), [banners.length]);
+  const goPrev = useCallback(() => setCurrent((prev) => (prev - 1 + banners.length) % banners.length), [banners.length]);
 
   if (loading) return <Loader />;
   if (!banners.length) return null;
@@ -58,81 +49,82 @@ export default function GameBannerCarousel() {
   const banner = banners[current];
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto mt-8 select-none">
-      <div className="relative overflow-hidden rounded-3xl h-[190px] md:h-[300px] group ">
+    <div className="relative w-full max-w-7xl mx-auto px-4 md:px-6 mt-8 md:mt-12 select-none group">
 
-        {/* IMAGE */}
-        <Link href={banner.bannerLink || "/"} className="absolute inset-0">
-          <Image
-            src={banner.bannerImage || logo}
-            alt={banner.bannerTitle || "Game banner"}
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 900px"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-          />
-        </Link>
+      <div className="relative overflow-hidden rounded-[2rem] md:rounded-[3.5rem] aspect-[16/9] md:h-[480px] border border-[var(--border)]/30 shadow-2xl bg-[var(--card)]">
 
-        {/* OVERLAY */}
-        {/* <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" /> */}
-
-        {/* TEXT */}
-        {banner.bannerTitle && (
-          <div className="absolute left-6 bottom-6 max-w-[75%]">
-            <h2 className="text-lg md:text-2xl font-bold text-white drop-shadow">
-              {banner.bannerTitle}
-            </h2>
-            <p className="text-sm md:text-base text-white/80 mt-1">
-              Tap to explore offers
-            </p>
-          </div>
-        )}
-
-        {/* LEFT ARROW */}
-        {banners.length > 1 && (
-          <button
-            onClick={goPrev}
-            className="absolute left-4 top-1/2 -translate-y-1/2
-                       w-10 h-10 md:w-12 md:h-12
-                       rounded-full 
-                       text-white 
-                       transition flex items-center justify-center"
-            aria-label="Previous banner"
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="absolute inset-0"
           >
-            ‹
-          </button>
-        )}
+            <Link href={banner.bannerLink || "/"} className="block w-full h-full relative">
+              <Image
+                src={banner.bannerImage || logo}
+                alt={banner.bannerTitle || "Game banner"}
+                fill
+                priority
+                className="object-cover transition-transform duration-[10s] group-hover:scale-110"
+              />
 
-        {/* RIGHT ARROW */}
+              {/* CLEAN GRADIENT OVERLAY */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+
+              {/* CLEAN CONTENT BOX */}
+              <div className="absolute inset-0 flex items-end p-8 md:p-16">
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="space-y-4 md:space-y-6 max-w-2xl"
+                >
+                  {banner.bannerTitle && (
+                    <h2 className="text-2xl md:text-5xl font-black text-white tracking-tight leading-tight uppercase">
+                      {banner.bannerTitle}
+                    </h2>
+                  )}
+                </motion.div>
+              </div>
+            </Link>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* REFINED NAVIGATION (ONLY GONE NEXT/PREV) */}
         {banners.length > 1 && (
-          <button
-            onClick={goNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2
-                       w-10 h-10 md:w-12 md:h-12
-                       rounded-full 
-                       text-white 
-                       transition flex items-center justify-center"
-            aria-label="Next banner"
-          >
-            ›
-          </button>
+          <>
+            <button
+              onClick={goPrev}
+              className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 active:scale-95"
+            >
+              <FiChevronLeft size={24} />
+            </button>
+            <button
+              onClick={goNext}
+              className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 active:scale-95"
+            >
+              <FiChevronRight size={24} />
+            </button>
+          </>
         )}
       </div>
 
-      {/* DOTS */}
+      {/* MINIMALIST DOTS */}
       {banners.length > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center items-center gap-3 mt-8">
           {banners.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              className={`h-2.5 rounded-full transition-all duration-300 ${
-                current === i
-                  ? "bg-[var(--accent)] w-6"
-                  : "bg-[var(--muted)]/60 w-2.5 hover:bg-[var(--accent)]/50"
-              }`}
+              className="py-2"
               aria-label={`Go to slide ${i + 1}`}
-            />
+            >
+              <div className={`h-1.5 rounded-full transition-all duration-500 ${current === i ? "w-8 bg-[var(--accent)]" : "w-1.5 bg-[var(--muted)]/20 hover:bg-[var(--muted)]/40"
+                }`} />
+            </button>
           ))}
         </div>
       )}

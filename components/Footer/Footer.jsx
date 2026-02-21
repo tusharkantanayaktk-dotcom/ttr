@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { QRCodeCanvas } from "qrcode.react";
 import { FaHeart, FaGamepad } from "react-icons/fa6";
 import {
   FiInstagram,
@@ -16,38 +14,26 @@ import {
   FiFileText,
   FiMail,
   FiShield,
+  FiZap,
+  FiClock,
 } from "react-icons/fi";
 
-/* ===================== ENV ===================== */
+/* ===================== ENV & CONSTANTS ===================== */
 
 const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || "MewJi";
-const BRAND_DESCRIPTION =
-  process.env.NEXT_PUBLIC_BRAND_DESCRIPTION ||
-  "Fast, secure MLBB top-ups with instant delivery.";
+const BRAND_DESCRIPTION = process.env.NEXT_PUBLIC_BRAND_DESCRIPTION || "Fast and secure gaming top-ups.";
 
 const INSTAGRAM_URL = process.env.NEXT_PUBLIC_INSTAGRAM_URL;
 const WHATSAPP_URL = process.env.NEXT_PUBLIC_WHATSAPP_URL;
 const YOUTUBE_URL = process.env.NEXT_PUBLIC_YOUTUBE_URL;
 
-const TRUSTPILOT_URL =
-  process.env.NEXT_PUBLIC_TRUSTPILOT_URL ||
-  "https://www.trustpilot.com/evaluate/meowjiofficial.com";
-
 const MADE_BY_NAME = "TK";
 const MADE_BY_URL = "https://wa.me/9178521537";
 const COPYRIGHT_NAME = "TK";
 
-/* ===================== DERIVED ===================== */
-
-const BRAND = {
-  primary: BRAND_NAME.slice(0, 4),
-  secondary: BRAND_NAME.slice(4),
-  description: BRAND_DESCRIPTION,
-};
-
 const FOOTER_LINKS = [
   {
-    title: "Quick Links",
+    title: "Links",
     links: [
       { label: "Home", href: "/", icon: FiHome },
       { label: "Region", href: "/region", icon: FiGlobe },
@@ -57,11 +43,11 @@ const FOOTER_LINKS = [
   {
     title: "Support",
     links: [
-      { label: "About Us", href: "/about", icon: FiInfo },
-      { label: "Privacy Policy", href: "/privacy-policy", icon: FiLock },
-      { label: "Terms & Conditions", href: "/terms-and-conditions", icon: FiFileText },
-      { label: "Refund Policy", href: "/refund-policy", icon: FiShield },
-      { label: "Contact Us", href: "/contact", icon: FiMail },
+      { label: "About", href: "/about", icon: FiInfo },
+      { label: "Privacy", href: "/privacy-policy", icon: FiLock },
+      { label: "Terms", href: "/terms-and-conditions", icon: FiFileText },
+      { label: "Refund", href: "/refund-policy", icon: FiShield },
+      { label: "Contact", href: "/contact", icon: FiMail },
     ],
   },
 ];
@@ -72,138 +58,116 @@ const SOCIALS = [
   { label: "YouTube", href: YOUTUBE_URL, icon: FiYoutube },
 ];
 
+const TRUST_BADGES = [
+  { icon: FiShield, label: "SECURE", desc: "Military Grade" },
+  { icon: FiZap, label: "INSTANT", desc: "Auto-Delivery" },
+  { icon: FiClock, label: "24/7", desc: "Support Link" },
+];
+
 /* ===================== COMPONENT ===================== */
 
 export default function Footer() {
-  const [accentColor, setAccentColor] = useState("#000000");
-
-  useEffect(() => {
-    const color = getComputedStyle(document.documentElement)
-      .getPropertyValue("--accent")
-      .trim();
-    if (color) setAccentColor(color);
-  }, []);
-
   return (
-    <footer className="bg-[var(--background)] border-t border-[var(--border)] relative overflow-hidden">
-      {/* Subtle Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--accent)]/5 pointer-events-none" />
+    <footer className="bg-[var(--background)] border-t border-[var(--border)] pt-12 pb-8 relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[300px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 py-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          {/* BRAND BLOCK */}
-          <div className="md:col-span-2 lg:col-span-2 space-y-3">
-            <h2 className="text-xl font-bold tracking-tight">
-              <span className="text-[var(--accent)]">{BRAND.primary}</span>
-              <span className="text-[var(--foreground)]">{BRAND.secondary}</span>
-            </h2>
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
 
-            <p className="text-[var(--muted)] text-xs leading-relaxed max-w-xs">
-              {BRAND.description}
+        {/* --- TOP ROW --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-12">
+
+          <div className="lg:col-span-5 space-y-6">
+            <Link href="/" className="inline-block group">
+              <h2 className="text-2xl font-bold tracking-tighter">
+                <span className="text-[var(--accent)]">{BRAND_NAME.slice(0, 4)}</span>
+                <span className="text-[var(--foreground)]">{BRAND_NAME.slice(4)}</span>
+              </h2>
+            </Link>
+
+            <p className="text-[var(--muted)] text-xs font-medium opacity-80 max-w-xs">
+              {BRAND_DESCRIPTION}
             </p>
 
-            {/* TRUSTPILOT QR */}
-            <div className="flex items-center gap-3 mt-4">
-              <div className="bg-white p-1.5 rounded-lg shadow-sm border border-[var(--border)]">
-                <QRCodeCanvas
-                  value={TRUSTPILOT_URL}
-                  size={48}
-                  bgColor="#ffffff"
-                  fgColor={accentColor}
-                  level="H"
-                />
-              </div>
-              <div className="flex flex-col text-[10px]">
-                <span className="font-semibold text-[var(--foreground)]">Trustpilot</span>
-                <span className="text-[var(--muted)]">Scan to review</span>
-              </div>
+            {/* TRUST BADGES - ONE LINE */}
+            <div className="flex items-center gap-6 overflow-x-auto no-scrollbar pb-2">
+              {TRUST_BADGES.map((badge, i) => (
+                <div key={i} className="flex items-center gap-2 shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--card)] flex items-center justify-center text-[var(--accent)] border border-[var(--border)]">
+                    <badge.icon size={14} />
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-black tracking-widest text-[var(--foreground)] leading-none">{badge.label}</p>
+                    <p className="text-[8px] font-bold text-[var(--muted)] uppercase opacity-50 mt-1">{badge.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* DYNAMIC SECTIONS - SIDE BY SIDE */}
-          <div className="md:col-span-2 lg:col-span-3 grid grid-cols-2 gap-4">
+          {/* QUICK LINKS */}
+          <div className="lg:col-span-4 grid grid-cols-2 gap-4">
             {FOOTER_LINKS.map((section) => (
-              <div key={section.title} className="space-y-3">
-                <h3 className="text-xs font-semibold text-[var(--foreground)] uppercase tracking-wider">
+              <div key={section.title} className="space-y-4">
+                <h3 className="text-[9px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-40">
                   {section.title}
                 </h3>
-                <ul className="space-y-1.5">
-                  {section.links.map((link) => {
-                    const Icon = link.icon;
-                    return (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className="flex items-center gap-2 text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-all hover:translate-x-1 duration-200"
-                        >
-                          {Icon && <Icon className="w-3 h-3" />}
-                          {link.label}
-                        </Link>
-                      </li>
-                    );
-                  })}
+                <ul className="space-y-2.5">
+                  {section.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="flex items-center gap-2 text-xs font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-all group"
+                      >
+                        <span className="w-0 group-hover:w-2 h-px bg-[var(--accent)] transition-all" />
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             ))}
           </div>
 
           {/* SOCIALS */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-semibold text-[var(--foreground)] uppercase tracking-wider">
-              Follow Us
+          <div className="lg:col-span-3">
+            <h3 className="text-[9px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-40 mb-4">
+              Community
             </h3>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2">
               {SOCIALS.map(({ label, href, icon: Icon }) => (
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={label}
-                  className="
-                    w-8 h-8 flex items-center justify-center
-                    rounded-lg bg-[var(--card)]
-                    border border-[var(--border)]
-                    text-[var(--muted)] hover:text-[var(--accent)]
-                    hover:border-[var(--accent)] hover:scale-110
-                    transition-all duration-300
-                  "
+                  className="w-10 h-10 flex items-center justify-center rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-white hover:bg-[var(--accent)] hover:border-[var(--accent)] transition-all"
+                  title={label}
                 >
-                  <Icon size={14} />
+                  <Icon size={16} />
                 </a>
               ))}
             </div>
           </div>
         </div>
 
-        {/* BOTTOM METADATA BAR */}
-        <div className="mt-8 pt-6 border-t border-[var(--border)] flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-[var(--muted)]">
-          <div className="flex items-center gap-1 opacity-80 uppercase tracking-widest">
-            <span>&copy; {new Date().getFullYear()} {COPYRIGHT_NAME}.</span>
+        {/* --- BOTTOM BAR --- */}
+        <div className="pt-8 border-t border-[var(--border)] flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest">
+            <span>&copy; {new Date().getFullYear()} {COPYRIGHT_NAME} SYSTEM</span>
+            <div className="w-1 h-1 rounded-full bg-[var(--border)]" />
+            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[var(--accent)]/5 text-[var(--accent)]">
+              Operational <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
+            </span>
           </div>
 
-          <div className="flex items-center gap-1.5 group">
-            <span>Made with</span>
-            <motion.span
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [1, 0.4, 1]
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="inline-block"
-            >
-              <FaHeart className="text-red-500" size={12} />
-            </motion.span>
-            <span>by</span>
+          <div className="flex items-center gap-2 text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest">
+            <span>By</span>
             <a
               href={MADE_BY_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--accent)] font-bold hover:underline tracking-widest uppercase bg-[var(--accent)]/10 px-2 py-0.5 rounded shadow-sm"
+              className="text-[var(--foreground)] border-b border-[var(--accent)]/20"
             >
               {MADE_BY_NAME}
             </a>
