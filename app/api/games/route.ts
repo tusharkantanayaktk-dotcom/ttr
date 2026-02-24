@@ -7,6 +7,16 @@ const MLBB_MAIN_IMAGE =
 const MLBB_SMALL_IMAGE =
   "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500739/kapkap_20260115220221554_sys_inhh1f.jpg";
 
+const MLBB_RUSIA_IMAGE =
+  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1770490927/cb4ec20e05bcf396d0a52c4413cfdd98.jpg_asvgds.jpg";
+const MLBB_INDO_IMAGE =
+  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1770490919/4c2e2e5ef86bc8cb344febb4a87e8823.jpg_hxbpbs.jpg";
+const MLBB_MY_SING_IMAGE =
+  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1770490919/a392ca101bac1986eb941c0febd7f30b.jpg_xiixsa.jpg";
+
+
+const MONTHLY_BUNDLE = "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771431297/7_r90jci.jpg"
+
 /* ================= OTT SECTION ================= */
 const OTTS = [
   {
@@ -75,6 +85,18 @@ export async function GET() {
       if (updatedGame.gameFrom === "Moneyton") {
         updatedGame.gameFrom = "Moonton";
       }
+      if (updatedGame.gameName === "MLBB RUSSIA") {
+        updatedGame.gameImageId = {
+          ...updatedGame.gameImageId,
+          image: MLBB_RUSIA_IMAGE,
+        };
+      }
+      if (updatedGame.gameName === "SG/MY Mlbb") {
+        updatedGame.gameImageId = {
+          ...updatedGame.gameImageId,
+          image: MLBB_MY_SING_IMAGE,
+        };
+      }
 
       // Replace Mobile Legends main image
       if (updatedGame.gameSlug === "mobile-legends988") {
@@ -92,19 +114,36 @@ export async function GET() {
         };
       }
 
+      if (updatedGame.gameName === "MLBB INDO") {
+        updatedGame.gameImageId = {
+          ...updatedGame.gameImageId,
+          image: MLBB_INDO_IMAGE,
+        };
+      }
+      if (updatedGame.gameSlug === "weeklymonthly-bundle931") {
+        updatedGame.gameImageId = {
+          ...updatedGame.gameImageId,
+          image: MONTHLY_BUNDLE,
+        };
+      }
       return updatedGame;
     };
 
     /* ================= FILTER GAMES ================= */
-    const excludedGameSlugs = [
+    const BLOCKED_GAME_SLUGS = [
       "test-1637",
+      "genshin-impact742",
+      "honor-of-kings57",
       "mobile-legends-backup826",
+      "wuthering-of-waves464",
+      "value-pass-ml948",
+      "ph-value-pass588"
     ];
 
     const filteredGames =
       data?.data?.games
         ?.filter(
-          (game: any) => !excludedGameSlugs.includes(game.gameSlug)
+          (game: any) => !BLOCKED_GAME_SLUGS.includes(game.gameSlug)
         )
         ?.map(normalizeGame) || [];
 
@@ -114,7 +153,7 @@ export async function GET() {
         ...cat,
         gameId:
           cat.gameId
-            ?.filter((game: any) => game.gameSlug !== "test-1637")
+            ?.filter((game: any) => !BLOCKED_GAME_SLUGS.includes(game.gameSlug))
             ?.map(normalizeGame) || [],
       })) || [];
 
@@ -122,7 +161,7 @@ export async function GET() {
 
     // Featured games
     const featuredGames = filteredGames.filter((g: any) =>
-      ["mobile-legends988", "pubg-mobile138", "genshin-impact742"].includes(
+      ["mobile-legends988", "pubg-mobile138"].includes(
         g.gameSlug
       )
     );

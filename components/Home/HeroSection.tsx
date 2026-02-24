@@ -12,6 +12,7 @@ import TopNoticeBanner from "./TopNoticeBanner";
 import ScrollingNoticeBand from "./ScrollingNoticeBand";
 import StorySlider from "./StorySlider";
 import HomeQuickActions from "./HomeQuickActions";
+import FlashSale from "./FlashSale";
 
 export default function HeroSection() {
   const [search, setSearch] = useState("");
@@ -33,6 +34,7 @@ export default function HeroSection() {
 
       <GameBannerCarousel />
       <ScrollingNoticeBand />
+      <FlashSale />
 
       <StorySlider />
       <HomeQuickActions />
