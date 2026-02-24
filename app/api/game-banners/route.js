@@ -6,7 +6,7 @@ export async function GET() {
   try {
     await connectDB();
 
-    const banners = await Banner.find()
+    const banners = await Banner.find({ isShow: true })
       .sort({ bannerDate: -1 })
       .lean();
 

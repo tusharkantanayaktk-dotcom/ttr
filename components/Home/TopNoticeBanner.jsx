@@ -49,7 +49,7 @@ export default function TopNoticeBanner() {
 
   /* ================= SHOW ONCE ================= */
   useEffect(() => {
-    const hidden = sessionStorage.getItem(STORAGE_KEY);
+    const hidden = localStorage.getItem(STORAGE_KEY);
     if (!hidden) setVisible(true);
   }, []);
 
@@ -132,7 +132,7 @@ export default function TopNoticeBanner() {
                 // setVisible(false); // Immediate visual feedback handled by AnimatePresence
                 // Add a small delay effectively or just let exit animation play
                 setVisible(false);
-                sessionStorage.setItem(STORAGE_KEY, "true");
+                localStorage.setItem(STORAGE_KEY, "true");
               }}
               className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
               aria-label="Close banner"
