@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import {
   FaWhatsapp,
   FaInstagram,
-  FaYoutube,
   FaShareNodes,
 } from "react-icons/fa6";
 import { RiChatSmile3Fill, RiCloseFill } from "react-icons/ri";
@@ -26,13 +25,6 @@ const socialLinks = [
     url: "https://www.instagram.com/meowjiofficial.mlbb?igsh=a3ZnOXBkNmY2ZDQ0",
     color: "hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:text-white",
     bgGradient: "from-purple-500 to-pink-500",
-  },
-  {
-    name: "YouTube",
-    icon: FaYoutube,
-    url: "https://www.youtube.com/@whoisfinalboss",
-    color: "hover:bg-red-600 hover:text-white",
-    bgGradient: "from-red-500 to-red-700",
   },
 ];
 
@@ -212,16 +204,17 @@ export default function SocialFloat() {
 
                     <div
                       className={`
-                        relative w-12 h-12
+                        relative w-10 h-10
                         rounded-full
-                        bg-[var(--card)]
-                        border border-[var(--border)]
+                        bg-[var(--card)]/80
+                        backdrop-blur-md
+                        border border-[var(--white)]/10
                         flex items-center justify-center
-                        text-lg
+                        text-base
                         shadow-lg
                         transition-all duration-300
                         group-hover:shadow-xl
-                        group-hover:border-transparent
+                        group-hover:border-[var(--white)]/20
                         ${social.color}
                       `}
                     >
@@ -253,12 +246,13 @@ export default function SocialFloat() {
             >
               <div
                 className="
-                  relative w-12 h-12
+                  relative w-10 h-10
                   rounded-full
-                  bg-[var(--card)]
-                  border border-[var(--border)]
+                  bg-[var(--card)]/80
+                  backdrop-blur-md
+                  border border-[var(--white)]/10
                   flex items-center justify-center
-                  text-lg
+                  text-base
                   shadow-lg
                   transition-all duration-300
                   group-hover:shadow-xl
@@ -283,15 +277,16 @@ export default function SocialFloat() {
         whileHover="hover"
         whileTap="tap"
         className={`
-          relative w-14 h-14
+          relative w-12 h-12
           rounded-full
           text-white
           flex items-center justify-center
           shadow-lg hover:shadow-xl
-          transition-colors duration-300
+          transition-all duration-300
           overflow-hidden
           z-[91]
-          ${isOpen ? 'bg-[var(--foreground)]' : 'bg-gradient-to-br from-[var(--accent)] to-purple-600'}
+          backdrop-blur-md
+          ${isOpen ? 'bg-[var(--foreground)] border border-[var(--white)]/20 shadow-2xl' : 'bg-gradient-to-br from-[var(--accent)] to-purple-600 border border-[var(--white)]/10 shadow-lg shadow-[var(--accent)]/30'}
         `}
         aria-label="Toggle social menu"
       >
@@ -305,9 +300,9 @@ export default function SocialFloat() {
             className="absolute"
           >
             {isOpen ? (
-              <RiCloseFill className="text-3xl" />
+              <RiCloseFill className="text-2xl" />
             ) : (
-              <RiChatSmile3Fill className="text-3xl" />
+              <RiChatSmile3Fill className="text-2xl" />
             )}
           </motion.div>
         </AnimatePresence>

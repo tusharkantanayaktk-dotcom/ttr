@@ -6,7 +6,6 @@ import { FaHeart, FaGamepad } from "react-icons/fa6";
 import {
   FiInstagram,
   FiMessageSquare,
-  FiYoutube,
   FiHome,
   FiGlobe,
   FiInfo,
@@ -25,7 +24,6 @@ const BRAND_DESCRIPTION = process.env.NEXT_PUBLIC_BRAND_DESCRIPTION || "Fast and
 
 const INSTAGRAM_URL = process.env.NEXT_PUBLIC_INSTAGRAM_URL;
 const WHATSAPP_URL = process.env.NEXT_PUBLIC_WHATSAPP_URL;
-const YOUTUBE_URL = process.env.NEXT_PUBLIC_YOUTUBE_URL;
 
 const MADE_BY_NAME = "TK";
 const MADE_BY_URL = "https://wa.me/9178521537";
@@ -55,7 +53,6 @@ const FOOTER_LINKS = [
 const SOCIALS = [
   { label: "Instagram", href: INSTAGRAM_URL, icon: FiInstagram },
   { label: "WhatsApp", href: WHATSAPP_URL, icon: FiMessageSquare },
-  { label: "YouTube", href: YOUTUBE_URL, icon: FiYoutube },
 ];
 
 const TRUST_BADGES = [

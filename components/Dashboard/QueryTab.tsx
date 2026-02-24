@@ -4,7 +4,6 @@ import { JSX, useState } from "react";
 import {
   FaPhoneAlt,
   FaInstagram,
-  FaYoutube,
   FaWhatsapp,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,14 +37,6 @@ const SUPPORT_CONFIG = {
         color: "pink",
       },
       {
-        id: "youtube",
-        title: "YouTube",
-        value: process.env.NEXT_PUBLIC_SUPPORT_YOUTUBE_LABEL,
-        href: process.env.NEXT_PUBLIC_SUPPORT_YOUTUBE_URL,
-        icon: "youtube",
-        color: "red",
-      },
-      {
         id: "whatsapp",
         title: "Community",
         value: process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP_LABEL,
@@ -71,7 +62,6 @@ const SUPPORT_CONFIG = {
 const ICON_MAP: Record<string, JSX.Element> = {
   phone: <FaPhoneAlt />,
   instagram: <FaInstagram />,
-  youtube: <FaYoutube />,
   whatsapp: <FaWhatsapp />,
 };
 

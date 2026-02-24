@@ -244,9 +244,9 @@ export default function ChatBot() {
 
     /* ── FAB animation wrapper ── */
     const fabStyle = {
-        position: "fixed", bottom: 24, left: 20, zIndex: 200,
-        transition: "transform 0.35s cubic-bezier(0.23,1,0.32,1), opacity 0.35s",
-        transform: visible ? "translateY(0)" : "translateY(110px)",
+        position: "fixed", bottom: 24, left: 24, zIndex: 200,
+        transition: "transform 0.4s cubic-bezier(0.23,1,0.32,1), opacity 0.4s",
+        transform: visible ? "translateY(0)" : "translateY(100px)",
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? "auto" : "none",
     };
@@ -262,7 +262,7 @@ export default function ChatBot() {
                         exit={{ opacity: 0, y: 14, scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 340, damping: 28 }}
                         style={{
-                            position: "fixed", bottom: 90, left: 20,
+                            position: "fixed", bottom: 85, left: 24,
                             width: 310, height: 470, zIndex: 200,
                             borderRadius: 22, overflow: "hidden",
                             display: "flex", flexDirection: "column",
@@ -483,9 +483,9 @@ export default function ChatBot() {
                     animate={{ rotate: isOpen ? 0 : 360 }}
                     transition={{ duration: 5, repeat: isOpen ? 0 : Infinity, ease: "linear" }}
                     style={{
-                        position: "absolute", inset: -2, borderRadius: "50%",
+                        position: "absolute", inset: -1.5, borderRadius: "50%",
                         background: "conic-gradient(from 0deg, var(--accent), #a855f7, #ec4899, var(--accent))",
-                        opacity: 0.7, zIndex: 0,
+                        opacity: 0.8, zIndex: 0,
                     }}
                 />
 
@@ -497,14 +497,15 @@ export default function ChatBot() {
                     transition={{ type: "spring", stiffness: 400, damping: 18 }}
                     style={{
                         position: "relative", zIndex: 1,
-                        width: 54, height: 54, borderRadius: "50%",
-                        border: "none", cursor: "pointer",
+                        width: 48, height: 48, borderRadius: "50%",
+                        border: "1px solid rgba(255,255,255,0.1)", cursor: "pointer",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         background: isOpen
-                            ? "rgba(18,18,30,0.95)"
+                            ? "rgba(10,10,20,0.95)"
                             : "linear-gradient(135deg, var(--accent), #a855f7)",
-                        color: "white", fontSize: 22,
-                        boxShadow: "0 8px 28px rgba(0,0,0,0.4)",
+                        color: "white", fontSize: 19,
+                        backdropFilter: "blur(10px)",
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)",
                     }}
                     aria-label="Open chat"
                 >
