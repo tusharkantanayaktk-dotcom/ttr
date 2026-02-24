@@ -5,7 +5,7 @@ const MLBB_MAIN_IMAGE =
   "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500738/kapkap_20260115220013809_sys_zicwwk.jpg";
 
 const MLBB_SMALL_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500739/kapkap_20260115220221554_sys_inhh1f.jpg";
+  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1766076026/e5467ac4556c15c54810e9a78c0d7950_1_dvzsmd.jpg";
 
 const MLBB_RUSIA_IMAGE =
   "https://res.cloudinary.com/dk0sslz1q/image/upload/v1770490927/cb4ec20e05bcf396d0a52c4413cfdd98.jpg_asvgds.jpg";
