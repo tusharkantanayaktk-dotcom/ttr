@@ -15,14 +15,14 @@ const socialLinks = [
   {
     name: "WhatsApp",
     icon: FaWhatsapp,
-    url: "https://wa.me/919366077306",
+    url: "https://wa.me/919631777559",
     color: "hover:bg-green-500 hover:text-white",
     bgGradient: "from-green-400 to-green-600",
   },
   {
     name: "Instagram",
     icon: FaInstagram,
-    url: "https://www.instagram.com/meowjiofficial.mlbb?igsh=a3ZnOXBkNmY2ZDQ0",
+    url: "https://www.instagram.com/tronics_offficial",
     color: "hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:text-white",
     bgGradient: "from-purple-500 to-pink-500",
   },
