@@ -43,7 +43,7 @@ export default function SupportQueriesTab() {
   const fetchQueries = async () => {
     try {
       setLoading(true);
-      const token = sessionStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
       const res = await fetch(
         `/api/admin/support-queries?page=${page}&limit=${limit}&search=${search}`,
@@ -68,7 +68,7 @@ export default function SupportQueriesTab() {
   const updateQueryStatus = async (id, status) => {
     try {
       setUpdating(true);
-      const token = sessionStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
       const res = await fetch("/api/admin/support-queries/status", {
         method: "PATCH",

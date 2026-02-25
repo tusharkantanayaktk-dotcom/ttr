@@ -37,7 +37,7 @@ export default function BuyFlowPage() {
 
   /* ================= LOAD USER ================= */
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) return;
 
     fetch("/api/auth/me", {
@@ -56,7 +56,7 @@ export default function BuyFlowPage() {
   useEffect(() => {
     if (!slug || !itemSlug) return;
 
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     fetch(`/api/games/${slug}`, {
       headers: {

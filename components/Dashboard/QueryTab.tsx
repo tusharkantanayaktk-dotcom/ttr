@@ -86,9 +86,9 @@ export default function QueryTab() {
     setIsSubmitting(true);
     setStatus(null);
 
-    const token = sessionStorage.getItem("token");
-    const storedEmail = sessionStorage.getItem("email");
-    const storedPhone = sessionStorage.getItem("phone");
+    const token = localStorage.getItem("token");
+    const storedEmail = localStorage.getItem("email");
+    const storedPhone = localStorage.getItem("phone");
 
     try {
       const res = await fetch("/api/support/query", {

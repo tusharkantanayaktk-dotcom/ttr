@@ -13,7 +13,7 @@ export default function AccountPage() {
 
     const token =
         typeof window !== "undefined"
-            ? sessionStorage.getItem("token")
+            ? localStorage.getItem("token")
             : null;
 
     useEffect(() => {

@@ -10,7 +10,7 @@ const NOTICE_CONFIG = {
     {
       type: "brand",
       prefix: "Welcome to",
-      suffix: "Store",
+      suffix: " ",
       icon: Sparkles,
     },
     {

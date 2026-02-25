@@ -22,12 +22,12 @@ export default function GameDetailPage() {
   const [game, setGame] = useState(null);
   const [activeItem, setActiveItem] = useState(null);
   const [redirecting, setRedirecting] = useState(false);
-const isBGMI =
+  const isBGMI =
     game?.gameName?.toLowerCase() === "pubg mobile" || game?.gameName?.toLowerCase() === "bgmi";
 
   /* ================= FETCH GAME ================= */
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     fetch(`/api/games/${slug}`, {
       headers: {
@@ -70,16 +70,16 @@ const isBGMI =
     //   `/games/${slug}/buy/${item.itemSlug}?${query.toString()}`
     // );
 
-      const isBGMI =
-    game?.gameName?.toLowerCase() === "pubg mobile" || game?.gameName?.toLowerCase() === "bgmi";
+    const isBGMI =
+      game?.gameName?.toLowerCase() === "pubg mobile" || game?.gameName?.toLowerCase() === "bgmi";
 
-  const basePath = isBGMI
-    ? `/games/pubg/${slug}/buy`
-    : `/games/ott/${slug}/buy`;
+    const basePath = isBGMI
+      ? `/games/pubg/${slug}/buy`
+      : `/games/ott/${slug}/buy`;
 
-  router.push(
-    `${basePath}/${item.itemSlug}?${query.toString()}`
-  );
+    router.push(
+      `${basePath}/${item.itemSlug}?${query.toString()}`
+    );
   };
 
   return (
@@ -99,7 +99,7 @@ const isBGMI =
         <div>
           <h1 className="text-2xl font-extrabold">
             {/* {game?.gameName} */}
-             {isBGMI ? "BGMI" : game?.gameName}
+            {isBGMI ? "BGMI" : game?.gameName}
           </h1>
           <p className="text-xs text-[var(--muted)]">
             {game?.gameFrom}
@@ -108,38 +108,38 @@ const isBGMI =
       </div>
 
       {/* ================= ITEM GRID ================= */}
-       {isBGMI ? (
-      <ItemGridBgmi
-        items={game.allItems}
-        activeItem={activeItem}
-        setActiveItem={setActiveItem}
-        buyPanelRef={buyPanelRef}
-      />
+      {isBGMI ? (
+        <ItemGridBgmi
+          items={game.allItems}
+          activeItem={activeItem}
+          setActiveItem={setActiveItem}
+          buyPanelRef={buyPanelRef}
+        />
       ) : (
-           <ItemGridBgmi
-        items={game.allItems}
-        activeItem={activeItem}
-        setActiveItem={setActiveItem}
-        buyPanelRef={buyPanelRef}
-      />
+        <ItemGridBgmi
+          items={game.allItems}
+          activeItem={activeItem}
+          setActiveItem={setActiveItem}
+          buyPanelRef={buyPanelRef}
+        />
 
-        )}
+      )}
 
       {/* ================= BUY PANEL ================= */}
-        {isBGMI ? (
-      <BuyPanelBgmi
-        activeItem={activeItem}
-        onBuy={goBuy}
-        redirecting={redirecting}
-        buyPanelRef={buyPanelRef}
-      />
+      {isBGMI ? (
+        <BuyPanelBgmi
+          activeItem={activeItem}
+          onBuy={goBuy}
+          redirecting={redirecting}
+          buyPanelRef={buyPanelRef}
+        />
       ) : (
-          <BuyPanelBgmi
-        activeItem={activeItem}
-        onBuy={goBuy}
-        redirecting={redirecting}
-        buyPanelRef={buyPanelRef}
-      />
+        <BuyPanelBgmi
+          activeItem={activeItem}
+          onBuy={goBuy}
+          redirecting={redirecting}
+          buyPanelRef={buyPanelRef}
+        />
       )}
 
 

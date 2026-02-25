@@ -18,7 +18,7 @@ export default function WalletTab() {
     const [totalPages, setTotalPages] = useState(1);
     const limit = 10;
 
-    const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
     useEffect(() => {
         fetchUsers();

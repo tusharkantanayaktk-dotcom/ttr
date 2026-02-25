@@ -220,7 +220,7 @@ export async function POST(req: Request) {
 
     /* ---------- WALLET PAYMENT LOGIC (DISABLED) ---------- */
     if (paymentMethod === "wallet") {
-      return NextResponse.json({ success: false, message: "Wallet payment is currently disabled." });
+      return NextResponse.json({ success: false, message: "Wallet system is currently not available." });
 
       /* 
       const User = (await import("@/models/User")).default;

@@ -30,10 +30,10 @@ export default function AuthPage() {
         return;
       }
 
-      sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("userName", data.user.name);
-      sessionStorage.setItem("email", data.user.email);
-      sessionStorage.setItem("userId", data.user.userId);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userName", data.user.name);
+      localStorage.setItem("email", data.user.email);
+      localStorage.setItem("userId", data.user.userId);
 
       setSuccess("Welcome back! Redirecting...");
       setTimeout(() => (window.location.href = "/"), 900);

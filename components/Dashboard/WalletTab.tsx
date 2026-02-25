@@ -36,7 +36,7 @@ export default function WalletTab({
   const [totalPages, setTotalPages] = useState(1);
 
   const fetchTransactions = useCallback(async (p = 1, quiet = false) => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) return;
 
     if (!quiet) setLoadingTransactions(true);
@@ -58,7 +58,7 @@ export default function WalletTab({
   }, []);
 
   useEffect(() => {
-    const phone = sessionStorage.getItem("phone");
+    const phone = localStorage.getItem("phone");
     if (phone) setStoredPhone(phone);
     fetchTransactions(1);
   }, [fetchTransactions]);
@@ -72,7 +72,7 @@ export default function WalletTab({
     if (!method) return alert("Please select a payment method");
 
     setLoading(true);
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     const res = await fetch("/api/wallet/create-order", {
       method: "POST",
@@ -98,7 +98,7 @@ export default function WalletTab({
   };
 
   const handleVerify = async (orderId: string) => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) return;
 
     try {

@@ -22,7 +22,7 @@ export default function LeaderboardPage() {
   const limit = 10;
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) return;
 
     setLoading(true);

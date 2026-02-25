@@ -3,27 +3,63 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiZap, FiAlertTriangle, FiCpu, FiLogOut, FiServer } from "react-icons/fi";
+import { usePathname } from "next/navigation";
 
 export default function Maintenance() {
+    const pathname = usePathname();
     const [show, setShow] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [isActive, setIsActive] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        const timer = setTimeout(() => setShow(true), 800);
-        return () => clearTimeout(timer);
+        const checkMaintenance = async () => {
+            try {
+                // Check if user is admin to bypass
+                const token = localStorage.getItem("token");
+                if (token) {
+                    const resMe = await fetch("/api/auth/me", {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    const dataMe = await resMe.json();
+                    if (dataMe.success && dataMe.user.userType === "owner") {
+                        setIsAdmin(true);
+                        return; // Bypass maintenance
+                    }
+                }
+
+                // Check maintenance status
+                const res = await fetch("/api/system/maintenance");
+                const data = await res.json();
+                if (data.success && data.maintenanceMode) {
+                    setIsActive(true);
+                    setTimeout(() => setShow(true), 800);
+                }
+            } catch (err) {
+                console.error("Maintenance check failed", err);
+            }
+        };
+
+        checkMaintenance();
+
+        // Polling for status updates every 30 seconds
+        const interval = setInterval(checkMaintenance, 30000);
+        return () => clearInterval(interval);
     }, []);
 
     const handleLoggingOff = () => {
         setIsLoggingOut(true);
 
         const keysToRemove = ["token", "userName", "email", "userId", "phone", "pending_topup_order", "avatar"];
-        keysToRemove.forEach(key => sessionStorage.removeItem(key));
+        keysToRemove.forEach(key => localStorage.removeItem(key));
         localStorage.removeItem("mlbb_verified_players");
 
         setTimeout(() => {
             window.location.href = "/";
         }, 2500);
     };
+
+    if (isAdmin || !isActive || pathname === "/login") return null;
 
     // Generate random particles
     const particles = Array.from({ length: 20 }, (_, i) => ({

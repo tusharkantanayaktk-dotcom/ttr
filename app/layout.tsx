@@ -30,7 +30,7 @@ export default function RootLayout({
           <Footer />
           <SocialFloat />
           <ChatBot />
-          {FEATURE_FLAGS.MAINTENANCE_MODE && <Maintenance />}
+          <Maintenance />
         </GoogleOAuthProvider>
 
       </body>

@@ -10,7 +10,7 @@ export default function AdminGuard({ children }) {
 
     useEffect(() => {
         const checkAuth = async () => {
-            const token = sessionStorage.getItem("token");
+            const token = localStorage.getItem("token");
 
             if (!token) {
                 router.replace("/login");

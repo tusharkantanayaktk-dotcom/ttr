@@ -32,7 +32,7 @@ export default function BannersTab({ banners, onRefresh }) {
 
   const token =
     typeof window !== "undefined"
-      ? sessionStorage.getItem("token")
+      ? localStorage.getItem("token")
       : null;
 
   /* ================= ADD / UPDATE ================= */

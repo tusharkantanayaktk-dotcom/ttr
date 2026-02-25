@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     }
 
     /* ---------- WALLET RECHARGE (DISABLED) ---------- */
-    return NextResponse.json({ success: false, message: "Wallet recharge is currently disabled." });
+    return NextResponse.json({ success: false, message: "Wallet system is currently not available." });
 
     /* 
     const userId = decoded.userId;

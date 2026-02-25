@@ -44,7 +44,7 @@ export default function TransactionsTab() {
   const fetchTransactions = async () => {
     try {
       setLoading(true);
-      const token = sessionStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
       const res = await fetch(
         `/api/admin/transactions?page=${page}&limit=${limit}&search=${search}`,

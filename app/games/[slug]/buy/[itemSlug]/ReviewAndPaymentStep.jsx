@@ -46,8 +46,8 @@ export default function ReviewAndPaymentStep({
     setIsRedirecting(true);
 
     try {
-      const storedPhone = userPhone || sessionStorage.getItem("phone");
-      const token = sessionStorage.getItem("token");
+      const storedPhone = userPhone || localStorage.getItem("phone");
+      const token = localStorage.getItem("token");
 
       const orderPayload = {
         gameSlug: slug,
@@ -79,12 +79,12 @@ export default function ReviewAndPaymentStep({
       }
 
       if (data.paidViaWallet) {
-        sessionStorage.setItem("pending_topup_order", data.orderId);
+        localStorage.setItem("pending_topup_order", data.orderId);
         window.location.href = "/payment/topup-complete";
         return;
       }
 
-      sessionStorage.setItem("pending_topup_order", data.orderId);
+      localStorage.setItem("pending_topup_order", data.orderId);
       window.location.href = data.paymentUrl;
     } catch (err) {
       alert("Something went wrong. Please try again.");

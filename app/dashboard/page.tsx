@@ -15,7 +15,7 @@ export default function Dashboard() {
 
   const token =
     typeof window !== "undefined"
-      ? sessionStorage.getItem("token")
+      ? localStorage.getItem("token")
       : null;
 
   /* ================= LOAD USER ================= */

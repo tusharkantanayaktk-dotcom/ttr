@@ -9,7 +9,7 @@ export default function WalletPage() {
 
     const token =
         typeof window !== "undefined"
-            ? sessionStorage.getItem("token")
+            ? localStorage.getItem("token")
             : null;
 
     useEffect(() => {

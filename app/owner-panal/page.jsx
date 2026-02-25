@@ -15,6 +15,7 @@ import TransactionsTab from "@/components/admin/TransactionsTab";
 import SupportQueriesTab from "@/components/admin/SupportQueriesTab";
 import BannersTab from "@/components/admin/BannersTab";
 import WalletTab from "@/components/admin/WalletTab";
+import SettingsTab from "@/components/admin/SettingsTab";
 
 
 export default function AdminPanalPage() {
@@ -62,7 +63,7 @@ export default function AdminPanalPage() {
 
 
   const fetchBanners = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     const res = await fetch("/api/admin/banners/game-banners", {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -75,7 +76,7 @@ export default function AdminPanalPage() {
 
   /* ================= FETCH PRICING ================= */
   const fetchPricing = async (type) => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     const res = await fetch(`/api/admin/pricing?userType=${type}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -95,7 +96,7 @@ export default function AdminPanalPage() {
   const savePricing = async () => {
     try {
       setSavingPricing(true);
-      const token = sessionStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
       const res = await fetch("/api/admin/pricing", {
         method: "PATCH",
@@ -192,7 +193,7 @@ export default function AdminPanalPage() {
 
 
           <div className="mb-5 flex flex-wrap gap-2">
-            {["users", "orders", "wallet", "transactions", "queries", "pricing", "banners"].map(
+            {["users", "orders", "wallet", "transactions", "queries", "pricing", "banners", "settings"].map(
               (tab) => {
                 const isActive = activeTab === tab;
 
@@ -290,6 +291,10 @@ export default function AdminPanalPage() {
                 savingPricing={savingPricing}
                 onSave={savePricing}
               />
+            )}
+
+            {activeTab === "settings" && (
+              <SettingsTab />
             )}
           </div>
 
