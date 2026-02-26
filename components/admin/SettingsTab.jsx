@@ -34,14 +34,13 @@ export default function SettingsTab() {
         }
     };
 
-    const handleToggle = (key) => {
-        setSettings((prev) => ({
-            ...prev,
-            [key]: !prev[key],
-        }));
-    };
+    const handleToggle = async (key) => {
+        if (saving) return;
 
-    const saveSettings = async () => {
+        const newValue = !settings[key];
+        const newSettings = { ...settings, [key]: newValue };
+        setSettings(newSettings);
+
         try {
             setSaving(true);
             setMessage({ type: "", text: "" });
@@ -52,16 +51,20 @@ export default function SettingsTab() {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ settings }),
+                body: JSON.stringify({ settings: newSettings }),
             });
             const data = await res.json();
             if (data.success) {
-                setMessage({ type: "success", text: "Settings updated successfully!" });
+                setMessage({ type: "success", text: `${key.replace(/_/g, " ")} updated successfully!` });
                 setTimeout(() => setMessage({ type: "", text: "" }), 3000);
             } else {
+                // Revert state on failure
+                setSettings(settings);
                 setMessage({ type: "error", text: data.message || "Failed to update settings" });
             }
         } catch (err) {
+            // Revert state on error
+            setSettings(settings);
             setMessage({ type: "error", text: "Something went wrong" });
         } finally {
             setSaving(false);
@@ -121,15 +124,19 @@ export default function SettingsTab() {
 
                             <button
                                 onClick={() => handleToggle("MAINTENANCE_MODE")}
+                                disabled={saving}
                                 className={`
                   relative w-14 h-7 rounded-full transition-all duration-300 focus:outline-none
                   ${settings.MAINTENANCE_MODE ? "bg-amber-500" : "bg-gray-700"}
+                  ${saving ? "opacity-50 cursor-not-allowed" : ""}
                 `}
                             >
                                 <div className={`
-                  absolute top-1 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300
+                  absolute top-1 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300 flex items-center justify-center
                   ${settings.MAINTENANCE_MODE ? "left-8" : "left-1"}
-                `} />
+                `}>
+                                    {saving && <div className="w-3 h-3 border border-[var(--background)] border-t-transparent rounded-full animate-spin" />}
+                                </div>
                             </button>
                         </div>
                     </div>
@@ -149,47 +156,21 @@ export default function SettingsTab() {
                 {/* More settings can be added here */}
             </div>
 
-            {/* Save Button */}
-            <div className="flex flex-col gap-4 pt-4 border-t border-[var(--border)]">
-                <div className="flex items-center justify-between">
-                    <div className="h-10">
-                        <AnimatePresence>
-                            {message.text && (
-                                <motion.div
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 10 }}
-                                    className={`flex items-center gap-2 text-sm font-medium ${message.type === "success" ? "text-green-500" : "text-red-500"}`}
-                                >
-                                    {message.type === "success" ? <FiCheckCircle /> : <FiAlertTriangle />}
-                                    {message.text}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-
-                    <button
-                        onClick={saveSettings}
-                        disabled={saving}
-                        className="
-                    flex items-center gap-2 px-8 py-3 rounded-xl bg-[var(--accent)] text-black 
-                    font-bold hover:brightness-110 active:scale-95 transition-all
-                    disabled:opacity-50 disabled:scale-100 shadow-[0_0_20px_rgba(var(--accent-rgb),0.2)]
-                "
-                    >
-                        {saving ? (
-                            <>
-                                <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                                <span>Saving...</span>
-                            </>
-                        ) : (
-                            <>
-                                <FiSave />
-                                <span>Save Changes</span>
-                            </>
-                        )}
-                    </button>
-                </div>
+            {/* Message Area */}
+            <div className="h-10 pt-4 border-t border-[var(--border)]">
+                <AnimatePresence>
+                    {message.text && (
+                        <motion.div
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 10 }}
+                            className={`flex items-center gap-2 text-sm font-medium ${message.type === "success" ? "text-green-500" : "text-red-500"}`}
+                        >
+                            {message.type === "success" ? <FiCheckCircle /> : <FiAlertTriangle />}
+                            {message.text}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );
