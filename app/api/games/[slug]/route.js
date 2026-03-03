@@ -10,7 +10,7 @@ const MEMBERSHIPS = {
     gameFrom: "Your Platform",
     gameImageId: {
       image:
-        "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+        "/membership/silver-m.png",
     },
     gameDescription: "Unlock premium pricing and basic benefits.",
     inputFieldOne: "User Email / Phone",
@@ -27,7 +27,7 @@ const MEMBERSHIPS = {
         index: 1,
         itemImageId: {
           image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+            "/membership/silver-m.png",
         },
       },
       {
@@ -39,7 +39,7 @@ const MEMBERSHIPS = {
         index: 3,
         itemImageId: {
           image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+            "/membership/silver-m.png",
         },
       },
     ],
@@ -50,7 +50,7 @@ const MEMBERSHIPS = {
     gameFrom: "Your Platform",
     gameImageId: {
       image:
-        "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
+        "/membership/reseller-m.png",
     },
     gameDescription: "Get reseller pricing, bulk access & dashboard.",
     inputFieldOne: "User Email / Phone",
@@ -67,7 +67,7 @@ const MEMBERSHIPS = {
         index: 1,
         itemImageId: {
           image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
+            "/membership/reseller-m.png",
         },
       },
       {
@@ -79,7 +79,7 @@ const MEMBERSHIPS = {
         index: 3,
         itemImageId: {
           image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
+            "/membership/reseller-m.png",
         },
       },
     ],
@@ -93,7 +93,7 @@ const OTTS = {
     gameFrom: "Google",
     gameImageId: {
       image:
-        "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/aa_avjoox.jpg",
+        "/ott/youtube.webp",
     },
     gameDescription: "Ad-free YouTube, background play, YouTube Music.",
     inputFieldOne: "Email / Phone",
@@ -110,7 +110,7 @@ const OTTS = {
         index: 1,
         itemImageId: {
           image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/aa_avjoox.jpg",
+            "/ott/youtube.webp",
         },
       },
     ],
@@ -121,7 +121,7 @@ const OTTS = {
     gameFrom: "Netflix Inc.",
     gameImageId: {
       image:
-        "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/s_d5mln0.jpg",
+        "/ott/netflix.webp",
     },
     gameDescription: "Movies & series streaming subscription.",
     inputFieldOne: "Account Email",
@@ -138,7 +138,7 @@ const OTTS = {
         index: 1,
         itemImageId: {
           image:
-            "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/s_d5mln0.jpg",
+            "/ott/netflix.webp",
         },
       },
     ],

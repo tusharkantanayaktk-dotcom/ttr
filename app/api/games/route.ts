@@ -2,20 +2,20 @@ import { NextResponse } from "next/server";
 
 /* ================= IMAGES ================= */
 const MLBB_MAIN_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500738/kapkap_20260115220013809_sys_zicwwk.jpg";
+  "/game-assets/india-mlbb.jpg";
 
 const MLBB_SMALL_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1766076026/e5467ac4556c15c54810e9a78c0d7950_1_dvzsmd.jpg";
+  "/game-assets/mlbb-small.jpg";
 
 const MLBB_RUSIA_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1770490927/cb4ec20e05bcf396d0a52c4413cfdd98.jpg_asvgds.jpg";
+  "/game-assets/11.jpg";
 const MLBB_INDO_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1770490919/4c2e2e5ef86bc8cb344febb4a87e8823.jpg_hxbpbs.jpg";
+  "/game-assets/13.jpg";
 const MLBB_MY_SING_IMAGE =
-  "https://res.cloudinary.com/dk0sslz1q/image/upload/v1770490919/a392ca101bac1986eb941c0febd7f30b.jpg_xiixsa.jpg";
+  "/game-assets/double.jpg";
 
 
-const MONTHLY_BUNDLE = "https://res.cloudinary.com/dk0sslz1q/image/upload/v1771431297/7_r90jci.jpg"
+const MONTHLY_BUNDLE = "/game-assets/bundle-weekly.jpg"
 
 /* ================= OTT SECTION ================= */
 const OTTS = [
@@ -23,7 +23,7 @@ const OTTS = [
     name: "YouTube Premium",
     slug: "youtube-premium",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/aa_avjoox.jpg",
+      "/ott/youtube.webp",
     category: "OTT",
     available: true,
   },
@@ -31,7 +31,7 @@ const OTTS = [
     name: "Netflix",
     slug: "netflix",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767027180/s_d5mln0.jpg",
+      "/ott/netflix.webp",
     category: "OTT",
     available: true,
   },
@@ -42,7 +42,7 @@ const MEMBERSHIPS = [
     name: "Silver Membership",
     slug: "silver-membership",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+      "/membership/silver-m.png",
     type: "silver",
     category: "Membership",
     available: true,
@@ -51,7 +51,7 @@ const MEMBERSHIPS = [
     name: "Reseller Membership",
     slug: "reseller-membership",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/sew_zcz775.png",
+      "/membership/reseller-m.png",
     type: "reseller",
     category: "Membership",
     available: true,
@@ -103,6 +103,14 @@ export async function GET() {
         updatedGame.gameImageId = {
           ...updatedGame.gameImageId,
           image: MLBB_MAIN_IMAGE,
+        };
+      }
+
+      // Replace PUBG Mobile image
+      if (updatedGame.gameSlug === "pubg-mobile138") {
+        updatedGame.gameImageId = {
+          ...updatedGame.gameImageId,
+          image: "/game-assets/bgmi-logo.webp",
         };
       }
 

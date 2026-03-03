@@ -16,24 +16,24 @@ const storyData = [
   },
   {
     id: 3,
-    title: "PUBG UC",
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768502877/WhatsApp_Image_2026-01-16_at_00.15.15_sbkqaz.jpg",
+    title: "PUBG Mobile",
+    image: "/game-assets/bgmi-logo.webp",
     link: "/games/pubg-mobile138",
     color: "from-orange-400 to-red-600",
     isLive: true
   },
   {
     id: 4,
-    title: "Double Pack",
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500738/kapkap_20260115220013809_sys_zicwwk.jpg",
-    link: "/games/mlbb-double332",
+    title: "Monthly Pass",
+    image: "/game-assets/bundle-weekly.jpg",
+    link: "/games/weeklymonthly-bundle931",
     color: "from-purple-400 to-rose-600",
     isLive: false
   },
   {
     id: 5,
     title: "Member",
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1767096434/rs_klee62.png",
+    image: "/membership/silver-m.png",
     link: "/games/membership/silver-membership",
     color: "from-emerald-400 to-teal-600",
     isLive: false
