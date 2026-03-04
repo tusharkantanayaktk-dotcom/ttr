@@ -5,7 +5,7 @@ const MLBB_MAIN_IMAGE =
   "/game-assets/india-mlbb.jpg";
 
 const MLBB_SMALL_IMAGE =
-  "/game-assets/smpp-php.jpeg";
+  "/game-assets/mlbb-small.jpeg";
 
 const MLBB_RUSIA_IMAGE =
   "/game-assets/mlbb-russia.jpeg";

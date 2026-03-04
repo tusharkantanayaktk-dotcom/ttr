@@ -241,7 +241,7 @@ export default function ReviewAndPaymentStep({
                   Processing...
                 </>
               ) : (
-                <>Secure Checkout <FiZap /></>
+                <>Buy Now <FiZap /></>
               )}
             </button>
           </div>
