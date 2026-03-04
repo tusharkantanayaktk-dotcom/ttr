@@ -44,7 +44,7 @@ export default function HeroSection() {
 
 
       <HomeServices />
-      <TrustHighlights />
+      {/* <TrustHighlights /> */}
 
 
     </>

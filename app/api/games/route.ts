@@ -5,14 +5,14 @@ const MLBB_MAIN_IMAGE =
   "/game-assets/india-mlbb.jpg";
 
 const MLBB_SMALL_IMAGE =
-  "/game-assets/mlbb-small.jpg";
+  "/game-assets/smpp-php.jpeg";
 
 const MLBB_RUSIA_IMAGE =
-  "/game-assets/11.jpg";
+  "/game-assets/mlbb-russia.jpeg";
 const MLBB_INDO_IMAGE =
-  "/game-assets/13.jpg";
+  "/game-assets/mlbb-indo.jpeg";
 const MLBB_MY_SING_IMAGE =
-  "/game-assets/double.jpg";
+  "/game-assets/my-sg.jpeg";
 
 
 const MONTHLY_BUNDLE = "/game-assets/bundle-weekly.jpg"
