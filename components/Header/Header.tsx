@@ -125,7 +125,7 @@ export default function Header() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 h-20">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 h-16">
 
         {/* LOGO SECTION */}
         <div className="flex items-center gap-8">

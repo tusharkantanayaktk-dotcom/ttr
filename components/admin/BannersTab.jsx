@@ -141,9 +141,9 @@ export default function BannersTab({ banners, onRefresh }) {
       {/* ================= HEADER SECTION ================= */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Banner Management</h2>
+          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Website Banners</h2>
           <p className="text-xs text-[var(--muted)] font-medium mt-1">
-            Manage your website banners and promotional links
+            Add or edit banners for the home screen
           </p>
         </div>
         <button
@@ -172,10 +172,10 @@ export default function BannersTab({ banners, onRefresh }) {
             </div>
             <div>
               <h3 className="text-sm font-bold text-[var(--foreground)]">
-                {editingId ? "Edit Banner" : "Add New Banner"}
+                {editingId ? "Update Banner" : "Add Banner"}
               </h3>
               <p className="text-[10px] text-[var(--muted)] font-medium mt-0.5">
-                {editingId ? "Updating existing banner content" : "Enter details for the new banner"}
+                {editingId ? "Change banner details" : "Fill out the fields below"}
               </p>
             </div>
           </div>

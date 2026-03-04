@@ -164,7 +164,7 @@ export default function UsersTab() {
         <div>
           <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">User Management</h2>
           <p className="text-sm text-[var(--muted)] mt-1">
-            Browse and manage all registered users and their roles.
+            Manage all registered users and their account types.
           </p>
         </div>
 
@@ -172,7 +172,7 @@ export default function UsersTab() {
           <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
             <Users size={14} className="text-[var(--accent)]" />
             <span className="text-sm font-semibold text-[var(--muted)]">
-              {pagination.total} Users Total
+              {pagination.total} Total Users
             </span>
           </div>
           <button
@@ -444,18 +444,18 @@ export default function UsersTab() {
               </div>
 
               <div className="flex-1 overflow-y-auto p-8 space-y-10">
-                <DrawerSection icon={<IdCard size={18} />} title="Basic Information">
-                  <DrawerDetail label="Full Name" value={selectedUser.name} />
+                <DrawerSection icon={<IdCard size={18} />} title="Profile Information">
+                  <DrawerDetail label="Name" value={selectedUser.name} />
                   <DrawerDetail label="User ID" value={selectedUser.userId} />
-                  <DrawerDetail label="Member Since" value={new Date(selectedUser.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })} />
+                  <DrawerDetail label="Joined On" value={new Date(selectedUser.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })} />
                 </DrawerSection>
 
-                <DrawerSection icon={<Mail size={18} />} title="Contact Details">
-                  <DrawerDetail label="Email Address" value={selectedUser.email} />
-                  <DrawerDetail label="Phone Number" value={selectedUser.phone || "Not provided"} />
+                <DrawerSection icon={<Mail size={18} />} title="Contact Information">
+                  <DrawerDetail label="Email" value={selectedUser.email} />
+                  <DrawerDetail label="Phone" value={selectedUser.phone || "Not provided"} />
                 </DrawerSection>
 
-                <DrawerSection icon={<Activity size={18} />} title="Activity & Tracking">
+                <DrawerSection icon={<Activity size={18} />} title="Activity">
                   <DrawerDetail
                     label="Last Login"
                     value={selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleString(undefined, { dateStyle: 'long', timeStyle: 'short' }) : "Never"}
@@ -466,7 +466,7 @@ export default function UsersTab() {
                   />
                 </DrawerSection>
 
-                <DrawerSection icon={<Shield size={18} />} title="Account Management">
+                <DrawerSection icon={<Shield size={18} />} title="Account Settings">
                   <div className="space-y-4 pt-2">
                     <p className="text-xs font-semibold text-[var(--muted)] px-1">Change User Role</p>
                     <RoleDropdown

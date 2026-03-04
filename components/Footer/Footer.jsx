@@ -27,7 +27,7 @@ const WHATSAPP_URL = process.env.NEXT_PUBLIC_WHATSAPP_URL;
 
 const MADE_BY_NAME = "TK";
 const MADE_BY_URL = "https://wa.me/9178521537";
-const COPYRIGHT_NAME = "TK";
+const COPYRIGHT_NAME = "TRONICS STORE";
 
 const FOOTER_LINKS = [
   {
@@ -150,21 +150,19 @@ export default function Footer() {
 
         {/* --- BOTTOM BAR --- */}
         <div className="pt-8 border-t border-[var(--border)] flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3 text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest">
-            <span>&copy; {new Date().getFullYear()} {COPYRIGHT_NAME} SYSTEM</span>
-            <div className="w-1 h-1 rounded-full bg-[var(--border)]" />
-            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[var(--accent)]/5 text-[var(--accent)]">
-              Operational <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
-            </span>
+          <div className="flex items-center gap-3 text-[10px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">
+            <span>&copy; {new Date().getFullYear()} {COPYRIGHT_NAME}</span>
+            <div className="hidden md:block w-1 h-1 rounded-full bg-[var(--border)]" />
+
           </div>
 
-          <div className="flex items-center gap-2 text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest">
-            <span>By</span>
+          <div className="flex items-center gap-2 text-[10px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">
+            <span>MADE BY</span>
             <a
               href={MADE_BY_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--foreground)] border-b border-[var(--accent)]/20"
+              className="text-white hover:text-[var(--accent)] transition-colors border-b-2 border-amber-500/20 hover:border-amber-500 italic"
             >
               {MADE_BY_NAME}
             </a>

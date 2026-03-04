@@ -98,84 +98,55 @@ export default function GameDetailPage() {
   return (
     <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6">
 
-      {/* ================= PREMIUM GAME SWITCHER HUD ================= */}
-      <div className="max-w-6xl mx-auto mb-10 relative group">
-        {/* Decorative Grid Accents */}
-        <div className="absolute -top-4 left-0 right-0 flex justify-between px-2 opacity-20 pointer-events-none">
-          <div className="flex gap-1">
-            <div className="w-1.5 h-1.5 bg-[var(--accent)]" />
-            <div className="w-6 h-1.5 bg-[var(--border)]/30" />
-          </div>
-          <span className="text-[8px] font-black uppercase tracking-[0.3em] text-[var(--muted)]">SEC-NAV // 001</span>
-        </div>
+      {/* ================= MODERN GAME SWITCHER ================= */}
+      <div className="max-w-6xl mx-auto mb-10 overflow-hidden">
+        <div className="flex items-center gap-2 overflow-x-auto py-4 no-scrollbar scroll-smooth">
+          {allGames.map((g) => {
+            const isActive = g.gameSlug === slug;
+            return (
+              <button
+                key={g.gameSlug}
+                onClick={() => router.push(`/games/${g.gameSlug}`)}
+                className={`
+                  relative flex-shrink-0 flex items-center gap-3 px-4 py-2 rounded-2xl transition-all duration-300
+                  ${isActive
+                    ? "bg-foreground/5 border border-foreground/10"
+                    : "hover:bg-foreground/5 border border-transparent"}
+                `}
+              >
+                {/* THUMBNAIL */}
+                <div className={`
+                  relative w-10 h-10 rounded-xl overflow-hidden transition-all duration-500
+                  ${isActive ? "scale-110 shadow-lg shadow-amber-500/20 ring-1 ring-amber-500/50" : "grayscale opacity-40 group-hover:grayscale-0"}
+                `}>
+                  <Image
+                    src={g.gameImageId?.image || logo}
+                    alt={g.gameName}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
 
-        <div className="relative rounded-2xl bg-gradient-to-b from-[var(--card)]/60 to-[var(--card)]/20 backdrop-blur-xl border border-[var(--border)]/40 p-2 overflow-hidden shadow-2xl">
-          {/* Scanline Effect */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.05)_50%)] z-0 bg-[length:100%_4px] pointer-events-none opacity-20" />
-
-          {/* Scroll Fade Gradients */}
-          <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-[var(--card)]/80 to-transparent z-10 pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[var(--card)]/80 to-transparent z-10 pointer-events-none" />
-
-          <div className="flex items-center gap-3 overflow-x-auto py-2 no-scrollbar relative z-10 scroll-smooth">
-            <div className="flex-shrink-0 w-6" /> {/* Spacer for gradient */}
-            {allGames.map((g) => {
-              const isActive = g.gameSlug === slug;
-              return (
-                <button
-                  key={g.gameSlug}
-                  onClick={() => router.push(`/games/${g.gameSlug}`)}
-                  className={`
-                    relative flex-shrink-0 flex flex-col items-center gap-2 group/btn
-                    p-1.5 min-w-[80px] rounded-xl transition-all duration-500
-                    ${isActive
-                      ? "bg-[var(--accent)]/10 scale-105"
-                      : "hover:bg-white/5"}
-                  `}
-                >
-                  {/* Image Container with Tactical Border */}
-                  <div className={`
-                    relative w-12 h-12 rounded-lg overflow-hidden border-2 transition-all duration-500
-                    ${isActive
-                      ? "border-[var(--accent)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.4)]"
-                      : "border-[var(--border)]/40 grayscale group-hover/btn:grayscale-0 group-hover/btn:border-[var(--accent)]/50"}
+                {/* LABEL */}
+                <div className="flex flex-col items-start pr-2">
+                  <span className={`
+                    text-[10px] font-black italic uppercase tracking-wider transition-colors duration-300
+                    ${isActive ? "text-foreground" : "text-muted group-hover:text-foreground"}
                   `}>
-                    <Image
-                      src={g.gameImageId?.image || logo}
-                      alt={g.gameName}
-                      fill
-                      className="object-cover"
-                    />
-                    {/* Active Scan Effect */}
-                    {isActive && (
-                      <motion.div
-                        className="absolute inset-x-0 h-px bg-white/50 z-20"
-                        animate={{ top: ["0%", "100%", "0%"] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                      />
-                    )}
-                  </div>
-
-                  {/* Label */}
-                  <div className="flex flex-col items-center">
-                    <span className={`
-                      text-[9px] font-black uppercase tracking-tight transition-colors duration-300
-                      ${isActive ? "text-[var(--accent)]" : "text-[var(--muted)] group-hover/btn:text-[var(--foreground)]"}
-                    `}>
-                      {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
-                    </span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="nav-glow"
-                        className="h-1 w-4 bg-[var(--accent)] rounded-full mt-1 shadow-[0_0_8px_var(--accent)]"
-                      />
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-            <div className="flex-shrink-0 w-6" /> {/* Spacer for gradient */}
-          </div>
+                    {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
+                  </span>
+                  {isActive && (
+                    <motion.span
+                      layoutId="active-pill"
+                      className="text-[8px] font-black uppercase tracking-[0.2em] text-amber-500 mt-0.5"
+                    >
+                      Active
+                    </motion.span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 

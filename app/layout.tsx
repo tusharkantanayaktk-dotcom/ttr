@@ -26,7 +26,7 @@ export default function RootLayout({
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
 
           <Header />
-          <main className="pt-20">{children}</main>
+          <main className="pt-16">{children}</main>
           <Footer />
           <SocialFloat />
           <ChatBot />
