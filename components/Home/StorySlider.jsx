@@ -68,7 +68,7 @@ export default function StorySlider() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex gap-6 md:gap-10 overflow-x-auto py-6
+        className="flex gap-6 md:gap-14 overflow-x-auto py-6 md:justify-center md:flex-nowrap
         [scrollbar-width:none]
         [&::-webkit-scrollbar]:hidden touch-pan-x snap-x"
       >

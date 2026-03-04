@@ -340,7 +340,7 @@ export default function GamesPage() {
         {memberships?.items?.length > 0 && (
           <section>
             <SectionHeader title={memberships.title} icon={FiActivity} />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {memberships.items.map((plan: any) => (
                 <motion.div
                   key={plan.slug}
@@ -351,48 +351,48 @@ export default function GamesPage() {
                 >
                   <Link
                     href={`/games/membership/${plan.slug}`}
-                    className="relative flex flex-col p-8 md:p-10 rounded-[3rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-500 hover:border-[var(--accent)]/50 group-hover:shadow-[0_30px_60px_rgba(var(--accent-rgb),0.1)] group-hover:-translate-y-3 overflow-hidden"
+                    className="relative flex flex-col p-6 md:p-8 rounded-[2rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-500 hover:border-[var(--accent)]/50 group-hover:shadow-[0_20px_40px_rgba(var(--accent-rgb),0.1)] group-hover:-translate-y-2 overflow-hidden"
                   >
                     {/* Dynamic Background Glows */}
-                    <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent)] opacity-[0.03] blur-[80px] group-hover:opacity-[0.1] transition-opacity duration-700" />
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500 opacity-0 blur-[60px] group-hover:opacity-[0.05] transition-opacity duration-1000" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)] opacity-[0.02] blur-[60px] group-hover:opacity-[0.08] transition-opacity duration-700" />
+                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-500 opacity-0 blur-[40px] group-hover:opacity-[0.04] transition-opacity duration-1000" />
 
-                    <div className="flex items-start justify-between mb-10 relative z-10">
-                      <div className="w-20 h-20 relative rounded-3xl overflow-hidden border-2 border-[var(--border)]/50 group-hover:border-[var(--accent)]/40 transition-colors duration-500 shadow-xl group-hover:scale-105 transform-gpu transition-transform">
+                    <div className="flex items-start justify-between mb-8 relative z-10">
+                      <div className="w-16 h-16 relative rounded-2xl overflow-hidden border-2 border-[var(--border)]/50 group-hover:border-[var(--accent)]/40 transition-colors duration-500 shadow-lg group-hover:scale-105 transform-gpu transition-transform">
                         <Image src={plan.image} alt={plan.name} fill className="object-cover" />
                       </div>
-                      <div className="w-12 h-12 rounded-2xl bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center border border-[var(--accent)]/20 shadow-sm group-hover:rotate-12 transition-transform duration-500">
-                        <FiZap size={22} fill="currentColor" className="opacity-30 group-hover:opacity-100 transition-opacity" />
+                      <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center border border-[var(--accent)]/20 shadow-sm group-hover:rotate-12 transition-transform duration-500">
+                        <FiZap size={18} fill="currentColor" className="opacity-30 group-hover:opacity-100 transition-opacity" />
                       </div>
                     </div>
 
-                    <div className="space-y-6 relative z-10">
+                    <div className="space-y-4 relative z-10">
                       <div>
-                        <p className="text-[10px] text-[var(--muted)] font-black uppercase tracking-[0.3em] mb-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                        <p className="text-[9px] text-[var(--muted)] font-black uppercase tracking-[0.3em] mb-1.5 opacity-50 group-hover:opacity-100 transition-opacity">
                           Subscription Plan
                         </p>
-                        <h4 className="text-2xl font-black text-[var(--foreground)] uppercase italic tracking-tighter group-hover:text-[var(--accent)] transition-colors">
+                        <h4 className="text-xl font-black text-[var(--foreground)] uppercase italic tracking-tighter group-hover:text-[var(--accent)] transition-colors">
                           {plan.name}
                         </h4>
                       </div>
 
-                      <div className="inline-flex px-5 py-2 rounded-2xl bg-[var(--accent)]/5 border border-[var(--accent)]/10 text-[var(--accent)] text-[11px] font-black uppercase tracking-widest backdrop-blur-md">
+                      <div className="inline-flex px-4 py-1.5 rounded-xl bg-[var(--accent)]/5 border border-[var(--accent)]/10 text-[var(--accent)] text-[10px] font-black uppercase tracking-widest backdrop-blur-md">
                         {plan.duration}
                       </div>
                     </div>
 
-                    <div className="mt-10 flex items-center justify-between relative z-10">
-                      <div className="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-[var(--muted)] group-hover:text-[var(--foreground)] transition-all duration-500">
+                    <div className="mt-8 flex items-center justify-between relative z-10">
+                      <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-[var(--muted)] group-hover:text-[var(--foreground)] transition-all duration-500">
                         Activate Profile
-                        <div className="w-8 h-8 rounded-full border border-[var(--border)] group-hover:border-[var(--accent)]/50 flex items-center justify-center group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
-                          <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" />
+                        <div className="w-7 h-7 rounded-full border border-[var(--border)] group-hover:border-[var(--accent)]/50 flex items-center justify-center group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
+                          <FiArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                         </div>
                       </div>
-                      <FiActivity className="text-[var(--border)] group-hover:text-[var(--accent)]/30 transition-colors duration-500" size={24} />
+                      <FiActivity className="text-[var(--border)] group-hover:text-[var(--accent)]/30 transition-colors duration-500" size={20} />
                     </div>
 
                     {/* Subtle Overlay Pattern */}
-                    <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] bg-[size:20px_20px]" />
+                    <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] bg-[size:15px_15px]" />
                   </Link>
                 </motion.div>
               ))}

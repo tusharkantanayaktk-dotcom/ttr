@@ -44,7 +44,7 @@ export default function ScrollingNoticeBand() {
   const duplicatedItems = [...NOTICE_CONFIG.items, ...NOTICE_CONFIG.items];
 
   return (
-    <div className="w-[95%] mx-auto mt-4 mb-2 relative group">
+    <div className="w-full max-w-7xl mx-auto px-4 mt-4 mb-2 relative group">
       {/* Premium Outer Container with Glassmorphism */}
       <div className="relative overflow-hidden bg-[var(--card)]/40 backdrop-blur-md border border-[var(--border)]/50 rounded-2xl md:rounded-full py-2.5 px-4 flex items-center shadow-lg shadow-black/5">
 

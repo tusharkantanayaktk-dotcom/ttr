@@ -78,7 +78,7 @@ export default function FlashSale() {
 
                 {/* Compact Horizontal Slider */}
                 <div className="overflow-x-auto pb-4 custom-scrollbar-premium snap-x snap-mandatory">
-                    <div className="flex gap-4 md:gap-6 px-1 md:justify-center min-w-max md:min-w-0">
+                    <div className="flex gap-4 md:gap-14 px-1 md:justify-center md:flex-nowrap min-w-max md:min-w-0">
                         {flashSaleData.map((item, index) => (
                             <motion.div
                                 key={item.id}
