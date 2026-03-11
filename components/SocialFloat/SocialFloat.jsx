@@ -126,9 +126,8 @@ export default function SocialFloat() {
       scale: 1,
       rotate: 0,
       transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20
+        duration: 0.3,
+        ease: "easeOut"
       }
     },
     exit: {
@@ -206,8 +205,7 @@ export default function SocialFloat() {
                       className={`
                         relative w-10 h-10
                         rounded-full
-                        bg-[var(--card)]/80
-                        backdrop-blur-md
+                        bg-[#1a1a2e]
                         border border-[var(--white)]/10
                         flex items-center justify-center
                         text-base
@@ -248,8 +246,7 @@ export default function SocialFloat() {
                 className="
                   relative w-10 h-10
                   rounded-full
-                  bg-[var(--card)]/80
-                  backdrop-blur-md
+                  bg-[#1a1a2e]
                   border border-[var(--white)]/10
                   flex items-center justify-center
                   text-base
@@ -285,7 +282,6 @@ export default function SocialFloat() {
           transition-all duration-300
           overflow-hidden
           z-[91]
-          backdrop-blur-md
           ${isOpen ? 'bg-[var(--foreground)] border border-[var(--white)]/20 shadow-2xl' : 'bg-gradient-to-br from-[var(--accent)] to-purple-600 border border-[var(--white)]/10 shadow-lg shadow-[var(--accent)]/30'}
         `}
         aria-label="Toggle social menu"

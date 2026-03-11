@@ -266,9 +266,7 @@ export default function ChatBot() {
                             width: 310, height: 470, zIndex: 200,
                             borderRadius: 22, overflow: "hidden",
                             display: "flex", flexDirection: "column",
-                            background: "rgba(8,8,18,0.90)",
-                            backdropFilter: "blur(28px)",
-                            WebkitBackdropFilter: "blur(28px)",
+                            background: "#080812",
                             border: "1px solid rgba(255,255,255,0.09)",
                             boxShadow: "0 32px 80px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.04)",
                         }}
@@ -464,18 +462,11 @@ export default function ChatBot() {
             <div style={fabStyle}>
                 {/* Pulse rings when closed */}
                 {!isOpen && (
-                    <>
-                        <motion.div
-                            animate={{ scale: [1, 1.8], opacity: [0.3, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-                            style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "var(--accent)", pointerEvents: "none" }}
-                        />
-                        <motion.div
-                            animate={{ scale: [1, 1.45], opacity: [0.18, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
-                            style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "var(--accent)", pointerEvents: "none" }}
-                        />
-                    </>
+                    <motion.div
+                        animate={{ opacity: [0.2, 0.5, 0.2] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        style={{ position: "absolute", inset: -4, borderRadius: "50%", background: "var(--accent)", pointerEvents: "none", filter: "blur(8px)" }}
+                    />
                 )}
 
                 {/* Spinning conic ring */}
@@ -501,10 +492,9 @@ export default function ChatBot() {
                         border: "1px solid rgba(255,255,255,0.1)", cursor: "pointer",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         background: isOpen
-                            ? "rgba(10,10,20,0.95)"
+                            ? "#0a0a14"
                             : "linear-gradient(135deg, var(--accent), #a855f7)",
                         color: "white", fontSize: 19,
-                        backdropFilter: "blur(10px)",
                         boxShadow: "0 10px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)",
                     }}
                     aria-label="Open chat"

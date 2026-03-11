@@ -5,14 +5,15 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
+import dynamic from "next/dynamic";
 import logo from "@/public/logo.png";
-import Loader from "@/components/Loader/Loader";
-import MLBBPurchaseGuide from "../../../components/HelpImage/MLBBPurchaseGuide";
 
-import ItemGrid from "@/components/GameDetail/ItemGrid";
-import BuyPanel from "@/components/GameDetail/BuyPanel";
-import ItemGridBgmi from "@/components/GameDetail/ItemGridBgmi";
-import BuyPanelBgmi from "@/components/GameDetail/BuyPanelBgmi";
+const Loader = dynamic(() => import("@/components/Loader/Loader"), { ssr: false });
+const MLBBPurchaseGuide = dynamic(() => import("../../../components/HelpImage/MLBBPurchaseGuide"), { ssr: false });
+const ItemGrid = dynamic(() => import("@/components/GameDetail/ItemGrid"), { ssr: false });
+const BuyPanel = dynamic(() => import("@/components/GameDetail/BuyPanel"), { ssr: false });
+const ItemGridBgmi = dynamic(() => import("@/components/GameDetail/ItemGridBgmi"), { ssr: false });
+const BuyPanelBgmi = dynamic(() => import("@/components/GameDetail/BuyPanelBgmi"), { ssr: false });
 
 export default function GameDetailPage() {
   const { slug } = useParams();

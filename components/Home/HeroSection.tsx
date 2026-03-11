@@ -3,16 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import GamesPage from "@/app/games/page";
+import dynamic from 'next/dynamic';
 import GameBannerCarousel from "./GameBannerCarousel";
-import HomeServices from "./HomeServices";
-import TrustHighlights from "./TrustHighlights";
-import MLBBPurchaseGuide from "../HelpImage/MLBBPurchaseGuide";
 import TopNoticeBanner from "./TopNoticeBanner";
 import ScrollingNoticeBand from "./ScrollingNoticeBand";
-import StorySlider from "./StorySlider";
-import HomeQuickActions from "./HomeQuickActions";
-import FlashSale from "./FlashSale";
+
+const GamesPage = dynamic(() => import("@/app/games/page"), { ssr: false });
+const FlashSale = dynamic(() => import("./FlashSale"), { ssr: false });
+const StorySlider = dynamic(() => import("./StorySlider"), { ssr: false });
+const HomeQuickActions = dynamic(() => import("./HomeQuickActions"), { ssr: false });
+const HomeServices = dynamic(() => import("./HomeServices"), { ssr: false });
+const TrustHighlights = dynamic(() => import("./TrustHighlights"), { ssr: false });
+const MLBBPurchaseGuide = dynamic(() => import("../HelpImage/MLBBPurchaseGuide"), { ssr: false });
 
 export default function HeroSection() {
   const [search, setSearch] = useState("");

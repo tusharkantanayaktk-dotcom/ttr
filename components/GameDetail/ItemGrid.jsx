@@ -49,13 +49,13 @@ export default function ItemGrid({
               rounded-xl border transition-all duration-300
               flex flex-col justify-between min-h-[90px] p-3.5 cursor-pointer
               ${isSelected
-                ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-[0_0_30px_rgba(var(--accent-rgb),0.2)] backdrop-blur-md"
-                : "border-[var(--border)] bg-[var(--card)]/40 hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/60 backdrop-blur-sm"
+                ? "border-[var(--accent)] bg-[var(--accent)]/15 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
+                : "border-[var(--border)] bg-[var(--card)]/40 hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/60"
               }
             `}
           >
             {/* Glossy Shimmer Effect on Hover/Selection */}
-            <div className={`absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none ${isSelected ? 'opacity-100' : 'opacity-0Group-hover:opacity-100'}`} />
+            {isSelected && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent animate-shimmer pointer-events-none" />}
 
             {/* Selection Indicator Glow */}
             {isSelected && (
@@ -106,17 +106,14 @@ export default function ItemGrid({
             {/* Corner Accent Decor */}
             <div className={`absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[var(--accent)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-3xl pointer-events-none`} />
 
-            {/* Floating Particle Decor (Selected Only) */}
+            {/* Floating Particle Decor (Selected Only) - Simplified */}
             {isSelected && (
-              <div className="absolute bottom-2 right-2 flex gap-1">
-                {[1, 2, 3].map((i) => (
-                  <motion.div
-                    key={i}
-                    animate={{ y: [0, -10, 0], opacity: [0, 1, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: i * 0.4 }}
-                    className="w-1 h-1 bg-[var(--accent)] rounded-full blur-[1px]"
-                  />
-                ))}
+              <div className="absolute bottom-2 right-2">
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="w-2 h-2 bg-[var(--accent)] rounded-full blur-[1px]"
+                />
               </div>
             )}
           </motion.div>

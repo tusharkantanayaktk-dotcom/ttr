@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import SocialFloat from "@/components/SocialFloat/SocialFloat";
-import ChatBot from "@/components/ChatBot/ChatBot";
-import Maintenance from "@/components/Maintenance/Maintenance";
+import GlobalElements from "@/components/GlobalElements";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { FEATURE_FLAGS } from "@/lib/config";
@@ -28,9 +26,7 @@ export default function RootLayout({
           <Header />
           <main className="pt-16">{children}</main>
           <Footer />
-          <SocialFloat />
-          <ChatBot />
-          <Maintenance />
+          <GlobalElements />
         </GoogleOAuthProvider>
 
       </body>

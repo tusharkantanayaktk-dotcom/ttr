@@ -394,25 +394,55 @@ a:hover {
 
 /* ✨ Premium Animations */
 @keyframes rotate-gradient {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes gradient-x {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes float {
-  0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.5; }
-  90% { opacity: 0.5; }
-  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.5;
+  }
+
+  90% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
 }
 
 .animate-rotate-gradient {
@@ -430,4 +460,47 @@ a:hover {
 
 .animate-float-particle {
   animation: float linear infinite;
+}
+
+/* 🌀 Premium Loader Keyframes */
+@keyframes orbit-1 {
+  from {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+
+  to {
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+
+@keyframes orbit-2 {
+  from {
+    transform: rotateX(0deg) rotateZ(0deg);
+  }
+
+  to {
+    transform: rotateX(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes orbit-3 {
+  from {
+    transform: rotateY(0deg) rotateZ(0deg);
+  }
+
+  to {
+    transform: rotateY(360deg) rotateZ(-360deg);
+  }
+}
+
+.animate-orbit-1 {
+  animation: orbit-1 1.2s linear infinite;
+}
+
+.animate-orbit-2 {
+  animation: orbit-2 1.6s linear infinite;
+}
+
+.animate-orbit-3 {
+  animation: orbit-3 2s linear infinite;
 }
