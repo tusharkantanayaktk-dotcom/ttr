@@ -32,7 +32,7 @@ export default function RootLayout({
         </GoogleOAuthProvider>
 
       </body>
-      <GoogleAnalytics gaId="G-7F4003P2EE" />
+      <GoogleAnalytics gaId="G-RBPY9YC6V6" />
       {/* <script src="https://quge5.com/88/tag.min.js" data-zone="191906" async data-cfasync="false"></script> */}
     </html>
   );
