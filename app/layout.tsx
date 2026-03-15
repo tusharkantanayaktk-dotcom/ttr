@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import BottomNav from "@/components/BottomNav/BottomNav";
 import GlobalElements from "@/components/GlobalElements";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -24,8 +25,9 @@ export default function RootLayout({
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
 
           <Header />
-          <main className="pt-16">{children}</main>
+          <main className="pt-14 pb-24 lg:pb-0">{children}</main>
           <Footer />
+          <BottomNav />
           <GlobalElements />
         </GoogleOAuthProvider>
 

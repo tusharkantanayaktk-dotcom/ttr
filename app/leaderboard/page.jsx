@@ -94,9 +94,9 @@ export default function LeaderboardPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-[var(--muted)] text-sm uppercase tracking-widest max-w-md mx-auto"
+              className="text-[var(--muted)] text-xs font-medium uppercase tracking-widest max-w-md mx-auto"
             >
-              The elite corps of contributors. Rise through the ranks and dominate the logistics network.
+              See who's at the top this month.
             </motion.p>
           </div>
 
@@ -140,9 +140,9 @@ export default function LeaderboardPage() {
               <div className="inline-flex p-4 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] mb-6">
                 <FiZap size={32} />
               </div>
-              <h2 className="text-2xl font-bold mb-2 uppercase italic tracking-tight">System Initialization Required</h2>
-              <p className="text-[var(--muted)] text-sm max-w-xs mx-auto mb-8">
-                No data detected in the current sector. Secure the first position to establish network presence.
+              <h2 className="text-xl font-bold mb-2 uppercase tracking-tight">No Rankings Yet</h2>
+              <p className="text-[var(--muted)] text-xs max-w-xs mx-auto mb-8">
+                Be the first one to show up on the leaderboard!
               </p>
             </motion.div>
           ) : (
@@ -175,10 +175,9 @@ export default function LeaderboardPage() {
                   className="max-w-2xl mx-auto space-y-3 px-4"
                 >
                   <div className="flex items-center justify-between px-6 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">
-                    <span>Collaborator</span>
-                    <div className="flex gap-12">
-                      <span>Orders</span>
-                      <span className="w-20 text-right">Contribution</span>
+                    <span>User</span>
+                    <div className="flex justify-end">
+                      <span className="w-24 text-right">Spent</span>
                     </div>
                   </div>
 
@@ -199,12 +198,8 @@ export default function LeaderboardPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-12">
-                          <div className="flex items-center gap-1.5">
-                            <FiShoppingBag size={12} className="text-[var(--muted)]" />
-                            <span className="text-sm font-medium">{item.totalOrders}</span>
-                          </div>
-                          <div className="w-20 text-right">
+                        <div className="flex justify-end">
+                          <div className="w-24 text-right">
                             <span className="text-sm font-bold text-[var(--accent)] tracking-tighter">₹{item.totalSpent}</span>
                           </div>
                         </div>
@@ -256,19 +251,13 @@ function PodiumCard({ user, rank, style, isMain = false }) {
           {user.user?.name || "Anonymous"}
         </h3>
         <p className="text-[7px] sm:text-[10px] font-bold text-[var(--muted)] uppercase tracking-[0.1em] sm:tracking-[0.2em] mb-1 sm:mb-4">
-          Operative
+          Ranked
         </p>
       </div>
 
-      <div className="relative z-10 w-full grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 mt-2 sm:mt-4 pt-2 sm:pt-4 border-t border-white/5">
-        <div className="flex flex-col items-center">
-          <span className="text-[6px] sm:text-[8px] font-black text-[var(--muted)] uppercase">Orders</span>
-          <span className="text-[10px] sm:text-sm font-bold tracking-tighter">{user.totalOrders}</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <span className="text-[6px] sm:text-[8px] font-black text-[var(--muted)] uppercase">Spent</span>
-          <span className={`text-[10px] sm:text-sm font-black tracking-tighter ${style.color}`}>₹{user.totalSpent}</span>
-        </div>
+      <div className="relative z-10 w-full flex flex-col items-center mt-2 sm:mt-4 pt-2 sm:pt-4 border-t border-white/5">
+        <span className="text-[6px] sm:text-[8px] font-black text-[var(--muted)] uppercase">Total Spent</span>
+        <span className={`text-xs sm:text-base font-black tracking-tighter ${style.color}`}>₹{user.totalSpent}</span>
       </div>
 
       {/* DECORATIVE CORNER BRACKETS */}

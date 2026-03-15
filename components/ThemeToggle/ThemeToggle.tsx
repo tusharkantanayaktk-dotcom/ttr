@@ -64,7 +64,7 @@ export default function ThemeToggle() {
       <motion.button
         onClick={() => setOpen(!open)}
         className={`
-          w-10 h-10 flex items-center justify-center rounded-full border transition-all duration-300
+          w-9 h-9 flex items-center justify-center rounded-full border transition-all duration-300
           ${open ? 'bg-[var(--accent)] text-white border-[var(--accent)]' : 'bg-[var(--card)]/50 border-[var(--border)] hover:border-[var(--accent)]/50'}
         `}
         whileHover={{ y: -1, rotate: [0, -10, 10, 0] }}
@@ -72,7 +72,7 @@ export default function ThemeToggle() {
       >
         <motion.span
           animate={open ? { rotate: 180, scale: 1.1 } : { rotate: 0, scale: 1 }}
-          className="text-lg"
+          className="text-base"
         >
           {currentTheme.icon}
         </motion.span>

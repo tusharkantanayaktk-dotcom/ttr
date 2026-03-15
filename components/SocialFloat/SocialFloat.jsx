@@ -163,7 +163,7 @@ export default function SocialFloat() {
         opacity: isVisible ? 1 : 0,
       }}
       transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-      className="fixed bottom-6 right-6 z-[90]"
+      className="fixed bottom-22 right-4 sm:bottom-6 sm:right-6 z-[90] hidden lg:block"
       style={{ pointerEvents: isVisible ? "auto" : "none" }}
     >
       {/* ================= FLOATING MENU ================= */}
@@ -203,12 +203,12 @@ export default function SocialFloat() {
 
                     <div
                       className={`
-                        relative w-10 h-10
+                        relative w-8 h-8 sm:w-10 sm:h-10
                         rounded-full
                         bg-[#1a1a2e]
                         border border-[var(--white)]/10
                         flex items-center justify-center
-                        text-base
+                        text-sm sm:text-base
                         shadow-lg
                         transition-all duration-300
                         group-hover:shadow-xl
@@ -216,7 +216,7 @@ export default function SocialFloat() {
                         ${social.color}
                       `}
                     >
-                      <Icon />
+                      <Icon className="text-sm sm:text-base" />
                     </div>
                   </Link>
                 </motion.div>
@@ -244,12 +244,12 @@ export default function SocialFloat() {
             >
               <div
                 className="
-                  relative w-10 h-10
+                  relative w-8 h-8 sm:w-10 sm:h-10
                   rounded-full
                   bg-[#1a1a2e]
                   border border-[var(--white)]/10
                   flex items-center justify-center
-                  text-base
+                  text-sm sm:text-base
                   shadow-lg
                   transition-all duration-300
                   group-hover:shadow-xl
@@ -258,7 +258,7 @@ export default function SocialFloat() {
                   group-hover:border-transparent
                 "
               >
-                <FaShareNodes />
+                <FaShareNodes className="text-sm sm:text-base" />
               </div>
             </motion.button>
           </motion.div>
@@ -274,7 +274,7 @@ export default function SocialFloat() {
         whileHover="hover"
         whileTap="tap"
         className={`
-          relative w-12 h-12
+          relative w-10 h-10 sm:w-12 sm:h-12
           rounded-full
           text-white
           flex items-center justify-center

@@ -12,8 +12,8 @@ const flashSaleData = [
         name: "Weekly Pass",
         game: "MLBB",
         image: "/game-assets/weekly-pass.jpeg",
-        price: "₹147",
-        originalPrice: "₹175",
+        price: "₹143",
+        originalPrice: "₹170",
         slug: "mobile-legends988?type=weekly-pass",
         badge: "Hot Deal"
     },
@@ -45,138 +45,104 @@ export default function FlashSale() {
     }, []);
 
     return (
-        <section className="relative py-4 px-4 overflow-hidden border-b border-white/5">
-            {/* PREMIUM BACKGROUND ACCENTS */}
-            <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-amber-500/5 blur-[120px] pointer-events-none rounded-full" />
-            <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-amber-500/[0.03] blur-[100px] pointer-events-none rounded-full" />
+        <section className="relative py-2 px-4 overflow-hidden border-b border-[var(--border)] opacity-95">
+            {/* BACKGROUND ACCENTS */}
+            <div className="absolute top-0 left-1/4 w-[300px] h-[300px] bg-amber-500/5 blur-[100px] pointer-events-none rounded-full" />
 
             <div className="max-w-7xl mx-auto relative">
-                {/* ENHANCED HEADER - COMPACT VERSION */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-                    <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-lg bg-amber-500 flex items-center justify-center text-black shadow-[0_0_15px_rgba(245,158,11,0.3)]">
-                            <FiZap size={14} fill="currentColor" />
+                {/* COMPACT HEADER */}
+                <div className="flex flex-row items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                        <div className="w-5 h-5 rounded-md bg-amber-500 flex items-center justify-center text-black shadow-[0_0_10px_rgba(245,158,11,0.3)]">
+                            <FiZap size={12} fill="currentColor" />
                         </div>
-                        <h2 className="text-xl font-black italic uppercase tracking-tighter text-foreground leading-none">
+                        <h2 className="text-lg font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none">
                             Flash <span className="text-amber-500">Sale</span>
                         </h2>
-                        <div className="hidden sm:block w-px h-4 bg-foreground/10 mx-1" />
-                        <p className="hidden sm:block text-[9px] font-bold text-muted uppercase tracking-[0.2em] opacity-40">Limited time</p>
+                        <div className="hidden xs:block w-px h-3 bg-[var(--border)] mx-1" />
+                        <p className="hidden md:block text-[8px] font-bold text-[var(--foreground)]/40 uppercase tracking-[0.2em]">Limited time</p>
                     </div>
 
-                    {/* ULTRA COMPACT COUNTDOWN HUD */}
-                    <div className="flex items-center gap-3 bg-foreground/[0.02] backdrop-blur-xl border border-foreground/5 px-2.5 py-1.5 rounded-xl self-start sm:self-auto">
-                        <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/10">
+                    {/* STREAMLINED COUNTDOWN */}
+                    <div className="flex items-center gap-2 px-2 py-1 bg-[var(--card)]/50 border border-[var(--border)] rounded-lg">
+                        <div className="flex items-center gap-1">
                             <FiClock className="text-amber-500 animate-pulse" size={10} />
-                            <span className="text-[8px] font-black uppercase tracking-widest text-amber-500">Ends In</span>
+                            <span className="hidden xs:block text-[8px] font-black uppercase tracking-widest text-amber-500">Ends In</span>
                         </div>
 
-                        <div className="flex items-center gap-2 font-black text-sm md:text-base tabular-nums text-foreground">
-                            <div className="flex flex-col items-center min-w-[1.2rem]">
-                                <span className="leading-none">{String(timeLeft.hours).padStart(2, '0')}</span>
-                                <span className="text-[6px] opacity-30 mt-0.5 uppercase">H</span>
-                            </div>
-                            <span className="opacity-10 translate-y-[-2px] text-[10px]">:</span>
-                            <div className="flex flex-col items-center min-w-[1.2rem]">
-                                <span className="leading-none">{String(timeLeft.minutes).padStart(2, '0')}</span>
-                                <span className="text-[6px] opacity-30 mt-0.5 uppercase">M</span>
-                            </div>
-                            <span className="opacity-10 translate-y-[-2px] text-[10px]">:</span>
-                            <div className="flex flex-col items-center min-w-[1.2rem] text-amber-500">
-                                <span className="leading-none">{String(timeLeft.seconds).padStart(2, '0')}</span>
-                                <span className="text-[6px] opacity-30 mt-0.5 uppercase">S</span>
-                            </div>
+                        <div className="flex items-center gap-1.5 font-bold text-xs tabular-nums text-[var(--foreground)]">
+                            <span className="min-w-[1rem] text-center">{String(timeLeft.hours).padStart(2, '0')}</span>
+                            <span className="opacity-20 text-[10px]">:</span>
+                            <span className="min-w-[1rem] text-center">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                            <span className="opacity-20 text-[10px]">:</span>
+                            <span className="min-w-[1rem] text-center text-amber-500">{String(timeLeft.seconds).padStart(2, '0')}</span>
                         </div>
                     </div>
                 </div>
 
-                {/* ENHANCED GRID */}
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+                {/* COMPACT GRID */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                     {flashSaleData.map((item, index) => (
                         <motion.div
                             key={item.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.4, delay: index * 0.1 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
                             viewport={{ once: true }}
                         >
                             <Link
                                 href={`/games/${item.slug}`}
-                                className="group relative block bg-foreground/[0.02] hover:bg-foreground/[0.04] backdrop-blur-xl border border-foreground/[0.05] hover:border-amber-500/20 rounded-[1.5rem] p-2 transition-all duration-500 shadow-2xl"
+                                className="group relative block bg-[var(--card)]/50 hover:bg-[var(--card)] backdrop-blur-xl border border-[var(--border)] hover:border-amber-500/30 rounded-2xl p-2 transition-all duration-300"
                             >
                                 {/* Badge Overlay */}
-                                <div className="absolute top-4 left-4 z-20">
-                                    <span className="text-[8px] font-black italic uppercase tracking-widest px-2 py-1 rounded-md bg-amber-500 text-black shadow-xl scale-90 group-hover:scale-100 transition-transform">
+                                <div className="absolute top-3 left-3 z-20">
+                                    <span className="text-[7px] font-black italic uppercase tracking-widest px-1.5 py-0.5 rounded-sm bg-amber-500 text-black shadow-lg">
                                         {item.badge}
                                     </span>
                                 </div>
 
                                 {/* IMAGE CONTAINER */}
-                                <div className="relative aspect-square rounded-[1rem] overflow-hidden mb-2 bg-black/40 border border-white/5">
+                                <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-2 bg-black/40">
                                     <Image
                                         src={item.image}
                                         alt={item.name}
                                         fill
-                                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-
-                                    {/* QUick Buy Trigger (Desktop) */}
-                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100">
-                                        <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-2xl">
-                                            <FiZap size={20} fill="currentColor" />
-                                        </div>
-                                    </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                                 </div>
 
                                 {/* INFO CONTENT */}
-                                <div className="space-y-1 px-1">
-                                    <div className="flex items-center gap-1.5 font-black italic uppercase tracking-widest text-muted text-[8px]">
+                                <div className="space-y-0.5 px-0.5">
+                                    <div className="flex items-center gap-1 font-black italic uppercase tracking-widest text-[var(--foreground)]/40 text-[7px]">
                                         <span className="w-1 h-1 rounded-full bg-amber-500" />
                                         {item.game}
                                     </div>
 
-                                    <h3 className="text-xs font-black italic uppercase tracking-tighter text-foreground truncate group-hover:text-amber-500 transition-colors">
+                                    <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate group-hover:text-amber-500 transition-colors">
                                         {item.name}
                                     </h3>
 
-                                    <div className="flex items-end justify-between gap-1 pt-1">
-                                        <div className="flex flex-col">
-                                            <span className="text-[8px] font-bold text-muted line-through opacity-50 mb-[-1px]">
-                                                {item.originalPrice}
-                                            </span>
-                                            <span className="text-base font-black italic text-foreground tracking-tighter">
+                                    <div className="flex items-center justify-between gap-1 pt-0.5">
+                                        <div className="flex items-baseline gap-1.5">
+                                            <span className="text-sm font-black italic text-[var(--foreground)] tracking-tighter">
                                                 {item.price}
+                                            </span>
+                                            <span className="text-[9px] font-bold text-[var(--foreground)]/30 line-through">
+                                                {item.originalPrice}
                                             </span>
                                         </div>
 
-                                        <div className="w-6 h-6 rounded-lg bg-foreground/[0.05] group-hover:bg-amber-500 flex items-center justify-center transition-all">
-                                            <FiChevronRight size={12} className="text-muted group-hover:text-black transition-colors" />
+                                        <div className="w-5 h-5 rounded-md bg-[var(--foreground)]/5 group-hover:bg-amber-500 flex items-center justify-center transition-all">
+                                            <FiChevronRight size={10} className="text-[var(--foreground)]/40 group-hover:text-black" />
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* GLOW EFFECT (ACTIVE) */}
-                                <div className="absolute inset-0 rounded-[1.5rem] bg-amber-500/0 group-hover:bg-amber-500/[0.02] pointer-events-none transition-colors" />
                             </Link>
                         </motion.div>
                     ))}
                 </div>
             </div>
-
-            <style jsx global>{`
-        .custom-scrollbar-premium::-webkit-scrollbar {
-          height: 3px;
-        }
-        .custom-scrollbar-premium::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.02);
-          border-radius: 10px;
-        }
-        .custom-scrollbar-premium::-webkit-scrollbar-thumb {
-          background: rgba(245, 158, 11, 0.2);
-          border-radius: 10px;
-        }
-      `}</style>
         </section>
     );
 }

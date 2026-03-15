@@ -95,62 +95,69 @@ export default function GamesPage() {
     return (
       <motion.div
         layout
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={!disabled ? { y: -6 } : {}}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="group relative transform-gpu"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={!disabled ? { y: -5, scale: 1.02 } : {}}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        className="group relative"
       >
         <Link
           href={disabled ? "#" : `/games/${game.gameSlug}`}
           className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         >
           {/* IMAGE WRAPPER */}
-          <div className="relative aspect-square overflow-hidden rounded-[1.2rem] bg-[var(--card)] border border-[var(--border)] transition-all duration-300 group-hover:border-[var(--accent)] group-hover:shadow-lg group-hover:shadow-[var(--accent)]/5">
+          <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-all duration-500 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]">
 
-            <div className="relative w-full h-full rounded-[1.1rem] overflow-hidden bg-[#0a0a0a]">
+            <div className="relative w-full h-full">
               <Image
                 src={game.gameImageId?.image || logo}
                 alt={game.gameName}
                 fill
                 sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
-                className={`object-cover transition-transform duration-500 ease-out
-                ${disabled ? "grayscale opacity-20" : "group-hover:scale-105"}`}
+                className={`object-cover transition-all duration-700 ease-out
+                ${disabled ? "grayscale opacity-30 scale-105" : "group-hover:scale-110"}`}
               />
 
-              {/* Simple Gradient Overlay - No Blurs */}
+              {/* High-Fidelity Overlays */}
               {!disabled && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+
+                  {/* Refraction Shine Effect */}
+                  <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-250%] group-hover:translate-x-[250%] transition-transform duration-1000 ease-in-out" />
+                </>
               )}
 
               {/* TAGS / BADGES */}
-              <div className="absolute top-2 left-2 right-2 flex justify-between items-start z-10">
+              <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-start z-10">
                 {!disabled && game.tagId ? (
                   <div
-                    className="px-2 py-0.5 rounded-md text-[7px] font-black uppercase tracking-wider shadow-sm flex items-center gap-1"
+                    className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-1.5 backdrop-blur-md border border-white/10"
                     style={{
-                      backgroundColor: `${game.tagId.tagBackground}`,
+                      backgroundColor: `${game.tagId.tagBackground}cc`, // Add some transparency
                       color: game.tagId.tagColor,
                     }}
                   >
-                    <div className="w-1 h-1 rounded-full bg-current" />
+                    <div className="w-1 h-1 rounded-full bg-current animate-pulse" />
                     {game.tagId.tagName}
                   </div>
                 ) : <div />}
 
                 {!disabled && (
-                  <div className="w-5 h-5 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <FiZap size={10} />
+                  <div className="w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+                    <FiZap size={12} fill="currentColor" />
                   </div>
                 )}
               </div>
 
-              {/* OUT OF STOCK OVERLAY - Simplified */}
+              {/* OUT OF STOCK OVERLAY */}
               {disabled && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-2 bg-black/60">
-                  <FiX size={14} className="text-red-500 mb-1" />
-                  <span className="text-[7px] font-black uppercase tracking-widest text-red-500">
-                    Offline
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px]">
+                  <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mb-1.5">
+                    <FiX size={16} className="text-red-500" />
+                  </div>
+                  <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500 drop-shadow-md">
+                    Link Offline
                   </span>
                 </div>
               )}
@@ -158,14 +165,14 @@ export default function GamesPage() {
           </div>
 
           {/* CARD FOOTER */}
-          <div className="px-1 space-y-0.5">
-            <h3 className="text-[11px] font-bold text-[var(--foreground)] truncate leading-none group-hover:text-[var(--accent)] transition-colors duration-200">
+          <div className="px-1.5 space-y-0.5">
+            <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate leading-none group-hover:text-[var(--accent)] transition-colors duration-300">
               {game.gameName}
             </h3>
 
             <div className="flex items-center gap-1">
               {game.gameFrom ? (
-                <p className="text-[7px] text-[var(--muted)] font-bold uppercase tracking-widest truncate opacity-50 group-hover:opacity-100">
+                <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] truncate opacity-30 group-hover:opacity-60 transition-opacity">
                   {game.gameFrom}
                 </p>
               ) : (
@@ -179,18 +186,18 @@ export default function GamesPage() {
   };
 
   const SectionHeader = ({ title, count, icon: Icon }: any) => (
-    <div className="flex items-center justify-between mb-12">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
-          <Icon size={20} />
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
+          <Icon size={18} />
         </div>
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-[var(--foreground)] tracking-tight">
+          <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-[var(--foreground)]">
             {title}
           </h2>
           {count !== undefined && (
-            <p className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-[0.2em] opacity-60 mt-0.5">
-              Showing {count} Available
+            <p className="text-[8px] text-[var(--muted)] font-black uppercase tracking-[0.2em] opacity-40 mt-[-2px]">
+              {count} Nodes Online
             </p>
           )}
         </div>
@@ -253,7 +260,7 @@ export default function GamesPage() {
       </div>
 
       {/* ================= CONTENT ================= */}
-      <div className="max-w-7xl mx-auto px-6 mt-16 space-y-32">
+      <div className="max-w-7xl mx-auto px-6 mt-8 space-y-16">
 
         {/* GAMES SECTION */}
         <section>
@@ -262,7 +269,7 @@ export default function GamesPage() {
             count={processedGames.length}
             icon={FiBox}
           />
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-x-3 gap-y-6">
+          <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-x-3 gap-y-6">
             {processedGames.map((game: any, i: number) => (
               <GameCard key={game.gameSlug || i} game={game} />
             ))}
@@ -273,7 +280,7 @@ export default function GamesPage() {
         {otts?.items?.length > 0 && (
           <section>
             <SectionHeader title={otts.title} icon={FiZap} />
-            <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-x-3 gap-y-6">
+            <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-x-3 gap-y-6">
               {otts.items.map((ott: any) => (
                 <motion.div
                   key={ott.slug}
@@ -370,6 +377,7 @@ export default function GamesPage() {
       <AnimatePresence>
         {showFilter && (
           <GamesFilterModal
+            key="games-filter-modal"
             open={showFilter}
             onClose={() => setShowFilter(false)}
             sort={sort}

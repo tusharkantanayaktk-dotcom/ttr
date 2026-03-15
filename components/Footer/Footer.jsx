@@ -66,7 +66,7 @@ const TRUST_BADGES = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[var(--background)] border-t border-[var(--border)] pt-10 pb-6 relative overflow-hidden">
+    <footer className="bg-[var(--background)] border-t border-[var(--border)] pt-10 pb-24 lg:pb-12 relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[300px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
 

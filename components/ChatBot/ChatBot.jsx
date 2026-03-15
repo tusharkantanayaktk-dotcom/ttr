@@ -204,13 +204,25 @@ export default function ChatBot() {
             lastScrollY.current = y;
         };
         window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
+
+        const handleToggle = () => setIsOpen(v => !v);
+        window.addEventListener('toggle-chatbot', handleToggle);
+
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+            window.removeEventListener('toggle-chatbot', handleToggle);
+        };
     }, []);
 
     /* Auto-scroll messages */
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, typing]);
+
+    /* Broadcast state */
+    useEffect(() => {
+        window.dispatchEvent(new CustomEvent('chatbot-state-change', { detail: { isOpen } }));
+    }, [isOpen]);
 
     /* Focus input on open */
     useEffect(() => {
@@ -238,21 +250,21 @@ export default function ChatBot() {
     };
 
     /* ── Gate visibility — NO early return before hooks ── */
-    const hidden = pathname.startsWith("/games");
-
-    if (hidden) return null;
+    const isGamesPage = pathname.startsWith("/games");
 
     /* ── FAB animation wrapper ── */
     const fabStyle = {
-        position: "fixed", bottom: 24, left: 24, zIndex: 200,
+        position: "fixed", bottom: 92, left: 16, zIndex: 200,
         transition: "transform 0.4s cubic-bezier(0.23,1,0.32,1), opacity 0.4s",
-        transform: visible ? "translateY(0)" : "translateY(100px)",
+        transform: visible ? "translateY(0)" : "translateY(110px)",
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? "auto" : "none",
     };
 
+    const fabContainerClassName = "hidden lg:block";
+
     return (
-        <>
+        <div style={{ display: isGamesPage && !isOpen ? 'none' : 'block' }}>
             {/* ══ CHAT PANEL ══ */}
             <AnimatePresence>
                 {isOpen && (
@@ -262,8 +274,8 @@ export default function ChatBot() {
                         exit={{ opacity: 0, y: 14, scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 340, damping: 28 }}
                         style={{
-                            position: "fixed", bottom: 85, left: 24,
-                            width: 310, height: 470, zIndex: 200,
+                            position: "fixed", bottom: 150, left: 16,
+                            width: 280, height: 420, zIndex: 200,
                             borderRadius: 22, overflow: "hidden",
                             display: "flex", flexDirection: "column",
                             background: "#080812",
@@ -459,7 +471,7 @@ export default function ChatBot() {
             </AnimatePresence>
 
             {/* ══ FAB ══ */}
-            <div style={fabStyle}>
+            <div className={fabContainerClassName} style={fabStyle}>
                 {/* Pulse rings when closed */}
                 {!isOpen && (
                     <motion.div
@@ -488,13 +500,13 @@ export default function ChatBot() {
                     transition={{ type: "spring", stiffness: 400, damping: 18 }}
                     style={{
                         position: "relative", zIndex: 1,
-                        width: 48, height: 48, borderRadius: "50%",
+                        width: 40, height: 40, borderRadius: "50%",
                         border: "1px solid rgba(255,255,255,0.1)", cursor: "pointer",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         background: isOpen
                             ? "#0a0a14"
                             : "linear-gradient(135deg, var(--accent), #a855f7)",
-                        color: "white", fontSize: 19,
+                        color: "white", fontSize: 16,
                         boxShadow: "0 10px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)",
                     }}
                     aria-label="Open chat"
@@ -532,6 +544,6 @@ export default function ChatBot() {
                     )}
                 </AnimatePresence>
             </div>
-        </>
+        </div>
     );
 }

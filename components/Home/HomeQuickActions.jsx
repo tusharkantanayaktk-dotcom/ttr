@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   Gamepad2,
   Layers,
+  Zap,
 } from "lucide-react";
 
 const QUICK_ACTIONS = [
@@ -15,44 +16,48 @@ const QUICK_ACTIONS = [
     href: "/region",
     icon: Globe,
     label: "Region",
-    color: "#3b82f6", // Blue
-    bg: "rgba(59, 130, 246, 0.1)"
+    color: "from-blue-500 to-cyan-400",
+    desc: "Global Access"
   },
   {
     href: "/services",
     icon: Layers,
     label: "Services",
-    color: "#10b981", // Green
-    bg: "rgba(16, 185, 129, 0.1)"
+    color: "from-emerald-500 to-teal-400",
+    desc: "All Features"
   },
   {
     href: "/games",
     icon: Gamepad2,
     label: "Games",
-    color: "#f59e0b", // Amber
-    bg: "rgba(245, 158, 11, 0.1)"
+    color: "from-amber-500 to-orange-400",
+    desc: "Play Now"
   },
   {
     href: "/games/membership/silver-membership",
     icon: ShieldCheck,
     label: "Member",
-    color: "#8b5cf6", // Violet
-    bg: "rgba(139, 92, 246, 0.1)"
+    color: "from-violet-500 to-purple-400",
+    desc: "VIP Perks"
   },
   {
     href: "/leaderboard",
     icon: Trophy,
     label: "Leader",
-    color: "#ef4444", // Red
-    bg: "rgba(239, 68, 68, 0.1)"
+    color: "from-rose-500 to-red-400",
+    desc: "Top Ranks"
   },
 ];
 
 export default function HomeQuickActions() {
   return (
-    <section className="w-full px-4 py-8 md:py-16 select-none bg-foreground/[0.02]">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-5 md:flex md:flex-wrap md:justify-center gap-2 sm:gap-6 md:gap-16">
+    <section className="relative w-full py-6 md:py-10 overflow-hidden select-none">
+      {/* Decorative Background Elements - Lightened for compactness */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[200px] bg-[var(--accent)]/5 blur-[100px] rounded-full pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        {/* Compact Action Grid */}
+        <div className="grid grid-cols-5 gap-2.5 sm:gap-4 md:gap-8 lg:gap-12 max-w-4xl mx-auto">
           {QUICK_ACTIONS.map((action, idx) => (
             <QuickItem
               key={idx}
@@ -66,72 +71,82 @@ export default function HomeQuickActions() {
   );
 }
 
-function QuickItem({ href, icon: Icon, label, color, bg, delay }) {
+function QuickItem({ href, icon: Icon, label, color, desc, delay }) {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9, y: 20 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.9, y: 15 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{
         type: "spring",
-        stiffness: 400,
-        damping: 30,
+        stiffness: 300,
+        damping: 25,
         delay
       }}
-      className="flex-1"
+      className="flex-1 min-w-0"
     >
       <Link
         href={href}
-        className="flex flex-col items-center gap-4 group"
+        className="flex flex-col items-center gap-2.5 group cursor-pointer"
       >
         <div className="relative">
-          {/* DYNAMIC VIBRANT GLOW */}
-          <div
-            className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 blur-2xl scale-125 pointer-events-none"
-            style={{ backgroundColor: color }}
-          />
+          {/* Subtle External Glow */}
+          <div className={`
+            absolute -inset-1 rounded-[1.2rem] md:rounded-[1.8rem] bg-gradient-to-tr ${color} 
+            opacity-0 group-hover:opacity-20 blur-lg transition-all duration-500 
+            scale-90 group-hover:scale-105
+          `} />
 
-          <div
-            className="
-              relative h-12 w-12 md:h-20 md:w-20 flex items-center justify-center 
-              rounded-2xl md:rounded-[2rem] 
-              bg-card border border-foreground/[0.05] backdrop-blur-xl 
-              transition-all duration-500 overflow-hidden
-              group-hover:border-transparent group-hover:bg-white
-              shadow-lg group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] group-hover:-translate-y-2
-            "
-            style={{
-              color: color,
-            }}
-          >
-            {/* HOVER COLOR OVERLAY */}
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              style={{ backgroundColor: bg }}
-            />
+          {/* Compact Icon Container */}
+          <div className={`
+            relative h-13 w-13 sm:h-16 sm:w-16 md:h-20 md:w-20 flex items-center justify-center 
+            rounded-[1rem] md:rounded-[1.5rem] 
+            bg-[var(--card)] border border-[var(--border)]
+            transition-all duration-400 overflow-hidden
+            group-hover:-translate-y-1 group-hover:border-[var(--accent)]/30
+            shadow-md group-hover:shadow-xl
+          `}>
+            {/* Animated Inner Background */}
+            <div className={`
+              absolute inset-0 bg-gradient-to-tr ${color} 
+              opacity-0 group-hover:opacity-10 transition-opacity duration-400
+            `} />
 
-            {/* REFRACTION SHINE */}
-            <div className="absolute inset-x-0 h-1/2 top-0 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
+            {/* Glossy Overlay */}
+            <div className="absolute inset-x-0 h-full top-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none opacity-30" />
 
+            {/* Icon */}
             <Icon
-              size={28}
-              strokeWidth={2.5}
-              className="relative z-10 transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-6 sm:size-32" style={{ width: 'unset', height: 'unset' }}
+              className={`
+                w-5.5 h-5.5 sm:w-7 sm:h-7 md:w-9 md:h-9
+                transition-all duration-400
+                text-[var(--foreground)] opacity-60
+                group-hover:text-[var(--accent)] group-hover:opacity-100
+                group-hover:drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.4)]
+              `}
+              strokeWidth={1.5}
             />
+
+            {/* Faster Scanning Light Effect */}
+            <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-250%] group-hover:translate-x-[250%] transition-transform duration-700 ease-in-out" />
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-1">
+        {/* Compact Label */}
+        <div className="flex flex-col items-center w-full">
           <span className="
-            text-[10px] md:text-xs font-black italic uppercase tracking-[0.2em] 
-            text-muted group-hover:text-foreground 
-            transition-colors duration-300 text-center truncate w-full
+            text-[8.5px] md:text-[10px] font-black uppercase tracking-[0.15em] 
+            text-[var(--foreground)] opacity-50 group-hover:opacity-100 group-hover:text-[var(--accent)]
+            transition-all duration-300 text-center truncate px-0.5
           ">
             {label}
           </span>
-          <div
-            className="h-1 w-0 group-hover:w-4 transition-all duration-300 rounded-full"
-            style={{ backgroundColor: color }}
-          />
+
+          {/* Ultrathin Accent Bar */}
+          <div className={`
+            h-0.5 w-0 group-hover:w-4 bg-gradient-to-r ${color} shadow-sm
+            transition-all duration-400 rounded-full mt-1 opacity-0 group-hover:opacity-100
+          `} />
         </div>
       </Link>
     </motion.div>

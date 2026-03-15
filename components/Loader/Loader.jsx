@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
  */
 export default function PremiumLoader({ fullScreen = true }) {
   const containerClasses = fullScreen
-    ? "fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050508] overflow-hidden"
+    ? "fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[var(--background)] overflow-hidden"
     : "relative w-full py-24 flex flex-col items-center justify-center bg-transparent overflow-hidden";
 
   return (
@@ -45,7 +45,7 @@ export default function PremiumLoader({ fullScreen = true }) {
             className="animate-orbit-3 absolute inset-8 rounded-full border border-[var(--accent)]/10"
             style={{ transformStyle: "preserve-3d", rotate: "-45deg" }}
           >
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-white shadow-[0_0_8px_white]" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-[var(--foreground)] shadow-[0_0_8px_var(--foreground)]" />
           </div>
 
           {/* The Nucleus */}
@@ -54,10 +54,10 @@ export default function PremiumLoader({ fullScreen = true }) {
               scale: [0.9, 1.1, 0.9],
               opacity: [0.7, 1, 0.7],
             }}
-            transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut" }}
             className="w-5 h-5 rounded-full bg-[var(--accent)] relative z-10 shadow-[0_0_25px_rgba(var(--accent-rgb),0.5)]"
           >
-            <div className="absolute inset-0 rounded-full bg-white/20 blur-[1px]" />
+            <div className="absolute inset-0 rounded-full bg-[var(--foreground)]/20 blur-[1px]" />
           </motion.div>
 
         </div>
@@ -71,7 +71,7 @@ export default function PremiumLoader({ fullScreen = true }) {
           >
             <div className="flex items-center gap-2 mb-1.5">
               <span className="w-1 h-1 rounded-full bg-[var(--accent)] animate-ping" />
-              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/90">
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[var(--foreground)]/90">
                 Tronics <span className="text-[var(--accent)]">Core</span>
               </span>
             </div>
@@ -80,8 +80,8 @@ export default function PremiumLoader({ fullScreen = true }) {
 
             <motion.p
               animate={{ opacity: [0.5, 0.9, 0.5] }}
-              transition={{ duration: 1.2, repeat: Infinity }}
-              className="mt-2.5 text-[7px] font-bold uppercase tracking-[0.2em] text-white/40"
+              transition={{ duration: 0.6, repeat: Infinity }}
+              className="mt-2.5 text-[7px] font-bold uppercase tracking-[0.2em] text-[var(--foreground)]/40"
             >
               Establishing Secure Connection...
             </motion.p>
