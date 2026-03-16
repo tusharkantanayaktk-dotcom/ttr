@@ -128,7 +128,7 @@ export async function POST(req: Request) {
       formData.append("order_id", orderId);
 
       const resp = await fetch(
-        "https://xyzpay.site/api/check-order-status",
+        "https://chuimei-pe.in/api/check-order-status",
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
