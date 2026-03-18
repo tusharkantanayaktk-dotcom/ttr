@@ -57,19 +57,16 @@ export default function GameBannerCarousel() {
     enter: (direction) => ({
       x: direction > 0 ? "100%" : "-100%",
       opacity: 0,
-      scale: 1.1,
     }),
     center: {
       zIndex: 1,
       x: 0,
       opacity: 1,
-      scale: 1,
     },
     exit: (direction) => ({
       zIndex: 0,
       x: direction < 0 ? "100%" : "-100%",
       opacity: 0,
-      scale: 0.9,
     }),
   };
 
@@ -96,27 +93,20 @@ export default function GameBannerCarousel() {
             exit="exit"
             transition={{
               x: { type: "spring", stiffness: 300, damping: 32 },
-              opacity: { duration: 0.4 },
-              scale: { duration: 0.6 }
+              opacity: { duration: 0.4 }
             }}
             className="absolute inset-0 w-full h-full"
           >
             <Link href={banners[current].bannerLink || "/"} className="block w-full h-full relative group/banner">
               {/* IMAGE WITH KEN BURNS EFFECT */}
-              <motion.div
-                initial={{ scale: 1 }}
-                animate={{ scale: 1.1 }}
-                transition={{ duration: 10, ease: "linear" }}
-                className="absolute inset-0 w-full h-full"
-              >
                 <Image
                   src={banners[current].bannerImage || logo}
                   alt={banners[current].bannerTitle || "Game banner"}
                   fill
                   priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
                   className="object-cover"
                 />
-              </motion.div>
 
               {/* PREMIUM OVERLAYS */}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90" />
@@ -124,10 +114,7 @@ export default function GameBannerCarousel() {
 
               {/* CONTENT BOX */}
               <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-20">
-                <motion.div
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
+                <div
                   className="space-y-3 md:space-y-6 max-w-4xl"
                 >
                   <div className="flex items-center gap-2.5">
@@ -144,7 +131,7 @@ export default function GameBannerCarousel() {
                   </p>
 
 
-                </motion.div>
+                </div>
               </div>
 
               {/* VIGNETTE */}

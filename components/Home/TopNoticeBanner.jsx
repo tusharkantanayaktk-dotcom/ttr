@@ -67,10 +67,7 @@ export default function TopNoticeBanner() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
+        <div
           className="relative z-[70] bg-black/40 backdrop-blur-xl border-b border-white/5 overflow-hidden"
         >
           {/* DYNAMIC BACKGROUND GLOW */}
@@ -151,7 +148,7 @@ export default function TopNoticeBanner() {
               className="h-full bg-gradient-to-r from-transparent via-amber-500 to-transparent"
             />
           </div>
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );

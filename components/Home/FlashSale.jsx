@@ -83,63 +83,60 @@ export default function FlashSale() {
                 {/* COMPACT GRID */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                     {flashSaleData.map((item, index) => (
-                        <motion.div
-                            key={item.id}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.3, delay: index * 0.05 }}
-                            viewport={{ once: true }}
+                    <div
+                        key={item.id}
+                    >
+                        <Link
+                            href={`/games/${item.slug}`}
+                            className="group relative block bg-[var(--card)]/50 hover:bg-[var(--card)] backdrop-blur-xl border border-[var(--border)] hover:border-amber-500/30 rounded-2xl p-2 transition-all duration-300"
                         >
-                            <Link
-                                href={`/games/${item.slug}`}
-                                className="group relative block bg-[var(--card)]/50 hover:bg-[var(--card)] backdrop-blur-xl border border-[var(--border)] hover:border-amber-500/30 rounded-2xl p-2 transition-all duration-300"
-                            >
-                                {/* Badge Overlay */}
-                                <div className="absolute top-3 left-3 z-20">
-                                    <span className="text-[7px] font-black italic uppercase tracking-widest px-1.5 py-0.5 rounded-sm bg-amber-500 text-black shadow-lg">
-                                        {item.badge}
-                                    </span>
-                                </div>
+                            {/* Badge Overlay */}
+                            <div className="absolute top-3 left-3 z-20">
+                                <span className="text-[7px] font-black italic uppercase tracking-widest px-1.5 py-0.5 rounded-sm bg-amber-500 text-black shadow-lg">
+                                    {item.badge}
+                                </span>
+                            </div>
 
-                                {/* IMAGE CONTAINER */}
-                                <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-2 bg-black/40">
+                            {/* IMAGE CONTAINER */}
+                            <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-2 bg-black/40">
                                     <Image
                                         src={item.image}
                                         alt={item.name}
                                         fill
+                                        sizes="(max-width: 640px) 45vw, 20vw"
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                            </div>
+
+                            {/* INFO CONTENT */}
+                            <div className="space-y-0.5 px-0.5">
+                                <div className="flex items-center gap-1 font-black italic uppercase tracking-widest text-[var(--foreground)]/40 text-[7px]">
+                                    <span className="w-1 h-1 rounded-full bg-amber-500" />
+                                    {item.game}
                                 </div>
 
-                                {/* INFO CONTENT */}
-                                <div className="space-y-0.5 px-0.5">
-                                    <div className="flex items-center gap-1 font-black italic uppercase tracking-widest text-[var(--foreground)]/40 text-[7px]">
-                                        <span className="w-1 h-1 rounded-full bg-amber-500" />
-                                        {item.game}
+                                <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate group-hover:text-amber-500 transition-colors">
+                                    {item.name}
+                                </h3>
+
+                                <div className="flex items-center justify-between gap-1 pt-0.5">
+                                    <div className="flex items-baseline gap-1.5">
+                                        <span className="text-sm font-black italic text-[var(--foreground)] tracking-tighter">
+                                            {item.price}
+                                        </span>
+                                        <span className="text-[9px] font-bold text-[var(--foreground)]/30 line-through">
+                                            {item.originalPrice}
+                                        </span>
                                     </div>
 
-                                    <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate group-hover:text-amber-500 transition-colors">
-                                        {item.name}
-                                    </h3>
-
-                                    <div className="flex items-center justify-between gap-1 pt-0.5">
-                                        <div className="flex items-baseline gap-1.5">
-                                            <span className="text-sm font-black italic text-[var(--foreground)] tracking-tighter">
-                                                {item.price}
-                                            </span>
-                                            <span className="text-[9px] font-bold text-[var(--foreground)]/30 line-through">
-                                                {item.originalPrice}
-                                            </span>
-                                        </div>
-
-                                        <div className="w-5 h-5 rounded-md bg-[var(--foreground)]/5 group-hover:bg-amber-500 flex items-center justify-center transition-all">
-                                            <FiChevronRight size={10} className="text-[var(--foreground)]/40 group-hover:text-black" />
-                                        </div>
+                                    <div className="w-5 h-5 rounded-md bg-[var(--foreground)]/5 group-hover:bg-amber-500 flex items-center justify-center transition-all">
+                                        <FiChevronRight size={10} className="text-[var(--foreground)]/40 group-hover:text-black" />
                                     </div>
                                 </div>
-                            </Link>
-                        </motion.div>
+                            </div>
+                        </Link>
+                    </div>
                     ))}
                 </div>
             </div>

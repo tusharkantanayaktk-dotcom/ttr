@@ -73,16 +73,8 @@ export default function HomeQuickActions() {
 
 function QuickItem({ href, icon: Icon, label, color, desc, delay }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9, y: 15 }}
-      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 25,
-        delay
-      }}
+    <div
+      key={delay}
       className="flex-1 min-w-0"
     >
       <Link
@@ -149,6 +141,6 @@ function QuickItem({ href, icon: Icon, label, color, desc, delay }) {
           `} />
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }

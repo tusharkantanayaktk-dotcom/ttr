@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -88,122 +88,114 @@ export default function GamesPage() {
     return filtered;
   }, [games, hideOOS, searchQuery, sort]);
 
-  /* ================= GAME CARD ================= */
-  const GameCard = ({ game }: any) => {
-    const disabled = isOutOfStock(game.gameName);
-
-    return (
-      <motion.div
-        layout
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        whileHover={!disabled ? { y: -5, scale: 1.02 } : {}}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="group relative"
+/* ================= SUB-COMPONENTS ================= */
+const GameCard = React.memo(({ game, disabled }: any) => {
+  return (
+    <div className="group relative">
+      <Link
+        href={disabled ? "#" : `/games/${game.gameSlug}`}
+        className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
-        <Link
-          href={disabled ? "#" : `/games/${game.gameSlug}`}
-          className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
-        >
-          {/* IMAGE WRAPPER */}
-          <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-all duration-500 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]">
+        {/* IMAGE WRAPPER */}
+        <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-all duration-500 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]">
 
-            <div className="relative w-full h-full">
-              <Image
-                src={game.gameImageId?.image || logo}
-                alt={game.gameName}
-                fill
-                sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
-                className={`object-cover transition-all duration-700 ease-out
-                ${disabled ? "grayscale opacity-30 scale-105" : "group-hover:scale-110"}`}
-              />
+          <div className="relative w-full h-full">
+            <Image
+              src={game.gameImageId?.image || logo}
+              alt={game.gameName}
+              fill
+              sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
+              className={`object-cover transition-all duration-700 ease-out
+              ${disabled ? "grayscale opacity-30 scale-105" : "group-hover:scale-110"}`}
+            />
 
-              {/* High-Fidelity Overlays */}
+            {/* High-Fidelity Overlays */}
+            {!disabled && (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+
+                {/* Refraction Shine Effect */}
+                <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-250%] group-hover:translate-x-[250%] transition-transform duration-1000 ease-in-out" />
+              </>
+            )}
+
+            {/* TAGS / BADGES */}
+            <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-start z-10">
+              {!disabled && game.tagId ? (
+                <div
+                  className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-1.5 backdrop-blur-md border border-white/10"
+                  style={{
+                    backgroundColor: `${game.tagId.tagBackground}cc`, // Add some transparency
+                    color: game.tagId.tagColor,
+                  }}
+                >
+                  <div className="w-1 h-1 rounded-full bg-current animate-pulse" />
+                  {game.tagId.tagName}
+                </div>
+              ) : <div />}
+
               {!disabled && (
-                <>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-
-                  {/* Refraction Shine Effect */}
-                  <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-250%] group-hover:translate-x-[250%] transition-transform duration-1000 ease-in-out" />
-                </>
-              )}
-
-              {/* TAGS / BADGES */}
-              <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-start z-10">
-                {!disabled && game.tagId ? (
-                  <div
-                    className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-1.5 backdrop-blur-md border border-white/10"
-                    style={{
-                      backgroundColor: `${game.tagId.tagBackground}cc`, // Add some transparency
-                      color: game.tagId.tagColor,
-                    }}
-                  >
-                    <div className="w-1 h-1 rounded-full bg-current animate-pulse" />
-                    {game.tagId.tagName}
-                  </div>
-                ) : <div />}
-
-                {!disabled && (
-                  <div className="w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
-                    <FiZap size={12} fill="currentColor" />
-                  </div>
-                )}
-              </div>
-
-              {/* OUT OF STOCK OVERLAY */}
-              {disabled && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px]">
-                  <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mb-1.5">
-                    <FiX size={16} className="text-red-500" />
-                  </div>
-                  <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500 drop-shadow-md">
-                    Link Offline
-                  </span>
+                <div className="w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+                  <FiZap size={12} fill="currentColor" />
                 </div>
               )}
             </div>
+
+            {/* OUT OF STOCK OVERLAY */}
+            {disabled && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px]">
+                <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mb-1.5">
+                  <FiX size={16} className="text-red-500" />
+                </div>
+                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500 drop-shadow-md">
+                  Link Offline
+                </span>
+              </div>
+            )}
           </div>
+        </div>
 
-          {/* CARD FOOTER */}
-          <div className="px-1.5 space-y-0.5">
-            <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate leading-none group-hover:text-[var(--accent)] transition-colors duration-300">
-              {game.gameName}
-            </h3>
+        {/* CARD FOOTER */}
+        <div className="px-1.5 space-y-0.5">
+          <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate leading-none group-hover:text-[var(--accent)] transition-colors duration-300">
+            {game.gameName}
+          </h3>
 
-            <div className="flex items-center gap-1">
-              {game.gameFrom ? (
-                <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] truncate opacity-30 group-hover:opacity-60 transition-opacity">
-                  {game.gameFrom}
-                </p>
-              ) : (
-                <div className="h-2" />
-              )}
-            </div>
+          <div className="flex items-center gap-1">
+            {game.gameFrom ? (
+              <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] truncate opacity-30 group-hover:opacity-60 transition-opacity">
+                {game.gameFrom}
+              </p>
+            ) : (
+              <div className="h-2" />
+            )}
           </div>
-        </Link>
-      </motion.div>
-    );
-  };
-
-  const SectionHeader = ({ title, count, icon: Icon }: any) => (
-    <div className="flex items-center justify-between mb-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
-          <Icon size={18} />
         </div>
-        <div>
-          <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-[var(--foreground)]">
-            {title}
-          </h2>
-          {count !== undefined && (
-            <p className="text-[8px] text-[var(--muted)] font-black uppercase tracking-[0.2em] opacity-40 mt-[-2px]">
-              {count} Nodes Online
-            </p>
-          )}
-        </div>
-      </div>
+      </Link>
     </div>
   );
+});
+GameCard.displayName = "GameCard";
+
+const SectionHeader = ({ title, count, icon: Icon }: any) => (
+  <div className="flex items-center justify-between mb-6">
+    <div className="flex items-center gap-3">
+      <div className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
+        <Icon size={18} />
+      </div>
+      <div>
+        <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-[var(--foreground)]">
+          {title}
+        </h2>
+        {count !== undefined && (
+          <p className="text-[8px] text-[var(--muted)] font-black uppercase tracking-[0.2em] opacity-40 mt-[-2px]">
+            {count} Nodes Online
+          </p>
+        )}
+      </div>
+    </div>
+  </div>
+);
 
   return (
     <div className="min-h-screen bg-[var(--background)] pb-24">
@@ -271,7 +263,7 @@ export default function GamesPage() {
           />
           <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-x-3 gap-y-6">
             {processedGames.map((game: any, i: number) => (
-              <GameCard key={game.gameSlug || i} game={game} />
+              <GameCard key={game.gameSlug || i} game={game} disabled={isOutOfStock(game.gameName)} />
             ))}
           </div>
         </section>
@@ -282,14 +274,9 @@ export default function GamesPage() {
             <SectionHeader title={otts.title} icon={FiZap} />
             <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-x-3 gap-y-6">
               {otts.items.map((ott: any) => (
-                <motion.div
+                <div
                   key={ott.slug}
                   className="group cursor-pointer transform-gpu"
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -6 }}
-                  transition={{ duration: 0.4 }}
                 >
                   <Link href={`/games/ott/${ott.slug}`} className="flex flex-col gap-5">
                     <div className="relative aspect-[3/4] overflow-hidden rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-700 group-hover:border-[var(--accent)]/50 group-hover:shadow-[0_15px_40px_rgba(var(--accent-rgb),0.2)]">
@@ -320,7 +307,7 @@ export default function GamesPage() {
                       </div>
                     </div>
                   </Link>
-                </motion.div>
+                </div>
               ))}
             </div>
           </section>
@@ -332,14 +319,9 @@ export default function GamesPage() {
             <SectionHeader title={memberships.title} icon={FiActivity} />
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {memberships.items.map((plan: any) => (
-                <motion.div
+                <div
                   key={plan.slug}
                   className="group transform-gpu"
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.3 }}
                 >
                   <Link
                     href={`/games/membership/${plan.slug}`}
@@ -366,7 +348,7 @@ export default function GamesPage() {
                       <FiArrowRight size={10} className="text-[var(--accent)] group-hover:translate-x-1 transition-transform" />
                     </div>
                   </Link>
-                </motion.div>
+                </div>
               ))}
             </div>
           </section>

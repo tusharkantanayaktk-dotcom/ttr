@@ -15,7 +15,7 @@ export default function ScrollingNoticeBand() {
       <motion.div
         className="flex whitespace-nowrap gap-24 w-max"
         animate={{ x: "-50%" }}
-        transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
       >
         {[...NOTICES, ...NOTICES].map((text, idx) => (
           <span key={idx} className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--foreground)] opacity-50">

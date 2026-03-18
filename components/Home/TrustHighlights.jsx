@@ -77,12 +77,8 @@ export default function TrustHighlights() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto">
-        <motion.div
+        <div
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
         >
           {HIGHLIGHTS.map((item, i) => {
             const Icon = item.icon;
@@ -130,7 +126,7 @@ export default function TrustHighlights() {
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
 
       {/* BOTTOM SEPARATOR LINE */}

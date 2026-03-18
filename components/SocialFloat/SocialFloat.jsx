@@ -115,27 +115,20 @@ export default function SocialFloat() {
 
   const itemVariants = {
     hidden: {
-      x: 50,
       opacity: 0,
-      scale: 0.3,
-      rotate: 45
+      scale: 0.8,
     },
     visible: {
-      x: 0,
       opacity: 1,
       scale: 1,
-      rotate: 0,
       transition: {
-        duration: 0.3,
-        ease: "easeOut"
+        duration: 0.2,
       }
     },
     exit: {
-      x: 50,
       opacity: 0,
-      scale: 0.3,
-      rotate: 45,
-      transition: { duration: 0.2 }
+      scale: 0.8,
+      transition: { duration: 0.15 }
     }
   };
 
