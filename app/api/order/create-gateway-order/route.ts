@@ -190,11 +190,11 @@ export async function POST(req: Request) {
     const price = await resolvePrice(gameSlug, itemSlug, userType);
 
     /* ---------- ORDER ID ---------- */
-    const orderId =
-      "TOPUP_" +
+    const orderId = (
+      "TRONNICTK" +
       Date.now().toString(36) +
-      "_" +
-      crypto.randomBytes(8).toString("hex");
+      crypto.randomBytes(8).toString("hex")
+    ).toUpperCase();
 
     const expiresAt = new Date(Date.now() + 90 * 1000);
 

@@ -342,7 +342,7 @@ export default function OrdersTab() {
                             </div>
                             <div className="flex flex-col min-w-0">
                               <span className="text-[var(--foreground)] font-bold uppercase text-[10px] tracking-tight truncate">{o.gameSlug}</span>
-                              <span className="text-[11px] text-[var(--foreground)] font-black truncate leading-tight uppercase font-mono">{o.email || "Guest User"}</span>
+                              <span className="text-[11px] text-[var(--foreground)] font-black truncate leading-tight font-mono">{o.email || "Guest User"}</span>
                             </div>
                           </div>
                         </td>
@@ -410,7 +410,7 @@ export default function OrdersTab() {
                     <div className="space-y-3">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <p className="text-[11px] font-black text-[var(--foreground)] uppercase truncate">{o.email || "Guest User"}</p>
+                          <p className="text-[11px] font-black text-[var(--foreground)] truncate">{o.email || "Guest User"}</p>
                         </div>
                         <p className="text-[11px] font-medium text-[var(--foreground)]/40 line-clamp-1 italic">"{o.itemName}"</p>
                         <p className="text-[9px] font-mono text-[var(--muted)]/30 mt-1 uppercase">{o.orderId}</p>
@@ -556,7 +556,7 @@ export default function OrdersTab() {
                 </DrawerSection>
 
                 <DrawerSection icon={<User size={16} />} title="Customer Details">
-                  <DrawerDetail label="Email" value={selectedOrder.email || "GUEST"} />
+                  <DrawerDetail label="Email" value={selectedOrder.email || "Guest"} />
                   <DrawerDetail label="Phone" value={selectedOrder.phone || "N/A"} />
                   <DrawerDetail label="Order Date" value={new Date(selectedOrder.createdAt).toLocaleString()} />
                 </DrawerSection>
