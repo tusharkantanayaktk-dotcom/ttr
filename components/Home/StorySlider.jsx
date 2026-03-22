@@ -51,19 +51,17 @@ export default function StorySlider() {
   return (
     <section className="relative w-full overflow-hidden py-4 md:py-8">
       {/* Background Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl bg-[var(--accent)]/5 blur-[120px] rounded-full pointer-events-none" />
+
 
       <div className="relative max-w-7xl mx-auto px-4">
-        <motion.div
+        <div
           ref={containerRef}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
           className="flex gap-5 md:gap-10 overflow-x-auto pb-6 pt-2 px-2
           [scrollbar-width:none] [&::-webkit-scrollbar]:hidden 
           touch-pan-x snap-x scroll-smooth"
         >
           {storyData.map((item, index) => (
-            <motion.div
+            <div
               key={item.id}
               className="flex-shrink-0 snap-start"
             >
@@ -88,7 +86,7 @@ export default function StorySlider() {
                   `}>
                     <div className={`
                       absolute inset-0 rounded-full bg-gradient-to-tr ${item.color} 
-                      opacity-40 group-hover:opacity-100 transition-opacity animate-spin-slow group-hover:animate-spin-fast
+                      opacity-40 group-hover:opacity-100 transition-opacity
                     `} />
 
                     {/* Inner Image Container */}
@@ -115,7 +113,6 @@ export default function StorySlider() {
                     `}>
                       {item.isLive && (
                         <span className="relative flex h-1.5 w-1.5">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
                         </span>
                       )}
@@ -139,27 +136,12 @@ export default function StorySlider() {
                 {/* Active Indicator dot */}
                 <div className="w-1 h-1 rounded-full bg-[var(--accent)] scale-0 group-hover:scale-100 transition-transform duration-300 shadow-[0_0_8px_var(--accent)]" />
               </Link>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
-      <style jsx global>{`
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes spin-fast {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(720deg); }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-        .animate-spin-fast {
-          animation: spin-fast 12s linear infinite;
-        }
-      `}</style>
+
     </section>
   );
 }

@@ -53,7 +53,7 @@ export default function HomeQuickActions() {
   return (
     <section className="relative w-full py-6 md:py-10 overflow-hidden select-none">
       {/* Decorative Background Elements - Lightened for compactness */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[200px] bg-[var(--accent)]/5 blur-[100px] rounded-full pointer-events-none" />
+
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         {/* Compact Action Grid */}
@@ -113,14 +113,12 @@ function QuickItem({ href, icon: Icon, label, color, desc, delay }) {
                 w-5.5 h-5.5 sm:w-7 sm:h-7 md:w-9 md:h-9
                 transition-all duration-400
                 text-[var(--foreground)] opacity-60
-                group-hover:text-[var(--accent)] group-hover:opacity-100
-                group-hover:drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.4)]
+                 group-hover:text-[var(--accent)] group-hover:opacity-100
               `}
               strokeWidth={1.5}
             />
 
-            {/* Faster Scanning Light Effect */}
-            <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-250%] group-hover:translate-x-[250%] transition-transform duration-700 ease-in-out" />
+
           </div>
         </div>
 

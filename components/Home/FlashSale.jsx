@@ -47,7 +47,7 @@ export default function FlashSale() {
     return (
         <section className="relative py-2 px-4 overflow-hidden border-b border-[var(--border)] opacity-95">
             {/* BACKGROUND ACCENTS */}
-            <div className="absolute top-0 left-1/4 w-[300px] h-[300px] bg-amber-500/5 blur-[100px] pointer-events-none rounded-full" />
+
 
             <div className="max-w-7xl mx-auto relative">
                 {/* COMPACT HEADER */}
@@ -66,7 +66,7 @@ export default function FlashSale() {
                     {/* STREAMLINED COUNTDOWN */}
                     <div className="flex items-center gap-2 px-2 py-1 bg-[var(--card)]/50 border border-[var(--border)] rounded-lg">
                         <div className="flex items-center gap-1">
-                            <FiClock className="text-amber-500 animate-pulse" size={10} />
+                            <FiClock className="text-amber-500" size={10} />
                             <span className="hidden xs:block text-[8px] font-black uppercase tracking-widest text-amber-500">Ends In</span>
                         </div>
 
@@ -104,7 +104,7 @@ export default function FlashSale() {
                                         alt={item.name}
                                         fill
                                         sizes="(max-width: 640px) 45vw, 20vw"
-                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                        className="object-cover transition-transform duration-300 group-hover:scale-105"
                                     />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                             </div>

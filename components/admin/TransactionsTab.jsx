@@ -168,10 +168,10 @@ export default function TransactionsTab() {
                   <tr className="text-[10px] uppercase font-bold tracking-widest text-[var(--muted)]">
                     <th className="px-6 py-4">Date/Time</th>
                     <th className="px-6 py-4">Order ID</th>
-                    <th className="px-6 py-4">User Info</th>
-                    <th className="px-6 py-4">Game</th>
-                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4">User</th>
+                    <th className="px-6 py-4">Method</th>
                     <th className="px-6 py-4 text-right">Amount</th>
+                    <th className="px-6 py-4">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--border)]">
@@ -208,14 +208,17 @@ export default function TransactionsTab() {
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border text-[9px] font-bold uppercase tracking-wider ${meta.class}`}>
-                            {meta.icon}
-                            {meta.label}
-                          </span>
+                          <span className="text-[10px] font-bold uppercase text-[var(--muted)]/60 bg-[var(--foreground)]/[0.05] px-2 py-1 rounded-lg border border-[var(--border)] tracking-wider">{t.paymentMethod || "wallet"}</span>
                         </td>
                         <td className="px-6 py-4 text-right">
                           <span className="text-base font-black text-emerald-500 tracking-tighter tabular-nums">
                             ₹{t.price}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border text-[9px] font-bold uppercase tracking-wider ${meta.class}`}>
+                            {meta.icon}
+                            {meta.label}
                           </span>
                         </td>
                       </motion.tr>
@@ -249,20 +252,17 @@ export default function TransactionsTab() {
                       <span className="text-lg font-black text-emerald-500 tracking-tighter">₹{t.price}</span>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px]">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center shrink-0">
-                          <Gamepad2 size={14} className="text-[var(--accent)]" />
+                    <div className="flex items-center justify-between text-[11px] pt-3 border-t border-[var(--border)] border-dashed">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--muted)]/60 bg-[var(--foreground)]/[0.05] border border-[var(--border)] px-2 py-1 rounded-lg uppercase tracking-wider">
+                          <CreditCard size={10} className="text-[var(--accent)]" />
+                          {t.paymentMethod || "wallet"}
                         </div>
-                        <div className="truncate">
-                          <p className="font-bold text-[var(--foreground)] uppercase">{t.gameSlug}</p>
-                          <p className="text-[var(--muted)]/60 truncate">{t.email || "No Email"}</p>
+                        <div className="text-right shrink-0">
+                          <p className="font-medium text-[var(--muted)]/40 text-[9px] uppercase tracking-tighter">{new Date(t.createdAt).toLocaleDateString()} • {new Date(t.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                         </div>
                       </div>
-                      <div className="text-right shrink-0">
-                        <p className="font-medium text-[var(--muted)]/40">{new Date(t.createdAt).toLocaleDateString()}</p>
-                        <ChevronRight size={14} className="ml-auto text-[var(--muted)]/20 mt-1" />
-                      </div>
+                      <ChevronRight size={14} className="text-[var(--muted)]/20" />
                     </div>
                   </motion.div>
                 );
@@ -322,24 +322,24 @@ export default function TransactionsTab() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed right-0 top-0 h-full w-full max-w-lg bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1002] flex flex-col"
             >
-              <div className="p-8 border-b border-[var(--border)] bg-gradient-to-r from-[var(--foreground)]/[0.02] to-transparent">
-                <div className="flex items-start justify-between mb-8">
+              <div className="p-6 border-b border-[var(--border)] bg-gradient-to-r from-[var(--foreground)]/[0.02] to-transparent">
+                <div className="flex items-start justify-between mb-4">
                   <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest">Transaction Status</p>
-                    <h3 className="text-2xl font-black uppercase italic tracking-tighter text-[var(--foreground)]">Payment Details</h3>
+                    <p className="text-[10px] font-mono font-bold text-[var(--accent)] uppercase tracking-wider">{selectedTx.orderId}</p>
+                    <h3 className="text-xl font-black uppercase italic tracking-tighter text-[var(--foreground)]">Payment Details</h3>
                   </div>
                   <button
                     onClick={() => setSelectedTx(null)}
-                    className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all"
+                    className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all font-bold"
                   >
-                    <X size={20} />
+                    <X size={18} />
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between p-6 rounded-3xl bg-[var(--accent)]/5 border border-[var(--accent)]/10">
+                <div className="flex items-center justify-between p-4 rounded-2xl bg-[var(--accent)]/5 border border-[var(--accent)]/10">
                   <div>
                     <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mb-1">Total Amount</p>
-                    <span className="text-3xl font-black text-emerald-500 tabular-nums">₹{selectedTx.price}</span>
+                    <span className="text-2xl font-black text-emerald-500 tabular-nums">₹{selectedTx.price}</span>
                   </div>
                   {(() => {
                     const meta = statusMeta[selectedTx.status] || statusMeta.pending;
@@ -353,7 +353,7 @@ export default function TransactionsTab() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 space-y-10">
+              <div className="flex-1 overflow-y-auto p-6 space-y-8">
                 <DrawerSection icon={<Gamepad2 size={16} />} title="Game Details">
                   <DrawerDetail label="Platform" value={selectedTx.gameSlug} emphasize />
                   <DrawerDetail label="Item Name" value={selectedTx.itemName} />
@@ -376,10 +376,6 @@ export default function TransactionsTab() {
                   <DrawerDetail label="Phone" value={selectedTx.phone || "UNLINKED"} />
                   <DrawerDetail label="Date & Time" value={new Date(selectedTx.createdAt).toLocaleString()} />
                 </DrawerSection>
-
-                <div className="pt-6 border-t border-[var(--border)] opacity-20">
-                  <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-center text-[var(--foreground)]">Order ID: {selectedTx.orderId.toUpperCase()}</p>
-                </div>
               </div>
             </motion.div>
           </>

@@ -71,11 +71,8 @@ export default function TopNoticeBanner() {
           className="relative z-[70] bg-black/40 backdrop-blur-xl border-b border-white/5 overflow-hidden"
         >
           {/* DYNAMIC BACKGROUND GLOW */}
-          <motion.div
-            key={banner.id + "-glow"}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 transition-colors duration-1000"
+          <div
+            className="absolute inset-0 transition-colors duration-500"
             style={{ backgroundColor: banner.glow }}
           />
 
@@ -95,10 +92,10 @@ export default function TopNoticeBanner() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={banner.id}
-                    initial={{ x: 20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: -20, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                     className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 w-full"
                   >
                     <div className="flex items-center gap-2">
@@ -138,16 +135,7 @@ export default function TopNoticeBanner() {
             </button>
           </div>
 
-          {/* ELEGANT PROGRESS TRACKER */}
-          <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-white/5">
-            <motion.div
-              key={index}
-              initial={{ width: "0%" }}
-              animate={{ width: "100%" }}
-              transition={{ duration: ROTATE_INTERVAL / 1000, ease: "linear" }}
-              className="h-full bg-gradient-to-r from-transparent via-amber-500 to-transparent"
-            />
-          </div>
+
         </div>
       )}
     </AnimatePresence>

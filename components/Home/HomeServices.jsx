@@ -17,17 +17,15 @@ export default function HomeServices() {
           </p>
         </div>
 
-        <motion.a
+        <a
           href="https://wa.me/919178521537"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-500 text-black hover:bg-amber-600 transition-all font-black text-[10px] uppercase tracking-widest"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-500 text-black hover:bg-amber-600 active:scale-95 transition-all font-black text-[10px] uppercase tracking-widest"
         >
           <FaWhatsapp size={14} />
           <span>Contact Us</span>
-        </motion.a>
+        </a>
 
       </div>
     </section>

@@ -315,9 +315,10 @@ export default function OrdersTab() {
               <table className="w-full text-left text-sm">
                 <thead className="bg-[var(--foreground)]/[0.03] border-b border-[var(--border)]">
                   <tr className="text-[10px] uppercase font-bold tracking-widest text-[var(--muted)]">
-                    <th className="px-6 py-4">Game</th>
+                    <th className="px-6 py-4">Game / User</th>
                     <th className="px-6 py-4">Date/Time</th>
                     <th className="px-6 py-4">Item</th>
+                    <th className="px-6 py-4">Method</th>
                     <th className="px-6 py-4">Price</th>
                     <th className="px-6 py-4">Status</th>
                   </tr>
@@ -336,10 +337,13 @@ export default function OrdersTab() {
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)]">
+                            <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)] shrink-0">
                               <Gamepad2 size={16} />
                             </div>
-                            <span className="text-[var(--foreground)] font-bold uppercase text-xs">{o.gameSlug}</span>
+                            <div className="flex flex-col min-w-0">
+                              <span className="text-[var(--foreground)] font-bold uppercase text-[10px] tracking-tight truncate">{o.gameSlug}</span>
+                              <span className="text-[11px] text-[var(--foreground)] font-black truncate leading-tight uppercase font-mono">{o.email || "Guest User"}</span>
+                            </div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -351,6 +355,9 @@ export default function OrdersTab() {
                         <td className="px-6 py-4 max-w-xs">
                           <span className="text-[var(--foreground)]/60 font-medium truncate block">{o.itemName}</span>
                           <span className="text-[10px] text-[var(--muted)]/40 font-mono uppercase">{o.orderId}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-[10px] font-black uppercase text-[var(--muted)] bg-[var(--foreground)]/[0.05] p-1.5 rounded-lg border border-[var(--border)] tracking-widest">{o.paymentMethod || "wallet"}</span>
                         </td>
                         <td className="px-6 py-4">
                           <span className="text-base font-black text-emerald-500 tabular-nums">
@@ -402,14 +409,23 @@ export default function OrdersTab() {
 
                     <div className="space-y-3">
                       <div>
-                        <p className="text-[11px] font-medium text-[var(--foreground)]/60 line-clamp-1 italic">"{o.itemName}"</p>
-                        <p className="text-[9px] font-mono text-[var(--muted)] mt-1 uppercase">{o.orderId}</p>
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="text-[11px] font-black text-[var(--foreground)] uppercase truncate">{o.email || "Guest User"}</p>
+                        </div>
+                        <p className="text-[11px] font-medium text-[var(--foreground)]/40 line-clamp-1 italic">"{o.itemName}"</p>
+                        <p className="text-[9px] font-mono text-[var(--muted)]/30 mt-1 uppercase">{o.orderId}</p>
                       </div>
 
                       <div className="flex items-center justify-between gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center gap-2">
-                          <Calendar size={12} className="text-[var(--muted)]/40" />
-                          <span className="text-[10px] font-bold text-[var(--muted)]/60">{new Date(o.createdAt).toLocaleDateString()}</span>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--muted)]/60 bg-[var(--foreground)]/[0.05] border border-[var(--border)] px-2 py-1 rounded-lg uppercase tracking-wider">
+                            <CreditCard size={10} className="text-[var(--accent)]" />
+                            {o.paymentMethod || "wallet"}
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Calendar size={12} className="text-[var(--muted)]/40" />
+                            <span className="text-[10px] font-bold text-[var(--muted)]/60">{new Date(o.createdAt).toLocaleDateString()}</span>
+                          </div>
                         </div>
 
                         <StatusDropdown
@@ -484,24 +500,24 @@ export default function OrdersTab() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed right-0 top-0 h-full w-full max-w-lg bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
             >
-              <div className="p-8 border-b border-[var(--border)] bg-gradient-to-r from-[var(--foreground)]/[0.02] to-transparent">
-                <div className="flex items-start justify-between mb-8">
+              <div className="p-6 border-b border-[var(--border)] bg-gradient-to-r from-[var(--foreground)]/[0.02] to-transparent">
+                <div className="flex items-start justify-between mb-4">
                   <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest">Order Management</p>
-                    <h3 className="text-2xl font-black uppercase italic tracking-tighter text-[var(--foreground)]">Order Details</h3>
+                    <p className="text-[10px] font-mono font-bold text-[var(--accent)] uppercase tracking-wider">{selectedOrder.orderId}</p>
+                    <h3 className="text-xl font-black uppercase italic tracking-tighter text-[var(--foreground)]">Order Details</h3>
                   </div>
                   <button
                     onClick={() => setSelectedOrder(null)}
-                    className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all"
+                    className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all font-bold"
                   >
-                    <X size={20} />
+                    <X size={18} />
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between p-6 rounded-3xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
+                <div className="flex items-center justify-between p-4 rounded-2xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
                   <div>
                     <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mb-1">Price</p>
-                    <span className="text-3xl font-black text-emerald-500 tabular-nums">₹{selectedOrder.price}</span>
+                    <span className="text-2xl font-black text-emerald-500 tabular-nums">₹{selectedOrder.price}</span>
                   </div>
                   <div className="flex flex-col gap-2">
                     <StatusDropdown
@@ -521,7 +537,7 @@ export default function OrdersTab() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 space-y-10">
+              <div className="flex-1 overflow-y-auto p-6 space-y-8">
                 <DrawerSection icon={<Gamepad2 size={16} />} title="Game Info">
                   <DrawerDetail label="Game" value={selectedOrder.gameSlug} emphasize />
                   <DrawerDetail label="Item Name" value={selectedOrder.itemName} />
@@ -544,10 +560,6 @@ export default function OrdersTab() {
                   <DrawerDetail label="Phone" value={selectedOrder.phone || "N/A"} />
                   <DrawerDetail label="Order Date" value={new Date(selectedOrder.createdAt).toLocaleString()} />
                 </DrawerSection>
-
-                <div className="pt-6 border-t border-[var(--border)] opacity-20">
-                  <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-center text-[var(--foreground)]">Deployment ID: {selectedOrder.orderId.toUpperCase()}</p>
-                </div>
               </div>
             </motion.div>
           </>
@@ -663,40 +675,40 @@ function DrawerDetail({ label, value, emphasize }) {
 function StatCard({ title, count, totalValue, loading }) {
   if (loading) {
     return (
-      <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] animate-pulse flex flex-col justify-between h-32">
-        <div className="h-4 bg-[var(--foreground)]/10 rounded w-1/3 mb-4"></div>
-        <div className="space-y-3">
-          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
-          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
+      <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] animate-pulse flex flex-col justify-between h-28">
+        <div className="h-3 bg-[var(--foreground)]/10 rounded w-1/3 mb-4"></div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="h-10 bg-[var(--foreground)]/5 rounded w-full"></div>
+          <div className="h-10 bg-[var(--foreground)]/5 rounded w-full"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] relative overflow-hidden group">
+    <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] relative overflow-hidden group">
       <div className="absolute -right-4 -top-4 w-24 h-24 bg-[var(--accent)]/5 rounded-full blur-2xl group-hover:bg-[var(--accent)]/10 transition-colors duration-500" />
 
-      <div className="flex items-center justify-between mb-4 relative z-10">
-        <h3 className="text-sm font-bold text-[var(--foreground)]">{title}</h3>
-        <TrendingUp size={16} className="text-[var(--accent)]/60" />
+      <div className="flex items-center justify-between mb-3 relative z-10">
+        <h3 className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest">{title}</h3>
+        <TrendingUp size={14} className="text-[var(--accent)]/40" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 relative z-10">
-        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
-          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
-            <Package size={12} className="text-blue-500" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider">Count</span>
+      <div className="grid grid-cols-2 gap-2 relative z-10">
+        <div className="flex items-center justify-between bg-[var(--foreground)]/[0.02] p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all">
+          <div className="flex items-center gap-1 text-[var(--muted)] shrink-0">
+            <Package size={12} className="text-blue-500 shrink-0" />
+            <span className="text-[9px] font-black uppercase tracking-wider">Count</span>
           </div>
-          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">{count}</span>
+          <span className="text-lg font-black text-[var(--foreground)] tracking-tight ml-2">{count}</span>
         </div>
 
-        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
-          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
-            <IndianRupee size={12} className="text-emerald-500" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider">Revenue</span>
+        <div className="flex items-center justify-between bg-[var(--foreground)]/[0.02] p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all">
+          <div className="flex items-center gap-1 text-[var(--muted)] shrink-0">
+            <IndianRupee size={12} className="text-emerald-500 shrink-0" />
+            <span className="text-[9px] font-black uppercase tracking-wider">Rev</span>
           </div>
-          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">₹{Number(totalValue || 0).toLocaleString()}</span>
+          <span className="text-lg font-black text-[var(--foreground)] tracking-tight ml-2 whitespace-nowrap">₹{Number(totalValue || 0).toLocaleString()}</span>
         </div>
       </div>
     </div>

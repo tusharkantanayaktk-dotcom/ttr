@@ -80,7 +80,7 @@ export default function GameBannerCarousel() {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* BACKGROUND GLOW */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[150%] max-w-5xl bg-[var(--accent)]/5 blur-[120px] pointer-events-none opacity-40 z-0" />
+
 
       <div className="relative h-[200px] sm:h-[300px] md:h-[450px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border border-white/5 shadow-2xl bg-black">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
@@ -92,8 +92,7 @@ export default function GameBannerCarousel() {
             animate="center"
             exit="exit"
             transition={{
-              x: { type: "spring", stiffness: 300, damping: 32 },
-              opacity: { duration: 0.4 }
+              duration: 0.3
             }}
             className="absolute inset-0 w-full h-full"
           >
@@ -118,7 +117,7 @@ export default function GameBannerCarousel() {
                   className="space-y-3 md:space-y-6 max-w-4xl"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_#f59e0b] animate-pulse" />
+                    <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_#f59e0b]" />
                     <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-white/50">Exclusive Drop</span>
                   </div>
 
@@ -173,12 +172,7 @@ export default function GameBannerCarousel() {
               : "w-4 bg-white/10 group-hover/dot:bg-white/30"
               }`}>
               {current === i && (
-                <motion.div
-                  initial={{ x: "-100%" }}
-                  animate={{ x: "100%" }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 bg-amber-500"
-                />
+                <div className="absolute inset-0 bg-amber-500" />
               )}
             </div>
           </button>

@@ -105,8 +105,8 @@ const GameCard = React.memo(({ game, disabled }: any) => {
               alt={game.gameName}
               fill
               sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
-              className={`object-cover transition-all duration-700 ease-out
-              ${disabled ? "grayscale opacity-30 scale-105" : "group-hover:scale-110"}`}
+              className={`object-cover transition-all duration-300 ease-out
+              ${disabled ? "grayscale opacity-30 scale-100" : "group-hover:scale-105"}`}
             />
 
             {/* High-Fidelity Overlays */}
@@ -114,8 +114,7 @@ const GameCard = React.memo(({ game, disabled }: any) => {
               <>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
 
-                {/* Refraction Shine Effect */}
-                <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-250%] group-hover:translate-x-[250%] transition-transform duration-1000 ease-in-out" />
+
               </>
             )}
 
@@ -129,7 +128,7 @@ const GameCard = React.memo(({ game, disabled }: any) => {
                     color: game.tagId.tagColor,
                   }}
                 >
-                  <div className="w-1 h-1 rounded-full bg-current animate-pulse" />
+                  <div className="w-1 h-1 rounded-full bg-current" />
                   {game.tagId.tagName}
                 </div>
               ) : <div />}
@@ -218,19 +217,14 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                        bg-[var(--card)]/40 text-[13px] font-medium outline-none transition-all
                        focus:border-[var(--accent)]/30 focus:bg-[var(--card)]/60"
             />
-            <AnimatePresence>
-              {searchQuery && (
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
+            {searchQuery && (
+                <button
                   onClick={() => setSearchQuery("")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-red-500 transition-colors"
                 >
                   <FiX size={14} />
-                </motion.button>
-              )}
-            </AnimatePresence>
+                </button>
+            )}
           </div>
 
           {/* FILTER ACTION */}
@@ -284,7 +278,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                         src={ott.image}
                         alt={ott.name}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />
 
                       {/* Animated Gradient Overlay */}
@@ -325,7 +319,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                 >
                   <Link
                     href={`/games/membership/${plan.slug}`}
-                    className="relative flex flex-col p-4 rounded-[1.2rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-300 hover:border-[var(--accent)] hover:shadow-lg hover:shadow-[var(--accent)]/5 group-hover:-translate-y-1 overflow-hidden"
+                    className="relative flex flex-col p-4 rounded-[1.2rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-300 hover:border-[var(--accent)] hover:shadow-lg hover:shadow-[var(--accent)]/5 overflow-hidden"
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 relative rounded-lg overflow-hidden border border-[var(--border)] shrink-0">

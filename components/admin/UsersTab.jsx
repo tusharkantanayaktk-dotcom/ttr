@@ -416,23 +416,23 @@ export default function UsersTab() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed right-0 top-0 h-full w-full max-w-lg bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
             >
-              <div className="p-8 border-b border-[var(--border)]">
-                <div className="flex items-start justify-between mb-8">
-                  <h3 className="text-xl font-bold text-[var(--foreground)]">User Details</h3>
+              <div className="p-6 border-b border-[var(--border)]">
+                <div className="flex items-start justify-between mb-4">
+                  <h3 className="text-lg font-bold text-[var(--foreground)]">User Details</h3>
                   <button
                     onClick={() => setSelectedUser(null)}
-                    className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-red-500/10 transition-all outline-none"
+                    className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-red-500/10 transition-all outline-none"
                   >
-                    <X size={20} />
+                    <X size={18} />
                   </button>
                 </div>
 
-                <div className="flex items-center gap-5">
+                <div className="flex items-center gap-4">
                   <div className="relative">
                     <Avatar user={selectedUser} size="lg" />
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-lg font-bold text-[var(--foreground)] truncate">{selectedUser.name}</h4>
+                    <h4 className="text-base font-bold text-[var(--foreground)] truncate">{selectedUser.name}</h4>
                     <div className="flex items-center gap-2 mt-1">
                       <span className={`px-2 py-0.5 rounded-md border text-[10px] font-semibold capitalize ${getRoleClass(selectedUser.userType)}`}>
                         {selectedUser.userType}
@@ -443,7 +443,24 @@ export default function UsersTab() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 space-y-10">
+              <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                <DrawerSection icon={<Shield size={18} />} title="Account Settings">
+                  <div className="space-y-4 pt-2">
+                    <p className="text-xs font-semibold text-[var(--muted)] px-1">Change User Role</p>
+                    <RoleDropdown
+                      value={selectedUser.userType}
+                      disabled={updatingUserId === selectedUser.userId || selectedUser.userType === "owner"}
+                      onChange={(v) => {
+                        changeUserRole(selectedUser.userId, v);
+                        setSelectedUser(null);
+                      }}
+                    />
+                    {selectedUser.userType === "owner" && (
+                      <p className="text-[11px] text-rose-500 font-medium px-1 italic">Role is restricted and cannot be modified.</p>
+                    )}
+                  </div>
+                </DrawerSection>
+
                 <DrawerSection icon={<IdCard size={18} />} title="Profile Information">
                   <DrawerDetail label="Name" value={selectedUser.name} />
                   <DrawerDetail label="User ID" value={selectedUser.userId} />
@@ -464,23 +481,6 @@ export default function UsersTab() {
                     label="IP Address"
                     value={selectedUser.lastIp || "Unknown"}
                   />
-                </DrawerSection>
-
-                <DrawerSection icon={<Shield size={18} />} title="Account Settings">
-                  <div className="space-y-4 pt-2">
-                    <p className="text-xs font-semibold text-[var(--muted)] px-1">Change User Role</p>
-                    <RoleDropdown
-                      value={selectedUser.userType}
-                      disabled={updatingUserId === selectedUser.userId || selectedUser.userType === "owner"}
-                      onChange={(v) => {
-                        changeUserRole(selectedUser.userId, v);
-                        setSelectedUser(null);
-                      }}
-                    />
-                    {selectedUser.userType === "owner" && (
-                      <p className="text-[11px] text-rose-500 font-medium px-1 italic">Role is restricted and cannot be modified.</p>
-                    )}
-                  </div>
                 </DrawerSection>
               </div>
             </motion.div>
@@ -723,40 +723,40 @@ function DrawerDetail({ label, value }) {
 function StatCard({ title, newUsers, activeUsers, loading }) {
   if (loading) {
     return (
-      <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] animate-pulse flex flex-col justify-between h-32">
-        <div className="h-4 bg-[var(--foreground)]/10 rounded w-1/3 mb-4"></div>
-        <div className="space-y-3">
-          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
-          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
+      <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] animate-pulse flex flex-col justify-between h-28">
+        <div className="h-3 bg-[var(--foreground)]/10 rounded w-1/3 mb-4"></div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="h-10 bg-[var(--foreground)]/5 rounded w-full"></div>
+          <div className="h-10 bg-[var(--foreground)]/5 rounded w-full"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] relative overflow-hidden group">
+    <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] relative overflow-hidden group">
       <div className="absolute -right-4 -top-4 w-24 h-24 bg-[var(--accent)]/5 rounded-full blur-2xl group-hover:bg-[var(--accent)]/10 transition-colors duration-500" />
 
-      <div className="flex items-center justify-between mb-4 relative z-10">
-        <h3 className="text-sm font-bold text-[var(--foreground)]">{title}</h3>
-        <TrendingUp size={16} className="text-[var(--accent)]/60" />
+      <div className="flex items-center justify-between mb-3 relative z-10">
+        <h3 className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest">{title}</h3>
+        <TrendingUp size={14} className="text-[var(--accent)]/40" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 relative z-10">
-        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
-          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
-            <UserPlus size={12} className="text-blue-500" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider">New</span>
+      <div className="grid grid-cols-2 gap-2 relative z-10">
+        <div className="flex items-center justify-between bg-[var(--foreground)]/[0.02] p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all">
+          <div className="flex items-center gap-1.5 text-[var(--muted)] shrink-0">
+            <UserPlus size={12} className="text-blue-500 shrink-0" />
+            <span className="text-[9px] font-bold uppercase tracking-wider">New</span>
           </div>
-          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">{newUsers}</span>
+          <span className="text-lg font-black text-[var(--foreground)] tracking-tight ml-2 whitespace-nowrap">{newUsers}</span>
         </div>
 
-        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
-          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
-            <UserCheck size={12} className="text-emerald-500" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider">Active</span>
+        <div className="flex items-center justify-between bg-[var(--foreground)]/[0.02] p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all">
+          <div className="flex items-center gap-1.5 text-[var(--muted)] shrink-0">
+            <UserCheck size={12} className="text-emerald-500 shrink-0" />
+            <span className="text-[9px] font-bold uppercase tracking-wider">Active</span>
           </div>
-          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">{activeUsers}</span>
+          <span className="text-lg font-black text-[var(--foreground)] tracking-tight ml-2 whitespace-nowrap">{activeUsers}</span>
         </div>
       </div>
     </div>
