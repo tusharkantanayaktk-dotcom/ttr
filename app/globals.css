@@ -25,14 +25,14 @@
 
 /* 🌙 Dark Mode */
 html[data-theme="dark"] {
-  --background: #050505;
-  --foreground: #f1f5f9;
+  --background: #000000;
+  --foreground: #f8fafc;
   --accent: #7dd3fc;
   /* Electric cyan */
   --accent-hover: #38bdf8;
-  --muted: #94a3b8;
-  --border: #1e293b;
-  --card: #0f172a;
+  --muted: #a1a1aa;
+  --border: #18181b;
+  --card: #000000;
 }
 
 /* 💠 Cyber Theme (Futuristic / Tech Anime) */
@@ -167,16 +167,16 @@ html[data-theme="ice"] {
   --card: #cffafe;
 }
 
-/* 🎭 Monochrome Theme (Psychological / Art Anime) */
+/* 🎭 Pitch Black Theme (OLED / Stealth) */
 html[data-theme="monochrome"] {
-  --background: #fafafa;
-  --foreground: #171717;
-  --accent: #404040;
-  /* Charcoal */
-  --accent-hover: #262626;
-  --muted: #737373;
-  --border: #d4d4d4;
-  --card: #f5f5f5;
+  --background: #000000;
+  --foreground: #ffffff;
+  --accent: #ffffff;
+  /* Pure White */
+  --accent-hover: #e2e8f0;
+  --muted: #525252;
+  --border: #171717;
+  --card: #000000;
 }
 
 /* 🌺 Tropical Theme (Summer / Beach Anime) */

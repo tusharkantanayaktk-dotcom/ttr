@@ -194,26 +194,8 @@ export default function OrdersTab() {
       </div>
 
       {/* ================= STATS CARDS ================= */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard
-          title="Last 24 Hours"
-          count={stats["1d"].count}
-          totalValue={stats["1d"].totalValue}
-          loading={statsLoading}
-        />
-        <StatCard
-          title="Last 7 Days"
-          count={stats["7d"].count}
-          totalValue={stats["7d"].totalValue}
-          loading={statsLoading}
-        />
-        <StatCard
-          title="Last 30 Days"
-          count={stats["30d"].count}
-          totalValue={stats["30d"].totalValue}
-          loading={statsLoading}
-        />
-      </div>
+      {/* ================= COMPACT STATS OVERVIEW ================= */}
+      <StatsOverview stats={stats} loading={statsLoading} />
 
       {/* ================= FILTERS & SEARCH ================= */}
       <div className="space-y-3">
@@ -672,43 +654,65 @@ function DrawerDetail({ label, value, emphasize }) {
   );
 }
 
-function StatCard({ title, count, totalValue, loading }) {
+function StatsOverview({ stats, loading }) {
+  const periods = [
+    { key: "1d", label: "24H" },
+    { key: "7d", label: "7D" },
+    { key: "30d", label: "30D" },
+  ];
+
   if (loading) {
     return (
-      <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] animate-pulse flex flex-col justify-between h-28">
-        <div className="h-3 bg-[var(--foreground)]/10 rounded w-1/3 mb-4"></div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="h-10 bg-[var(--foreground)]/5 rounded w-full"></div>
-          <div className="h-10 bg-[var(--foreground)]/5 rounded w-full"></div>
-        </div>
+      <div className="space-y-3">
+        <div className="h-14 w-full rounded-2xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] animate-pulse" />
+        <div className="h-14 w-full rounded-2xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] animate-pulse" />
       </div>
     );
   }
 
   return (
-    <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] relative overflow-hidden group">
-      <div className="absolute -right-4 -top-4 w-24 h-24 bg-[var(--accent)]/5 rounded-full blur-2xl group-hover:bg-[var(--accent)]/10 transition-colors duration-500" />
-
-      <div className="flex items-center justify-between mb-3 relative z-10">
-        <h3 className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest">{title}</h3>
-        <TrendingUp size={14} className="text-[var(--accent)]/40" />
+    <div className="space-y-1.5">
+      {/* COLUMN HEADERS */}
+      <div className="hidden sm:flex items-center gap-3 px-1">
+        <div className="min-w-[120px]" />
+        <div className="flex-1 grid grid-cols-3 gap-2">
+          {periods.map((p) => (
+            <div key={p.key} className="text-center">
+              <span className="text-[9px] font-black text-[var(--muted)]/40 uppercase tracking-widest">{p.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 relative z-10">
-        <div className="flex items-center justify-between bg-[var(--foreground)]/[0.02] p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all">
-          <div className="flex items-center gap-1 text-[var(--muted)] shrink-0">
-            <Package size={12} className="text-blue-500 shrink-0" />
-            <span className="text-[9px] font-black uppercase tracking-wider">Count</span>
-          </div>
-          <span className="text-lg font-black text-[var(--foreground)] tracking-tight ml-2">{count}</span>
+      {/* ORDER VOLUME ROW */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="px-4 py-2.5 min-w-[120px] rounded-xl border border-blue-500/20 bg-blue-500/5 flex items-center gap-3">
+          <Package size={14} className="text-blue-500" />
+          <span className="text-[9px] font-black uppercase tracking-widest text-blue-500">ORDER VOLUME</span>
         </div>
+        <div className="flex-1 grid grid-cols-3 gap-2">
+          {periods.map((p) => (
+            <div key={p.key} className="px-5 py-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-blue-500/30 transition-all">
+              <span className="sm:hidden text-[9px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
+              <span className="text-sm font-black text-[var(--foreground)]">{stats[p.key].count}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-        <div className="flex items-center justify-between bg-[var(--foreground)]/[0.02] p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)]/30 transition-all">
-          <div className="flex items-center gap-1 text-[var(--muted)] shrink-0">
-            <IndianRupee size={12} className="text-emerald-500 shrink-0" />
-            <span className="text-[9px] font-black uppercase tracking-wider">Rev</span>
-          </div>
-          <span className="text-lg font-black text-[var(--foreground)] tracking-tight ml-2 whitespace-nowrap">₹{Number(totalValue || 0).toLocaleString()}</span>
+      {/* REVENUE ROW */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="px-4 py-2.5 min-w-[120px] rounded-xl border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-3">
+          <IndianRupee size={14} className="text-emerald-500" />
+          <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500">TOTAL REVENUE</span>
+        </div>
+        <div className="flex-1 grid grid-cols-3 gap-2">
+          {periods.map((p) => (
+            <div key={p.key} className="px-5 py-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-emerald-500/30 transition-all">
+              <span className="sm:hidden text-[9px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
+              <span className="text-sm font-black text-[var(--foreground)] whitespace-nowrap ml-1">₹{Number(stats[p.key].totalValue || 0).toLocaleString()}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

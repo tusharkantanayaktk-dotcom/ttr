@@ -17,7 +17,7 @@ const themes = [
   { id: "galaxy", icon: <FiActivity />, label: "Galaxy", color: "#6366f1" },
   { id: "sunset", icon: <FiSun />, label: "Sunset", color: "#f97316" },
   { id: "ice", icon: <FiDroplet />, label: "Ice", color: "#06b6d4" },
-  { id: "monochrome", icon: <FiGrid />, label: "Monochrome", color: "#404040" },
+  { id: "monochrome", icon: <FiGrid />, label: "Pitch Black", color: "#ffffff" },
   { id: "tropical", icon: <FiDroplet />, label: "Tropical", color: "#14b8a6" },
   { id: "retro", icon: <FiZap />, label: "Retro", color: "#ff006e" },
 ];

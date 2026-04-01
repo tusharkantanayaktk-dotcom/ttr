@@ -243,11 +243,9 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: 10, scale: 0.98, filter: "blur(10px)" }}
                   transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                  className="absolute right-0 top-[calc(100%+12px)] w-72 bg-[var(--card)]/80 border border-[var(--border)] rounded-[1.8rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] overflow-hidden backdrop-blur-3xl z-50 p-2"
+                  className="absolute right-0 top-[calc(100%+12px)] w-64 bg-[var(--card)]/95 border border-[var(--border)] rounded-[1.5rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-3xl z-50 p-1.5"
                 >
-                  {/* Background Ambient Depth */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/15 blur-[60px] rounded-full pointer-events-none" />
-                  <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-[var(--accent)]/5 blur-[50px] rounded-full pointer-events-none" />
+                  <div className="absolute inset-0 bg-[var(--card)] pointer-events-none" />
 
                   {!user ? (
                     <div className="p-7 flex flex-col items-center justify-center text-center relative z-10">
@@ -278,43 +276,43 @@ export default function Header() {
                     </div>
                   ) : (
                     <div className="relative z-10">
-                      {/* User Identity Header */}
-                      <div className="px-4 py-5 mb-2 flex items-center gap-4 relative overflow-hidden rounded-[1.4rem] bg-gradient-to-br from-[var(--foreground)]/[0.04] to-transparent border border-[var(--border)]/40 shadow-inner">
-                        <div className="relative">
-                          <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            className="w-13 h-13 rounded-full bg-[var(--accent)]/15 p-0.5 border border-[var(--accent)]/40 shadow-2xl shrink-0 overflow-hidden"
-                          >
+                      <div className="px-4 py-3 mb-1 flex items-center justify-between border-b border-[var(--border)]">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="w-9 h-9 rounded-full bg-[var(--accent)] shrink-0 overflow-hidden">
                             {user?.avatar ? (
                               <Image
                                 src={user.avatar}
                                 alt="User Avatar"
-                                width={52}
-                                height={52}
+                                width={36}
+                                height={36}
                                 className="object-cover w-full h-full rounded-full"
                               />
                             ) : (
                               <div className="w-full h-full rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center">
-                                <FiUser className="text-white text-2xl" />
+                                <FiUser className="text-white text-xl" />
                               </div>
                             )}
-                          </motion.div>
-                          <div className="absolute bottom-0 right-0 w-4.5 h-4.5 rounded-full bg-[var(--accent)] border-[3px] border-[var(--card)] flex items-center justify-center shadow-lg">
-                            <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                           </div>
-                        </div>
 
-                        <div className="flex flex-col min-w-0 pr-2">
-                          <span className="text-[15px] font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate leading-tight">
-                            {user.name || user.username || "Standard User"}
-                          </span>
-                          <div className="flex items-center gap-1.5 mt-0.5">
-                            <div className="w-1 h-1 rounded-full bg-[var(--accent)] opacity-60" />
-                            <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest truncate opacity-60">
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-sm font-bold text-[var(--foreground)] truncate leading-tight">
+                              {user.name || user.username}
+                            </span>
+                            <span className="text-[9px] font-medium text-[var(--muted)]/60 truncate">
                               {user.email}
                             </span>
                           </div>
                         </div>
+
+                        {/* TOP RIGHT LOGOUT ICON */}
+                        <motion.button
+                          onClick={handleLogout}
+                          className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all ml-1"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <FiLogOut size={14} strokeWidth={2.5} />
+                        </motion.button>
                       </div>
 
                       {/* Navigation Nodes */}
@@ -331,18 +329,14 @@ export default function Header() {
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: idx * 0.05 }}
-                              className="relative flex items-center justify-between px-4 py-3 rounded-xl hover:bg-[var(--foreground)]/[0.04] text-[var(--muted)] group transition-all duration-300"
-                              whileHover={{ x: 6 }}
+                              className="relative flex items-center justify-between px-3.5 py-2.5 rounded-lg hover:bg-[var(--foreground)]/[0.04] text-[var(--muted)] group transition-all duration-300"
+                              whileHover={{ x: 4 }}
                             >
-                              <div className="flex items-center gap-4">
-                                <link.icon className="text-xl opacity-50 group-hover:opacity-100 group-hover:text-[var(--accent)] group-hover:scale-110 transition-all duration-300" />
-                                <div className="flex flex-col">
-                                  <span className="text-[11px] font-black uppercase tracking-tight group-hover:text-[var(--foreground)] transition-colors">{link.label}</span>
-                                </div>
+                              <div className="flex items-center gap-3">
+                                <link.icon className="text-lg opacity-50 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all duration-300" />
+                                <span className="text-xs font-semibold group-hover:text-[var(--foreground)] transition-colors">{link.label}</span>
                               </div>
-
-                              {/* Active Hover Glow */}
-                              <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                              <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300" />
                             </motion.div>
                           </Link>
                         ))}
@@ -353,32 +347,17 @@ export default function Header() {
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 0.3 }}
-                              className="flex items-center gap-4 px-4 py-3.5 rounded-xl bg-gradient-to-r from-orange-500/10 to-transparent hover:from-orange-500/20 border border-orange-500/10 hover:border-orange-500/40 text-orange-500 transition-all mt-5 mb-3 group shadow-lg"
-                              whileHover={{ scale: 1.02, x: 4 }}
+                              className="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-orange-500/10 border border-orange-500/20 text-orange-500 hover:bg-orange-500/20 transition-all mt-2 group"
+                              whileHover={{ scale: 1.02 }}
                             >
-                              <div className="w-9 h-9 rounded-xl bg-orange-500/20 flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] transition-all">
-                                <FiSettings size={18} className="animate-spin-slow" style={{ animationDuration: '6s' }} />
-                              </div>
-                              <div className="flex flex-col">
-                                <span className="text-[11px] font-black italic uppercase tracking-tight">Admin Panel</span>
-                              </div>
+                              <FiSettings size={16} className="group-hover:rotate-90 transition-transform duration-500" />
+                              <span className="text-xs font-bold uppercase tracking-tight">Admin Panel</span>
                             </motion.div>
                           </Link>
                         )}
                       </div>
 
-                      <div className="mt-4 pt-1">
-                        <motion.button
-                          onClick={handleLogout}
-                          whileHover={{ scale: 0.98, backgroundColor: 'rgba(239, 68, 68, 0.15)' }}
-                          whileTap={{ scale: 0.95 }}
-                          className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-2xl bg-red-500/[0.06] border border-red-500/10 hover:border-red-500/30 text-red-500 transition-all font-black italic uppercase tracking-[0.2em] text-[10px] relative overflow-hidden group"
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/5 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-                          <FiLogOut size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-                          <span>Log Out</span>
-                        </motion.button>
-                      </div>
+                      <div className="h-2" />
                     </div>
                   )}
                 </motion.div>

@@ -146,53 +146,35 @@ export default function AdminPanalPage() {
     <AdminGuard>
       <section className="min-h-screen bg-[var(--background)] px-6 py-3">
         <div className="max-w-6xl mx-auto">
-          {/* HEADER */}
           <div className="mb-4">
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-[var(--foreground)]">
-                Admin Panel
-              </h1>
-
-              {/* Accent status dot */}
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-            </div>
-
-            <p className="mt-0.5 text-xs md:text-sm text-[var(--muted)] max-w-lg leading-snug">
+            <h1 className="text-xl font-bold tracking-tight text-[var(--foreground)]">
+              Admin Panel
+            </h1>
+            <p className="text-[10px] text-[var(--muted)]">
               Manage users, orders, transactions, queries & pricing
             </p>
           </div>
 
 
-          {/* BALANCE */}
-          <div className="
-  mb-6
-  relative
-  rounded-xl
-  border border-[var(--border)]
-  bg-[var(--card)]
-  px-5 py-4
-">
-
-            {/* Top accent bar */}
-            <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-[var(--accent)] to-purple-500 rounded-t-xl" />
+          <div className="mb-4 p-4 rounded-xl border border-[var(--border)] bg-[var(--card)]">
 
             <p className="text-xs uppercase tracking-wide text-[var(--muted)]">
               Account Balance
             </p>
 
-            <div className="mt-1 flex items-end gap-2">
-              <p className="text-2xl font-bold text-[var(--foreground)]">
+            <div className="flex items-baseline gap-2">
+              <p className="text-xl font-bold text-[var(--foreground)]">
                 {balance !== null ? balance : "Loading…"}
               </p>
 
-              <span className="text-sm font-medium text-green-500">
+              <span className="text-[10px] font-medium text-green-500 uppercase">
                 Available
               </span>
             </div>
           </div>
 
 
-          <div className="mb-5 flex flex-wrap gap-2">
+          <div className="mb-4 flex flex-wrap gap-1.5">
             {["users", "orders", "wallet", "transactions", "queries", "pricing", "banners", "settings"].map(
               (tab) => {
                 const isActive = activeTab === tab;
@@ -202,44 +184,18 @@ export default function AdminPanalPage() {
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`
-            relative
-            px-3.5 py-1.5
-            rounded-lg
-            text-xs sm:text-sm
-            font-semibold
-            border
-            transition-all duration-200
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40
-            ${isActive
-                        ? `
-                  bg-[var(--accent)]/15
-                  text-[var(--accent)]
-                  border-[var(--accent)]/40
-                `
-                        : `
-                  bg-[var(--card)]
-                  text-[var(--muted)]
-                  border-[var(--border)]
-                  hover:text-[var(--foreground)]
-                  hover:border-[var(--accent)]/30
-                `
+                      px-3 py-1
+                      rounded-lg
+                      text-[10px] font-bold
+                      transition-all
+                      border
+                      ${isActive
+                        ? "bg-[var(--accent)] text-black border-[var(--accent)]"
+                        : "bg-transparent text-[var(--muted)] border-[var(--border)] hover:border-[var(--muted)]"
                       }
-          `}
+                    `}
                   >
                     {tab.toUpperCase()}
-
-                    {/* Active underline */}
-                    {isActive && (
-                      <span className="
-              absolute left-1/2 -bottom-1
-              h-0.5 w-6
-              -translate-x-1/2
-              rounded-full
-              bg-gradient-to-r
-              from-[var(--accent)]
-              to-purple-500
-            " />
-                    )}
                   </button>
                 );
               }

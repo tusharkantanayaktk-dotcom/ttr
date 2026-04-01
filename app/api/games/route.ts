@@ -138,20 +138,27 @@ export async function GET() {
     };
 
     /* ================= FILTER GAMES ================= */
-    const BLOCKED_GAME_SLUGS = [
-      "test-1637",
+    const ALLOWED_GAME_SLUGS = [
+      "mobile-legends988",
+      "mlbb-double332",
+      "sgmy-mlbb893",
+      "magic-chess-gogo-india924",
+      "mlbb-indo42",
+      "mlbb-russia953",
+      "pubg-mobile138",
+
       "genshin-impact742",
       "honor-of-kings57",
-      "mobile-legends-backup826",
       "wuthering-of-waves464",
-      "value-pass-ml948",
-      "ph-value-pass588"
+      "where-winds-meet280",
+      "mlbb-smallphp980",
+      "weeklymonthly-bundle931"
     ];
 
     const filteredGames =
       data?.data?.games
         ?.filter(
-          (game: any) => !BLOCKED_GAME_SLUGS.includes(game.gameSlug)
+          (game: any) => ALLOWED_GAME_SLUGS.includes(game.gameSlug)
         )
         ?.map(normalizeGame) || [];
 
@@ -161,7 +168,7 @@ export async function GET() {
         ...cat,
         gameId:
           cat.gameId
-            ?.filter((game: any) => !BLOCKED_GAME_SLUGS.includes(game.gameSlug))
+            ?.filter((game: any) => ALLOWED_GAME_SLUGS.includes(game.gameSlug))
             ?.map(normalizeGame) || [],
       })) || [];
 
