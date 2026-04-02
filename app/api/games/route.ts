@@ -47,15 +47,15 @@ const MEMBERSHIPS = [
     category: "Membership",
     available: true,
   },
-  {
-    name: "Reseller Membership",
-    slug: "reseller-membership",
-    image:
-      "/membership/reseller-m.png",
-    type: "reseller",
-    category: "Membership",
-    available: true,
-  },
+  // {
+  //   name: "Reseller Membership",
+  //   slug: "reseller-membership",
+  //   image:
+  //     "/membership/reseller-m.png",
+  //   type: "reseller",
+  //   category: "Membership",
+  //   available: true,
+  // },
 ];
 
 
@@ -141,14 +141,14 @@ export async function GET() {
     const ALLOWED_GAME_SLUGS = [
       "mobile-legends988",
       "mlbb-double332",
-      "sgmy-mlbb893",
+      // "sgmy-mlbb893",
       "magic-chess-gogo-india924",
       "mlbb-indo42",
-      "mlbb-russia953",
+      // "mlbb-russia953",
       "pubg-mobile138",
 
-      "genshin-impact742",
-      "honor-of-kings57",
+      // "genshin-impact742",
+      // "honor-of-kings57",
       "wuthering-of-waves464",
       "where-winds-meet280",
       "mlbb-smallphp980",
@@ -227,11 +227,11 @@ export async function GET() {
         regionalGames,
 
         // 🔥 OTT SECTION
-        otts: {
-          title: "OTT & Social Subscriptions",
-          items: OTTS.filter((o) => o.available),
-          total: OTTS.filter((o) => o.available).length,
-        },
+        // otts: {
+        //   title: "OTT & Social Subscriptions",
+        //   items: OTTS.filter((o) => o.available),
+        //   total: OTTS.filter((o) => o.available).length,
+        // },
         // 🔥 MEMBERSHIP SECTION
         memberships: {
           title: "Memberships & Passes",
