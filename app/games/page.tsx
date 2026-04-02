@@ -255,7 +255,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
             count={processedGames.length}
             icon={FiBox}
           />
-          <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-x-3 gap-y-6">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-6">
             {processedGames.map((game: any, i: number) => (
               <GameCard key={game.gameSlug || i} game={game} disabled={isOutOfStock(game.gameName)} />
             ))}
@@ -266,7 +266,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
         {otts?.items?.length > 0 && (
           <section>
             <SectionHeader title={otts.title} icon={FiZap} />
-            <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-x-3 gap-y-6">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-6">
               {otts.items.map((ott: any) => (
                 <div
                   key={ott.slug}

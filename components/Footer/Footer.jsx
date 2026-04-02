@@ -78,7 +78,7 @@ export default function Footer() {
           {/* Left Column: Brand & Socials */}
           <div className="lg:col-span-5 space-y-4">
             <Link href="/" className="inline-block group">
-              <h2 className="text-2xl font-black tracking-tighter bg-gradient-to-br from-[#0ea5e9] via-[#7dd3fc] to-white bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(14,165,233,0.4)] transition-all group-hover:drop-shadow-[0_0_20px_rgba(14,165,233,0.6)]">
+              <h2 className="text-2xl font-black tracking-tighter bg-gradient-to-br from-[var(--accent)] via-[var(--accent-hover)] to-[var(--accent)] bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(14,165,233,0.3)] transition-all group-hover:drop-shadow-[0_0_20px_rgba(14,165,233,0.5)]">
                 {BRAND_NAME}
               </h2>
             </Link>
@@ -88,7 +88,7 @@ export default function Footer() {
             </p>
 
             <div className="pt-1">
-              <h3 className="text-[8px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-30 mb-2">
+              <h3 className="text-[8px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-60 mb-2">
                 Connect
               </h3>
               <div className="flex gap-2.5">
@@ -112,7 +112,7 @@ export default function Footer() {
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-4">
             {FOOTER_LINKS.map((section) => (
               <div key={section.title} className="space-y-3">
-                <h3 className="text-[9px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-40">
+                <h3 className="text-[9px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-60">
                   {section.title}
                 </h3>
                 <ul className="space-y-2">
@@ -133,7 +133,7 @@ export default function Footer() {
 
             {/* Added a dynamic trust summary in the links area for better usage of space */}
             <div className="hidden sm:block space-y-4">
-              <h3 className="text-[9px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-40">
+              <h3 className="text-[9px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-60">
                 Safe & Fast
               </h3>
               <div className="space-y-2.5">

@@ -56,7 +56,7 @@ export default function StorySlider() {
       <div className="relative max-w-7xl mx-auto px-4">
         <div
           ref={containerRef}
-          className="flex gap-5 md:gap-10 overflow-x-auto pb-6 pt-2 px-2
+          className="flex gap-4 md:gap-8 overflow-x-auto pb-6 pt-2 px-2
           [scrollbar-width:none] [&::-webkit-scrollbar]:hidden 
           touch-pan-x snap-x scroll-smooth"
         >
@@ -67,7 +67,7 @@ export default function StorySlider() {
             >
               <Link
                 href={item.link}
-                className="group flex flex-col items-center gap-3.5 cursor-pointer max-w-[85px] md:max-w-[100px]"
+                className="group flex flex-col items-center gap-3.5 cursor-pointer max-w-[80px] md:max-w-[90px]"
               >
                 {/* RING ASSEMBLY */}
                 <div className="relative">
@@ -78,9 +78,8 @@ export default function StorySlider() {
                     scale-75 group-hover:scale-110
                   `} />
 
-                  {/* Rotating Border Ring */}
                   <div className={`
-                    relative w-18 h-18 md:w-22 md:h-22 rounded-full p-[2.5px]
+                    relative w-16 h-16 md:w-20 md:h-20 rounded-full p-[2.5px]
                     bg-[#1a1a1a] border border-white/5 shadow-2xl transition-all duration-500
                     group-hover:translate-y-[-4px] group-active:scale-95
                   `}>

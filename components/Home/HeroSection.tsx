@@ -13,6 +13,7 @@ const FlashSale = dynamic(() => import("./FlashSale"), { ssr: false });
 const StorySlider = dynamic(() => import("./StorySlider"), { ssr: false });
 const HomeQuickActions = dynamic(() => import("./HomeQuickActions"), { ssr: false });
 const HomeServices = dynamic(() => import("./HomeServices"), { ssr: false });
+const TronicsWho = dynamic(() => import("./TronicsWho"), { ssr: false });
 const TrustHighlights = dynamic(() => import("./TrustHighlights"), { ssr: false });
 const MLBBPurchaseGuide = dynamic(() => import("../HelpImage/MLBBPurchaseGuide"), { ssr: false });
 
@@ -42,9 +43,9 @@ export default function HeroSection() {
       <HomeQuickActions />
 
       <GamesPage />
-      <ScrollingNoticeBand />
+      {/* <ScrollingNoticeBand /> */}
 
-
+      <TronicsWho />
       <HomeServices />
       {/* <TrustHighlights /> */}
 
