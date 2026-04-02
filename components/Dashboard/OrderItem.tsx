@@ -77,52 +77,49 @@ export default function OrderItem({ order }: { order: OrderType }) {
         <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 blur-[50px] -mr-16 -mt-16 group-hover:bg-[var(--accent)]/10 transition-colors" />
 
         {/* COMPACT VIEW */}
-        <div className="px-5 py-5 sm:px-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="px-5 py-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-[var(--accent)]/5 border border-[var(--border)] flex items-center justify-center text-[var(--accent)] transition-all">
-                <FiPackage className="text-lg" />
+              <div className="h-9 w-9 rounded-xl bg-[var(--accent)]/5 border border-[var(--border)] flex items-center justify-center text-[var(--accent)] transition-all">
+                <FiPackage className="text-base" />
               </div>
               <div>
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)]">Order ID</span>
-                  <span className="text-[10px] font-mono text-[var(--foreground)] opacity-60">#{order.orderId}</span>
-                </div>
-                <h3 className="text-xs font-bold text-[var(--foreground)] line-clamp-1">
+                <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 block mb-0.5">#{order.orderId}</span>
+                <h3 className="text-xs font-bold text-[var(--foreground)] line-clamp-1 leading-none">
                   {order.itemName}
                 </h3>
               </div>
             </div>
 
-            <div className="flex items-center justify-between sm:justify-end gap-5 border-t sm:border-t-0 border-[var(--border)] pt-3 sm:pt-0">
+            <div className="flex items-center justify-between sm:justify-end gap-5 border-t sm:border-t-0 border-[var(--border)] pt-2.5 sm:pt-0">
               <div className="text-right">
-                <div className="flex items-center justify-end gap-1 text-[9px] font-medium text-[var(--muted)] mb-0.5 uppercase">
+                <div className="flex items-center justify-end gap-1 text-[8px] font-medium text-[var(--muted)] mb-0.5 uppercase">
                   <FiCalendar /> {new Date(order.createdAt).toLocaleDateString()}
                 </div>
-                <div className="text-base font-bold text-[var(--foreground)]">₹{order.price.toFixed(2)}</div>
+                <div className="text-sm font-bold text-[var(--foreground)]">₹{order.price.toFixed(2)}</div>
               </div>
 
               <div className="flex items-center gap-2">
-                <div className={`px-2.5 py-1 rounded-lg border ${statusConfig.bg} ${statusConfig.border} ${statusConfig.color} flex items-center gap-1.5`}>
+                <div className={`px-2 py-0.5 rounded-lg border ${statusConfig.bg} ${statusConfig.border} ${statusConfig.color} flex items-center gap-1.5`}>
                   <div className="w-1 h-1 rounded-full bg-current" />
-                  <span className="text-[9px] font-bold uppercase tracking-wider">{statusConfig.label}</span>
+                  <span className="text-[8px] font-bold uppercase tracking-wider">{statusConfig.label}</span>
                 </div>
 
                 <div className="flex gap-1.5">
                   <button
                     onClick={() => setShowReceipt(true)}
-                    className="h-8 w-8 rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white flex items-center justify-center transition-all"
+                    className="h-7.5 w-7.5 rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white flex items-center justify-center transition-all"
                   >
-                    <FiExternalLink size={14} />
+                    <FiExternalLink size={13} />
                   </button>
 
                   <button
                     onClick={() => setOpen(!open)}
-                    className={`h-8 w-8 rounded-lg border border-[var(--border)] flex items-center justify-center transition-all ${open ? "bg-[var(--accent)] text-white border-[var(--accent)]" : "hover:bg-[var(--card)]"}`}
+                    className={`h-7.5 w-7.5 rounded-lg border border-[var(--border)] flex items-center justify-center transition-all ${open ? "bg-[var(--accent)] text-white border-[var(--accent)]" : "hover:bg-[var(--card)]"}`}
                   >
                     <FiChevronDown
-                      size={16}
+                      size={14}
                       className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`}
                     />
                   </button>
@@ -142,31 +139,20 @@ export default function OrderItem({ order }: { order: OrderType }) {
               transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
               className="overflow-hidden"
             >
-              <div className="px-5 pb-8 sm:px-8 border-t border-[var(--border)]/50 pt-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="px-5 pb-5 sm:px-6 border-t border-[var(--border)]/50 pt-4">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
                   <DetailBox label="Game" value={getGameName(order.gameSlug)} icon={<FiPackage />} />
                   <DetailBox label="Player ID" value={order.playerId} mono icon={<FiUser />} />
                   <DetailBox label="Zone ID" value={order.zoneId} mono icon={<FiGrid />} />
                   <DetailBox label="Payment" value={order.paymentMethod.toUpperCase()} icon={<FiCreditCard />} />
                 </div>
 
-                <div className="mt-4 p-4 rounded-xl bg-[var(--background)]/50 border border-[var(--border)] flex flex-col sm:flex-row justify-between items-center gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-lg bg-[var(--card)] flex items-center justify-center text-[var(--muted)]">
-                      <FiHash />
-                    </div>
-                    <div>
-                      <p className="text-[8px] font-bold uppercase tracking-wider text-[var(--muted)] mb-0.5">Item Details</p>
-                      <p className="text-[10px] font-mono text-[var(--foreground)]">{order.itemName}</p>
-                    </div>
+                {currentStatus === "pending" && (
+                  <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/5 border border-yellow-500/10">
+                    <FiClock size={11} className="text-yellow-500 animate-pulse" />
+                    <span className="text-[9px] font-black text-yellow-500 uppercase tracking-widest">Processing Transaction</span>
                   </div>
-                  {currentStatus === "pending" && (
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-yellow-500/5 border border-yellow-500/10">
-                      <FiClock className="text-yellow-500 text-[10px] animate-pulse" />
-                      <span className="text-[9px] font-bold text-yellow-500 uppercase">Processing</span>
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
             </motion.div>
           )}
@@ -186,12 +172,12 @@ export default function OrderItem({ order }: { order: OrderType }) {
 
 function DetailBox({ label, value, icon, mono }: { label: string, value: string, icon: any, mono?: boolean }) {
   return (
-    <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all">
-      <div className="flex items-center gap-2 mb-1 text-[var(--muted)]">
-        <div className="text-xs">{icon}</div>
-        <span className="text-[8px] font-bold uppercase tracking-wider">{label}</span>
+    <div className="p-2 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all">
+      <div className="flex items-center gap-2 mb-0.5 text-[var(--muted)]">
+        <div className="text-[10px]">{icon}</div>
+        <span className="text-[7px] font-black uppercase tracking-widest">{label}</span>
       </div>
-      <p className={`text-xs font-bold truncate ${mono ? "font-mono" : ""} text-[var(--foreground)]`}>
+      <p className={`text-[10px] font-bold truncate ${mono ? "font-mono" : ""} text-[var(--foreground)]`}>
         {value || "---"}
       </p>
     </div>

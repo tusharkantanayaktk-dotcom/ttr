@@ -223,9 +223,9 @@ export default function Header() {
                 )}
               </div>
               <div className="hidden md:flex flex-col items-start leading-none">
-                <span className="text-[10px] uppercase tracking-widest text-[var(--muted)] font-bold">Account</span>
+                <span className="text-[11px] uppercase tracking-widest text-[var(--muted)] font-bold">Account</span>
                 <div className="flex items-center gap-1">
-                  <span className="text-sm font-semibold truncate max-w-[80px]">
+                  <span className="text-base font-semibold truncate max-w-[80px]">
                     {user ? user.username : 'Guest'}
                   </span>
                   <motion.div animate={{ rotate: userMenuOpen ? 180 : 0 }}>
@@ -259,7 +259,7 @@ export default function Header() {
                       </motion.div>
 
                       <h3 className="text-[var(--foreground)] font-black italic uppercase tracking-tighter text-2xl mb-2 leading-none">Welcome, <span className="text-[var(--accent)]">User</span></h3>
-                      <p className="text-[10px] text-[var(--muted)] mb-8 font-bold uppercase tracking-[0.2em] opacity-50 max-w-[90%] leading-relaxed">
+                      <p className="text-xs text-[var(--muted)] mb-8 font-bold uppercase tracking-[0.2em] opacity-50 max-w-[90%] leading-relaxed">
                         Sign in to access your wallet and orders.
                       </p>
 
@@ -298,7 +298,7 @@ export default function Header() {
                             <span className="text-sm font-bold text-[var(--foreground)] truncate leading-tight">
                               {user.name || user.username}
                             </span>
-                            <span className="text-[9px] font-medium text-[var(--muted)]/60 truncate">
+                            <span className="text-[10px] font-medium text-[var(--muted)]/60 truncate">
                               {user.email}
                             </span>
                           </div>
@@ -334,7 +334,7 @@ export default function Header() {
                             >
                               <div className="flex items-center gap-3">
                                 <link.icon className="text-lg opacity-50 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all duration-300" />
-                                <span className="text-xs font-semibold group-hover:text-[var(--foreground)] transition-colors">{link.label}</span>
+                                <span className="text-sm font-semibold group-hover:text-[var(--foreground)] transition-colors">{link.label}</span>
                               </div>
                               <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300" />
                             </motion.div>
@@ -351,7 +351,7 @@ export default function Header() {
                               whileHover={{ scale: 1.02 }}
                             >
                               <FiSettings size={16} className="group-hover:rotate-90 transition-transform duration-500" />
-                              <span className="text-xs font-bold uppercase tracking-tight">Admin Panel</span>
+                              <span className="text-sm font-bold uppercase tracking-tight">Admin Panel</span>
                             </motion.div>
                           </Link>
                         )}
