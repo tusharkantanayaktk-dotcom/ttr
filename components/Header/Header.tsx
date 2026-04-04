@@ -125,10 +125,10 @@ export default function Header() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-4 h-13">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-4 h-11 relative">
 
         {/* LOGO SECTION */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center">
           <Link href="/" className="relative group">
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -138,51 +138,51 @@ export default function Header() {
               <Image
                 src={logo}
                 alt="Logo"
-                width={95}
-                height={28}
+                width={80}
+                height={24}
                 priority
-                className="object-contain -ml-3"
+                className="object-contain -ml-2"
               />
             </motion.div>
             <div className="absolute -inset-2 bg-[var(--accent)]/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity blur-md" />
           </Link>
-
-          {/* DESKTOP NAV */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {[
-              { name: "Games", href: "/games", icon: FiGrid },
-              { name: "Services", href: "/services", icon: FiLayers },
-              { name: "Regions", href: "/regions", icon: FiGlobe }
-            ].map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="relative flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] transition-colors group"
-              >
-                <item.icon className="text-lg opacity-70 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all" />
-                <span>{item.name}</span>
-                <motion.span
-                  className="absolute bottom-0 left-4 right-4 h-0.5 bg-[var(--accent)] rounded-full origin-left opacity-0 group-hover:opacity-100"
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              </Link>
-            ))}
-          </nav>
         </div>
+
+        {/* DESKTOP NAV - CENTERED */}
+        <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
+          {[
+            { name: "Games", href: "/games", icon: FiGrid },
+            { name: "Services", href: "/services", icon: FiLayers },
+            { name: "Regions", href: "/regions", icon: FiGlobe }
+          ].map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className="relative flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] transition-colors group"
+            >
+              <item.icon className="text-lg opacity-70 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all" />
+              <span>{item.name}</span>
+              <motion.span
+                className="absolute bottom-0 left-4 right-4 h-0.5 bg-[var(--accent)] rounded-full origin-left opacity-0 group-hover:opacity-100"
+                initial={{ scaleX: 0 }}
+                whileHover={{ scaleX: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              />
+            </Link>
+          ))}
+        </nav>
 
         {/* ACTIONS SECTION */}
         <div className="flex items-center gap-3 sm:gap-4" ref={dropdownRef}>
           {user && (
             <Link
               href="/dashboard/wallet"
-              className="flex items-center gap-1.5 bg-[var(--accent)]/10 border border-[var(--accent)]/30 px-2.5 py-1.5 rounded-full hover:bg-[var(--accent)]/20 transition-all group shrink-0 shadow-sm hover:shadow-md"
+              className="flex items-center gap-1 bg-[var(--accent)]/10 border border-[var(--accent)]/30 px-2 py-1 rounded-full hover:bg-[var(--accent)]/20 transition-all group shrink-0 shadow-sm"
             >
-              <div className="w-4.5 h-4.5 rounded-full bg-[var(--accent)]/20 flex items-center justify-center">
-                <FiPlus className="text-[var(--accent)] text-[9px]" />
+              <div className="w-4 h-4 rounded-full bg-[var(--accent)]/20 flex items-center justify-center">
+                <FiPlus className="text-[var(--accent)] text-[8px]" />
               </div>
-              <span className="text-sm font-bold text-[var(--accent)]">₹{user.wallet?.toFixed(1) || "0.0"}</span>
+              <span className="text-[12px] font-bold text-[var(--accent)]">₹{user.wallet?.toFixed(1) || "0.0"}</span>
             </Link>
           )}
 
@@ -195,43 +195,28 @@ export default function Header() {
             <motion.button
               onClick={() => {
                 if (!loading) {
-                  if (user) {
-                    setUserMenuOpen(!userMenuOpen);
-                  } else {
-                    window.location.href = "/login";
-                  }
+                  setUserMenuOpen(!userMenuOpen);
                 }
               }}
               className={`
-                flex items-center gap-1.5 p-0.5 pr-2 rounded-full transition-all duration-300
-                ${userMenuOpen ? 'bg-[var(--accent)]/10' : 'hover:bg-[var(--card)]/50'}
+                flex items-center justify-center w-7 h-7 rounded-full transition-all duration-300
+                ${userMenuOpen ? 'bg-[var(--accent)] ring-2 ring-[var(--accent)]/50' : 'hover:bg-[var(--card)]/50 border border-transparent hover:border-[var(--border)]'}
               `}
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.97 }}
             >
-              <div className="w-8 h-8 rounded-full bg-[var(--accent)] flex items-center justify-center overflow-hidden shadow-sm">
+              <div className="w-full h-full rounded-full bg-[var(--accent)] flex items-center justify-center overflow-hidden shadow-sm">
                 {!loading && user?.avatar ? (
                   <Image
                     src={user.avatar}
                     alt="User Avatar"
-                    width={32}
-                    height={32}
+                    width={28}
+                    height={28}
                     className="object-cover w-full h-full"
                   />
                 ) : (
-                  <FiUser className="text-white text-sm" />
+                  <FiUser className="text-white text-xs" />
                 )}
-              </div>
-              <div className="hidden md:flex flex-col items-start leading-none">
-                <span className="text-[11px] uppercase tracking-widest text-[var(--muted)] font-bold">Account</span>
-                <div className="flex items-center gap-1">
-                  <span className="text-base font-semibold truncate max-w-[80px]">
-                    {user ? user.username : 'Guest'}
-                  </span>
-                  <motion.div animate={{ rotate: userMenuOpen ? 180 : 0 }}>
-                    <FiChevronDown className="text-xs text-[var(--muted)]" />
-                  </motion.div>
-                </div>
               </div>
             </motion.button>
 
@@ -262,6 +247,22 @@ export default function Header() {
                       <p className="text-xs text-[var(--muted)] mb-8 font-bold uppercase tracking-[0.2em] opacity-50 max-w-[90%] leading-relaxed">
                         Sign in to access your wallet and orders.
                       </p>
+
+                      {/* Mobile Guest Navigation */}
+                      <div className="lg:hidden flex flex-col gap-1 w-full mb-8">
+                        {[
+                          { label: "Games", icon: FiGrid, href: "/games" },
+                          { label: "Services", icon: FiLayers, href: "/services" },
+                          { label: "Regions", icon: FiGlobe, href: "/regions" }
+                        ].map((link) => (
+                          <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
+                            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--foreground)]/[0.03] hover:bg-[var(--foreground)]/[0.06] text-[var(--muted)] transition-all">
+                              <link.icon className="text-lg text-[var(--accent)]" />
+                              <span className="text-sm font-bold uppercase tracking-wider">{link.label}</span>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
 
                       <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full">
                         <motion.button
@@ -317,6 +318,23 @@ export default function Header() {
 
                       {/* Navigation Nodes */}
                       <div className="space-y-0.5 mt-4">
+                        {/* Mobile Regular Navigation */}
+                        <div className="lg:hidden mb-4 space-y-0.5">
+                          {[
+                            { label: "Games", icon: FiGrid, href: "/games" },
+                            { label: "Services", icon: FiLayers, href: "/services" },
+                            { label: "Regions", icon: FiGlobe, href: "/regions" }
+                          ].map((link) => (
+                            <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
+                              <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-lg hover:bg-[var(--foreground)]/[0.04] text-[var(--muted)] group transition-all">
+                                <link.icon className="text-lg text-[var(--accent)]" />
+                                <span className="text-sm font-bold uppercase tracking-wider group-hover:text-[var(--foreground)]">{link.label}</span>
+                              </div>
+                            </Link>
+                          ))}
+                          <div className="h-[1px] bg-[var(--border)] mx-2 my-2 opacity-30" />
+                        </div>
+
                         {[
                           { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
                           { label: "Orders", icon: FiSettings, href: "/dashboard/order" },

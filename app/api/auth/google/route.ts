@@ -15,12 +15,26 @@ export async function POST(req: Request) {
     const forwardedFor = req.headers.get("x-forwarded-for");
     const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "Unknown IP";
 
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+    let payload;
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      payload = ticket.getPayload();
+    } catch (e) {
+      // If ID token verification fails, try as access token
+      const res = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`);
+      if (res.ok) {
+        payload = await res.json();
+      } else {
+        return Response.json(
+          { success: false, message: "Invalid Google token" },
+          { status: 401 }
+        );
+      }
+    }
 
-    const payload = ticket.getPayload();
     if (!payload?.email) {
       return Response.json(
         { success: false, message: "Invalid Google token" },

@@ -202,19 +202,19 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
 
       {/* ================= FILTER BAR ================= */}
-      <div className="sticky top-0 md:top-[64px] z-40 bg-[var(--background)]/80 backdrop-blur-xl border-b border-[var(--border)]/40 py-3">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center gap-2 md:gap-4">
+      <div className="sticky top-0 md:top-[44px] z-40 bg-[var(--background)]/80 backdrop-blur-xl border-b border-[var(--border)]/40 py-1.5">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center gap-2 md:gap-3">
 
           {/* SEARCH */}
           <div className="relative flex-1 group">
-            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-[var(--muted)]" />
+            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[11px] text-[var(--muted)]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search gaming nodes..."
-              className="w-full h-11 pl-10 pr-10 rounded-xl border border-[var(--border)]/50 
-                       bg-[var(--card)]/40 text-[13px] font-medium outline-none transition-all
+              className="w-full h-9 pl-9 pr-9 rounded-full border border-[var(--border)]/50 
+                       bg-[var(--card)]/40 text-[12px] font-medium outline-none transition-all
                        focus:border-[var(--accent)]/30 focus:bg-[var(--card)]/60"
             />
             {searchQuery && (
@@ -222,7 +222,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                   onClick={() => setSearchQuery("")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-red-500 transition-colors"
                 >
-                  <FiX size={14} />
+                  <FiX size={12} />
                 </button>
             )}
           </div>
@@ -230,14 +230,13 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
           {/* FILTER ACTION */}
           <button
             onClick={() => setShowFilter(true)}
-            className="flex items-center gap-2 h-11 px-4 md:px-6 rounded-xl 
-                     bg-[var(--foreground)] text-[var(--background)] font-bold text-xs uppercase tracking-tight
+            className="flex items-center justify-center w-9 h-9 rounded-full 
+                     bg-[var(--foreground)] text-[var(--background)] relative
                      hover:bg-[var(--accent)] hover:text-white transition-all active:scale-95 shrink-0"
           >
-            <FiFilter size={16} />
-            <span className="hidden sm:inline">Filter</span>
+            <FiFilter size={15} />
             {activeFilterCount > 0 && (
-              <span className="w-4 h-4 flex items-center justify-center text-[9px] rounded-full bg-[var(--accent)] text-white font-black border border-[var(--foreground)]">
+              <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center text-[9px] rounded-full bg-[var(--accent)] text-white font-black border-2 border-[var(--background)]">
                 {activeFilterCount}
               </span>
             )}

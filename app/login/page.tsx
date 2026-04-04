@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { RiShieldKeyholeFill, RiLockPasswordLine } from "react-icons/ri";
+import { FcGoogle } from "react-icons/fc";
 
 export default function AuthPage() {
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,11 @@ export default function AuthPage() {
       setLoading(false);
     }
   };
+
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => handleGoogleLogin(codeResponse.access_token),
+    onError: () => setError("Google Login Failed"),
+  });
 
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[var(--background)] px-4">
@@ -132,26 +138,43 @@ export default function AuthPage() {
               )}
             </AnimatePresence>
 
-            {/* Simple Premium Google Button */}
+            {/* Compact Premium Google Button */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="group/btn"
+              className="group/btn relative w-full max-w-[300px] mx-auto"
             >
-              <div className="relative flex justify-center w-full transition-all duration-300 rounded-full border border-[var(--border)] hover:border-[var(--accent)]/50 bg-black overflow-hidden shadow-sm hover:shadow-md">
-                <GoogleLogin
-                  onSuccess={(res) =>
-                    res.credential && handleGoogleLogin(res.credential)
-                  }
-                  onError={() => setError("Authorization Failed")}
-                  theme="filled_black"
-                  size="large"
-                  shape="pill"
-                  width="360px"
-                  text="continue_with"
-                />
-              </div>
+              {/* Button Glow Effect */}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)] to-indigo-500 rounded-xl blur-[8px] opacity-10 group-hover/btn:opacity-25 transition duration-500" />
+              
+              <button
+                onClick={() => login()}
+                className="
+                  group relative w-full flex items-center justify-center gap-2.5
+                  py-2.5 px-6 rounded-xl
+                  bg-white hover:bg-gray-50
+                  text-gray-900 font-bold text-sm
+                  border border-gray-200
+                  shadow-[0_4px_16px_rgba(0,0,0,0.05)]
+                  hover:shadow-[0_8px_24px_rgba(37,99,235,0.15)]
+                  hover:-translate-y-0.5
+                  transition-all duration-300
+                  active:scale-[0.98]
+                "
+              >
+                {/* Logo Container */}
+                <div className="relative flex items-center justify-center w-5 h-5 transition-transform group-hover:scale-110 duration-300">
+                  <FcGoogle className="text-xl" />
+                </div>
+                
+                <span className="tracking-tight">Continue with Google</span>
+
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
+                </div>
+              </button>
             </motion.div>
 
             {/* Minimal Loading */}
