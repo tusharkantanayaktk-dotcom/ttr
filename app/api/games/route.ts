@@ -141,6 +141,8 @@ export async function GET() {
     const ALLOWED_GAME_SLUGS = [
       "mobile-legends988",
       "mlbb-double332",
+      "mlbbglobal202",          // Global
+      "mlbbtr112",
       // "sgmy-mlbb893",
       "magic-chess-gogo-india924",
       "mlbb-indo42",
