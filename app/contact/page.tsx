@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { FaInstagram, FaTwitter, FaDiscord, FaEnvelope } from "react-icons/fa";
 
 export default function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
-
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-6 py-15">
       <div className="max-w-5xl mx-auto flex flex-col lg:flex-row gap-12">
@@ -15,14 +12,14 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="text-[var(--muted)] leading-relaxed text-lg">
-            Have a question, suggestion, or collaboration idea?  
-            We’d love to hear from you — reach out via email or social media!
+            Have a question or suggestion?
+            Contact us by email or social media.
           </p>
 
           {/* ✉️ Email Highlight Box */}
           <div className="p-6 border border-[var(--border)] rounded-2xl bg-[var(--card)] shadow-lg">
             <p className="text-lg text-[var(--muted)] mb-2">
-              You can directly email us at:
+              Email us at:
             </p>
             <a
               href="mailto:zyronix.innovations@gmail.com"
@@ -80,7 +77,7 @@ export default function ContactPage() {
 
       {/* ✅ Footer Message */}
       <div className="mt-16 text-center text-[var(--muted)] text-sm">
-        <p>We usually reply within 24 hours ✨</p>
+        <p>We usually reply within 24 hours.</p>
       </div>
     </main>
   );

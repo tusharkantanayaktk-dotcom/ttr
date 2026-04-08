@@ -65,10 +65,10 @@ export default function WalletTab({
 
   const handleProceed = async () => {
     if (!amount || Number(amount) < 1) {
-      setAmountError("Minimum ₹1");
+      setAmountError("Minimum amount is ₹1.");
       return;
     }
-    if (!method) return alert("Select a payment method");
+    if (!method) return alert("Please select a payment method.");
 
     setLoading(true);
     try {
@@ -82,7 +82,7 @@ export default function WalletTab({
       if (data.success) window.location.href = data.paymentUrl;
       else alert(data.message);
     } catch (err) {
-      alert("Error creating order");
+      alert("Could not create order. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -120,7 +120,7 @@ export default function WalletTab({
             My <span className="text-[var(--accent)]">Wallet</span>
           </h2>
           <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">
-            Secure Credits Management
+            Wallet and payment
           </p>
         </div>
         <div className="h-8 px-3 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center gap-2">
@@ -146,7 +146,7 @@ export default function WalletTab({
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60 mb-2">
                   <FiTrendingUp className="text-[var(--accent)]" />
-                  Available Credits
+                  Available Balance
                 </div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-2xl font-bold text-[var(--accent)]">₹</span>
@@ -157,7 +157,7 @@ export default function WalletTab({
                 <div className="pt-4 flex flex-col">
                   <span className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40">User Identity</span>
                   <span className="text-[11px] font-mono font-bold text-[var(--foreground)] opacity-80">
-                    {storedPhone ? `+91 ${storedPhone.slice(0, 3)}••••${storedPhone.slice(-3)}` : 'Anonymous Access'}
+                    {storedPhone ? `+91 ${storedPhone.slice(0, 3)}••••${storedPhone.slice(-3)}` : 'Guest user'}
                   </span>
                 </div>
               </div>
@@ -232,7 +232,7 @@ export default function WalletTab({
                     </div>
                     <div className="text-left">
                       <p className="text-xs font-black uppercase">UPI Pay</p>
-                      <p className="text-[9px] text-[var(--muted)] opacity-60">Instant Delivery</p>
+                      <p className="text-[9px] text-[var(--muted)] opacity-60">Fast payment</p>
                     </div>
                     {method === "upi" && <FiCheckCircle size={14} className="text-[var(--accent)] ml-auto" />}
                   </button>
@@ -256,7 +256,7 @@ export default function WalletTab({
                            flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/30
                            hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-40"
               >
-                {loading ? <div className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" /> : <><span>Complete Recharge</span> <FiArrowRight /></>}
+                {loading ? <div className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" /> : <><span>Add Money</span> <FiArrowRight /></>}
               </button>
             </div>
           </motion.div>
@@ -328,7 +328,7 @@ export default function WalletTab({
             ) : (
                 <div className="text-center py-12 rounded-3xl border-2 border-dashed border-[var(--border)] opacity-40">
                     <FiActivity size={24} className="mx-auto mb-2 text-[var(--muted)]" />
-                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">Null History</p>
+                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">No History Yet</p>
                 </div>
             )}
           </div>

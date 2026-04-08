@@ -22,7 +22,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
 
   const handlePasswordUpdate = async () => {
     if (newPass.length < 6) {
-      setPassError("Minimum 6 characters required");
+      setPassError("Password must be at least 6 characters.");
       return;
     }
 
@@ -49,11 +49,11 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
       }
 
       setNewPass("");
-      setPassSuccess("Identity secure. Password updated!");
+      setPassSuccess("Password updated successfully.");
       setTimeout(() => setPassSuccess(""), 3000);
     } catch (error) {
       setLoadingPass(false);
-      setPassError("System error. Please try again later.");
+      setPassError("Something went wrong. Please try again.");
     }
   };
 
@@ -69,7 +69,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
           My <span className="text-[var(--accent)]">Profile</span>
         </h2>
         <p className="text-xs sm:text-sm text-[var(--muted)] max-w-xl">
-          Manage your account information and security settings.
+          Manage your account details and password.
         </p>
       </motion.div>
 
@@ -174,7 +174,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
               </button>
 
               <p className="text-[10px] text-center text-[var(--muted)] font-medium leading-relaxed uppercase tracking-tighter italic">
-                Authorized identity update only. <br /> Encrypted transmission active.
+                Only you can change your password here. <br /> Your data is sent securely.
               </p>
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
         <div className="flex-1">
           <h4 className="text-sm font-bold mb-0.5">Secure Account</h4>
           <p className="text-[10px] text-[var(--muted)] font-medium leading-relaxed">
-            Your account is protected by encrypted protocols and secure login sessions.
+            Your account is protected with secure login and encrypted data.
           </p>
         </div>
       </motion.div>

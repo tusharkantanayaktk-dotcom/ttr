@@ -19,14 +19,14 @@ export default function HomeServices() {
           <div className="flex items-center justify-center sm:justify-start gap-1.5 mb-0.5">
              <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
              <h3 className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--accent)] opacity-80">
-               Premium Services
+               Our Services
              </h3>
           </div>
           <h2 className="text-base font-black text-[var(--foreground)] tracking-tight leading-tight">
-            Build Your Website
+            Build Your Site
           </h2>
           <p className="text-[10px] text-[var(--muted)] font-medium mt-0.5 max-w-[240px] leading-relaxed">
-            Professional software development and high-quality web solutions for any business.
+            We build clean, fast websites and software for your business.
           </p>
         </div>
 

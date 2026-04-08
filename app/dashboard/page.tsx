@@ -70,7 +70,7 @@ export default function Dashboard() {
       value: "Help",
       icon: "💬",
       route: "/dashboard/query",
-      description: "Get help & support"
+      description: "Get help"
     },
   ];
 
@@ -85,7 +85,7 @@ export default function Dashboard() {
               Welcome back, {userDetails.name || "Player"} 👋
             </h1>
             <p className="text-sm text-[var(--muted)] mt-1">
-              Track orders, manage wallet & account
+              Track orders and manage your wallet and account
             </p>
           </div>
 

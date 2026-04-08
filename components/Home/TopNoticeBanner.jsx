@@ -16,7 +16,7 @@ const BANNERS = [
   {
     id: "channel",
     title: "WHATSAPP CHANNEL",
-    subtitle: "UNLOCK EXCLUSIVE DEALS & DAILY GIVEAWAYS!",
+    subtitle: "Get daily deals and giveaway updates.",
     cta: "JOIN NOW",
     link: SUPPORT_WHATSAPP_URL,
     icon: MessageCircle,
@@ -25,7 +25,7 @@ const BANNERS = [
   {
     id: "sale",
     title: "FLASH SALE ALERT 🔥",
-    subtitle: "GET UP TO 30% OFF ON BGMI UC TODAY.",
+    subtitle: "Get up to 30% off on BGMI UC today.",
     cta: "SHOP NOW",
     link: SUPPORT_WHATSAPP_URL,
     icon: Flame,
@@ -34,7 +34,7 @@ const BANNERS = [
   {
     id: "membership",
     title: "PRO MEMBERSHIP",
-    subtitle: "ZERO FEES, INSTANT DELIVERY & VIP SUPPORT.",
+    subtitle: "No extra fees, fast delivery, and priority support.",
     cta: "UPGRADE",
     link: SUPPORT_WHATSAPP_URL,
     icon: Crown,

@@ -12,40 +12,40 @@ import {
 
 const HIGHLIGHTS = [
   {
-    title: "INSTANT",
-    subtitle: "DISPATCH",
+    title: "FAST",
+    subtitle: "DELIVERY",
     icon: FiZap,
-    description: "Sub-second delivery"
+    description: "Quick top-up delivery"
   },
   {
-    title: "100%",
-    subtitle: "ENCRYPTED",
+    title: "SAFE",
+    subtitle: "PAYMENT",
     icon: FiShield,
-    description: "Zero-risk profile"
+    description: "Protected payment flow"
   },
   {
     title: "SECURE",
-    subtitle: "PROTOCOL",
+    subtitle: "SYSTEM",
     icon: FiLock,
-    description: "Military grade pay"
+    description: "Strong account safety"
   },
   {
     title: "24/7",
     subtitle: "SERVICE",
     icon: FiClock,
-    description: "Global support link"
+    description: "Support anytime"
   },
   {
-    title: "CORE",
-    subtitle: "NETWORK",
+    title: "ACTIVE",
+    subtitle: "COMMUNITY",
     icon: FiUsers,
-    description: "50K+ Active units"
+    description: "Many happy users"
   },
   {
     title: "AUTO",
-    subtitle: "LINK",
+    subtitle: "PROCESS",
     icon: FiCpu,
-    description: "Autonomous sync"
+    description: "Automatic handling"
   },
 ];
 

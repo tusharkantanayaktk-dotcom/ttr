@@ -39,7 +39,7 @@ export default function ReviewAndPaymentStep({
   // Handle proceed to payment
   const handleProceed = async () => {
     if (!paymentMethod) {
-      alert("Please select a payment method");
+      alert("Please choose a payment method.");
       return;
     }
 
@@ -105,7 +105,7 @@ export default function ReviewAndPaymentStep({
             <div>
               <h3 className="text-xl font-bold tracking-tight">{itemName}</h3>
               <p className="text-sm text-[var(--muted)] flex items-center gap-1.5">
-                <FiZap className="text-yellow-400" /> Instant Delivery Enabled
+                <FiZap className="text-yellow-400" /> Fast delivery
               </p>
             </div>
           </div>
@@ -118,7 +118,7 @@ export default function ReviewAndPaymentStep({
               </h4>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-[var(--muted)]">Username</span>
+                  <span className="text-[var(--muted)]">Name</span>
                   <span className="font-semibold">{reviewData.userName}</span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -186,7 +186,7 @@ export default function ReviewAndPaymentStep({
               {walletBalance < totalPrice && (
                 <p className="text-red-400 text-[10px] mt-2 flex items-center gap-1.5 px-2">
                   <div className="w-1 h-1 rounded-full bg-red-400 animate-pulse" />
-                  Insufficient balance. Top up your wallet to pay instantly.
+                  Not enough balance. Add money to your wallet to continue.
                 </p>
               )}
 
@@ -205,7 +205,7 @@ export default function ReviewAndPaymentStep({
                   </div>
                   <div>
                     <p className="font-bold text-sm">UPI Gateway</p>
-                    <p className="text-[10px] text-[var(--muted)]">GPay, PhonePe, Paytm & More</p>
+                    <p className="text-[10px] text-[var(--muted)]">GPay, PhonePe, Paytm and more</p>
                   </div>
                 </div>
                 {paymentMethod === 'upi' && <div className="h-5 w-5 rounded-full bg-[var(--accent)] flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-black" /></div>}
@@ -225,7 +225,7 @@ export default function ReviewAndPaymentStep({
                 <span>-₹{discount}</span>
               </div>
               <div className="pt-3 border-t border-[var(--border)] flex justify-between items-center">
-                <span className="font-bold text-lg">Total Amount</span>
+                <span className="font-bold text-lg">Total</span>
                 <span className="text-2xl font-black text-[var(--accent)]">₹{totalPrice}</span>
               </div>
             </div>
@@ -238,7 +238,7 @@ export default function ReviewAndPaymentStep({
               {isRedirecting ? (
                 <>
                   <div className="w-5 h-5 border-3 border-black border-t-transparent rounded-full animate-spin" />
-                  Processing...
+                  Processing payment...
                 </>
               ) : (
                 <>Buy Now <FiZap /></>
@@ -251,13 +251,13 @@ export default function ReviewAndPaymentStep({
       {step === 3 && paymentMethod === "upi" && (
         <div className="bg-[var(--card)] p-8 rounded-2xl border border-[var(--border)] text-center animate-in zoom-in duration-300">
           <h3 className="text-xl font-bold mb-2">Scan & Pay</h3>
-          <p className="text-sm text-[var(--muted)] mb-6">Scan the QR code with any UPI app to complete payment</p>
+          <p className="text-sm text-[var(--muted)] mb-6">Scan this QR code in any UPI app to pay.</p>
 
           <div className="relative w-56 h-56 mx-auto bg-white p-4 rounded-2xl shadow-2xl border-4 border-[var(--accent)]">
             {upiQR ? (
               <Image src={upiQR} alt="UPI QR" fill className="p-4" />
             ) : (
-              <div className="h-full flex items-center justify-center animate-pulse text-gray-300 text-xs">Generating QR...</div>
+              <div className="h-full flex items-center justify-center animate-pulse text-gray-300 text-xs">Creating QR...</div>
             )}
           </div>
 
@@ -266,7 +266,7 @@ export default function ReviewAndPaymentStep({
               onClick={onPaymentComplete}
               className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-bold shadow-lg"
             >
-              I have completed payment
+              I have paid
             </button>
             <button
               onClick={() => setStep(2)}

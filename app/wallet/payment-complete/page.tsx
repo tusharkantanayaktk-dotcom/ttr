@@ -29,7 +29,7 @@ export default function PaymentComplete() {
 
         if (data?.success) {
           setStatus("success");
-          setMessage("Payment Successful!");
+          setMessage("Payment successful!");
 
           // Update wallet balance
           const oldBal = Number(localStorage.getItem("walletBalance") || "0");
@@ -40,12 +40,12 @@ export default function PaymentComplete() {
           localStorage.removeItem("pending_order");
         } else {
           setStatus("failed");
-          setMessage("Payment failed or still pending");
+          setMessage("Payment failed or is still pending");
         }
       } catch (err) {
         console.error("Payment check error:", err);
         setStatus("failed");
-        setMessage("Unable to verify payment");
+        setMessage("Could not verify payment");
       }
     }
 
@@ -78,7 +78,7 @@ export default function PaymentComplete() {
           {status === "success" &&
             "Your wallet has been updated successfully."}
           {status === "failed" &&
-            "If money was deducted, it will be auto-refunded or credited shortly."}
+            "If money was deducted, it will be refunded or added to your wallet soon."}
         </p>
 
         {/* ACTION */}

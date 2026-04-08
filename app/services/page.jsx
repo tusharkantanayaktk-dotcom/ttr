@@ -17,7 +17,7 @@ export default function ServicesPage() {
   const services = [
     {
       title: "Reseller Program",
-      desc: "Deploy into the market as a verified reseller. Access elite rates with high-margin profit protocols.",
+      desc: "Join as a verified reseller and get better rates to earn more profit.",
       icon: FiUsers,
       badge: "Available",
       status: "Cheapest",
@@ -26,7 +26,7 @@ export default function ServicesPage() {
     },
     {
       title: "Whitelabel Assets",
-      desc: "Acquire your own branded domain. Fully integrated topup systems under your own operational identity.",
+      desc: "Get your own branded domain with a full top-up setup under your brand name.",
       icon: FiGlobe,
       badge: "Available",
       status: "Verified",
@@ -35,7 +35,7 @@ export default function ServicesPage() {
     },
     {
       title: "Custom Infrastructure",
-      desc: "Tailor-made topup architecture designed for specific business operational requirements.",
+      desc: "Get a custom top-up setup built for your business needs.",
       icon: FiZap,
       badge: "Available",
       status: "Specialized",
@@ -44,7 +44,7 @@ export default function ServicesPage() {
     },
     {
       title: "API Integration",
-      desc: "Direct socket connections for automated service delivery across your existing digital network.",
+      desc: "Connect your current system with our API for automatic service delivery.",
       icon: FiCode,
       badge: "Coming Soon",
       status: "Development",
@@ -90,7 +90,7 @@ export default function ServicesPage() {
             transition={{ delay: 0.1 }}
             className="text-[var(--muted)] text-sm md:text-base max-w-lg mx-auto leading-relaxed"
           >
-            Reliable infrastructure and commercial solutions to expand your digital network presence effectively.
+            Simple and reliable services to help you grow your digital business.
           </motion.p>
         </div>
 
@@ -155,7 +155,7 @@ export default function ServicesPage() {
 
                     {service.active ? (
                       <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[var(--accent)]">
-                        <span className="group-hover:mr-2 transition-all">Establish Connection</span>
+                        <span className="group-hover:mr-2 transition-all">Contact Us</span>
                         <FiExternalLink size={12} />
                       </div>
                     ) : (
@@ -181,9 +181,9 @@ export default function ServicesPage() {
           transition={{ delay: 0.6 }}
           className="mt-20 pt-10 border-t border-[var(--border)]/30 grid grid-cols-1 sm:grid-cols-3 gap-8"
         >
-          <TrustMark icon={FiShield} label="SECURE PROTOCOL" desc="Encrypted transactions and data sovereignty." />
-          <TrustMark icon={FiZap} label="INSTANT ACTIVATION" desc="Rapid deployment of service nodes." />
-          <TrustMark icon={FiTrendingUp} label="MARKET ADVANTAGE" desc="Dominant rates in current network sectors." />
+          <TrustMark icon={FiShield} label="SECURE SERVICE" desc="Encrypted transactions and protected data." />
+          <TrustMark icon={FiZap} label="FAST SETUP" desc="Quick onboarding for your service." />
+          <TrustMark icon={FiTrendingUp} label="BETTER RATES" desc="Competitive prices for your business." />
         </motion.div>
 
       </div>

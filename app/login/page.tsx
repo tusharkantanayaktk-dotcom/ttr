@@ -47,7 +47,7 @@ export default function AuthPage() {
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => handleGoogleLogin(codeResponse.access_token),
-    onError: () => setError("Google Login Failed"),
+    onError: () => setError("Google login failed."),
   });
 
   return (
@@ -106,7 +106,7 @@ export default function AuthPage() {
               Welcome Back
             </h1>
             <p className="text-[var(--muted)] text-sm font-medium px-8 leading-relaxed">
-              Login to access your high-fidelity dashboard.
+              Log in to access your dashboard.
             </p>
           </motion.div>
 
@@ -182,7 +182,7 @@ export default function AuthPage() {
               <div className="flex items-center justify-center gap-2">
                 <div className="w-4 h-4 border-[1.5px] border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
                 <span className="text-[10px] text-[var(--muted)] font-bold tracking-widest uppercase">
-                  Verifying
+                  Checking
                 </span>
               </div>
             )}
@@ -199,7 +199,7 @@ export default function AuthPage() {
             </div>
 
             <p className="text-[10px] text-[var(--muted)]/50 leading-relaxed font-medium">
-              Protected by military-grade encryption. Learn more about our <span className="hover:text-[var(--foreground)] transition-colors cursor-pointer underline underline-offset-4">Security</span>.
+              Your login is protected with encryption. Learn more about our <span className="hover:text-[var(--foreground)] transition-colors cursor-pointer underline underline-offset-4">security</span>.
             </p>
           </div>
         </div>

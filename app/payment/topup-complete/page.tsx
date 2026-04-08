@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 
 export default function TopupComplete() {
   const [status, setStatus] = useState("checking"); // checking | success | failed
-  const [message, setMessage] = useState("Verifying Payment...");
+  const [message, setMessage] = useState("Checking payment...");
   const router = useRouter();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function TopupComplete() {
 
     if (!orderId) {
       setStatus("failed");
-      setMessage("Order Not Found");
+      setMessage("Order not found");
       return;
     }
 
@@ -43,16 +43,16 @@ export default function TopupComplete() {
 
         if (data?.success) {
           setStatus("success");
-          setMessage("Payment Success");
+          setMessage("Payment successful");
           localStorage.removeItem("pending_topup_order");
         } else {
           setStatus("failed");
-          setMessage("Payment Failed");
+          setMessage("Payment failed");
         }
       } catch (err) {
         console.error("Topup verification error:", err);
         setStatus("failed");
-        setMessage("Connection Error");
+        setMessage("Connection error");
       }
     }
 
@@ -146,8 +146,8 @@ export default function TopupComplete() {
 
                 <p className="text-xs md:text-sm font-bold text-muted/60 max-w-[280px] mx-auto uppercase tracking-wide leading-relaxed">
                   {status === "checking" && "Please wait while we confirm your payment."}
-                  {status === "success" && "Your order is confirmed and will be delivered shortly."}
-                  {status === "failed" && "If money deducted, auto dias will be credited in 10 mins or refunded shortly. Please contact support."}
+                  {status === "success" && "Your order is confirmed and will be delivered soon."}
+                  {status === "failed" && "If money was deducted, your diamonds will be added soon or your amount will be refunded. Please contact support if needed."}
                 </p>
               </div>
 

@@ -12,14 +12,14 @@ export default function ValidationStep({
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-2xl font-bold">Player Verification</h2>
+        <h2 className="text-2xl font-bold">Player Check</h2>
         <HelpImagePopup />
       </div>
 
       <input
         value={playerId}
         onChange={(e) => setPlayerId(e.target.value)}
-        placeholder="Enter Player ID"
+        placeholder="Enter player ID"
         className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full"
         disabled={loading}
       />
@@ -27,7 +27,7 @@ export default function ValidationStep({
       <input
         value={zoneId}
         onChange={(e) => setZoneId(e.target.value)}
-        placeholder="Enter Zone ID"
+        placeholder="Enter zone ID"
         className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full"
         disabled={loading}
       />
