@@ -559,3 +559,21 @@ a:hover {
 .animate-orbit-3 {
   animation: orbit-3 1s linear infinite;
 }
+
+/* 🎨 Custom Scrollbar Utility */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
