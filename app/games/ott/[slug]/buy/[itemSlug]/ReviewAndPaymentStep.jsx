@@ -135,7 +135,7 @@ export default function ReviewAndPaymentStep({
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-[var(--muted)]">Email</span>
-                  <span className="font-semibold truncate max-w-[120px]">{userEmail || "N/A"}</span>
+                  <span className="font-semibold">{userEmail || "N/A"}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-[var(--muted)]">Phone</span>

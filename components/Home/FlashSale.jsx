@@ -51,7 +51,7 @@ export default function FlashSale() {
 
             <div className="max-w-7xl mx-auto relative">
                 {/* COMPACT HEADER */}
-                <div className="flex flex-row items-center justify-between gap-2 mb-3">
+                <div className="flex flex-row items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
                         <div className="w-5 h-5 rounded-md bg-amber-500 flex items-center justify-center text-black shadow-[0_0_10px_rgba(245,158,11,0.3)]">
                             <FiZap size={12} fill="currentColor" />
@@ -81,14 +81,14 @@ export default function FlashSale() {
                 </div>
 
                 {/* COMPACT GRID */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
                     {flashSaleData.map((item, index) => (
                     <div
                         key={item.id}
                     >
                         <Link
                             href={`/games/${item.slug}`}
-                            className="group relative block bg-[var(--card)]/50 hover:bg-[var(--card)] backdrop-blur-xl border border-[var(--border)] hover:border-amber-500/30 rounded-2xl p-2 transition-all duration-300"
+                            className="group relative block bg-[var(--card)]/50 hover:bg-[var(--card)] backdrop-blur-xl border border-[var(--border)] hover:border-amber-500/30 rounded-2xl p-1.5 transition-all duration-300"
                         >
                             {/* Badge Overlay */}
                             <div className="absolute top-3 left-3 z-20">
@@ -98,7 +98,7 @@ export default function FlashSale() {
                             </div>
 
                             {/* IMAGE CONTAINER */}
-                            <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-2 bg-black/40">
+                            <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-1.5 bg-black/40">
                                     <Image
                                         src={item.image}
                                         alt={item.name}
@@ -116,7 +116,7 @@ export default function FlashSale() {
                                     {item.game}
                                 </div>
 
-                                <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate group-hover:text-amber-500 transition-colors">
+                                <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] group-hover:text-amber-500 transition-colors">
                                     {item.name}
                                 </h3>
 

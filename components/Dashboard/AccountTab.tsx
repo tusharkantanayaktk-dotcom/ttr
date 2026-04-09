@@ -217,7 +217,7 @@ function InfoCard({ icon: Icon, label, value, delay }: { icon: any; label: strin
 
       <div className="flex-1 min-w-0">
         <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] mb-0.5">{label}</p>
-        <p className="text-sm font-bold text-[var(--foreground)] truncate font-mono">
+        <p className="text-sm font-bold text-[var(--foreground)] font-mono">
           {value || "Not Set"}
         </p>
       </div>

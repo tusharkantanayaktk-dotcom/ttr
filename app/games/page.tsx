@@ -156,13 +156,13 @@ const GameCard = React.memo(({ game, disabled }: any) => {
 
         {/* CARD FOOTER */}
         <div className="px-1.5 space-y-0.5">
-          <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate leading-none group-hover:text-[var(--accent)] transition-colors duration-300">
+          <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors duration-300">
             {game.gameName}
           </h3>
 
           <div className="flex items-center gap-1">
             {game.gameFrom ? (
-              <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] truncate opacity-30 group-hover:opacity-60 transition-opacity">
+              <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] opacity-30 group-hover:opacity-60 transition-opacity">
                 {game.gameFrom}
               </p>
             ) : (
@@ -245,7 +245,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
       </div>
 
       {/* ================= CONTENT ================= */}
-      <div className="max-w-7xl mx-auto px-6 mt-8 space-y-16">
+      <div className="max-w-7xl mx-auto px-6 mt-6 space-y-10">
 
         {/* GAMES SECTION */}
         <section>
@@ -254,7 +254,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
             count={processedGames.length}
             icon={FiBox}
           />
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-6">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-5">
             {processedGames.map((game: any, i: number) => (
               <GameCard key={game.gameSlug || i} game={game} disabled={isOutOfStock(game.gameName)} />
             ))}
@@ -288,7 +288,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                           <p className="text-[8px] text-[var(--accent)] font-black uppercase tracking-[0.2em] drop-shadow-md">
                             {ott.category}
                           </p>
-                          <h4 className="text-[12px] font-black text-white truncate uppercase tracking-tighter italic">
+                          <h4 className="text-[12px] font-black text-white uppercase tracking-tighter italic">
                             {ott.name}
                           </h4>
                         </div>
@@ -328,7 +328,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                         <p className="text-[7px] text-[var(--muted)] font-black uppercase tracking-widest opacity-60">
                           {plan.duration}
                         </p>
-                        <h4 className="text-[11px] font-black text-[var(--foreground)] uppercase truncate">
+                        <h4 className="text-[11px] font-black text-[var(--foreground)] uppercase">
                           {plan.name}
                         </h4>
                       </div>

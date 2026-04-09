@@ -75,14 +75,14 @@ export default function GameBannerCarousel() {
 
   return (
     <div
-      className="relative w-full max-w-[1600px] mx-auto px-4 md:px-12 mt-4 md:mt-10 select-none group overflow-hidden"
+      className="relative w-full max-w-[1600px] mx-auto px-4 md:px-12 mt-2 md:mt-6 select-none group overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* BACKGROUND GLOW */}
 
 
-      <div className="relative h-[200px] sm:h-[300px] md:h-[450px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border border-white/5 shadow-2xl bg-black">
+      <div className="relative h-[220px] sm:h-[240px] md:h-[340px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border border-white/5 shadow-2xl bg-black">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current}
@@ -112,16 +112,16 @@ export default function GameBannerCarousel() {
               <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent opacity-40" />
 
               {/* CONTENT BOX */}
-              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-20">
+              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-10">
                 <div
-                  className="space-y-3 md:space-y-6 max-w-4xl"
+                  className="space-y-2 md:space-y-4 max-w-4xl"
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_#f59e0b]" />
                     <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-white/50">Exclusive Drop</span>
                   </div>
 
-                  <h2 className="text-2xl sm:text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white leading-[0.85] drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                  <h2 className="text-2xl sm:text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-white leading-[0.85] drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
                     {banners[current].bannerTitle}
                   </h2>
 
@@ -157,7 +157,7 @@ export default function GameBannerCarousel() {
       </div>
 
       {/* PROGRESS INDICATORS */}
-      <div className="flex justify-center items-center gap-4 mt-8">
+      <div className="flex justify-center items-center gap-4 mt-6">
         {banners.map((_, i) => (
           <button
             key={i}

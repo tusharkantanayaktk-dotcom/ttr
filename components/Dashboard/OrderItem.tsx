@@ -77,7 +77,7 @@ export default function OrderItem({ order }: { order: OrderType }) {
         <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 blur-[50px] -mr-16 -mt-16 group-hover:bg-[var(--accent)]/10 transition-colors" />
 
         {/* COMPACT VIEW */}
-        <div className="px-5 py-4 sm:px-6">
+        <div className="px-4 py-3 sm:px-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 
             <div className="flex items-center gap-3">
@@ -86,7 +86,7 @@ export default function OrderItem({ order }: { order: OrderType }) {
               </div>
               <div>
                 <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 block mb-0.5">#{order.orderId}</span>
-                <h3 className="text-xs font-bold text-[var(--foreground)] line-clamp-1 leading-none">
+                <h3 className="text-xs font-bold text-[var(--foreground)] leading-tight">
                   {order.itemName}
                 </h3>
               </div>
@@ -177,7 +177,7 @@ function DetailBox({ label, value, icon, mono }: { label: string, value: string,
         <div className="text-[10px]">{icon}</div>
         <span className="text-[7px] font-black uppercase tracking-widest">{label}</span>
       </div>
-      <p className={`text-[10px] font-bold truncate ${mono ? "font-mono" : ""} text-[var(--foreground)]`}>
+      <p className={`text-[10px] font-bold ${mono ? "font-mono" : ""} text-[var(--foreground)]`}>
         {value || "---"}
       </p>
     </div>
