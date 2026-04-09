@@ -147,7 +147,7 @@ const GameCard = React.memo(({ game, disabled }: any) => {
                   <FiX size={16} className="text-red-500" />
                 </div>
                 <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500 drop-shadow-md">
-                  Link Offline
+                  OFF
                 </span>
               </div>
             )}
@@ -188,7 +188,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
         </h2>
         {count !== undefined && (
           <p className="text-[8px] text-[var(--muted)] font-black uppercase tracking-[0.2em] opacity-40 mt-[-2px]">
-            {count} Nodes Online
+            {count} Games Ready
           </p>
         )}
       </div>
@@ -212,7 +212,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search gaming nodes..."
+              placeholder="Find a game..."
               className="w-full h-9 pl-9 pr-9 rounded-full border border-[var(--border)]/50 
                        bg-[var(--card)]/40 text-[12px] font-medium outline-none transition-all
                        focus:border-[var(--accent)]/30 focus:bg-[var(--card)]/60"
@@ -250,7 +250,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
         {/* GAMES SECTION */}
         <section>
           <SectionHeader
-            title="Gaming Collection"
+            title="Our Games"
             count={processedGames.length}
             icon={FiBox}
           />
@@ -335,9 +335,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                     </div>
 
                     <div className="flex items-center justify-between pt-2 border-t border-[var(--border)]/30">
-                      <span className="text-[8px] font-bold text-[var(--accent)] uppercase tracking-wider">
-                        View Plan
-                      </span>
+                        <span>View Info</span>
                       <FiArrowRight size={10} className="text-[var(--accent)] group-hover:translate-x-1 transition-transform" />
                     </div>
                   </Link>
