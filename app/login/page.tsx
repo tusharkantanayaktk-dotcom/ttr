@@ -36,7 +36,7 @@ export default function AuthPage() {
       localStorage.setItem("email", data.user.email);
       localStorage.setItem("userId", data.user.userId);
 
-      setSuccess("Welcome back! Redirecting...");
+      setSuccess("Welcome! One moment...");
       setTimeout(() => (window.location.href = "/"), 900);
     } catch {
       setError("Google login failed. Please try again.");
@@ -103,10 +103,10 @@ export default function AuthPage() {
             className="space-y-2 mb-10"
           >
             <h1 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">
-              Welcome Back
+              Welcome
             </h1>
             <p className="text-[var(--muted)] text-sm font-medium px-8 leading-relaxed">
-              Log in to access your dashboard.
+              Login to your account.
             </p>
           </motion.div>
 
@@ -182,7 +182,7 @@ export default function AuthPage() {
               <div className="flex items-center justify-center gap-2">
                 <div className="w-4 h-4 border-[1.5px] border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
                 <span className="text-[10px] text-[var(--muted)] font-bold tracking-widest uppercase">
-                  Checking
+                  Wait...
                 </span>
               </div>
             )}
