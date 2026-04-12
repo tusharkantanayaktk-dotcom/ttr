@@ -92,46 +92,83 @@ export default function BuyFlowPage() {
       });
   }, [slug, itemSlug]);
 
+  /* ================= GAME CONFIG ================= */
+  const isMLBB = slug?.toLowerCase().includes("mlbb") || slug?.toLowerCase().includes("mobile-legends");
+  const isBGMI = slug?.toLowerCase().includes("pubg") || slug?.toLowerCase().includes("bgmi");
+  const isOTT = slug?.toLowerCase().includes("netflix") || slug?.toLowerCase().includes("youtube");
+  const isMembership = slug?.toLowerCase().includes("membership");
+
+  const needsZoneId = isMLBB; // Only MLBB needs Zone ID for now
+  const isVerificationBypass = isBGMI || isOTT || isMembership;
+
   /* ================= VALIDATE PLAYER ================= */
   const handleValidate = async () => {
-    if (!playerId || !zoneId) {
-      alert("Please enter Player ID and Zone ID");
+    if (!playerId || (needsZoneId && !zoneId)) {
+      alert(needsZoneId ? "Please enter Player ID and Zone ID" : "Please enter ID");
       return;
     }
 
     setLoading(true);
 
-    const res = await fetch("/api/check-region", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: playerId, zone: zoneId }),
-    });
+    if (isVerificationBypass) {
+      // ✅ Bypass real verification for these games
+      saveVerifiedPlayer({
+        playerId,
+        zoneId: zoneId || "NA",
+        username: isBGMI ? "BGMI Player" : (isOTT ? "OTT User" : "Member"),
+        region: "INDIA",
+        savedAt: Date.now(),
+      });
 
-    const data = await res.json();
+      setReviewData({
+        userName: isBGMI ? "BGMI Player" : (isOTT ? "OTT User" : "Member"),
+        region: "INDIA",
+        playerId,
+        zoneId: zoneId || "NA",
+      });
 
-    if (data?.success !== 200) {
-      alert("Invalid Player ID / Zone ID");
       setLoading(false);
+      setStep(2);
       return;
     }
 
-    saveVerifiedPlayer({
-      playerId,
-      zoneId,
-      username: data.data.username,
-      region: data.data.region,
-      savedAt: Date.now(),
-    });
+    // Real verification for MLBB etc.
+    try {
+      const res = await fetch("/api/check-region", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: playerId, zone: zoneId }),
+      });
 
-    setReviewData({
-      userName: data.data.username,
-      region: data.data.region,
-      playerId,
-      zoneId,
-    });
+      const data = await res.json();
 
-    setLoading(false);
-    setStep(2);
+      if (data?.success !== 200) {
+        alert("Invalid Player ID / Zone ID");
+        setLoading(false);
+        return;
+      }
+
+      saveVerifiedPlayer({
+        playerId,
+        zoneId,
+        username: data.data.username,
+        region: data.data.region,
+        savedAt: Date.now(),
+      });
+
+      setReviewData({
+        userName: data.data.username,
+        region: data.data.region,
+        playerId,
+        zoneId,
+      });
+
+      setLoading(false);
+      setStep(2);
+    } catch (err) {
+      alert("Verification failed. Please try again.");
+      setLoading(false);
+    }
   };
 
   /* ================= PAYMENT ================= */
@@ -195,6 +232,9 @@ export default function BuyFlowPage() {
                 setZoneId={setZoneId}
                 onValidate={handleValidate}
                 loading={loading}
+                showZoneId={needsZoneId}
+                label={isBGMI ? "Character Verification" : "Player Check"}
+                placeholder={isBGMI ? "Enter Character ID" : "Enter Player ID"}
               />
             )}
 

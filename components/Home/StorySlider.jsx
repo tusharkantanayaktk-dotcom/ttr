@@ -38,7 +38,7 @@ const storyData = [
     id: 5,
     title: "VIP",
     image: "/membership/silver-m.png",
-    link: "/games/membership/silver-membership",
+    link: "/games/silver-membership",
     color: "from-emerald-400 via-teal-500 to-green-600",
     isLive: false,
     label: "BEST"

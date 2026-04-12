@@ -143,7 +143,7 @@ export async function GET() {
       "mlbb-double332",
       "mlbbglobal202",          // Global
       "mlbbtr112",
-      // "sgmy-mlbb893",
+      "sgmy-mlbb893",
       "magic-chess-gogo-india924",
       "mlbb-indo42",
       // "mlbb-russia953",

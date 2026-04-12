@@ -12,8 +12,6 @@ const Loader = dynamic(() => import("@/components/Loader/Loader"), { ssr: false 
 const MLBBPurchaseGuide = dynamic(() => import("../../../components/HelpImage/MLBBPurchaseGuide"), { ssr: false });
 const ItemGrid = dynamic(() => import("@/components/GameDetail/ItemGrid"), { ssr: false });
 const BuyPanel = dynamic(() => import("@/components/GameDetail/BuyPanel"), { ssr: false });
-const ItemGridBgmi = dynamic(() => import("@/components/GameDetail/ItemGridBgmi"), { ssr: false });
-const BuyPanelBgmi = dynamic(() => import("@/components/GameDetail/BuyPanelBgmi"), { ssr: false });
 
 export default function GameDetailPage() {
   const { slug } = useParams();
@@ -34,10 +32,6 @@ export default function GameDetailPage() {
         setAllGames(data?.data?.games || []);
       });
   }, []);
-
-  /* ================= FETCH CURRENT GAME ================= */
-  const isBGMI =
-    game?.gameName?.toLowerCase() === "pubg mobile" || game?.gameName?.toLowerCase() === "bgmi";
 
   /* ================= FETCH GAME ================= */
   useEffect(() => {
@@ -68,6 +62,9 @@ export default function GameDetailPage() {
     return <Loader />;
   }
 
+  const isBGMI =
+    game?.gameName?.toLowerCase() === "pubg mobile" || game?.gameName?.toLowerCase() === "bgmi";
+
   /* ================= BUY HANDLER ================= */
   const goBuy = (item) => {
     if (redirecting) return;
@@ -80,16 +77,8 @@ export default function GameDetailPage() {
       image: item.itemImageId?.image || "",
     });
 
-    // router.push(
-    //   `/games/${slug}/buy/${item.itemSlug}?${query.toString()}`
-    // );
-
-    const isBGMI =
-      game?.gameName?.toLowerCase() === "pubg mobile" || game?.gameName?.toLowerCase() === "bgmi";
-
-    const basePath = isBGMI
-      ? `/games/pubg/${slug}/buy`
-      : `/games/${slug}/buy`;
+    // Always use generic path
+    const basePath = `/games/${slug}/buy`;
 
     router.push(
       `${basePath}/${item.itemSlug}?${query.toString()}`
@@ -163,7 +152,6 @@ export default function GameDetailPage() {
 
         <div>
           <h1 className="text-2xl font-extrabold">
-            {/* {game?.gameName} */}
             {isBGMI ? "BGMI" : game?.gameName}
           </h1>
           <p className="text-xs text-[var(--muted)]">
@@ -173,40 +161,20 @@ export default function GameDetailPage() {
       </div>
 
       {/* ================= ITEM GRID ================= */}
-      {isBGMI ? (
-        <ItemGridBgmi
-          items={game.allItems}
-          activeItem={activeItem}
-          setActiveItem={setActiveItem}
-          buyPanelRef={buyPanelRef}
-        />
-      ) : (
-        <ItemGrid
-          items={game.allItems}
-          activeItem={activeItem}
-          setActiveItem={setActiveItem}
-          buyPanelRef={buyPanelRef}
-        />
-
-      )}
+      <ItemGrid
+        items={game.allItems}
+        activeItem={activeItem}
+        setActiveItem={setActiveItem}
+        buyPanelRef={buyPanelRef}
+      />
 
       {/* ================= BUY PANEL ================= */}
-      {isBGMI ? (
-        <BuyPanelBgmi
-          activeItem={activeItem}
-          onBuy={goBuy}
-          redirecting={redirecting}
-          buyPanelRef={buyPanelRef}
-        />
-      ) : (
-        <BuyPanel
-          activeItem={activeItem}
-          onBuy={goBuy}
-          redirecting={redirecting}
-          buyPanelRef={buyPanelRef}
-        />
-      )}
-
+      <BuyPanel
+        activeItem={activeItem}
+        onBuy={goBuy}
+        redirecting={redirecting}
+        buyPanelRef={buyPanelRef}
+      />
 
     </section>
   );

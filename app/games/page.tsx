@@ -271,7 +271,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                   key={ott.slug}
                   className="group cursor-pointer transform-gpu"
                 >
-                  <Link href={`/games/ott/${ott.slug}`} className="flex flex-col gap-5">
+                  <Link href={`/games/${ott.slug}`} className="flex flex-col gap-5">
                     <div className="relative aspect-[3/4] overflow-hidden rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-700 group-hover:border-[var(--accent)]/50 group-hover:shadow-[0_15px_40px_rgba(var(--accent-rgb),0.2)]">
                       <Image
                         src={ott.image}
@@ -317,7 +317,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                   className="group transform-gpu"
                 >
                   <Link
-                    href={`/games/membership/${plan.slug}`}
+                    href={`/games/${plan.slug}`}
                     className="relative flex flex-col p-4 rounded-[1.2rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-300 hover:border-[var(--accent)] hover:shadow-lg hover:shadow-[var(--accent)]/5 overflow-hidden"
                   >
                     <div className="flex items-center gap-3 mb-3">

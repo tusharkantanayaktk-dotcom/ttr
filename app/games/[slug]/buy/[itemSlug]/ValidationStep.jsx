@@ -7,30 +7,35 @@ export default function ValidationStep({
   zoneId,
   setZoneId,
   onValidate,
-  loading, // 👈 NEW
+  loading,
+  showZoneId = true,
+  label = "Player Check",
+  placeholder = "Enter Player ID",
 }) {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-2xl font-bold">Player Check</h2>
+        <h2 className="text-2xl font-bold">{label}</h2>
         <HelpImagePopup />
       </div>
 
       <input
         value={playerId}
         onChange={(e) => setPlayerId(e.target.value)}
-        placeholder="Enter player ID"
+        placeholder={placeholder}
         className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full"
         disabled={loading}
       />
 
-      <input
-        value={zoneId}
-        onChange={(e) => setZoneId(e.target.value)}
-        placeholder="Enter zone ID"
-        className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full"
-        disabled={loading}
-      />
+      {showZoneId && (
+        <input
+          value={zoneId}
+          onChange={(e) => setZoneId(e.target.value)}
+          placeholder="Enter zone ID"
+          className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full"
+          disabled={loading}
+        />
+      )}
 
       <button
         onClick={onValidate}
@@ -42,14 +47,14 @@ export default function ValidationStep({
               : "bg-[var(--accent)] text-black hover:opacity-90"
           }`}
       >
-        {loading ? "Validating…" : "Validate"}
+        {loading ? "Validating…" : "Continue"}
       </button>
 
       <RecentVerifiedPlayers
         limit={10}
         onSelect={(player) => {
           setPlayerId(player.playerId);
-          setZoneId(player.zoneId);
+          if (showZoneId) setZoneId(player.zoneId);
         }}
       />
     </div>
