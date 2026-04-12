@@ -118,7 +118,7 @@ export default function GameDetailPage() {
                 {/* THUMBNAIL */}
                 <div className={`
                   relative w-10 h-10 rounded-xl overflow-hidden transition-all duration-500
-                  ${isActive ? "scale-110 shadow-lg shadow-amber-500/20 ring-1 ring-amber-500/50" : "grayscale opacity-40 group-hover:grayscale-0"}
+                  ${isActive ? "shadow-lg shadow-amber-500/20 ring-1 ring-amber-500/50" : "grayscale opacity-40 group-hover:grayscale-0"}
                 `}>
                   <Image
                     src={g.gameImageId?.image || logo}
@@ -137,12 +137,11 @@ export default function GameDetailPage() {
                     {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
                   </span>
                   {isActive && (
-                    <motion.span
-                      layoutId="active-pill"
+                    <span
                       className="text-[8px] font-black uppercase tracking-[0.2em] text-amber-500 mt-0.5"
                     >
                       Active
-                    </motion.span>
+                    </span>
                   )}
                 </div>
               </button>

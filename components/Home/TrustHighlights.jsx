@@ -50,26 +50,7 @@ const HIGHLIGHTS = [
 ];
 
 export default function TrustHighlights() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  };
 
-  const itemVariants = {
-    hidden: { opacity: 0, scale: 0.9, y: 10 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" }
-    }
-  };
 
   return (
     <section className="py-12 px-4 relative overflow-hidden">
@@ -83,10 +64,8 @@ export default function TrustHighlights() {
           {HIGHLIGHTS.map((item, i) => {
             const Icon = item.icon;
             return (
-              <motion.div
+              <div
                 key={i}
-                variants={itemVariants}
-                whileHover={{ y: -5 }}
                 className="relative group p-4 rounded-2xl bg-gradient-to-b from-[var(--card)]/80 to-transparent backdrop-blur-xl border border-[var(--border)]/40 hover:border-[var(--accent)]/40 hover:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.3)] transition-all duration-500 overflow-hidden"
               >
                 {/* SCANLINE EFFECT */}
@@ -96,7 +75,7 @@ export default function TrustHighlights() {
                   {/* ICON BLOCK */}
                   <div className="relative mb-4">
                     <div className="absolute inset-0 bg-[var(--accent)] blur-xl opacity-0 group-hover:opacity-20 transition-opacity" />
-                    <div className="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)]/50 text-[var(--accent)] group-hover:scale-110 group-hover:border-[var(--accent)]/40 transition-all duration-500">
+                    <div className="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)]/50 text-[var(--accent)] group-hover:border-[var(--accent)]/40 transition-all duration-500">
                       <Icon size={20} />
                     </div>
                   </div>
@@ -104,7 +83,7 @@ export default function TrustHighlights() {
                   {/* TEXT SECTION */}
                   <div className="space-y-1">
                     <div className="flex items-center justify-center gap-1">
-                      <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
+                      <div className="w-1 h-1 rounded-full bg-[var(--accent)]" />
                       <span className="text-[11px] font-black text-[var(--foreground)] tracking-tighter uppercase italic">
                         {item.title}
                       </span>
@@ -123,7 +102,7 @@ export default function TrustHighlights() {
                 {/* DECORATIVE CORNER BRACKETS */}
                 <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-[var(--border)]/20 group-hover:border-[var(--accent)]/40 transition-colors" />
                 <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-[var(--border)]/20 group-hover:border-[var(--accent)]/40 transition-colors" />
-              </motion.div>
+              </div>
             );
           })}
         </div>

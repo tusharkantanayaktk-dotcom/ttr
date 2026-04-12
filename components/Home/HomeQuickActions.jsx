@@ -78,11 +78,10 @@ function QuickItem({ href, icon: Icon, label, color }) {
           relative h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 flex items-center justify-center 
           rounded-xl sm:rounded-2xl
           bg-white/[0.03] dark:bg-zinc-900/[0.2] transition-all duration-300
-          group-hover:-translate-y-0.5
         `}>
             {/* Icon - Always Colorful & Bold */}
             <Icon
-              className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 md:w-8 md:h-8 transition-transform duration-300 group-hover:scale-110"
+              className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 md:w-8 md:h-8"
               style={{ color: 'var(--accent)' }} 
               strokeWidth={2.5}
             />

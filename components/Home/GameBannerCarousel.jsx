@@ -143,13 +143,13 @@ export default function GameBannerCarousel() {
         <div className="hidden lg:block">
           <button
             onClick={(e) => { e.preventDefault(); goPrev(); }}
-            className="absolute left-8 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-black hover:scale-110"
+            className="absolute left-8 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-black"
           >
             <FiChevronLeft size={24} />
           </button>
           <button
             onClick={(e) => { e.preventDefault(); goNext(); }}
-            className="absolute right-8 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-black hover:scale-110"
+            className="absolute right-8 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-black"
           >
             <FiChevronRight size={24} />
           </button>

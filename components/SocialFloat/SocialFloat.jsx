@@ -134,15 +134,8 @@ export default function SocialFloat() {
 
   const buttonVariants = {
     idle: { scale: 1 },
-    hover: {
-      scale: 1.1,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 10
-      }
-    },
-    tap: { scale: 0.9 }
+    hover: { scale: 1 },
+    tap: { scale: 0.95 }
   };
 
   if (pathname !== "/") return null;
@@ -175,11 +168,6 @@ export default function SocialFloat() {
                 <motion.div
                   key={social.name}
                   variants={itemVariants}
-                  whileHover={{
-                    scale: 1.15,
-                    x: -5,
-                    transition: { type: "spring", stiffness: 400, damping: 10 }
-                  }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <Link
@@ -225,11 +213,6 @@ export default function SocialFloat() {
             {/* Share */}
             <motion.button
               variants={itemVariants}
-              whileHover={{
-                scale: 1.15,
-                x: -5,
-                transition: { type: "spring", stiffness: 400, damping: 10 }
-              }}
               whileTap={{ scale: 0.95 }}
               onClick={handleShare}
               className="relative group"

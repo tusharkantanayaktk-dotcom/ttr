@@ -71,9 +71,7 @@ export default function TopupComplete() {
       <div className="absolute top-1/4 -left-20 w-96 h-96 bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[var(--accent)]/10 blur-[120px] rounded-full pointer-events-none" />
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
+      <div
         className="w-full max-w-md relative z-10"
       >
         <div className="bg-card/40 backdrop-blur-2xl border border-foreground/5 rounded-[2.5rem] p-8 md:p-12 shadow-2xl overflow-hidden group">
@@ -82,61 +80,43 @@ export default function TopupComplete() {
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500/30 to-transparent" />
 
           <AnimatePresence mode="wait">
-            <motion.div
+            <div
               key={status}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="flex flex-col items-center text-center"
+              className="flex flex-col items-center text-center w-full"
             >
               {/* ICON SECTION */}
               <div className="mb-8 relative">
                 {status === "checking" && (
                   <div className="relative">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                      className="w-24 h-24 rounded-full border-2 border-dashed border-amber-500/20"
-                    />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <FiLoader className="text-4xl animate-spin text-amber-500" />
                     </div>
+                    {/* Placeholder to keep size consistent */}
+                    <div className="w-24 h-24 rounded-full border border-amber-500/10" />
                   </div>
                 )}
 
                 {status === "success" && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", damping: 12 }}
+                  <div
                     className="w-24 h-24 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20"
                   >
                     <FiCheckCircle className="text-5xl text-green-500" />
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1.5, opacity: 0 }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                      className="absolute inset-0 rounded-full border-2 border-green-500/30"
-                    />
-                  </motion.div>
+                  </div>
                 )}
 
                 {status === "failed" && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", damping: 12 }}
+                  <div
                     className="w-24 h-24 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20"
                   >
                     <FiXCircle className="text-5xl text-red-500" />
-                  </motion.div>
+                  </div>
                 )}
               </div>
 
               {/* MESSAGE SECTION */}
               <div className="space-y-3 mb-8">
                 <div className="flex items-center justify-center gap-2 mb-1">
-                  <span className={`w-2 h-2 rounded-full ${status === 'success' ? 'bg-green-500' : status === 'failed' ? 'bg-red-500' : 'bg-amber-500 animate-pulse'}`} />
+                  <span className={`w-2 h-2 rounded-full ${status === 'success' ? 'bg-green-500' : status === 'failed' ? 'bg-red-500' : 'bg-amber-500'}`} />
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted opacity-60">Status</span>
                 </div>
 
@@ -172,10 +152,10 @@ export default function TopupComplete() {
                 </div>
               </div>
 
-            </motion.div>
+            </div>
           </AnimatePresence>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

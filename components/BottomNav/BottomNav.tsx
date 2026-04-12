@@ -44,9 +44,7 @@ export default function BottomNav() {
     };
 
     return (
-        <motion.div
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
+        <div
             className="fixed bottom-0 left-0 right-0 z-[100] lg:hidden"
         >
             {/* Slim Profile Glass Bar */}
@@ -64,18 +62,15 @@ export default function BottomNav() {
                                         <div className="relative">
                                             {/* Pulse effect for center button */}
                                             {isActive && (
-                                                <motion.div
-                                                    layoutId="center-active-glow"
+                                                <div
                                                     className="absolute inset-0 bg-[var(--accent)] rounded-full blur-xl opacity-30 scale-150"
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 0.3 }}
                                                 />
                                             )}
 
                                             <div className={`
                                                 w-11 h-11 rounded-full flex items-center justify-center relative z-10 transition-all duration-500
                                                 ${isActive
-                                                    ? "bg-[var(--accent)] shadow-[0_5px_15px_rgba(var(--accent),0.5)] scale-110"
+                                                    ? "bg-[var(--accent)] shadow-[0_5px_15px_rgba(var(--accent),0.5)]"
                                                     : "bg-[var(--background)] border border-[var(--border)] shadow-md group-hover:bg-[var(--card)]"
                                                 }
                                             `}>
@@ -84,8 +79,7 @@ export default function BottomNav() {
 
                                             {/* Minimal Active Bar below center */}
                                             {isActive && (
-                                                <motion.div
-                                                    layoutId="active-dot-center"
+                                                <div
                                                     className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-[var(--accent)] rounded-full shadow-[0_0_8px_var(--accent)]"
                                                 />
                                             )}
@@ -117,7 +111,7 @@ export default function BottomNav() {
                     })}
                 </nav>
             </div>
-        </motion.div>
+        </div>
     );
 }
 
@@ -127,7 +121,7 @@ function NavItemContent({ isActive, Icon, name }: { isActive: boolean; Icon: any
             <div className="relative flex items-center justify-center h-5">
                 <Icon
                     className={`text-lg transition-all duration-300 ${isActive
-                        ? "text-[var(--accent)] scale-105 drop-shadow-[0_0_6px_var(--accent)]"
+                        ? "text-[var(--accent)] drop-shadow-[0_0_6px_var(--accent)]"
                         : "text-[var(--foreground)]/25 group-hover:text-[var(--foreground)]/50"
                         }`}
                 />
@@ -144,11 +138,8 @@ function NavItemContent({ isActive, Icon, name }: { isActive: boolean; Icon: any
 
             {/* Minimal line indicator for side items */}
             {isActive && (
-                <motion.div
-                    layoutId="active-dot"
+                <div
                     className="absolute -bottom-1 w-2.5 h-0.5 bg-[var(--accent)] rounded-full shadow-[0_0_5px_var(--accent)]"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
                 />
             )}
         </div>

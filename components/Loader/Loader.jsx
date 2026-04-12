@@ -23,16 +23,7 @@ export default function Loader({ fullScreen = true }) {
 
       <div className="relative flex flex-col items-center">
         {/* Pulsing Logo */}
-        <motion.div
-          animate={{
-            scale: [0.95, 1.05, 0.95],
-            opacity: [0.8, 1, 0.8],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        <div
           className="relative mb-8"
         >
           <Image
@@ -46,7 +37,7 @@ export default function Loader({ fullScreen = true }) {
           
           {/* Subtle underline glow */}
           <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-[2px] bg-[var(--accent)]/40 blur-[2px]" />
-        </motion.div>
+        </div>
 
         {/* Simplified Progress / Text */}
         <div className="flex flex-col items-center gap-3">
@@ -55,22 +46,21 @@ export default function Loader({ fullScreen = true }) {
               <motion.div
                 key={i}
                 animate={{
-                  scale: [1, 1.5, 1],
-                  opacity: [0.3, 1, 0.3],
+                  opacity: [0.2, 0.5, 0.2],
                 }}
                 transition={{
-                  duration: 1,
+                  duration: 2,
                   repeat: Infinity,
-                  delay: i * 0.2,
+                  delay: i * 0.4,
                 }}
-                className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"
+                className="w-1 h-1 rounded-full bg-[var(--accent)]"
               />
             ))}
           </div>
           
           <motion.p
-            animate={{ opacity: [0.4, 0.7, 0.4] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            animate={{ opacity: [0.4, 0.5, 0.4] }}
+            transition={{ duration: 3, repeat: Infinity }}
             className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--foreground)]/60"
           >
             Just a moment...

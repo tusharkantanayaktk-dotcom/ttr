@@ -22,24 +22,7 @@ const BANNERS = [
     icon: MessageCircle,
     glow: "rgba(16, 185, 129, 0.08)",
   },
-  {
-    id: "sale",
-    title: "FLASH SALE ALERT 🔥",
-    subtitle: "Get up to 30% off on BGMI UC today.",
-    cta: "SHOP NOW",
-    link: SUPPORT_WHATSAPP_URL,
-    icon: Flame,
-    glow: "rgba(249, 115, 22, 0.08)",
-  },
-  {
-    id: "membership",
-    title: "PRO MEMBERSHIP",
-    subtitle: "No extra fees, fast delivery, and priority support.",
-    cta: "UPGRADE",
-    link: SUPPORT_WHATSAPP_URL,
-    icon: Crown,
-    glow: "rgba(245, 158, 11, 0.08)",
-  },
+
 ];
 
 export default function TopNoticeBanner() {
@@ -83,7 +66,7 @@ export default function TopNoticeBanner() {
             >
               {/* STATUS INDICATOR */}
               <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                 <span className="text-[9px] font-black uppercase tracking-widest text-white/40">Live</span>
               </div>
 
@@ -131,7 +114,7 @@ export default function TopNoticeBanner() {
               }}
               className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/20 hover:text-white transition-all group"
             >
-              <X size={14} className="group-hover:rotate-90 transition-transform duration-300" />
+              <X size={14} />
             </button>
           </div>
 

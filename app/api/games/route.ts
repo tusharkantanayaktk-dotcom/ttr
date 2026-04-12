@@ -235,11 +235,11 @@ export async function GET() {
         //   total: OTTS.filter((o) => o.available).length,
         // },
         // 🔥 MEMBERSHIP SECTION
-        memberships: {
-          title: "Memberships & Passes",
-          items: MEMBERSHIPS.filter((m) => m.available),
-          total: MEMBERSHIPS.filter((m) => m.available).length,
-        },
+        // memberships: {
+        //   title: "Memberships & Passes",
+        //   items: MEMBERSHIPS.filter((m) => m.available),
+        //   total: MEMBERSHIPS.filter((m) => m.available).length,
+        // },
 
       },
     });
