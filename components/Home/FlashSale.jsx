@@ -12,7 +12,7 @@ const flashSaleData = [
         name: "Weekly Pass",
         game: "MLBB",
         image: "/game-assets/weekly-pass.jpeg",
-        price: "₹143",
+        price: "₹150",
         originalPrice: "₹170",
         slug: "mobile-legends988?type=weekly-pass",
         badge: "Hot Deal"
@@ -22,7 +22,7 @@ const flashSaleData = [
         name: "Weekly Bundle",
         game: "MLBB",
         image: "/game-assets/12.jpg",
-        price: "₹79",
+        price: "₹81",
         originalPrice: "₹100",
         slug: "weeklymonthly-bundle931",
         badge: "Best Value"
@@ -83,22 +83,22 @@ export default function FlashSale() {
                 {/* COMPACT GRID */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
                     {flashSaleData.map((item, index) => (
-                    <div
-                        key={item.id}
-                    >
-                        <Link
-                            href={`/games/${item.slug}`}
-                            className="group relative block bg-[var(--card)]/50 hover:bg-[var(--card)] backdrop-blur-xl border border-[var(--border)] hover:border-amber-500/30 rounded-2xl p-1.5 transition-all duration-300"
+                        <div
+                            key={item.id}
                         >
-                            {/* Badge Overlay */}
-                            <div className="absolute top-3 left-3 z-20">
-                                <span className="text-[7px] font-black italic uppercase tracking-widest px-1.5 py-0.5 rounded-sm bg-amber-500 text-black shadow-lg">
-                                    {item.badge}
-                                </span>
-                            </div>
+                            <Link
+                                href={`/games/${item.slug}`}
+                                className="group relative block bg-[var(--card)]/50 hover:bg-[var(--card)] backdrop-blur-xl border border-[var(--border)] hover:border-amber-500/30 rounded-2xl p-1.5 transition-all duration-300"
+                            >
+                                {/* Badge Overlay */}
+                                <div className="absolute top-3 left-3 z-20">
+                                    <span className="text-[7px] font-black italic uppercase tracking-widest px-1.5 py-0.5 rounded-sm bg-amber-500 text-black shadow-lg">
+                                        {item.badge}
+                                    </span>
+                                </div>
 
-                            {/* IMAGE CONTAINER */}
-                            <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-1.5 bg-black/40">
+                                {/* IMAGE CONTAINER */}
+                                <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-1.5 bg-black/40">
                                     <Image
                                         src={item.image}
                                         alt={item.name}
@@ -106,37 +106,37 @@ export default function FlashSale() {
                                         sizes="(max-width: 640px) 45vw, 20vw"
                                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                                     />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                            </div>
-
-                            {/* INFO CONTENT */}
-                            <div className="space-y-0.5 px-0.5">
-                                <div className="flex items-center gap-1 font-black italic uppercase tracking-widest text-[var(--foreground)]/40 text-[7px]">
-                                    <span className="w-1 h-1 rounded-full bg-amber-500" />
-                                    {item.game}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                                 </div>
 
-                                <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] group-hover:text-amber-500 transition-colors">
-                                    {item.name}
-                                </h3>
-
-                                <div className="flex items-center justify-between gap-1 pt-0.5">
-                                    <div className="flex items-baseline gap-1.5">
-                                        <span className="text-sm font-black italic text-[var(--foreground)] tracking-tighter">
-                                            {item.price}
-                                        </span>
-                                        <span className="text-[9px] font-bold text-[var(--foreground)]/30 line-through">
-                                            {item.originalPrice}
-                                        </span>
+                                {/* INFO CONTENT */}
+                                <div className="space-y-0.5 px-0.5">
+                                    <div className="flex items-center gap-1 font-black italic uppercase tracking-widest text-[var(--foreground)]/40 text-[7px]">
+                                        <span className="w-1 h-1 rounded-full bg-amber-500" />
+                                        {item.game}
                                     </div>
 
-                                    <div className="w-5 h-5 rounded-md bg-[var(--foreground)]/5 group-hover:bg-amber-500 flex items-center justify-center transition-all">
-                                        <FiChevronRight size={10} className="text-[var(--foreground)]/40 group-hover:text-black" />
+                                    <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] group-hover:text-amber-500 transition-colors">
+                                        {item.name}
+                                    </h3>
+
+                                    <div className="flex items-center justify-between gap-1 pt-0.5">
+                                        <div className="flex items-baseline gap-1.5">
+                                            <span className="text-sm font-black italic text-[var(--foreground)] tracking-tighter">
+                                                {item.price}
+                                            </span>
+                                            <span className="text-[9px] font-bold text-[var(--foreground)]/30 line-through">
+                                                {item.originalPrice}
+                                            </span>
+                                        </div>
+
+                                        <div className="w-5 h-5 rounded-md bg-[var(--foreground)]/5 group-hover:bg-amber-500 flex items-center justify-center transition-all">
+                                            <FiChevronRight size={10} className="text-[var(--foreground)]/40 group-hover:text-black" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Link>
-                    </div>
+                            </Link>
+                        </div>
                     ))}
                 </div>
             </div>
