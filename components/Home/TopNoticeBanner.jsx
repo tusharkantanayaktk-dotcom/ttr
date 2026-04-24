@@ -9,7 +9,7 @@ const STORAGE_KEY = "hide_notice_banner";
 const ROTATE_INTERVAL = 6000;
 
 /* ================= ENV ================= */
-const SUPPORT_WHATSAPP_URL = process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP_URL || "#";
+const SUPPORT_WHATSAPP_URL = "https://whatsapp.com/channel/0029Vb7jVuaLtOj7Q889qV1k";
 
 /* ================= BANNERS ================= */
 const BANNERS = [

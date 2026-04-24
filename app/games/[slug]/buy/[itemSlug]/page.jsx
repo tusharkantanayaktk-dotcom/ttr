@@ -93,7 +93,7 @@ export default function BuyFlowPage() {
   }, [slug, itemSlug]);
 
   /* ================= GAME CONFIG ================= */
-  const isMLBB = slug?.toLowerCase().includes("mlbb") || slug?.toLowerCase().includes("mobile-legends");
+  const isMLBB = slug?.toLowerCase().includes("mlbb") || slug?.toLowerCase().includes("mobile-legends") || slug?.toLowerCase().includes("mobile-legens") || slug?.toLowerCase().includes("weeklymonthly-bundle931");
   const isBGMI = slug?.toLowerCase().includes("pubg") || slug?.toLowerCase().includes("bgmi");
   const isOTT = slug?.toLowerCase().includes("netflix") || slug?.toLowerCase().includes("youtube");
   const isMembership = slug?.toLowerCase().includes("membership");
