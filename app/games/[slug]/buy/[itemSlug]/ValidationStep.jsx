@@ -1,5 +1,7 @@
 import HelpImagePopup from "../../../../../components/HelpImage/HelpImagePopup";
 import RecentVerifiedPlayers from "../../../../region/RecentVerifiedPlayers";
+import { FiUser, FiHash, FiSearch } from "react-icons/fi";
+import { motion } from "framer-motion";
 
 export default function ValidationStep({
   playerId,
@@ -19,35 +21,59 @@ export default function ValidationStep({
         <HelpImagePopup />
       </div>
 
-      <input
-        value={playerId}
-        onChange={(e) => setPlayerId(e.target.value)}
-        placeholder={placeholder}
-        className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full"
-        disabled={loading}
-      />
+      <div className="space-y-4">
+        {/* PLAYER ID INPUT */}
+        <div className="relative group">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[var(--accent)] transition-colors">
+            <FiUser size={18} />
+          </div>
+          <input
+            value={playerId}
+            onChange={(e) => setPlayerId(e.target.value)}
+            placeholder={placeholder}
+            className="p-3 pl-12 rounded-lg bg-white dark:bg-black/20 border border-gray-200 dark:border-gray-700 w-full focus:border-[var(--accent)] transition-all outline-none placeholder:text-gray-400 dark:placeholder:text-white/40"
+            disabled={loading}
+          />
+        </div>
 
-      {showZoneId && (
-        <input
-          value={zoneId}
-          onChange={(e) => setZoneId(e.target.value)}
-          placeholder="Enter zone ID"
-          className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full"
-          disabled={loading}
-        />
-      )}
+        {/* ZONE ID INPUT (OPTIONAL) */}
+        {showZoneId && (
+          <div className="relative group">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--accent)] transition-colors">
+              <FiHash size={18} />
+            </div>
+            <input
+              value={zoneId}
+              onChange={(e) => setZoneId(e.target.value)}
+              placeholder="Enter zone ID"
+              className="p-3 pl-12 rounded-lg bg-white dark:bg-black/20 border border-gray-200 dark:border-gray-700 w-full focus:border-[var(--accent)] transition-all outline-none placeholder:text-gray-400 dark:placeholder:text-white/40"
+              disabled={loading}
+            />
+          </div>
+        )}
+      </div>
 
       <button
         onClick={onValidate}
         disabled={loading}
-        className={`py-3 rounded-lg w-full font-semibold transition
+        className={`py-3 rounded-lg w-full font-semibold transition flex items-center justify-center gap-2
           ${
             loading
               ? "bg-gray-600 text-gray-300 cursor-not-allowed"
-              : "bg-[var(--accent)] text-black hover:opacity-90"
+              : "bg-[var(--accent)] text-black hover:opacity-90 shadow-lg shadow-[var(--accent)]/10"
           }`}
       >
-        {loading ? "Validating…" : "Continue"}
+        {loading ? (
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          >
+            <FiSearch size={18} />
+          </motion.div>
+        ) : (
+          <FiSearch size={18} />
+        )}
+        <span>{loading ? "Validating…" : "Continue"}</span>
       </button>
 
       <RecentVerifiedPlayers

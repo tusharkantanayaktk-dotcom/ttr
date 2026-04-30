@@ -46,75 +46,52 @@ export default function ItemGrid({
             }}
             className={`
               relative overflow-hidden group
-              rounded-xl border transition-all duration-300
-              flex flex-col justify-between min-h-[90px] p-3.5 cursor-pointer
+              rounded-2xl border transition-all duration-500
+              flex flex-col justify-between min-h-[82px] p-3 cursor-pointer
               ${isSelected
-                ? "border-[var(--accent)] bg-[var(--accent)]/15 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
-                : "border-[var(--border)] bg-[var(--card)]/40 hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/60"
+                ? "border-[var(--accent)] bg-[var(--accent)]/[0.08] shadow-lg shadow-[var(--accent)]/5"
+                : "border-[var(--border)] bg-white/[0.02] hover:border-[var(--accent)]/30 hover:bg-white/[0.04]"
               }
             `}
           >
-            {/* Glossy Shimmer Effect on Hover/Selection */}
-            {isSelected && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent animate-shimmer pointer-events-none" />}
-
-            {/* Selection Indicator Glow */}
+            {/* Selection Checkmark */}
             {isSelected && (
               <motion.div
-                layoutId="active-glow-main"
-                className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/20 via-transparent to-[var(--accent)]/5 pointer-events-none"
-              />
+                initial={{ scale: 0, rotate: -20 }}
+                animate={{ scale: 1, rotate: 0 }}
+                className="absolute top-1.5 right-1.5 z-20 w-4.5 h-4.5 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20"
+              >
+                <FiCheck size={11} strokeWidth={4} />
+              </motion.div>
             )}
 
-            {/* Header: Name & Discount */}
-            <div className="relative z-10 flex flex-col gap-1">
-              <div className="flex justify-between gap-2">
-                <p className={`font-bold text-[11px] tracking-tight leading-tight transition-colors duration-300 ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>
+            {/* Header: Name & Price */}
+            <div className="relative z-10 flex flex-col h-full justify-between">
+              <div className="flex flex-col">
+                <p className={`font-black text-[11px] uppercase tracking-tight transition-colors duration-300 ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
                   {item.itemName}
                 </p>
                 {discount > 0 && (
-                  <span className="text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0 leading-none h-4 flex items-center rounded-full uppercase tracking-tighter shadow-sm">
-                    {discount}%
+                  <span className="text-[8px] font-black text-emerald-400 uppercase tracking-tighter opacity-80">
+                    SAVE {discount}%
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-2">
-                <div className="h-0.5 w-6 bg-[var(--accent)]/30 rounded-full" />
-                {isSelected && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="bg-[var(--accent)] text-white p-0.5 rounded-full"
-                  >
-                    <FiCheck size={10} strokeWidth={4} />
-                  </motion.div>
-                )}
+
+              <div className="mt-2 flex items-baseline gap-1">
+                <span className={`text-[9px] font-bold ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--muted)]'} opacity-50`}>₹</span>
+                <p className={`text-lg font-black tracking-tighter transition-all duration-300 ${isSelected ? 'text-[var(--foreground)] scale-105 origin-left' : 'text-[var(--muted)]'}`}>
+                  {item.sellingPrice}
+                </p>
               </div>
             </div>
 
-            {/* Footer: Price */}
-            <div className="relative z-10 mt-auto pt-2">
-              <div className="flex flex-col">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-[10px] font-medium text-[var(--muted)]">₹</span>
-                  <p className="text-lg font-black text-[var(--foreground)] tracking-tight">
-                    {item.sellingPrice}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Corner Accent Decor */}
-            <div className={`absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[var(--accent)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-3xl pointer-events-none`} />
-
-            {/* Floating Particle Decor (Selected Only) - Simplified */}
+            {/* Selection Background Glow */}
             {isSelected && (
-              <div className="absolute bottom-2 right-2">
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-2 h-2 bg-[var(--accent)] rounded-full blur-[1px]"
-                />
-              </div>
+              <motion.div
+                layoutId="active-card-glow"
+                className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent pointer-events-none"
+              />
             )}
           </motion.div>
         );

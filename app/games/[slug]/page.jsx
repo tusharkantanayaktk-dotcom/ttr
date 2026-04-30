@@ -89,8 +89,8 @@ export default function GameDetailPage() {
     <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6">
 
       {/* ================= MODERN GAME SWITCHER ================= */}
-      <div className="max-w-6xl mx-auto mb-10 overflow-hidden">
-        <div className="flex items-center gap-2 overflow-x-auto py-4 no-scrollbar scroll-smooth">
+      <div className="max-w-6xl mx-auto mb-6 overflow-hidden px-2">
+        <div className="flex items-center gap-1 overflow-x-auto py-2 no-scrollbar scroll-smooth">
           {allGames.map((g) => {
             const isActive = g.gameSlug === slug;
             return (
@@ -98,16 +98,16 @@ export default function GameDetailPage() {
                 key={g.gameSlug}
                 onClick={() => router.push(`/games/${g.gameSlug}`)}
                 className={`
-                  relative flex-shrink-0 flex items-center gap-3 px-4 py-2 rounded-2xl transition-all duration-300
+                  relative flex-shrink-0 flex flex-col items-center gap-1.5 px-1 py-2 rounded-xl transition-all duration-500 min-w-[68px]
                   ${isActive
-                    ? "bg-foreground/5 border border-foreground/10"
-                    : "hover:bg-foreground/5 border border-transparent"}
+                    ? "bg-white/[0.03] opacity-100"
+                    : "hover:bg-white/[0.02] opacity-40 hover:opacity-80"}
                 `}
               >
                 {/* THUMBNAIL */}
                 <div className={`
-                  relative w-10 h-10 rounded-xl overflow-hidden transition-all duration-500
-                  ${isActive ? "shadow-lg shadow-amber-500/20 ring-1 ring-amber-500/50" : "grayscale opacity-40 group-hover:grayscale-0"}
+                  relative w-11 h-11 rounded-xl overflow-hidden transition-all duration-500 transform
+                  ${isActive ? "ring-1 ring-red-500/50 scale-105" : "grayscale opacity-80"}
                 `}>
                   <Image
                     src={g.gameImageId?.image || logo}
@@ -118,20 +118,22 @@ export default function GameDetailPage() {
                 </div>
 
                 {/* LABEL */}
-                <div className="flex flex-col items-start pr-2">
+                <div className="flex flex-col items-center text-center w-full px-1">
                   <span className={`
-                    text-[10px] font-black italic uppercase tracking-wider transition-colors duration-300
-                    ${isActive ? "text-foreground" : "text-muted group-hover:text-foreground"}
+                    text-[8px] font-black italic uppercase tracking-wider transition-colors duration-300 leading-tight
+                    ${isActive ? "text-red-500" : "text-[var(--muted)]"}
                   `}>
                     {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
                   </span>
-                  {isActive && (
-                    <span
-                      className="text-[8px] font-black uppercase tracking-[0.2em] text-amber-500 mt-0.5"
-                    >
-                      Active
-                    </span>
-                  )}
+                  <div className="h-[2px] w-full mt-1.5 relative">
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeTabRedLine"
+                        className="absolute inset-0 bg-red-600 rounded-full shadow-[0_0_8px_rgba(220,38,38,0.5)]"
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                  </div>
                 </div>
               </button>
             );

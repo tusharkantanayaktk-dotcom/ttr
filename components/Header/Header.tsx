@@ -13,6 +13,7 @@ export default function Header() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [avatarError, setAvatarError] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
@@ -134,7 +135,7 @@ export default function Header() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-4 h-11 relative">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-4 h-13 relative">
 
         {/* LOGO SECTION */}
         <div className="flex items-center">
@@ -161,7 +162,7 @@ export default function Header() {
         <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
           {[
             { name: "Games", href: "/games", icon: FiGrid },
-            { name: "Regions", href: "/regions", icon: FiGlobe }
+            { name: "Regions", href: "/region", icon: FiGlobe }
           ].map((item) => (
             <Link
               key={item.name}
@@ -214,13 +215,12 @@ export default function Header() {
               whileTap={{ scale: 0.97 }}
             >
               <div className="w-full h-full rounded-full bg-[var(--accent)] flex items-center justify-center overflow-hidden shadow-sm">
-                {!loading && user?.avatar ? (
-                  <Image
+                {!loading && user?.avatar && !avatarError ? (
+                  <img
                     src={user.avatar}
                     alt="User Avatar"
-                    width={28}
-                    height={28}
                     className="object-cover w-full h-full"
+                    onError={() => setAvatarError(true)}
                   />
                 ) : (
                   <span className="text-white text-[10px] font-black uppercase">
@@ -316,13 +316,12 @@ export default function Header() {
                             {/* Left: Avatar */}
                             <div className="w-12 h-12 rounded-[0.8rem] bg-[var(--accent)] p-[1.5px] shadow-[0_5px_15px_-5px_rgba(var(--accent-rgb),0.5)] shrink-0">
                               <div className="w-full h-full rounded-[0.7rem] overflow-hidden bg-[var(--card)]">
-                                {user?.avatar ? (
-                                  <Image
+                                {user?.avatar && !avatarError ? (
+                                  <img
                                     src={user.avatar}
                                     alt="User Avatar"
-                                    width={48}
-                                    height={48}
                                     className="object-cover w-full h-full"
+                                    onError={() => setAvatarError(true)}
                                   />
                                 ) : (
                                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)]">
@@ -343,7 +342,7 @@ export default function Header() {
                                 {user.email}
                               </span>
                             </div>
-                            
+
                             {/* Right: Logout Icon */}
                             <motion.button
                               onClick={handleLogout}
@@ -415,11 +414,11 @@ export default function Header() {
                         </div>
                       )}
                     </div>
-                    
+
                     {/* FOOTER OF SIDEBAR */}
                     <div className="p-4 border-t border-[var(--border)] mt-auto bg-[var(--foreground)]/[0.02] text-center space-y-1">
-                       <p className="text-[7px] font-black uppercase tracking-[0.4em] text-[var(--accent)] opacity-50">Love from TK</p>
-                       <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-[0.3em] opacity-30">TRONICS © 2026</p>
+                      <p className="text-[7px] font-black uppercase tracking-[0.4em] text-[var(--accent)] opacity-50">Love from TK</p>
+                      <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-[0.3em] opacity-30">TRONICS © 2026</p>
                     </div>
                   </motion.div>
                 </>

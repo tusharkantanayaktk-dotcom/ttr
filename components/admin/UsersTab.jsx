@@ -650,6 +650,7 @@ function RoleDropdown({ value, onChange, disabled, compact }) {
 
 /* ================= AVATAR ================= */
 function Avatar({ user, size = "md" }) {
+  const [error, setError] = useState(false);
   const sizeClasses = {
     sm: "h-8 w-8",
     md: "h-10 w-10",
@@ -661,11 +662,12 @@ function Avatar({ user, size = "md" }) {
     .slice(0, 2)
     .toUpperCase() || "U";
 
-  if (user.avatar) {
+  if (user.avatar && !error) {
     return (
       <img
         src={user.avatar}
         alt={user.name}
+        onError={() => setError(true)}
         className={`${sizeClasses[size]} rounded-2xl object-cover border-2 border-[var(--border)] shadow-inner`}
       />
     );
