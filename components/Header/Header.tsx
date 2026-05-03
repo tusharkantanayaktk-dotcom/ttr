@@ -284,15 +284,15 @@ export default function Header() {
                           </p>
 
                           {/* Mobile/Guest Navigation Nodes */}
-                          <div className="flex flex-col gap-1.5 w-full mb-8">
+                          <div className="grid grid-cols-2 gap-2 w-full mb-8">
                             {[
                               { label: "Games", icon: FiGrid, href: "/games" },
-                              { label: "Regions", icon: FiGlobe, href: "/regions" }
+                              { label: "Regions", icon: FiGlobe, href: "/region" }
                             ].map((link) => (
                               <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.06] hover:border-[var(--accent)]/30 text-[var(--muted)] transition-all group">
-                                  <link.icon className="text-lg text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                                  <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-[var(--foreground)]">{link.label}</span>
+                                <div className="flex flex-col items-center justify-center gap-2 p-3 rounded-2xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.06] hover:border-[var(--accent)]/30 text-[var(--muted)] transition-all group text-center">
+                                  <link.icon className="text-xl text-[var(--accent)] group-hover:scale-110 transition-transform" />
+                                  <span className="text-[9px] font-black uppercase tracking-[0.2em] group-hover:text-[var(--foreground)]">{link.label}</span>
                                 </div>
                               </Link>
                             ))}
@@ -335,12 +335,22 @@ export default function Header() {
 
                             {/* Middle: Info */}
                             <div className="flex flex-col flex-1 min-w-0">
-                              <span className="text-sm font-black italic uppercase tracking-tight text-[var(--foreground)] truncate leading-none mb-0.5">
+                              <span className="text-sm font-black italic uppercase tracking-tight text-[var(--foreground)] truncate leading-none mb-1">
                                 {user.name || user.username}
                               </span>
-                              <span className="text-[8px] font-bold text-[var(--muted)] opacity-50 uppercase tracking-widest truncate">
+                              <span className="text-[8px] font-bold text-[var(--muted)] opacity-50 uppercase tracking-widest truncate mb-2">
                                 {user.email}
                               </span>
+                              <div className="flex">
+                                <span className={`
+                                  text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md border
+                                  ${user.userType === 'owner' ? 'bg-orange-500/10 text-orange-500 border-orange-500/20' : 
+                                    user.userType === 'admin' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' : 
+                                    'bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20'}
+                                `}>
+                                  {user.userType === "owner" ? "Owner" : user.userType === "admin" ? "Reseller" : "User"}
+                                </span>
+                              </div>
                             </div>
 
                             {/* Right: Logout Icon */}
@@ -357,20 +367,20 @@ export default function Header() {
 
                           {/* Navigation nodes compacted */}
                           <div className="space-y-1">
-                            <div className="lg:hidden space-y-1 mb-4">
+                            <div className="lg:hidden grid grid-cols-2 gap-2 mb-4">
                               {[
                                 { label: "Games", icon: FiGrid, href: "/games" },
-                                { label: "Regions", icon: FiGlobe, href: "/regions" }
+                                { label: "Regions", icon: FiGlobe, href: "/region" }
                               ].map((link) => (
                                 <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                  <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--foreground)]/[0.03] text-[var(--muted)] group transition-all border border-transparent hover:border-[var(--border)]">
-                                    <link.icon className="text-base text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest group-hover:text-[var(--foreground)]">{link.label}</span>
+                                  <div className="flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl hover:bg-[var(--foreground)]/[0.03] text-[var(--muted)] group transition-all border border-transparent hover:border-[var(--border)] text-center">
+                                    <link.icon className="text-lg text-[var(--accent)] group-hover:scale-110 transition-transform" />
+                                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] group-hover:text-[var(--foreground)]">{link.label}</span>
                                   </div>
                                 </Link>
                               ))}
-                              <div className="h-[1px] bg-[var(--border)] mx-4 my-2 opacity-50" />
                             </div>
+                            <div className="h-[1px] bg-[var(--border)] mx-4 my-2 opacity-50" />
 
                             {[
                               { label: "Dashboard", icon: FiLayout, href: "/dashboard" },

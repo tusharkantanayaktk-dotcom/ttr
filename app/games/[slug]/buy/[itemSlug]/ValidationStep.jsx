@@ -1,7 +1,7 @@
 import HelpImagePopup from "../../../../../components/HelpImage/HelpImagePopup";
 import RecentVerifiedPlayers from "../../../../region/RecentVerifiedPlayers";
 import { FiUser, FiHash, FiSearch } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ValidationStep({
   playerId,
@@ -10,6 +10,7 @@ export default function ValidationStep({
   setZoneId,
   onValidate,
   loading,
+  error = "",
   showZoneId = true,
   label = "Player Check",
   placeholder = "Enter Player ID",
@@ -51,6 +52,23 @@ export default function ValidationStep({
             />
           </div>
         )}
+
+        {/* ERROR MESSAGE */}
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 flex items-start gap-3 overflow-hidden"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+              <p className="text-[10px] font-bold text-red-500 uppercase tracking-wider leading-relaxed">
+                {error}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <button

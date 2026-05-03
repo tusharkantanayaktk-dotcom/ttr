@@ -28,7 +28,7 @@ const FEATURES = [
 
 export default function TronicsWho() {
   return (
-    <section className="py-12 px-4 bg-[var(--background)] relative overflow-hidden">
+    <section className="py-8 px-4 bg-[var(--background)] relative overflow-hidden">
       {/* Background Subtle Elements */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent)] opacity-[0.02] blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--accent)] opacity-[0.02] blur-3xl rounded-full -translate-x-1/2 translate-y-1/2" />
@@ -76,7 +76,7 @@ export default function TronicsWho() {
       </div>
 
       {/* Decorative Line */}
-      <div className="max-w-4xl mx-auto mt-16 h-px bg-gradient-to-r from-transparent via-[var(--border)] to-transparent opacity-20" />
+      <div className="max-w-4xl mx-auto mt-4 h-px bg-gradient-to-r from-transparent via-[var(--border)] to-transparent opacity-20" />
     </section>
   );
 }

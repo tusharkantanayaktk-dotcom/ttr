@@ -17,7 +17,7 @@ import AuthGuard from "@/components/AuthGuard";
 export default function LeaderboardPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState("monthly"); // weekly | monthly
+  const [range, setRange] = useState("current"); // current (this month) | previous (prev month)
 
   const limit = 10;
 
@@ -27,7 +27,7 @@ export default function LeaderboardPage() {
 
     setLoading(true);
 
-    fetch(`/api/leaderboard?limit=${limit}&range=${range}`, {
+    fetch(`/api/leaderboard?limit=${limit}&range=${range === 'current' ? 'monthly' : 'prev_monthly'}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -64,18 +64,18 @@ export default function LeaderboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] py-12 px-4 relative overflow-hidden">
+      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] py-8 px-4 relative overflow-hidden">
         {/* BACKGROUND DECORATION */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.05] pointer-events-none" />
 
         <div className="max-w-5xl mx-auto relative z-10">
 
           {/* HEADER SECTION */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-6">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 mb-2"
             >
               <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
               <span className="text-[10px] font-bold tracking-[0.2em] text-[var(--accent)] uppercase">Live Rankings</span>
@@ -85,7 +85,7 @@ export default function LeaderboardPage() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl font-black italic tracking-tighter mb-4"
+              className="text-4xl md:text-5xl font-black italic tracking-tighter mb-2"
             >
               TOP <span className="text-[var(--accent)]">SPENDERS</span>
             </motion.h1>
@@ -101,9 +101,9 @@ export default function LeaderboardPage() {
           </div>
 
           {/* RANGE TOGGLE */}
-          <div className="flex justify-center mb-12">
+          <div className="flex justify-center mb-8">
             <div className="inline-flex p-1 bg-[var(--card)]/50 border border-[var(--border)] rounded-xl backdrop-blur-md">
-              {[{ id: "weekly", label: "This Week" }, { id: "monthly", label: "This Month" }].map((r) => (
+              {[{ id: "current", label: "This Month" }, { id: "previous", label: "Prev Month" }].map((r) => (
                 <button
                   key={r.id}
                   onClick={() => setRange(r.id)}
@@ -240,7 +240,7 @@ function PodiumCard({ user, rank, style, isMain = false }) {
       <div className={`relative z-10 mb-2 sm:mb-4 p-2 sm:p-4 rounded-xl sm:rounded-2xl border ${style.border} bg-black/20 group-hover:scale-110 transition-transform duration-500`}>
         <Icon size={isMain ? 32 : 20} className={`sm:hidden ${style.color}`} />
         <Icon className={`hidden sm:block ${style.color}`} size={isMain ? 40 : 28} />
-        <div className={`absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-5 h-5 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black italic text-[8px] sm:text-xs border ${style.border} bg-black`}>
+        <div className={`absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-5 h-5 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black italic text-[8px] sm:text-xs border ${style.border} bg-black text-white`}>
           #{rank}
         </div>
       </div>

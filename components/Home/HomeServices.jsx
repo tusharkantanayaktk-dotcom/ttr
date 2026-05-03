@@ -5,38 +5,37 @@ import { FaWhatsapp } from "react-icons/fa";
 
 export default function HomeServices() {
   return (
-    <section className="py-4 px-4 bg-[var(--background)]">
-      <div 
-        className="max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-[var(--card)] border border-[var(--border)] shadow-sm relative overflow-hidden group transition-colors duration-300"
+    <section className="px-4 bg-[var(--background)] !py-0">
+      <motion.div 
+        initial={{ opacity: 0, y: 5 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="max-w-2xl mx-auto flex items-center justify-between gap-4 p-4 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)] group transition-all duration-300"
       >
-        {/* Subtle background glow on hover */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-        
-        <div className="relative z-10 text-center sm:text-left">
-          <div className="flex items-center justify-center sm:justify-start gap-1.5 mb-0.5">
-             <div className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-             <h3 className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--accent)] opacity-80">
-               Our Services
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-1">
+             <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+             <h3 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.1em] text-blue-600">
+               Build Your Site
              </h3>
           </div>
-          <h2 className="text-base font-black text-[var(--foreground)] tracking-tight leading-tight">
-            Build Your Site
-          </h2>
-          <p className="text-[10px] text-[var(--muted)] font-medium mt-0.5 max-w-[240px] leading-relaxed">
+          <p className="text-[10px] text-[var(--muted)] font-medium leading-tight opacity-70 max-w-[220px]">
             We build clean, fast websites and software for your business.
           </p>
         </div>
 
-        <a
+        <motion.a
           href="https://wa.me/919178521537"
           target="_blank"
           rel="noopener noreferrer"
-          className="relative z-20 flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[var(--accent)] !text-black font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-[var(--accent)]/20 transition-all cursor-pointer group/btn"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--card)]/80 border border-[var(--border)] text-blue-600 font-black text-[10px] uppercase tracking-wider transition-all shadow-sm"
         >
-          <FaWhatsapp size={18} className="!text-black drop-shadow-sm" />
-          <span className="!text-black">Contact Us</span>
-        </a>
-      </div>
+          <FaWhatsapp size={16} className="text-green-500" />
+          <span>Contact</span>
+        </motion.a>
+      </motion.div>
     </section>
   );
 }

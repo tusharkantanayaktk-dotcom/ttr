@@ -76,21 +76,24 @@ export default function AuthPage() {
           overflow-hidden
         "
       >
-        <div className="p-10 md:p-12 flex flex-col items-center text-center">
-
-          {/* Minimal Logo Container */}
+        <div className="p-8 md:p-10 flex flex-col items-center text-center">
+          {/* Premium Logo Section */}
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="mb-8"
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="mb-6 relative"
           >
-            <div className="relative w-20 h-20 rounded-2xl bg-[var(--background)] border border-[var(--border)] p-4 flex items-center justify-center shadow-sm">
+            {/* Subtle glow behind logo */}
+            <div className="absolute inset-0 bg-[var(--accent)]/10 blur-[40px] rounded-full" />
+            
+            <div className="relative w-32 h-32 flex items-center justify-center">
               <Image
                 src={logo}
                 alt="Logo"
                 fill
-                className="object-contain p-4"
+                className="object-contain"
+                priority
               />
             </div>
           </motion.div>
@@ -99,27 +102,27 @@ export default function AuthPage() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="space-y-2 mb-10"
+            transition={{ delay: 0.1 }}
+            className="space-y-1 mb-8"
           >
-            <h1 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+            <h1 className="text-4xl font-bold tracking-tight text-[var(--foreground)]">
               Welcome
             </h1>
-            <p className="text-[var(--muted)] text-sm font-medium px-8 leading-relaxed">
+            <p className="text-[var(--muted)] text-sm font-medium opacity-80">
               Login to your account.
             </p>
           </motion.div>
 
           {/* Actions */}
-          <div className="w-full space-y-8">
-            {/* Status Messages - Clean & Simple */}
+          <div className="w-full space-y-6">
+            {/* Status Messages */}
             <AnimatePresence mode="wait">
               {error && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className="bg-red-500/5 border border-red-500/20 text-red-400 text-xs px-4 py-3 rounded-xl flex items-center gap-3"
+                  className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-4 py-3 rounded-xl flex items-center gap-3"
                 >
                   <RiLockPasswordLine className="text-base flex-shrink-0" />
                   <span className="text-left font-medium">{error}</span>
@@ -130,7 +133,7 @@ export default function AuthPage() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className="bg-green-500/5 border border-green-500/20 text-green-400 text-xs px-4 py-3 rounded-xl flex items-center gap-3"
+                  className="bg-green-500/10 border border-green-500/20 text-green-400 text-xs px-4 py-3 rounded-xl flex items-center gap-3"
                 >
                   <RiShieldKeyholeFill className="text-base flex-shrink-0" />
                   <span className="text-left font-medium">{success}</span>
@@ -138,68 +141,55 @@ export default function AuthPage() {
               )}
             </AnimatePresence>
 
-            {/* Compact Premium Google Button */}
+            {/* Google Button */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="group/btn relative w-full max-w-[300px] mx-auto"
+              transition={{ delay: 0.2 }}
+              className="w-full max-w-[280px] mx-auto"
             >
-              {/* Button Glow Effect */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)] to-indigo-500 rounded-xl blur-[8px] opacity-10 group-hover/btn:opacity-25 transition duration-500" />
-              
               <button
                 onClick={() => login()}
                 className="
-                  group relative w-full flex items-center justify-center gap-2.5
-                  py-2.5 px-6 rounded-xl
+                  group relative w-full flex items-center justify-center gap-3
+                  py-3 px-6 rounded-2xl
                   bg-white hover:bg-gray-50
                   text-gray-900 font-bold text-sm
                   border border-gray-200
-                  shadow-[0_4px_16px_rgba(0,0,0,0.05)]
-                  hover:shadow-[0_8px_24px_rgba(37,99,235,0.15)]
+                  shadow-sm hover:shadow-md
                   hover:-translate-y-0.5
                   transition-all duration-300
                   active:scale-[0.98]
                 "
               >
-                {/* Logo Container */}
-                <div className="relative flex items-center justify-center w-5 h-5 transition-transform group-hover:scale-110 duration-300">
-                  <FcGoogle className="text-xl" />
-                </div>
-                
+                <FcGoogle className="text-xl" />
                 <span className="tracking-tight">Continue with Google</span>
-
-                {/* Shimmer Effect */}
-                <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-                </div>
               </button>
             </motion.div>
 
-            {/* Minimal Loading */}
+            {/* Loading Indicator */}
             {loading && (
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-2 py-2">
                 <div className="w-4 h-4 border-[1.5px] border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
                 <span className="text-[10px] text-[var(--muted)] font-bold tracking-widest uppercase">
-                  Wait...
+                  Processing...
                 </span>
               </div>
             )}
 
-            <div className="relative py-2">
+            <div className="relative pt-4">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[var(--border)] opacity-30"></div>
+                <div className="w-full border-t border-[var(--border)] opacity-20"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-[var(--card)]/80 px-4 text-[10px] tracking-widest font-bold uppercase text-[var(--muted)]/60">
+                <span className="bg-[var(--card)]/10 backdrop-blur-md px-4 text-[9px] tracking-[0.2em] font-bold uppercase text-[var(--muted)]/50">
                   Secure Portal
                 </span>
               </div>
             </div>
 
-            <p className="text-[10px] text-[var(--muted)]/50 leading-relaxed font-medium">
-              Your login is protected with encryption. Learn more about our <span className="hover:text-[var(--foreground)] transition-colors cursor-pointer underline underline-offset-4">security</span>.
+            <p className="text-[10px] text-[var(--muted)]/40 leading-relaxed font-medium">
+              Your login is protected with encryption. <br /> Learn more about our <span className="hover:text-[var(--foreground)] transition-colors cursor-pointer underline underline-offset-4">security</span>.
             </p>
           </div>
         </div>

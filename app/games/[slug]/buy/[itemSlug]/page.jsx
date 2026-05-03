@@ -31,6 +31,9 @@ export default function BuyFlowPage() {
   const [discount, setDiscount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const [error, setError] = useState("");
+  const [game, setGame] = useState(null);
+
   /* ================= FALLBACK (UI ONLY) ================= */
   const fallbackName = params.get("name");
   const fallbackImage = params.get("image");
@@ -66,14 +69,15 @@ export default function BuyFlowPage() {
       .then(res => res.json())
       .then(data => {
         const gameData = data?.data;
-        if (!gameData?.itemId) return;
+        if (!gameData) return;
+        setGame(gameData);
 
-        const foundItem = gameData.itemId.find(
+        const foundItem = gameData.itemId?.find(
           (i) => i.itemSlug === itemSlug
         );
 
         if (!foundItem) {
-          alert("Invalid item selected");
+          setError("Invalid item selected");
           return;
         }
 
@@ -88,41 +92,45 @@ export default function BuyFlowPage() {
         setTotalPrice(sellingPrice);
       })
       .catch(() => {
-        alert("Failed to load item price");
+        setError("Failed to load item price");
       });
   }, [slug, itemSlug]);
 
   /* ================= GAME CONFIG ================= */
-  const isMLBB = slug?.toLowerCase().includes("mlbb") || slug?.toLowerCase().includes("mobile-legends") || slug?.toLowerCase().includes("mobile-legens") || slug?.toLowerCase().includes("weeklymonthly-bundle931");
+  const isMLBB = slug?.toLowerCase().includes("mlbb") || slug?.toLowerCase().includes("mobile-legends") || slug?.toLowerCase().includes("mobile-legens") || slug?.toLowerCase().includes("weeklymonthly-bundle") || slug?.toLowerCase().includes("legends988");
   const isBGMI = slug?.toLowerCase().includes("pubg") || slug?.toLowerCase().includes("bgmi");
   const isOTT = slug?.toLowerCase().includes("netflix") || slug?.toLowerCase().includes("youtube");
   const isMembership = slug?.toLowerCase().includes("membership");
 
   const needsZoneId = isMLBB; // Only MLBB needs Zone ID for now
-  const isVerificationBypass = isBGMI || isOTT || isMembership;
+  const isVerificationBypass = isOTT || isMembership || game?.isValidationRequired === false;
 
   /* ================= VALIDATE PLAYER ================= */
   const handleValidate = async () => {
+    setError(""); // reset error
     if (!playerId || (needsZoneId && !zoneId)) {
-      alert(needsZoneId ? "Please enter Player ID and Zone ID" : "Please enter ID");
+      setError(`Please enter your Player ID${needsZoneId ? " and Zone ID" : ""}`);
       return;
     }
 
     setLoading(true);
 
+    // Determine if MLBB based on slug and name for robust validation
+    const name = game?.gameName?.toLowerCase() || "";
+    const isMLBB_local = slug.includes("mlbb") || name.includes("mlbb") || slug.includes("legends988") || slug.includes("weeklymonthly-bundle");
+
     if (isVerificationBypass) {
-      // ✅ Bypass real verification for these games
       saveVerifiedPlayer({
         playerId,
         zoneId: zoneId || "NA",
-        username: isBGMI ? "BGMI Player" : (isOTT ? "OTT User" : "Member"),
-        region: "INDIA",
+        username: isBGMI ? "BGMI Player" : (isOTT ? "OTT User" : (isMembership ? "Member" : "Player")),
+        region: "Global",
         savedAt: Date.now(),
       });
 
       setReviewData({
-        userName: isBGMI ? "BGMI Player" : (isOTT ? "OTT User" : "Member"),
-        region: "INDIA",
+        userName: isBGMI ? "BGMI Player" : (isOTT ? "OTT User" : (isMembership ? "Member" : "Player")),
+        region: "Global",
         playerId,
         zoneId: zoneId || "NA",
       });
@@ -132,41 +140,64 @@ export default function BuyFlowPage() {
       return;
     }
 
-    // Real verification for MLBB etc.
     try {
-      const res = await fetch("/api/check-region", {
+      let username = "Unknown";
+      let region = "Global";
+      let isValid = false;
+
+      // 1. Always check name for ALL games (including MLBB)
+      // For MLBB variants, we use a standard gameId to ensure name check works across all regions
+      const baseGameId = isMLBB_local ? "mobile-legends988" : (game?.gameId || slug);
+      const productId = `${baseGameId}_${item?.itemId || itemSlug}`;
+
+      const nameRes = await fetch("/api/check-region/namecheck", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: playerId, zone: zoneId }),
+        body: JSON.stringify({
+          productId,
+          playerId,
+          zoneId: zoneId || "NA",
+        }),
       });
+      const nameData = await nameRes.json();
 
-      const data = await res.json();
-
-      if (data?.success !== 200) {
-        alert("Invalid Player ID / Zone ID");
-        setLoading(false);
-        return;
+      if (
+        (nameData?.success === 200 || nameData?.success === true) &&
+        (nameData?.data?.username || nameData?.data?.name) &&
+        nameData?.data?.valid !== false
+      ) {
+        username = nameData?.data?.username || nameData?.data?.name || "Unknown";
+        region = nameData?.data?.region || "Global";
+        isValid = true;
       }
 
-      saveVerifiedPlayer({
-        playerId,
-        zoneId,
-        username: data.data.username,
-        region: data.data.region,
-        savedAt: Date.now(),
-      });
+      if (isValid) {
+        saveVerifiedPlayer({
+          playerId,
+          zoneId,
+          username,
+          region,
+          savedAt: Date.now(),
+        });
 
-      setReviewData({
-        userName: data.data.username,
-        region: data.data.region,
-        playerId,
-        zoneId,
-      });
+        setReviewData({
+          userName: username,
+          region,
+          playerId,
+          zoneId,
+        });
 
-      setLoading(false);
-      setStep(2);
+        setLoading(false);
+        setStep(2);
+      } else {
+        // If we got here and it's not valid, use the error from nameData
+        const serverMsg = nameData?.message || "Player not found";
+        setError(serverMsg.toLowerCase().includes("success") ? "Player ID not found." : serverMsg);
+        setLoading(false);
+      }
     } catch (err) {
-      alert("Verification failed. Please try again.");
+      console.error("Complete Validation Error:", err);
+      setError("Validation failed. Please try again.");
       setLoading(false);
     }
   };
@@ -232,6 +263,7 @@ export default function BuyFlowPage() {
                 setZoneId={setZoneId}
                 onValidate={handleValidate}
                 loading={loading}
+                error={error}
                 showZoneId={needsZoneId}
                 label={isBGMI ? "Character Verification" : "Player Check"}
                 placeholder={isBGMI ? "Enter Character ID" : "Enter Player ID"}
