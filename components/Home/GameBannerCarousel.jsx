@@ -91,7 +91,7 @@ export default function GameBannerCarousel() {
 
 
       <div className="relative h-[220px] sm:h-[240px] md:h-[340px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border border-white/5 shadow-2xl bg-black">
-        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+        <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={current}
             custom={direction}
@@ -111,7 +111,7 @@ export default function GameBannerCarousel() {
                   alt={banners[current].bannerTitle || "Game banner"}
                   fill
                   priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+                  sizes="(max-width: 768px) 100vw, 1200px"
                   className="object-cover"
                 />
 

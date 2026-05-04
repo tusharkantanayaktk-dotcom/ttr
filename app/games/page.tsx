@@ -99,7 +99,7 @@ const GameCard = React.memo(({ game, disabled }: any) => {
         className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
         {/* IMAGE WRAPPER */}
-        <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-all duration-500 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]">
+        <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-[border-color,transform,box-shadow] duration-300 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-md">
 
           <div className="relative w-full h-full">
             <Image
@@ -136,7 +136,7 @@ const GameCard = React.memo(({ game, disabled }: any) => {
               ) : <div />}
 
               {!disabled && (
-                <div className="w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+                <div className="w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 transform scale-75 group-hover:scale-100">
                   <FiZap size={12} fill="currentColor" />
                 </div>
               )}
@@ -158,13 +158,13 @@ const GameCard = React.memo(({ game, disabled }: any) => {
 
         {/* CARD FOOTER */}
         <div className="px-1.5 space-y-0.5">
-          <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors duration-300">
+          <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors duration-200">
             {game.gameName}
           </h3>
 
           <div className="flex items-center gap-1">
             {game.gameFrom ? (
-              <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] opacity-30 group-hover:opacity-60 transition-opacity">
+              <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] opacity-30 group-hover:opacity-60 transition-opacity duration-200">
                 {game.gameFrom}
               </p>
             ) : (
@@ -331,12 +331,14 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                   className="group cursor-pointer transform-gpu"
                 >
                   <Link href={`/games/${ott.slug}`} className="flex flex-col gap-5">
-                    <div className="relative aspect-[3/4] overflow-hidden rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-700 group-hover:border-[var(--accent)]/50 group-hover:shadow-[0_15px_40px_rgba(var(--accent-rgb),0.2)]">
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)]/40 transition-[border-color,box-shadow] duration-300 group-hover:border-[var(--accent)]/50 group-hover:shadow-lg">
                       <Image
                         src={ott.image}
                         alt={ott.name}
                         fill
+                        sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                        loading="lazy"
                       />
 
                       {/* Animated Gradient Overlay */}
@@ -381,7 +383,14 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 relative rounded-lg overflow-hidden border border-[var(--border)] shrink-0">
-                        <Image src={plan.image} alt={plan.name} fill className="object-cover" />
+                        <Image 
+                          src={plan.image} 
+                          alt={plan.name} 
+                          fill 
+                          sizes="40px"
+                          className="object-cover" 
+                          loading="lazy"
+                        />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-[7px] text-[var(--muted)] font-black uppercase tracking-widest opacity-60">
