@@ -36,8 +36,8 @@ const requireAdminMemberOwner = (req) => {
     const token = auth.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // owner, admin, member can VIEW pricing
-    if (!["owner", "admin", "member"].includes(decoded.userType)) {
+    // owner, admin can VIEW pricing
+    if (!["owner", "admin"].includes(decoded.userType)) {
       return { error: "Forbidden", status: 403 };
     }
 
@@ -72,7 +72,7 @@ export async function GET(req) {
       );
     }
 
-    if (!["user", "member", "admin"].includes(userType)) {
+    if (!["user", "admin"].includes(userType)) {
       return NextResponse.json(
         { success: false, message: "Invalid userType" },
         { status: 400 }
@@ -127,7 +127,7 @@ export async function PATCH(req) {
 
     userType = userType.trim().toLowerCase();
 
-    const validRoles = ["user", "member", "admin", "owner"];
+    const validRoles = ["user", "admin", "owner"];
     if (!validRoles.includes(userType)) {
       return NextResponse.json(
         {

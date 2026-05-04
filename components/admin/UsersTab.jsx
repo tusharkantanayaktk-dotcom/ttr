@@ -145,7 +145,6 @@ export default function UsersTab() {
     switch (role) {
       case "owner": return <ShieldAlert size={14} className="text-rose-500" />;
       case "admin": return <ShieldCheck size={14} className="text-[var(--accent)]" />;
-      case "member": return <Crown size={14} className="text-amber-500" />;
       default: return <User size={14} className="text-[var(--muted)]/60" />;
     }
   };
@@ -154,7 +153,6 @@ export default function UsersTab() {
     switch (role) {
       case "owner": return "bg-rose-500/10 text-rose-500 border-rose-500/20";
       case "admin": return "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20";
-      case "member": return "bg-amber-500/10 text-amber-500 border-amber-500/20";
       default: return "bg-[var(--foreground)]/[0.05] text-[var(--muted)] border-[var(--border)]";
     }
   };
@@ -505,7 +503,7 @@ export default function UsersTab() {
                 <div className="space-y-3">
                   <label className="text-xs font-semibold text-[var(--muted)] ml-1">Role Type</label>
                   <div className="grid grid-cols-2 gap-2">
-                    {["user", "member", "admin", "owner"].map((type) => (
+                    {["user", "admin", "owner"].map((type) => (
                       <button
                         key={type}
                         onClick={() => setFilters({ ...filters, userType: filters.userType === type ? "" : type })}
@@ -576,7 +574,6 @@ function RoleDropdown({ value, onChange, disabled, compact }) {
 
   const roles = [
     { value: "user", label: "User", icon: <User size={12} /> },
-    { value: "member", label: "Member", icon: <Crown size={12} /> },
     { value: "admin", label: "Admin", icon: <ShieldCheck size={12} /> },
   ];
 

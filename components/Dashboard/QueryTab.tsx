@@ -75,20 +75,20 @@ const FAQS = [
 
 export default function QueryTab() {
   const [queryType, setQueryType] = useState("");
+  const [userPhone, setUserPhone] = useState("");
   const [queryMessage, setQueryMessage] = useState("");
   const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   const handleSubmit = async () => {
-    if (!queryType || !queryMessage.trim()) return;
+    if (!queryType || !userPhone.trim() || !queryMessage.trim()) return;
 
     setIsSubmitting(true);
     setStatus(null);
 
     const token = localStorage.getItem("token");
     const storedEmail = localStorage.getItem("email");
-    const storedPhone = localStorage.getItem("phone");
 
     try {
       const res = await fetch("/api/support/query", {
@@ -99,7 +99,7 @@ export default function QueryTab() {
         },
         body: JSON.stringify({
           email: storedEmail || null,
-          phone: storedPhone || null,
+          phone: userPhone,
           type: queryType,
           message: queryMessage,
         }),
@@ -110,6 +110,7 @@ export default function QueryTab() {
       if (data.success) {
         setStatus({ type: "success", message: "Your query has been submitted. We'll get back to you soon!" });
         setQueryType("");
+        setUserPhone("");
         setQueryMessage("");
       } else {
         setStatus({ type: "error", message: data.message || "Something went wrong." });
@@ -192,6 +193,19 @@ export default function QueryTab() {
               </div>
 
               <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Phone Number</label>
+                <input
+                  type="tel"
+                  value={userPhone}
+                  onChange={(e) => setUserPhone(e.target.value)}
+                  placeholder="Enter your phone number..."
+                  className="w-full p-4 rounded-xl border border-[var(--border)] bg-[var(--background)] 
+                             focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all
+                             font-medium text-sm"
+                />
+              </div>
+
+              <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Description</label>
                 <textarea
                   value={queryMessage}
@@ -204,7 +218,7 @@ export default function QueryTab() {
               </div>
 
               <button
-                disabled={!queryType || !queryMessage.trim() || isSubmitting}
+                disabled={!queryType || !userPhone.trim() || !queryMessage.trim() || isSubmitting}
                 onClick={handleSubmit}
                 className="w-full py-4 rounded-xl bg-[var(--accent)] text-white font-bold uppercase tracking-wider text-xs
                            flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20

@@ -283,7 +283,7 @@ export default function SupportQueriesTab() {
                 <h3 className="text-base font-bold text-[var(--foreground)]">Query Details</h3>
                 <button
                   onClick={() => setActiveQuery(null)}
-                  className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all"
+                  className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.08] flex items-center justify-center text-[var(--muted)] hover:text-rose-500 hover:bg-rose-500/10 transition-all"
                 >
                   <X size={16} />
                 </button>

@@ -4,7 +4,7 @@ const PricingConfigSchema = new mongoose.Schema(
   {
     userType: {
       type: String,
-      enum: ["user", "member", "admin", "owner"],
+      enum: ["user", "admin", "owner"],
       required: true,
       unique: true,
     },
