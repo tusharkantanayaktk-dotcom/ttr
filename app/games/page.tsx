@@ -7,7 +7,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiFilter, FiX, FiSearch, FiZap, FiBox, FiActivity, FiArrowRight } from "react-icons/fi";
 import logo from "@/public/logo.png";
 import dynamic from "next/dynamic";
+import Skeleton from "@/components/Skeleton";
 const GamesFilterModal = dynamic(() => import("@/components/Games/GamesFilterModal"), { ssr: false });
+
 
 export default function GamesPage() {
   const [category, setCategory] = useState<any[]>([]);
@@ -196,7 +198,64 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
   </div>
 );
 
+  if (games.length === 0) {
+    return (
+      <div className="min-h-screen bg-[var(--background)] pb-24">
+        {/* AMBIENT BACKGROUND */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
+
+        {/* ================= FILTER BAR SKELETON ================= */}
+        <div className="sticky top-0 md:top-[44px] z-40 bg-[var(--background)]/80 backdrop-blur-xl border-b border-[var(--border)]/40 py-2">
+          <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center gap-3">
+            <Skeleton height={36} className="flex-1 rounded-full border-none" />
+            <Skeleton width={36} height={36} variant="circle" className="shrink-0 border-none" />
+          </div>
+        </div>
+
+        {/* ================= CONTENT SKELETON ================= */}
+        <div className="max-w-7xl mx-auto px-6 mt-10 space-y-12">
+          {/* GAMES SECTION */}
+          <section>
+            <div className="flex items-center gap-3 mb-8">
+              <Skeleton width={40} height={40} className="rounded-xl border-none" />
+              <div className="space-y-2">
+                <Skeleton width={140} height={24} className="rounded-md border-none" />
+                <Skeleton width={80} height={10} className="rounded-md border-none" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-8">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+                <div key={i} className="space-y-3">
+                  <Skeleton className="aspect-square rounded-[1.4rem] w-full border-none" />
+                  <div className="px-1.5 space-y-1.5">
+                    <Skeleton width="80%" height={12} className="rounded-md border-none" />
+                    <Skeleton width="40%" height={8} className="rounded-md border-none" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* OTT SECTION PLACEHOLDER */}
+          <section className="opacity-50">
+             <div className="flex items-center gap-3 mb-8">
+                <Skeleton width={40} height={40} className="rounded-xl border-none" />
+                <Skeleton width={120} height={20} className="rounded-md border-none" />
+             </div>
+             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                   <Skeleton key={i} className="aspect-[3/4] rounded-[1.5rem] w-full border-none" />
+                ))}
+             </div>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
   return (
+
     <div className="min-h-screen bg-[var(--background)] pb-24">
       {/* AMBIENT BACKGROUND */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />

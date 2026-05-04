@@ -98,8 +98,9 @@ export default function ReviewAndPaymentStep({
       {step === 2 && (
         <>
           {/* ITEM SUMMARY */}
-          <div className="bg-gradient-to-br from-[var(--card)] to-black/40 p-5 rounded-2xl border border-[var(--border)] shadow-xl flex items-center gap-5">
-            <div className="relative h-16 w-16 rounded-xl overflow-hidden border border-white/10 shadow-lg">
+          <div className="bg-[var(--card)] p-3 rounded-2xl border border-[var(--border)] shadow-xl flex items-center gap-4">
+
+            <div className="relative h-12 w-12 rounded-xl overflow-hidden border border-white/10 shadow-lg">
               <Image src={itemImage || logo} alt={itemName} fill className="object-cover" />
             </div>
             <div>
@@ -111,8 +112,9 @@ export default function ReviewAndPaymentStep({
           </div>
 
           {/* PLAYER & CONTACT DETAILS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            <div className="bg-[var(--card)]/50 p-5 rounded-2xl border border-[var(--border)]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+            <div className="bg-[var(--card)]/50 p-4 rounded-2xl border border-[var(--border)]">
+
               <h4 className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
                 <FiShield className="text-indigo-400" /> Account Details
               </h4>
@@ -134,10 +136,11 @@ export default function ReviewAndPaymentStep({
               </div>
             </div>
 
-            <div className="bg-[var(--card)]/50 p-5 rounded-2xl border border-[var(--border)]">
-              <h4 className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+            <div className="bg-[var(--card)]/50 p-4 rounded-2xl border border-[var(--border)]">
+              <h4 className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-2 flex items-center gap-2">
                 <FiZap className="text-emerald-400" /> Contact Info
               </h4>
+
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-[var(--muted)]">Email</span>
@@ -152,8 +155,9 @@ export default function ReviewAndPaymentStep({
           </div>
 
           {/* PAYMENT OPTIONS */}
-          <div className="bg-[var(--card)] p-6 rounded-2xl border border-[var(--border)] shadow-2xl mt-8">
-            <h3 className="text-lg font-bold mb-5 flex items-center gap-2">
+          <div className="bg-[var(--card)] p-4 rounded-2xl border border-[var(--border)] shadow-2xl mt-5">
+            <h3 className="text-base font-bold mb-4 flex items-center gap-2">
+
               <span className="h-2 w-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
               Select Payment Method
             </h3>
@@ -167,12 +171,14 @@ export default function ReviewAndPaymentStep({
                 }}
                 className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all duration-300 ${paymentMethod === "wallet"
                   ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
-                  : "border-[var(--border)] bg-black/20 hover:border-[var(--accent)]/40 hover:bg-black/30"
+                  : "border-[var(--border)] bg-[var(--foreground)]/[0.03] hover:border-[var(--accent)]/40 hover:bg-[var(--foreground)]/[0.05]"
                   } ${walletBalance < totalPrice ? "opacity-40 cursor-not-allowed" : ""}`}
+
               >
                 <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black' : 'bg-gray-800 text-gray-400'
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.08] text-[var(--muted)]'
                     }`}>
+
                     <FiActivity size={20} />
                   </div>
                   <div>
@@ -180,7 +186,8 @@ export default function ReviewAndPaymentStep({
                     <p className="text-[10px] text-[var(--muted)]">Balance: ₹{walletBalance.toFixed(2)}</p>
                   </div>
                 </div>
-                {paymentMethod === 'wallet' && <div className="h-5 w-5 rounded-full bg-[var(--accent)] flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-black" /></div>}
+                {paymentMethod === 'wallet' && <div className="h-5 w-5 rounded-full bg-[var(--accent)] flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-white" /></div>}
+
               </button>
 
               {walletBalance < totalPrice && (
@@ -195,12 +202,14 @@ export default function ReviewAndPaymentStep({
                 onClick={handleUPI}
                 className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all duration-300 ${paymentMethod === "upi"
                   ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
-                  : "border-[var(--border)] bg-black/20 hover:border-[var(--accent)]/40 hover:bg-black/30"
+                  : "border-[var(--border)] bg-[var(--foreground)]/[0.03] hover:border-[var(--accent)]/40 hover:bg-[var(--foreground)]/[0.05]"
                   }`}
+
               >
                 <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black' : 'bg-gray-800 text-gray-400'
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.08] text-[var(--muted)]'
                     }`}>
+
                     <FiCreditCard size={20} />
                   </div>
                   <div>
@@ -208,19 +217,26 @@ export default function ReviewAndPaymentStep({
                     <p className="text-[10px] text-[var(--muted)]">GPay, PhonePe, Paytm and more</p>
                   </div>
                 </div>
-                {paymentMethod === 'upi' && <div className="h-5 w-5 rounded-full bg-[var(--accent)] flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-black" /></div>}
+                {paymentMethod === 'upi' && <div className="h-5 w-5 rounded-full bg-[var(--accent)] flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-white" /></div>}
+
               </button>
             </div>
           </div>
 
           {/* PRICE SUMMARY & ACTIONS */}
-          <div className="bg-gradient-to-br from-[var(--card)] to-black/60 p-6 rounded-2xl border border-[var(--border)] shadow-2xl mt-6">
-            <div className="space-y-3 mb-6">
+          <div className="bg-[var(--foreground)]/[0.02] p-5 rounded-2xl border border-[var(--border)] shadow-xl mt-4 relative overflow-hidden">
+
+            {/* SUBTLE AMBIENCE */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 blur-3xl -mr-16 -mt-16 pointer-events-none" />
+
+            <div className="space-y-2 mb-4">
+
               <div className="flex justify-between text-sm text-[var(--muted)]">
                 <span>Price</span>
                 <span>₹{price}</span>
               </div>
-              <div className="flex justify-between text-sm text-emerald-400">
+              <div className="flex justify-between text-sm text-emerald-500 font-bold">
+
                 <span>Discount</span>
                 <span>-₹{discount}</span>
               </div>
@@ -257,7 +273,8 @@ export default function ReviewAndPaymentStep({
             {upiQR ? (
               <Image src={upiQR} alt="UPI QR" fill className="p-4" />
             ) : (
-              <div className="h-full flex items-center justify-center animate-pulse text-gray-300 text-xs">Creating QR...</div>
+              <div className="h-full flex items-center justify-center animate-pulse text-[var(--muted)] text-xs">Creating QR...</div>
+
             )}
           </div>
 

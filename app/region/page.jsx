@@ -54,22 +54,26 @@ export default function RegionPage() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-4 bg-[var(--background)] text-[var(--foreground)] relative overflow-hidden">
+    <div className="min-h-screen pt-12 pb-12 px-4 md:px-8 bg-[var(--background)] text-[var(--foreground)] relative overflow-hidden">
+
       {/* BACKGROUND DECORATION */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
 
-      <div className="max-w-2xl mx-auto relative z-10">
+      <div className="max-w-2xl relative z-10">
+
 
         {/* HEADER SECTION */}
-        <div className="text-center mb-10">
+        <div className="text-left mb-8">
+
           <motion.h1
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl font-bold tracking-tight mb-2 flex items-center justify-center gap-2"
+            className="text-3xl font-bold tracking-tight mb-2 flex items-center justify-start gap-2"
           >
             Check Region
             <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
           </motion.h1>
+
 
           <motion.p
             initial={{ opacity: 0 }}
@@ -95,8 +99,9 @@ export default function RegionPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-ping" />
-                <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Input Sector</span>
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Player Details</span>
               </div>
+
               <HelpImagePopup />
             </div>
 
@@ -131,8 +136,9 @@ export default function RegionPage() {
               ) : (
                 <>
                   <FiSearch size={18} />
-                  <span>Execute Scan</span>
+                  <span>Verify Now</span>
                 </>
+
               )}
             </button>
           </div>
@@ -158,15 +164,18 @@ export default function RegionPage() {
                   </div>
                   <div className="flex-1">
                     <div className="text-[10px] font-black text-green-500 uppercase tracking-widest mb-1 flex items-center gap-1">
-                      <FiZap size={10} /> Sync Successful
+                      <FiZap size={10} /> Verified
                     </div>
-                    <h3 className="text-2xl font-black italic tracking-tighter text-white">
+
+                    <h3 className="text-2xl font-black italic tracking-tighter text-[var(--foreground)]">
                       {result.data?.username}
                     </h3>
+
                     <div className="mt-2 flex items-center gap-3">
                       <div className="flex items-center gap-1.5 px-3 py-1 bg-black/40 border border-white/5 rounded-full">
                         <FiGlobe size={12} className="text-[var(--muted)]" />
-                        <span className="text-xs font-bold text-white uppercase">{result.data?.region}</span>
+                        <span className="text-xs font-bold text-[var(--foreground)] uppercase">{result.data?.region}</span>
+
                       </div>
                     </div>
                   </div>
@@ -177,10 +186,11 @@ export default function RegionPage() {
                     <FiAlertCircle size={32} />
                   </div>
                   <div>
-                    <div className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1">Error Detected</div>
-                    <h3 className="text-xl font-bold tracking-tight text-white uppercase italic">Target Not Found</h3>
-                    <p className="text-xs text-[var(--muted)] mt-1">Operational parameters returned zero matches in sector.</p>
+                    <div className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1">Error</div>
+                    <h3 className="text-xl font-bold tracking-tight text-[var(--foreground)] uppercase italic">Not Found</h3>
+                    <p className="text-xs text-[var(--muted)] mt-1">We couldn't find this player. Please check the ID and Zone.</p>
                   </div>
+
                 </div>
               )}
             </motion.div>
@@ -219,9 +229,10 @@ function HUDInput({ icon: Icon, label, placeholder, value, onChange }) {
         <Icon className="text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors" size={14} />
         <span className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">{label}</span>
       </div>
-      <div className="relative overflow-hidden rounded-2xl border border-[var(--border)]/30 bg-black/20 focus-within:border-[var(--accent)]/50 focus-within:bg-black/40 transition-all duration-300">
+      <div className="relative overflow-hidden rounded-2xl border border-[var(--border)]/30 bg-[var(--foreground)]/[0.03] focus-within:border-[var(--accent)]/50 focus-within:bg-[var(--foreground)]/[0.05] transition-all duration-300">
         <input
-          className="w-full h-14 px-5 bg-transparent text-white placeholder:text-white/10 outline-none font-bold tracking-tight"
+          className="w-full h-14 px-5 bg-transparent text-[var(--foreground)] placeholder:text-[var(--muted)]/30 outline-none font-bold tracking-tight"
+
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}

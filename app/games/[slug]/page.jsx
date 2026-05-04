@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import dynamic from "next/dynamic";
 import logo from "@/public/logo.png";
+import Skeleton from "@/components/Skeleton";
 
-const Loader = dynamic(() => import("@/components/Loader/Loader"), { ssr: false });
 const MLBBPurchaseGuide = dynamic(() => import("../../../components/HelpImage/MLBBPurchaseGuide"), { ssr: false });
 const ItemGrid = dynamic(() => import("@/components/GameDetail/ItemGrid"), { ssr: false });
 const BuyPanel = dynamic(() => import("@/components/GameDetail/BuyPanel"), { ssr: false });
@@ -57,10 +57,46 @@ export default function GameDetailPage() {
       });
   }, [slug]);
 
-  /* ================= LOADING ================= */
   if (!game || !activeItem) {
-    return <Loader />;
+    return (
+      <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6">
+        {/* Modern Game Switcher Skeleton */}
+        <div className="max-w-6xl mx-auto mb-6 px-2 overflow-hidden">
+          <div className="flex items-center gap-2 mb-3 px-1">
+            <div className="w-1 h-3 bg-[var(--muted)] opacity-20 rounded-full" />
+            <Skeleton width={100} height={12} className="rounded-sm" />
+          </div>
+          <div className="flex gap-2 py-2 overflow-x-auto no-scrollbar">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <Skeleton key={i} width={68} height={85} className="shrink-0 rounded-xl" />
+            ))}
+          </div>
+        </div>
+
+        {/* Header Skeleton */}
+        <div className="max-w-6xl mx-auto mb-8 flex items-center gap-4">
+          <Skeleton width={56} height={56} className="rounded-lg shrink-0" />
+          <div className="space-y-2">
+            <Skeleton width={180} height={28} className="rounded-md" />
+            <Skeleton width={100} height={14} className="rounded-md" />
+          </div>
+        </div>
+
+        {/* Item Grid Skeleton */}
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            <Skeleton key={i} height={100} className="rounded-2xl" />
+          ))}
+        </div>
+
+        {/* Footer/Panel Placeholder */}
+        <div className="max-w-6xl mx-auto mt-10">
+          <Skeleton height={140} className="w-full rounded-[2rem]" />
+        </div>
+      </section>
+    );
   }
+
 
   const isBGMI =
     game?.gameName?.toLowerCase() === "pubg mobile" || game?.gameName?.toLowerCase() === "bgmi";
@@ -90,8 +126,15 @@ export default function GameDetailPage() {
 
       {/* ================= MODERN GAME SWITCHER ================= */}
       <div className="max-w-6xl mx-auto mb-6 overflow-hidden px-2">
+        <div className="flex items-center gap-2 mb-3 px-1">
+          <div className="w-1 h-3 bg-red-600 rounded-full shadow-[0_0_8px_rgba(220,38,38,0.5)]" />
+          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] italic">
+            Quick Game Switch
+          </h2>
+        </div>
+
         <div className="flex items-center gap-1 overflow-x-auto py-2 no-scrollbar scroll-smooth">
-          {allGames.map((g) => {
+          {allGames.map((g, index) => {
             const isActive = g.gameSlug === slug;
             return (
               <button
@@ -100,8 +143,8 @@ export default function GameDetailPage() {
                 className={`
                   relative flex-shrink-0 flex flex-col items-center gap-1.5 px-1 py-2 rounded-xl transition-all duration-500 min-w-[68px]
                   ${isActive
-                    ? "bg-white/[0.03] opacity-100"
-                    : "hover:bg-white/[0.02] opacity-40 hover:opacity-80"}
+                    ? "bg-[var(--foreground)]/[0.05] opacity-100"
+                    : "hover:bg-[var(--foreground)]/[0.03] opacity-40 hover:opacity-80"}
                 `}
               >
                 {/* THUMBNAIL */}
@@ -113,19 +156,24 @@ export default function GameDetailPage() {
                     src={g.gameImageId?.image || logo}
                     alt={g.gameName}
                     fill
+                    sizes="44px"
                     className="object-cover"
+                    priority={index < 8}
                   />
                 </div>
 
                 {/* LABEL */}
                 <div className="flex flex-col items-center text-center w-full px-1">
-                  <span className={`
-                    text-[8px] font-black italic uppercase tracking-wider transition-colors duration-300 leading-tight
-                    ${isActive ? "text-red-500" : "text-[var(--muted)]"}
-                  `}>
-                    {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
-                  </span>
-                  <div className="h-[2px] w-full mt-1.5 relative">
+                  <div className="h-5 flex items-center justify-center mb-1">
+                    <span className={`
+                      text-[7px] font-black italic uppercase tracking-wider transition-colors duration-300 leading-[1]
+                      ${isActive ? "text-red-500" : "text-[var(--muted)]"}
+                      line-clamp-2 max-w-[64px] whitespace-normal
+                    `}>
+                      {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
+                    </span>
+                  </div>
+                  <div className="h-[2px] w-full relative">
                     {isActive && (
                       <motion.div
                         layoutId="activeTabRedLine"
@@ -165,6 +213,7 @@ export default function GameDetailPage() {
       {/* ================= ITEM GRID ================= */}
       <ItemGrid
         items={game.allItems}
+        gameLogo={game?.gameImageId?.image || logo}
         activeItem={activeItem}
         setActiveItem={setActiveItem}
         buyPanelRef={buyPanelRef}

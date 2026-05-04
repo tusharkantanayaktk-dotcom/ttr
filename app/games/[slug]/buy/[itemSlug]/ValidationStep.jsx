@@ -25,31 +25,35 @@ export default function ValidationStep({
       <div className="space-y-4">
         {/* PLAYER ID INPUT */}
         <div className="relative group">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[var(--accent)] transition-colors">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors">
             <FiUser size={18} />
           </div>
+
           <input
             value={playerId}
             onChange={(e) => setPlayerId(e.target.value)}
             placeholder={placeholder}
-            className="p-3 pl-12 rounded-lg bg-white dark:bg-black/20 border border-gray-200 dark:border-gray-700 w-full focus:border-[var(--accent)] transition-all outline-none placeholder:text-gray-400 dark:placeholder:text-white/40"
+            className="p-3 pl-12 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]/40 w-full text-[var(--foreground)] focus:border-[var(--accent)]/50 transition-all outline-none placeholder:text-[var(--muted)]/40"
             disabled={loading}
           />
+
         </div>
 
         {/* ZONE ID INPUT (OPTIONAL) */}
         {showZoneId && (
           <div className="relative group">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--accent)] transition-colors">
-              <FiHash size={18} />
-            </div>
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors">
+            <FiHash size={18} />
+          </div>
+
             <input
               value={zoneId}
               onChange={(e) => setZoneId(e.target.value)}
               placeholder="Enter zone ID"
-              className="p-3 pl-12 rounded-lg bg-white dark:bg-black/20 border border-gray-200 dark:border-gray-700 w-full focus:border-[var(--accent)] transition-all outline-none placeholder:text-gray-400 dark:placeholder:text-white/40"
+              className="p-3 pl-12 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]/40 w-full text-[var(--foreground)] focus:border-[var(--accent)]/50 transition-all outline-none placeholder:text-[var(--muted)]/40"
               disabled={loading}
             />
+
           </div>
         )}
 

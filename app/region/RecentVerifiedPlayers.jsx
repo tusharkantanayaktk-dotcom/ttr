@@ -35,13 +35,15 @@ export default function RecentVerifiedPlayers({
             className="group w-full flex items-center justify-between p-4 rounded-2xl bg-[var(--card)]/30 border border-[var(--border)]/30 hover:border-[var(--accent)]/50 hover:bg-[var(--card)]/60 transition-all duration-300 backdrop-blur-sm relative overflow-hidden"
           >
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-black/40 border border-white/5 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-[var(--foreground)]/[0.05] border border-[var(--border)]/20 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">
+
                 <FiUser size={18} />
               </div>
               <div className="text-left">
-                <p className="font-black text-sm tracking-tight text-white group-hover:text-[var(--accent)] transition-colors uppercase italic leading-none mb-1">
+                <p className="font-black text-sm tracking-tight text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors uppercase italic leading-none mb-1">
                   {p.username}
                 </p>
+
                 <div className="flex items-center gap-2 text-[10px] font-bold text-[var(--muted)] uppercase tracking-tighter">
                   <span>ID: {p.playerId}</span>
                   <span className="opacity-30">/</span>
@@ -51,10 +53,11 @@ export default function RecentVerifiedPlayers({
             </div>
 
             <div className="flex items-center gap-4 relative z-10">
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 border border-white/5">
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--foreground)]/[0.05] border border-[var(--border)]/20">
                 <FiGlobe size={11} className="text-[var(--muted)]" />
-                <span className="text-[10px] font-black text-white uppercase tracking-tighter">{p.region}</span>
+                <span className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-tighter">{p.region}</span>
               </div>
+
               <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" size={16} />
             </div>
 

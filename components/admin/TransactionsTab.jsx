@@ -21,6 +21,8 @@ import {
   Calendar,
   Smartphone
 } from "lucide-react";
+import Skeleton from "../Skeleton";
+
 
 export default function TransactionsTab() {
   const [transactions, setTransactions] = useState([]);
@@ -146,16 +148,13 @@ export default function TransactionsTab() {
       {/* ================= CONTENT ================= */}
       <AnimatePresence mode="wait">
         {loading ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="py-32 flex flex-col items-center justify-center space-y-4"
-          >
-            <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
-            <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase tracking-[0.2em]">Loading Transactions...</p>
-          </motion.div>
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Skeleton key={i} height={64} className="w-full rounded-[1.5rem]" />
+            ))}
+          </div>
         ) : (
+
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

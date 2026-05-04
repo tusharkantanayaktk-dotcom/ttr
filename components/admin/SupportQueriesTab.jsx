@@ -18,6 +18,8 @@ import {
   Filter,
   Inbox
 } from "lucide-react";
+import Skeleton from "../Skeleton";
+
 
 export default function SupportQueriesTab() {
   const [queries, setQueries] = useState([]);
@@ -166,16 +168,13 @@ export default function SupportQueriesTab() {
       <div className="relative">
         <AnimatePresence mode="wait">
           {loading ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="py-20 flex flex-col items-center justify-center space-y-3"
-            >
-              <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
-              <p className="text-xs font-bold text-[var(--muted)]/40 uppercase tracking-widest">Loading...</p>
-            </motion.div>
+            <div className="space-y-3">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Skeleton key={i} height={80} className="w-full rounded-2xl" />
+              ))}
+            </div>
           ) : (
+
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}

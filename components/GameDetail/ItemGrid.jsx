@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
+import Image from "next/image";
 
 export default function ItemGrid({
   items,
+  gameLogo,
   activeItem,
   setActiveItem,
   buyPanelRef,
@@ -17,7 +19,7 @@ export default function ItemGrid({
         hidden: { opacity: 0 },
         visible: {
           opacity: 1,
-          transition: { staggerChildren: 0.05 }
+          transition: { staggerChildren: 0.02 }
         }
       }}
       className="max-w-6xl mx-auto mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
@@ -47,7 +49,7 @@ export default function ItemGrid({
             className={`
               relative overflow-hidden group
               rounded-2xl border transition-all duration-500
-              flex flex-col justify-between min-h-[82px] p-3 cursor-pointer
+              flex items-center gap-3 min-h-[82px] p-3 cursor-pointer
               ${isSelected
                 ? "border-[var(--accent)] bg-[var(--accent)]/[0.08] shadow-lg shadow-[var(--accent)]/5"
                 : "border-[var(--border)] bg-white/[0.02] hover:border-[var(--accent)]/30 hover:bg-white/[0.04]"
@@ -65,10 +67,25 @@ export default function ItemGrid({
               </motion.div>
             )}
 
+            {/* Game Icon */}
+            <div className={`
+              relative w-10 h-10 rounded-xl overflow-hidden shrink-0 transition-all duration-500
+              ${isSelected ? "ring-1 ring-[var(--accent)]/50 scale-105" : "grayscale opacity-50 group-hover:opacity-80 group-hover:grayscale-0"}
+            `}>
+              <Image
+                src={gameLogo}
+                alt="game"
+                fill
+                sizes="40px"
+                className="object-cover"
+                loading="lazy"
+              />
+            </div>
+
             {/* Header: Name & Price */}
-            <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="relative z-10 flex flex-col flex-1 h-full justify-between overflow-hidden">
               <div className="flex flex-col">
-                <p className={`font-black text-[11px] uppercase tracking-tight transition-colors duration-300 ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
+                <p className={`font-black text-[11px] uppercase tracking-tight transition-colors duration-300 truncate ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
                   {item.itemName}
                 </p>
                 {discount > 0 && (
@@ -78,9 +95,9 @@ export default function ItemGrid({
                 )}
               </div>
 
-              <div className="mt-2 flex items-baseline gap-1">
+              <div className="mt-1 flex items-baseline gap-1">
                 <span className={`text-[9px] font-bold ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--muted)]'} opacity-50`}>₹</span>
-                <p className={`text-lg font-black tracking-tighter transition-all duration-300 ${isSelected ? 'text-[var(--foreground)] scale-105 origin-left' : 'text-[var(--muted)]'}`}>
+                <p className={`text-base font-black tracking-tighter transition-all duration-300 ${isSelected ? 'text-[var(--foreground)] scale-105 origin-left' : 'text-[var(--muted)]'}`}>
                   {item.sellingPrice}
                 </p>
               </div>

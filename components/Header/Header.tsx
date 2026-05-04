@@ -7,6 +7,8 @@ import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX } from "react-icons/fi";
 import Image from "next/image";
 import logo from "@/public/logo.png";
+import Skeleton from "../Skeleton";
+
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -201,34 +203,37 @@ export default function Header() {
 
           {/* USER PROFILE / LOGIN */}
           <div className="relative">
-            <motion.button
-              onClick={() => {
-                if (!loading) {
+            {loading ? (
+              <Skeleton variant="circle" className="w-7 h-7 border-none" />
+            ) : (
+              <motion.button
+                onClick={() => {
                   setUserMenuOpen(!userMenuOpen);
-                }
-              }}
-              className={`
-                flex items-center justify-center w-7 h-7 rounded-full transition-all duration-300
-                ${userMenuOpen ? 'bg-[var(--accent)] ring-2 ring-[var(--accent)]/50' : 'hover:bg-[var(--card)]/50 border border-transparent hover:border-[var(--border)]'}
-              `}
-              whileHover={{ y: -1 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <div className="w-full h-full rounded-full bg-[var(--accent)] flex items-center justify-center overflow-hidden shadow-sm">
-                {!loading && user?.avatar && !avatarError ? (
-                  <img
-                    src={user.avatar}
-                    alt="User Avatar"
-                    className="object-cover w-full h-full"
-                    onError={() => setAvatarError(true)}
-                  />
-                ) : (
-                  <span className="text-white text-[10px] font-black uppercase">
-                    {(user?.name || user?.username || user?.email || "U")[0]}
-                  </span>
-                )}
-              </div>
-            </motion.button>
+                }}
+                className={`
+                  flex items-center justify-center w-7 h-7 rounded-full transition-all duration-300
+                  ${userMenuOpen ? 'bg-[var(--accent)] ring-2 ring-[var(--accent)]/50' : 'hover:bg-[var(--card)]/50 border border-transparent hover:border-[var(--border)]'}
+                `}
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <div className="w-full h-full rounded-full bg-[var(--accent)] flex items-center justify-center overflow-hidden shadow-sm">
+                  {user?.avatar && !avatarError ? (
+                    <img
+                      src={user.avatar}
+                      alt="User Avatar"
+                      className="object-cover w-full h-full"
+                      onError={() => setAvatarError(true)}
+                    />
+                  ) : (
+                    <span className="text-white text-[10px] font-black uppercase">
+                      {(user?.name || user?.username || user?.email || "U")[0]}
+                    </span>
+                  )}
+                </div>
+              </motion.button>
+            )}
+
 
             {/* USER SLIDER (SIDEBAR) */}
             <AnimatePresence>

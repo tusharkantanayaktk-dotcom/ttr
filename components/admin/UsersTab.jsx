@@ -27,6 +27,8 @@ import {
   UserPlus,
   UserCheck
 } from "lucide-react";
+import Skeleton from "../Skeleton";
+
 
 export default function UsersTab() {
   const [users, setUsers] = useState([]);
@@ -714,8 +716,8 @@ function StatsOverview({ stats, loading }) {
   if (loading) {
     return (
       <div className="space-y-3">
-        <div className="h-14 w-full rounded-2xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] animate-pulse" />
-        <div className="h-14 w-full rounded-2xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] animate-pulse" />
+        <Skeleton height={56} className="w-full" />
+        <Skeleton height={56} className="w-full" />
       </div>
     );
   }
