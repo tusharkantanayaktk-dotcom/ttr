@@ -32,23 +32,22 @@ export default function RecentVerifiedPlayers({
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.05 }}
             onClick={() => onSelect(p)}
-            className="group w-full flex items-center justify-between p-4 rounded-2xl bg-[var(--card)]/30 border border-[var(--border)]/30 hover:border-[var(--accent)]/50 hover:bg-[var(--card)]/60 transition-all duration-300 backdrop-blur-sm relative overflow-hidden"
+            className="group w-full flex items-center justify-between p-3 rounded-xl bg-[var(--card)]/20 border border-[var(--border)]/20 hover:border-[var(--accent)]/50 hover:bg-[var(--card)]/40 transition-all duration-300 relative overflow-hidden"
           >
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-[var(--foreground)]/[0.05] border border-[var(--border)]/20 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">
-
-                <FiUser size={18} />
+            <div className="flex items-center gap-3 relative z-10">
+              <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
+                <FiUser size={14} />
               </div>
               <div className="text-left">
-                <p className="font-black text-sm tracking-tight text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors uppercase italic leading-none mb-1">
+                <p className="font-black text-xs tracking-tight text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors uppercase italic leading-none mb-0.5">
                   {p.username}
                 </p>
 
-                <div className="flex items-center gap-2 text-[10px] font-bold text-[var(--muted)] uppercase tracking-tighter">
+                <div className="flex items-center gap-1.5 text-[9px] font-bold text-[var(--foreground)]/50 uppercase tracking-tighter">
                   <span>{p.playerId}</span>
                   {p.zoneId && p.zoneId !== "NA" && (
                     <>
-                      <span className="opacity-30">/</span>
+                      <span className="opacity-20">/</span>
                       <span>{p.zoneId}</span>
                     </>
                   )}
@@ -56,17 +55,17 @@ export default function RecentVerifiedPlayers({
               </div>
             </div>
 
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--foreground)]/[0.05] border border-[var(--border)]/20">
-                <FiGlobe size={11} className="text-[var(--muted)]" />
-                <span className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-tighter">{p.region}</span>
+            <div className="flex items-center gap-3 relative z-10">
+              <div className="hidden sm:flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--foreground)]/[0.05] border border-[var(--border)]/10">
+                <FiGlobe size={10} className="text-[var(--accent)]" />
+                <span className="text-[9px] font-black text-[var(--foreground)]/70 uppercase tracking-tighter">{p.region}</span>
               </div>
 
-              <FiChevronRight className="text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" size={16} />
+              <FiChevronRight className="text-[var(--foreground)]/20 group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" size={14} />
             </div>
 
             {/* HOVER GLOW */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--accent)]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--accent)]/3 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
           </motion.button>
         ))}
       </div>

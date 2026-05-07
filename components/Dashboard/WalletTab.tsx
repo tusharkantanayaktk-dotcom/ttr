@@ -108,7 +108,7 @@ export default function WalletTab({
   };
 
   return (
-    <div className="space-y-5 pb-6">
+    <div className="space-y-4 pb-6">
       {/* ================= HEADER ================= */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -129,7 +129,7 @@ export default function WalletTab({
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
 
         {/* LEFT: ADD MONEY */}
         <div className="lg:col-span-7 space-y-6">
@@ -138,7 +138,7 @@ export default function WalletTab({
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative p-5 sm:p-7 rounded-[2rem] bg-[var(--card)] border border-[var(--border)] shadow-xl overflow-hidden group"
+            className="relative p-5 sm:p-6 rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)] shadow-xl overflow-hidden group"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent)] opacity-[0.03] blur-[100px] rounded-full" />
             
@@ -148,9 +148,9 @@ export default function WalletTab({
                   <FiTrendingUp className="text-[var(--accent)]" />
                   Available Balance
                 </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-[var(--accent)]">₹</span>
-                  <span className="text-4xl sm:text-5xl font-black tracking-tight text-[var(--foreground)] drop-shadow-sm">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-xl font-bold text-[var(--accent)]">₹</span>
+                  <span className="text-3xl sm:text-4xl font-black tracking-tight text-[var(--foreground)] drop-shadow-sm">
                     {walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
@@ -163,8 +163,8 @@ export default function WalletTab({
               </div>
 
               <div className="shrink-0">
-                <div className="h-16 w-16 rounded-2xl bg-[var(--accent)] flex items-center justify-center shadow-[0_10px_30px_-5px_var(--accent)]/30 group-hover:scale-105 transition-transform duration-500">
-                  <FaWallet className="text-2xl text-black" />
+                <div className="h-12 w-12 rounded-xl bg-[var(--accent)] flex items-center justify-center shadow-[0_10px_30px_-5px_var(--accent)]/30 group-hover:scale-105 transition-transform duration-500">
+                  <FaWallet className="text-xl text-black" />
                 </div>
                 <div className="mt-4 flex -space-x-3 opacity-20 justify-end">
                   <div className="h-7 w-7 rounded-full bg-[var(--accent)]" />
@@ -178,27 +178,27 @@ export default function WalletTab({
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)]/50 p-6 sm:p-8 shadow-sm relative overflow-hidden"
+            className="rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)]/50 p-5 sm:p-6 shadow-sm relative overflow-hidden"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-8 w-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
-                <FiPlus size={16} />
+            <div className="flex items-center gap-2 mb-4">
+              <div className="h-7 w-7 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
+                <FiPlus size={14} />
               </div>
-              <h3 className="text-sm font-black uppercase tracking-widest">Recharge Wallet</h3>
+              <h3 className="text-xs font-black uppercase tracking-widest">Recharge</h3>
             </div>
 
             <div className="space-y-6">
               <div className="space-y-3">
                 <div className="relative group/input">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl font-bold text-[var(--muted)] group-focus-within/input:text-[var(--accent)] transition-colors">₹</div>
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-bold text-[var(--muted)] group-focus-within/input:text-[var(--accent)] transition-colors">₹</div>
                   <input
                     type="number"
                     value={amount}
-                    placeholder="Enter Amount"
+                    placeholder="0.00"
                     onChange={(e) => { setAmount(e.target.value); setAmountError(""); }}
-                    className="w-full pl-12 pr-6 py-5 rounded-2xl border border-[var(--border)] bg-[var(--background)] 
+                    className="w-full pl-10 pr-5 py-4 rounded-xl border border-[var(--border)] bg-[var(--background)] 
                                    focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all 
-                                   text-2xl font-black placeholder:opacity-20 placeholder:font-bold"
+                                   text-xl font-black placeholder:opacity-20 placeholder:font-bold"
                   />
                 </div>
                 {amountError && <p className="text-red-500 text-[9px] font-black uppercase pl-2">{amountError}</p>}
@@ -208,7 +208,7 @@ export default function WalletTab({
                     <button
                       key={val}
                       onClick={() => setAmount(val.toString())}
-                      className="py-3 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[9px] font-black uppercase tracking-tight
+                      className="py-2.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[8px] font-black uppercase tracking-tight
                                  hover:bg-[var(--accent)] hover:text-black transition-all active:scale-95"
                     >
                       +₹{val}
@@ -252,7 +252,7 @@ export default function WalletTab({
               <button
                 onClick={handleProceed}
                 disabled={loading || !method}
-                className="w-full py-5 rounded-2xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] text-[10px]
+                className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] text-[10px]
                            flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/30
                            hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-40"
               >
@@ -284,11 +284,11 @@ export default function WalletTab({
                         key={tx._id}
                         initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 hover:bg-[var(--card)] transition-all flex justify-between items-center group shadow-sm"
+                        className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/40 hover:bg-[var(--card)] transition-all flex justify-between items-center group shadow-sm"
                     >
                         <div className="flex gap-3 items-center min-w-0">
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${tx.type.includes("add") || tx.type === "deposit" ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"}`}>
-                            {tx.type.includes("add") || tx.type === "deposit" ? <FiPlus /> : <FiMinus />}
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${tx.type.includes("add") || tx.type === "deposit" ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"}`}>
+                            {tx.type.includes("add") || tx.type === "deposit" ? <FiPlus size={12} /> : <FiMinus size={12} />}
                         </div>
                         <div className="min-w-0">
                             <p className="font-bold text-[11px] uppercase tracking-tight text-[var(--foreground)] truncate leading-none mb-1">

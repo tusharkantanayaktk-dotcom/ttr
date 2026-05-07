@@ -57,43 +57,39 @@ export default function RegionPage() {
     <div className="min-h-screen pt-12 pb-12 px-4 md:px-8 bg-[var(--background)] text-[var(--foreground)] relative overflow-hidden">
 
       {/* BACKGROUND DECORATION */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.02] pointer-events-none" />
 
       <div className="max-w-2xl relative z-10">
 
 
         {/* HEADER SECTION */}
-        <div className="text-left mb-8">
-
+        <div className="text-left mb-6">
           <motion.h1
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl font-bold tracking-tight mb-2 flex items-center justify-start gap-2"
+            className="text-2xl font-bold tracking-tight mb-1 flex items-center justify-start gap-2"
           >
-            Check Region
+            Region Check
             <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
           </motion.h1>
-
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-[var(--muted)] text-sm"
+            className="text-[var(--muted)] text-xs opacity-70"
           >
-            Enter your details to verify your region
+            Enter details to verify your account region
           </motion.p>
         </div>
 
-        {/* MAIN HUD INTERFACE */}
+        {/* MAIN HUD INTERFACE (CARD-LESS) */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3 }}
-          className="relative p-6 sm:p-8 rounded-3xl border border-[var(--border)]/40 bg-[var(--card)]/40 backdrop-blur-xl overflow-hidden shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)]"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="relative py-2 overflow-hidden"
         >
-          {/* SCANLINE EFFECT */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.05)_50%)] z-0 bg-[length:100%_4px] pointer-events-none opacity-20" />
 
           <div className="relative z-10 space-y-6">
             <div className="flex items-center justify-between">
@@ -125,27 +121,22 @@ export default function RegionPage() {
             <button
               onClick={handleCheck}
               disabled={loading || !id || !zone}
-              className="group relative w-full h-14 rounded-2xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-black font-black uppercase tracking-widest transition-all duration-300 disabled:opacity-30 flex items-center justify-center gap-3 overflow-hidden shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)]"
+              className="group relative w-full h-12 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-black font-black uppercase tracking-widest transition-all duration-300 disabled:opacity-30 flex items-center justify-center gap-2 overflow-hidden"
             >
-              <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+              <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                  <span>Scanning...</span>
+                  <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  <span className="text-xs">Checking...</span>
                 </>
               ) : (
                 <>
-                  <FiSearch size={18} />
-                  <span>Verify Now</span>
+                  <FiSearch size={16} />
+                  <span className="text-xs">Verify</span>
                 </>
-
               )}
             </button>
           </div>
-
-          {/* DECORATIVE CORNER BRACKETS */}
-          <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-[var(--border)]/20" />
-          <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-[var(--border)]/20" />
         </motion.div>
 
         {/* SCAN RESULT */}
@@ -158,16 +149,16 @@ export default function RegionPage() {
               className="mt-6"
             >
               {result?.success === 200 ? (
-                <div className="p-6 rounded-3xl border border-green-500/20 bg-green-500/5 backdrop-blur-md flex items-center gap-6">
-                  <div className="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center text-green-500 shadow-[0_0_20px_rgba(34,197,94,0.2)]">
-                    <FiCheckCircle size={32} />
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-green-500">
+                    <FiCheckCircle size={24} />
                   </div>
-                  <div className="flex-1">
+                  <div>
                     <div className="text-[10px] font-black text-green-500 uppercase tracking-widest mb-1 flex items-center gap-1">
                       <FiZap size={10} /> Verified
                     </div>
 
-                    <h3 className="text-2xl font-black italic tracking-tighter text-[var(--foreground)]">
+                    <h3 className="text-xl font-black italic tracking-tighter text-[var(--foreground)]">
                       {result.data?.username}
                     </h3>
 
@@ -181,16 +172,15 @@ export default function RegionPage() {
                   </div>
                 </div>
               ) : (
-                <div className="p-6 rounded-3xl border border-red-500/20 bg-red-500/5 backdrop-blur-md flex items-center gap-6">
-                  <div className="w-16 h-16 rounded-2xl bg-red-500/20 flex items-center justify-center text-red-500">
-                    <FiAlertCircle size={32} />
+                <div className="p-4 rounded-2xl border border-red-500/20 bg-red-500/5 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-500">
+                    <FiAlertCircle size={24} />
                   </div>
                   <div>
-                    <div className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1">Error</div>
-                    <h3 className="text-xl font-bold tracking-tight text-[var(--foreground)] uppercase italic">Not Found</h3>
-                    <p className="text-xs text-[var(--muted)] mt-1">We couldn't find this player. Please check the ID and Zone.</p>
+                    <div className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-0.5">Error</div>
+                    <h3 className="text-lg font-bold tracking-tight text-[var(--foreground)] uppercase italic leading-none">Not Found</h3>
+                    <p className="text-[10px] text-[var(--muted)] mt-1">Player not found. Check details.</p>
                   </div>
-
                 </div>
               )}
             </motion.div>
@@ -229,9 +219,9 @@ function HUDInput({ icon: Icon, label, placeholder, value, onChange }) {
         <Icon className="text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors" size={14} />
         <span className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">{label}</span>
       </div>
-      <div className="relative overflow-hidden rounded-2xl border border-[var(--border)]/30 bg-[var(--foreground)]/[0.03] focus-within:border-[var(--accent)]/50 focus-within:bg-[var(--foreground)]/[0.05] transition-all duration-300">
+      <div className="relative overflow-hidden rounded-xl border border-[var(--border)]/30 bg-[var(--foreground)]/[0.03] focus-within:border-[var(--accent)]/50 focus-within:bg-[var(--foreground)]/[0.05] transition-all duration-300">
         <input
-          className="w-full h-14 px-5 bg-transparent text-[var(--foreground)] placeholder:text-[var(--muted)]/30 outline-none font-bold tracking-tight"
+          className="w-full h-12 px-4 bg-transparent text-[var(--foreground)] placeholder:text-[var(--muted)]/30 outline-none font-bold text-sm tracking-tight"
 
           placeholder={placeholder}
           value={value}

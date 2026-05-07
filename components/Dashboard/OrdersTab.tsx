@@ -69,7 +69,7 @@ export default function OrdersTab() {
   };
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-4 pb-6">
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -77,11 +77,11 @@ export default function OrdersTab() {
       >
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--foreground)]">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--foreground)]">
               My <span className="text-[var(--accent)]">Orders</span>
             </h2>
-            <p className="text-xs sm:text-sm text-[var(--muted)] max-w-xl">
-              Track your recent transactions and order status.
+            <p className="text-[10px] sm:text-xs text-[var(--muted)] max-w-xl">
+              Track your recent transactions and status.
             </p>
           </div>
           <div className="flex gap-2">
@@ -104,9 +104,9 @@ export default function OrdersTab() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search orders..."
-            className="w-full pl-11 pr-4 py-4 rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 backdrop-blur-md
+            className="w-full pl-11 pr-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--card)]/50 backdrop-blur-md
                            focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all 
-                           text-sm font-medium placeholder:text-[var(--muted)]/50 tracking-tight"
+                           text-xs font-medium placeholder:text-[var(--muted)]/50 tracking-tight"
           />
           {search && (
             <button
@@ -142,9 +142,9 @@ export default function OrdersTab() {
             variants={{
               visible: { transition: { staggerChildren: 0.05 } }
             }}
-            className="space-y-5"
+            className="space-y-4"
           >
-            <div className="space-y-4">
+            <div className="space-y-3">
               {orders.map((order, idx) => (
                 <motion.div
                   key={order.orderId}
@@ -168,9 +168,9 @@ export default function OrdersTab() {
                 <button
                   disabled={page === 1}
                   onClick={() => setPage((p) => p - 1)}
-                  className="p-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)] hover:text-white disabled:opacity-20 transition-all shadow-sm"
+                  className="p-2 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)] hover:text-white disabled:opacity-20 transition-all shadow-sm"
                 >
-                  <FiChevronLeft size={20} />
+                  <FiChevronLeft size={18} />
                 </button>
 
                 <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--card)] border border-[var(--border)]">
@@ -192,25 +192,25 @@ export default function OrdersTab() {
                 <button
                   disabled={page >= totalPages}
                   onClick={() => setPage((p) => p + 1)}
-                  className="p-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)] hover:text-white disabled:opacity-20 transition-all shadow-sm"
+                  className="p-2 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)] hover:text-white disabled:opacity-20 transition-all shadow-sm"
                 >
-                  <FiChevronRight size={20} />
+                  <FiChevronRight size={18} />
                 </button>
               </motion.div>
             )}
 
             {/* INFO BANNER */}
-            <div className="mt-8 p-6 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-center gap-4 group overflow-hidden relative">
-              <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 text-lg">
+            <div className="mt-6 p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/10 flex items-center gap-3 group overflow-hidden relative">
+              <div className="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500 text-sm">
                 <FiZap />
               </div>
               <div className="flex-1">
-                <h4 className="text-[11px] font-bold mb-0.5 uppercase text-indigo-400">Status Info</h4>
-                <p className="text-[10px] text-[var(--muted)] leading-relaxed uppercase tracking-tight">
-                  Orders typically process within 5-15 minutes.
+                <h4 className="text-[9px] font-bold mb-0.5 uppercase text-indigo-400">Status Info</h4>
+                <p className="text-[9px] text-[var(--muted)] leading-relaxed uppercase tracking-tight">
+                  Orders process in 5-15 minutes.
                 </p>
               </div>
-              <button className="px-4 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[9px] font-bold uppercase tracking-wider hover:bg-indigo-500 hover:text-white transition-all">
+              <button className="px-3 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[8px] font-bold uppercase tracking-wider hover:bg-indigo-500 hover:text-white transition-all">
                 Refresh
               </button>
             </div>

@@ -76,12 +76,12 @@ export default function Dashboard() {
 
   return (
     <AuthGuard>
-      <section className="min-h-screen px-5 py-7 bg-[var(--background)] text-[var(--foreground)]">
+      <section className="min-h-screen px-4 py-6 bg-[var(--background)] text-[var(--foreground)]">
 
         {/* HEADER */}
-        <div className="max-w-5xl mx-auto mb-8 flex flex-col md:flex-row gap-5 md:items-center md:justify-between">
+        <div className="max-w-4xl mx-auto mb-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold">
+            <h1 className="text-xl md:text-2xl font-bold">
               Welcome back, {userDetails.name || "Player"} 👋
             </h1>
             <p className="text-sm text-[var(--muted)] mt-1">
@@ -89,25 +89,25 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <div className="bg-[var(--accent)]/10 border border-[var(--accent)]/20 p-4 rounded-2xl flex items-center gap-4 shadow-sm backdrop-blur-sm">
-            <div className="h-10 w-10 rounded-full bg-[var(--accent)] flex items-center justify-center text-black shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+          <div className="bg-[var(--accent)]/10 border border-[var(--accent)]/20 p-3 rounded-xl flex items-center gap-3 shadow-sm backdrop-blur-sm">
+            <div className="h-9 w-9 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
             </div>
             <div>
-              <p className="text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider">Wallet Balance</p>
-              <p className="text-xl font-black text-[var(--accent)]">₹{walletBalance.toFixed(2)}</p>
+              <p className="text-[9px] uppercase font-bold text-[var(--muted)] tracking-wider">Balance</p>
+              <p className="text-lg font-black text-[var(--accent)]">₹{walletBalance.toFixed(2)}</p>
             </div>
           </div>
         </div>
 
         {/* DASHBOARD CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-1 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 px-1 max-w-4xl mx-auto">
           {dashboardCards.map((card) => (
             <div
               key={card.key}
               onClick={() => router.push(card.route)}
               className="group relative bg-[var(--card)] border border-[var(--border)] 
-                         rounded-2xl p-5 sm:p-6 cursor-pointer transition-all duration-300
+                         rounded-xl p-4 sm:p-5 cursor-pointer transition-all duration-300
                          hover:border-[var(--accent)]/50 hover:shadow-[0_0_30px_rgba(var(--accent-rgb),0.15)]
                          hover:scale-[1.02] active:scale-[0.98]"
             >
@@ -117,13 +117,13 @@ export default function Dashboard() {
 
               <div className="relative flex items-center gap-4">
                 {/* Icon */}
-                <div className="text-3xl sm:text-4xl group-hover:scale-110 transition-transform duration-300 shrink-0">
+                <div className="text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300 shrink-0">
                   {card.icon}
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg sm:text-xl font-bold mb-0.5 group-hover:text-[var(--accent)] transition-colors">
+                  <h3 className="text-base sm:text-lg font-bold mb-0.5 group-hover:text-[var(--accent)] transition-colors">
                     {card.label}
                   </h3>
                   <p className="text-xs sm:text-sm text-[var(--muted)] line-clamp-1 group-hover:line-clamp-none transition-all">

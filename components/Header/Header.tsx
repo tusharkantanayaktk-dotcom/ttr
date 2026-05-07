@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX } from "react-icons/fi";
+import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX, FiChevronRight } from "react-icons/fi";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import Skeleton from "../Skeleton";
@@ -150,8 +150,8 @@ export default function Header() {
               <Image
                 src={logo}
                 alt="Logo"
-                width={80}
-                height={24}
+                width={90}
+                height={30}
                 priority
                 className="object-contain -ml-2"
               />
@@ -185,33 +185,25 @@ export default function Header() {
 
         {/* ACTIONS SECTION */}
         <div className="flex items-center gap-3 sm:gap-4" ref={dropdownRef}>
-          {user && (
-            <Link
-              href="/dashboard/wallet"
-              className="flex items-center gap-1 bg-[var(--accent)]/10 border border-[var(--accent)]/30 px-2 py-1 rounded-full hover:bg-[var(--accent)]/20 transition-all group shrink-0 shadow-sm"
-            >
-              <div className="w-4 h-4 rounded-full bg-[var(--accent)]/20 flex items-center justify-center">
-                <FiPlus className="text-[var(--accent)] text-[8px]" />
-              </div>
-              <span className="text-[12px] font-bold text-[var(--accent)]">₹{user.wallet?.toFixed(1) || "0.0"}</span>
-            </Link>
-          )}
+          {/* Wallet balance moved to sidebar */}
 
-          <ThemeToggle />
+
+          {/* ThemeToggle moved to sidebar */}
+
 
           <div className="h-6 w-[1px] bg-[var(--border)] mx-1 hidden sm:block" />
 
           {/* USER PROFILE / LOGIN */}
-          <div className="relative">
+          <div className="relative mr-2">
             {loading ? (
-              <Skeleton variant="circle" className="w-7 h-7 border-none" />
+              <Skeleton variant="circle" className="w-9 h-9 border-none" />
             ) : (
               <motion.button
                 onClick={() => {
                   setUserMenuOpen(!userMenuOpen);
                 }}
                 className={`
-                  flex items-center justify-center w-7 h-7 rounded-full transition-all duration-300
+                  flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300
                   ${userMenuOpen ? 'bg-[var(--accent)] ring-2 ring-[var(--accent)]/50' : 'hover:bg-[var(--card)]/50 border border-transparent hover:border-[var(--border)]'}
                 `}
                 whileHover={{ y: -1 }}
@@ -226,7 +218,7 @@ export default function Header() {
                       onError={() => setAvatarError(true)}
                     />
                   ) : (
-                    <span className="text-white text-[10px] font-black uppercase">
+                    <span className="text-white text-[12px] font-black uppercase">
                       {(user?.name || user?.username || user?.email || "U")[0]}
                     </span>
                   )}
@@ -254,22 +246,27 @@ export default function Header() {
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}
                     transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                    className="fixed right-0 top-0 h-[100dvh] w-[75%] sm:w-[320px] bg-[var(--card)] border-l border-[var(--border)] shadow-2xl z-[1001] flex flex-col"
+                    className="fixed right-0 top-0 h-[100dvh] w-[80%] sm:w-[300px] bg-[var(--card)] border-l border-[var(--border)] shadow-2xl z-[1001] flex flex-col"
                   >
                     {/* CLOSE BUTTON - FLOATING TOP RIGHT */}
                     <div className="p-4 flex items-center justify-between border-b border-[var(--border)] shrink-0">
-                      <h2 className="text-[10px] font-black italic uppercase tracking-[0.2em] text-[var(--muted)] opacity-50">Account</h2>
-                      <motion.button
-                        onClick={() => setUserMenuOpen(false)}
-                        whileHover={{ rotate: 90, scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--accent)] hover:text-black transition-colors"
-                      >
-                        <FiX className="text-lg" />
-                      </motion.button>
+                      <div className="flex flex-col">
+                        <h2 className="text-[10px] font-black italic uppercase tracking-[0.2em] text-[var(--muted)] opacity-50">Account</h2>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <ThemeToggle />
+                        <motion.button
+                          onClick={() => setUserMenuOpen(false)}
+                          whileHover={{ rotate: 90, scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--accent)] hover:text-black transition-colors"
+                        >
+                          <FiX className="text-lg" />
+                        </motion.button>
+                      </div>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto px-4 py-6 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto px-3 py-4 custom-scrollbar">
                       {!user ? (
                         <div className="flex flex-col items-center justify-center text-center">
                           <motion.div
@@ -315,11 +312,11 @@ export default function Header() {
                           </Link>
                         </div>
                       ) : (
-                        <div className="space-y-6">
-                          {/* User Profile Header horizontal */}
-                          <div className="flex items-center gap-3 pb-6 border-b border-[var(--border)] relative">
+                        <div className="space-y-4">
+                          {/* User Profile Header horizontal - COMPACT */}
+                          <div className="flex items-center gap-3 pb-4 border-b border-[var(--border)] relative">
                             {/* Left: Avatar */}
-                            <div className="w-12 h-12 rounded-[0.8rem] bg-[var(--accent)] p-[1.5px] shadow-[0_5px_15px_-5px_rgba(var(--accent-rgb),0.5)] shrink-0">
+                            <div className="w-10 h-10 rounded-lg bg-[var(--accent)] p-[1.5px] shadow-lg shrink-0">
                               <div className="w-full h-full rounded-[0.7rem] overflow-hidden bg-[var(--card)]">
                                 {user?.avatar && !avatarError ? (
                                   <img
@@ -349,9 +346,9 @@ export default function Header() {
                               <div className="flex">
                                 <span className={`
                                   text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md border
-                                  ${user.userType === 'owner' ? 'bg-orange-500/10 text-orange-500 border-orange-500/20' : 
-                                    user.userType === 'admin' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' : 
-                                    'bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20'}
+                                  ${user.userType === 'owner' ? 'bg-orange-500/10 text-orange-500 border-orange-500/20' :
+                                    user.userType === 'admin' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
+                                      'bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20'}
                                 `}>
                                   {user.userType === "owner" ? "Owner" : user.userType === "admin" ? "Reseller" : "User"}
                                 </span>
@@ -369,6 +366,26 @@ export default function Header() {
                               <FiLogOut size={18} strokeWidth={2.5} />
                             </motion.button>
                           </div>
+
+                          {/* Prominent Wallet Section inside sidebar */}
+                          <Link
+                            href="/dashboard/wallet"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center justify-between p-4 rounded-2xl bg-[var(--accent)]/[0.08] border border-[var(--accent)]/20 hover:bg-[var(--accent)]/[0.12] transition-all group shadow-inner"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-[var(--accent)] flex items-center justify-center text-black shadow-lg shadow-[var(--accent)]/20">
+                                <FiPlus size={14} />
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-[var(--accent)]/60">Wallet Balance</span>
+                                <span className="text-lg font-black text-[var(--foreground)] tracking-tight">₹{user.wallet?.toFixed(1) || "0.0"}</span>
+                              </div>
+                            </div>
+                            <div className="w-7 h-7 rounded-full bg-[var(--foreground)]/[0.03] flex items-center justify-center group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
+                              <FiChevronRight size={14} />
+                            </div>
+                          </Link>
 
                           {/* Navigation nodes compacted */}
                           <div className="space-y-1">
@@ -399,7 +416,7 @@ export default function Header() {
                                   initial={{ opacity: 0, x: 20 }}
                                   animate={{ opacity: 1, x: 0 }}
                                   transition={{ delay: idx * 0.05 }}
-                                  className="relative flex items-center justify-between px-4 py-2.5 rounded-xl hover:bg-[var(--foreground)]/[0.04] text-[var(--muted)] group transition-all duration-300 border border-transparent hover:border-[var(--border)]"
+                                  className="relative flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[var(--foreground)]/[0.04] text-[var(--muted)] group transition-all duration-300 border border-transparent hover:border-[var(--border)]"
                                   whileHover={{ x: -2 }}
                                 >
                                   <div className="flex items-center gap-3">

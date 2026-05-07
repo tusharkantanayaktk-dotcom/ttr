@@ -88,7 +88,7 @@ export default function BuyFlowPage() {
   }, [slug, initialItemSlug]);
 
   /* ================= GAME CONFIG ================= */
-  const isMLBB = slug?.toLowerCase().includes("mlbb") || slug?.toLowerCase().includes("mobile-legends") || slug?.toLowerCase().includes("legends988");
+  const isMLBB = slug?.toLowerCase().includes("mlbb") || slug?.toLowerCase().includes("mobile-legends") || slug?.toLowerCase().includes("legends988") || slug?.toLowerCase().includes("bundle931");
   const isBGMI = slug?.toLowerCase().includes("pubg") || slug?.toLowerCase().includes("bgmi");
   const isOTT = slug?.toLowerCase().includes("netflix") || slug?.toLowerCase().includes("youtube");
   const isMembership = slug?.toLowerCase().includes("membership");
@@ -228,13 +228,13 @@ export default function BuyFlowPage() {
               {/* HERO CARD */}
               <motion.div 
                 layoutId={`item-${activeItem.itemSlug}`}
-                className="relative bg-[var(--card)] rounded-3xl p-5 border border-[var(--border)] shadow-xl overflow-hidden group"
+                className="relative bg-[var(--card)] rounded-2xl p-4 border border-[var(--border)] shadow-xl overflow-hidden group"
               >
                 {/* Background Decor */}
                 <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent)]/5 blur-[80px] -mr-24 -mt-24 pointer-events-none" />
                 
                 <div className="flex items-center gap-5 relative z-10">
-                  <div className="relative w-24 h-24 rounded-2xl overflow-hidden shadow-xl border-2 border-white/5 shrink-0 transition-transform duration-500 group-hover:scale-105">
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden shadow-xl border-2 border-white/5 shrink-0 transition-transform duration-500 group-hover:scale-105">
                     <Image 
                       src={activeItem.itemImageId?.image || fallbackImage || logo} 
                       alt={activeItem.itemName} 
@@ -242,26 +242,26 @@ export default function BuyFlowPage() {
                       className="object-cover"
                     />
                     {discountPerc > 0 && (
-                      <div className="absolute top-1.5 left-1.5 bg-red-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded-md shadow-lg">
+                      <div className="absolute top-1 left-1 bg-red-600 text-white text-[7px] font-black px-1.5 py-0.5 rounded shadow-lg">
                         {discountPerc}%
                       </div>
                     )}
                   </div>
                   
                   <div className="flex flex-col gap-1.5 min-w-0">
-                    <div className="bg-[var(--foreground)]/[0.03] px-2.5 py-1 rounded-lg border border-[var(--border)] w-fit flex items-center gap-1.5 mb-0.5">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-[8px] font-black uppercase tracking-wider text-[var(--muted)]">Instant Delivery</span>
+                    <div className="bg-[var(--accent)]/[0.08] px-2 py-0.5 rounded-md border border-[var(--accent)]/20 w-fit flex items-center gap-1.5 mb-0.5">
+                      <div className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_var(--emerald-400)]" />
+                      <span className="text-[7px] font-black uppercase tracking-wider text-[var(--accent)]">Instant</span>
                     </div>
 
-                    <h1 className="text-xl font-black tracking-tighter uppercase leading-none truncate">
+                    <h1 className="text-lg font-black tracking-tighter uppercase leading-none truncate text-[var(--foreground)]">
                       {activeItem.itemName}
                     </h1>
                     
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-black text-[var(--accent)]">₹{activeItem.sellingPrice}</span>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-xl font-black text-[var(--accent)] drop-shadow-[0_0_10px_var(--accent-glow)]">₹{activeItem.sellingPrice}</span>
                       {activeItem.dummyPrice > activeItem.sellingPrice && (
-                        <span className="text-sm text-[var(--muted)] line-through opacity-40 font-bold">₹{activeItem.dummyPrice}</span>
+                        <span className="text-xs text-[var(--foreground)]/30 line-through font-bold">₹{activeItem.dummyPrice}</span>
                       )}
                     </div>
                   </div>
@@ -282,7 +282,7 @@ export default function BuyFlowPage() {
                   <h2 className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">More Packs</h2>
                 </div>
 
-                <div className="flex overflow-x-auto no-scrollbar gap-2.5 pb-2 md:grid md:grid-cols-4 lg:grid-cols-3">
+                <div className="flex overflow-x-auto no-scrollbar gap-2 pb-2 md:grid md:grid-cols-4 lg:grid-cols-3">
                   {allItems.map((item) => {
                     const isSelected = activeItem.itemSlug === item.itemSlug;
                     return (
@@ -293,7 +293,7 @@ export default function BuyFlowPage() {
                           router.replace(`/games/${slug}/buy/${item.itemSlug}`, { scroll: false });
                         }}
                         className={`
-                          relative p-3 rounded-2xl border transition-all duration-300 text-left overflow-hidden group min-h-[72px] flex flex-col justify-center shrink-0 w-[120px] md:w-full
+                          relative p-2.5 rounded-xl border transition-all duration-300 text-left overflow-hidden group min-h-[64px] flex flex-col justify-center shrink-0 w-[105px] md:w-full
                           ${isSelected 
                             ? "bg-[var(--accent)]/[0.08] border-[var(--accent)] shadow-lg shadow-[var(--accent)]/5" 
                             : "bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/30 hover:bg-[var(--foreground)]/[0.02]"}
@@ -304,10 +304,10 @@ export default function BuyFlowPage() {
                             <FiCheck size={9} strokeWidth={4} />
                           </div>
                         )}
-                        <p className={`text-[9px] font-bold uppercase tracking-tight mb-0.5 truncate ${isSelected ? "text-[var(--accent)]" : "text-[var(--muted)]"}`}>
+                        <p className={`text-[8px] font-bold uppercase tracking-tight mb-0.5 truncate ${isSelected ? "text-[var(--accent)]" : "text-[var(--muted)]"}`}>
                           {item.itemName}
                         </p>
-                        <p className="text-base font-black tracking-tight">₹{item.sellingPrice}</p>
+                        <p className="text-sm font-black tracking-tight">₹{item.sellingPrice}</p>
                       </button>
                     );
                   })}
@@ -322,10 +322,10 @@ export default function BuyFlowPage() {
               <div className="bg-[var(--card)] rounded-3xl p-6 border border-[var(--border)] shadow-xl space-y-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <span className="text-xl font-black italic text-[var(--accent)]">| 1.</span>
-                    <h2 className="text-xl font-black italic tracking-tight uppercase">Player Info</h2>
+                    <span className="text-xl font-black italic text-[var(--accent)] drop-shadow-[0_0_8px_var(--accent-glow)]">| 1.</span>
+                    <h2 className="text-xl font-black italic tracking-tight uppercase text-[var(--foreground)]">Player Info</h2>
                   </div>
-                  <button className="w-8 h-8 rounded-full bg-[var(--accent)] text-black flex items-center justify-center shadow-lg shadow-[var(--accent)]/20">
+                  <button className="w-8 h-8 rounded-full bg-[var(--accent)] text-black flex items-center justify-center shadow-lg shadow-[var(--accent)]/30 hover:scale-110 transition-transform">
                     <FiHelpCircle size={16} />
                   </button>
                 </div>
@@ -430,8 +430,8 @@ export default function BuyFlowPage() {
               {/* SECTION 2: PAYMENT */}
               <div className={`bg-[var(--card)] rounded-3xl p-6 border border-[var(--border)] shadow-xl space-y-5 transition-all duration-500 ${!reviewData ? "opacity-40 grayscale pointer-events-none" : ""}`}>
                 <div className="flex items-center gap-2.5">
-                  <span className="text-xl font-black italic text-[var(--accent)]">| 2.</span>
-                  <h2 className="text-xl font-black italic tracking-tight uppercase">Payment</h2>
+                  <span className="text-xl font-black italic text-[var(--accent)] drop-shadow-[0_0_8px_var(--accent-glow)]">| 2.</span>
+                  <h2 className="text-xl font-black italic tracking-tight uppercase text-[var(--foreground)]">Payment</h2>
                 </div>
 
                 <ReviewAndPaymentStep

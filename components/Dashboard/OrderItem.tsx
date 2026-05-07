@@ -71,22 +71,22 @@ export default function OrderItem({ order }: { order: OrderType }) {
     <>
       <motion.div
         layout
-        className="group relative rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 backdrop-blur-sm shadow-sm hover:border-[var(--accent)]/30 transition-all overflow-hidden"
+        className="group relative rounded-xl border border-[var(--border)] bg-[var(--card)]/50 backdrop-blur-sm shadow-sm hover:border-[var(--accent)]/30 transition-all overflow-hidden"
       >
         {/* Glow Element */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 blur-[50px] -mr-16 -mt-16 group-hover:bg-[var(--accent)]/10 transition-colors" />
 
         {/* COMPACT VIEW */}
-        <div className="px-4 py-3 sm:px-5">
+        <div className="px-3 py-2 sm:px-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-xl bg-[var(--accent)]/5 border border-[var(--border)] flex items-center justify-center text-[var(--accent)] transition-all">
-                <FiPackage className="text-base" />
+              <div className="h-8 w-8 rounded-lg bg-[var(--accent)]/5 border border-[var(--border)] flex items-center justify-center text-[var(--accent)] transition-all">
+                <FiPackage className="text-sm" />
               </div>
               <div>
                 <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 block mb-0.5">#{order.orderId}</span>
-                <h3 className="text-xs font-bold text-[var(--foreground)] leading-tight">
+                <h3 className="text-[11px] font-bold text-[var(--foreground)] leading-tight">
                   {order.itemName}
                 </h3>
               </div>
@@ -97,7 +97,7 @@ export default function OrderItem({ order }: { order: OrderType }) {
                 <div className="flex items-center justify-end gap-1 text-[8px] font-medium text-[var(--muted)] mb-0.5 uppercase">
                   <FiCalendar /> {new Date(order.createdAt).toLocaleDateString()}
                 </div>
-                <div className="text-sm font-bold text-[var(--foreground)]">₹{order.price.toFixed(2)}</div>
+                <div className="text-xs font-bold text-[var(--foreground)]">₹{order.price.toFixed(2)}</div>
               </div>
 
               <div className="flex items-center gap-2">
@@ -109,17 +109,17 @@ export default function OrderItem({ order }: { order: OrderType }) {
                 <div className="flex gap-1.5">
                   <button
                     onClick={() => setShowReceipt(true)}
-                    className="h-7.5 w-7.5 rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white flex items-center justify-center transition-all"
+                    className="h-7 w-7 rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white flex items-center justify-center transition-all"
                   >
-                    <FiExternalLink size={13} />
+                    <FiExternalLink size={12} />
                   </button>
 
                   <button
                     onClick={() => setOpen(!open)}
-                    className={`h-7.5 w-7.5 rounded-lg border border-[var(--border)] flex items-center justify-center transition-all ${open ? "bg-[var(--accent)] text-white border-[var(--accent)]" : "hover:bg-[var(--card)]"}`}
+                    className={`h-7 w-7 rounded-lg border border-[var(--border)] flex items-center justify-center transition-all ${open ? "bg-[var(--accent)] text-white border-[var(--accent)]" : "hover:bg-[var(--card)]"}`}
                   >
                     <FiChevronDown
-                      size={14}
+                      size={13}
                       className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`}
                     />
                   </button>

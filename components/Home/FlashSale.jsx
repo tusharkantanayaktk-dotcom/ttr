@@ -27,6 +27,16 @@ const flashSaleData = [
         slug: "weeklymonthly-bundle931",
         badge: "Best Value"
     },
+    {
+        id: 5,
+        name: "Monthly Bundle",
+        game: "MLBB",
+        image: "/game-assets/13.jpg",
+        price: "₹400",
+        originalPrice: "₹500",
+        slug: "weeklymonthly-bundle931",
+        badge: "Best Value"
+    },
 ];
 
 export default function FlashSale() {
@@ -80,11 +90,12 @@ export default function FlashSale() {
                     </div>
                 </div>
 
-                {/* COMPACT GRID */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+                {/* COMPACT SCROLLABLE ROW / GRID */}
+                <div className="flex overflow-x-auto no-scrollbar gap-2 pb-2 md:grid md:grid-cols-4 lg:grid-cols-6 md:pb-0">
                     {flashSaleData.map((item, index) => (
                         <div
                             key={item.id}
+                            className="shrink-0 w-[140px] xs:w-[160px] md:w-full"
                         >
                             <Link
                                 href={`/games/${item.slug}`}

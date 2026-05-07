@@ -51,7 +51,7 @@ export default function AuthPage() {
   });
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[var(--background)] px-4">
+    <section className="relative min-h-screen w-full flex items-start justify-center overflow-hidden bg-[var(--background)] px-4 pt-12 md:pt-16">
       {/* ================= SIMPLE PREMIUM BACKGROUND ================= */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* Soft, Static Mesh Gradient */}
@@ -67,22 +67,15 @@ export default function AuthPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="
-          relative z-10 w-full max-w-md
-          rounded-[2rem]
-          bg-[var(--card)]/40 backdrop-blur-xl
-          border border-[var(--border)]
-          shadow-[0_8px_32px_rgba(0,0,0,0.12)]
-          overflow-hidden
-        "
+        className="relative z-10 w-full max-w-md overflow-hidden"
       >
-        <div className="p-8 md:p-10 flex flex-col items-center text-center">
+        <div className="px-8 pt-6 pb-10 md:px-10 md:pt-8 md:pb-12 flex flex-col items-center text-center">
           {/* Premium Logo Section */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="mb-6 relative"
+            className="mb-4 relative"
           >
             {/* Subtle glow behind logo */}
             <div className="absolute inset-0 bg-[var(--accent)]/10 blur-[40px] rounded-full" />
@@ -103,18 +96,18 @@ export default function AuthPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="space-y-1 mb-8"
+            className="space-y-1 mb-6"
           >
             <h1 className="text-4xl font-bold tracking-tight text-[var(--foreground)]">
               Welcome
             </h1>
             <p className="text-[var(--muted)] text-sm font-medium opacity-80">
-              Login to your account.
+              Sign in to continue.
             </p>
           </motion.div>
 
           {/* Actions */}
-          <div className="w-full space-y-6">
+          <div className="w-full space-y-4">
             {/* Status Messages */}
             <AnimatePresence mode="wait">
               {error && (
@@ -163,7 +156,7 @@ export default function AuthPage() {
                 "
               >
                 <FcGoogle className="text-xl" />
-                <span className="tracking-tight">Continue with Google</span>
+                <span className="tracking-tight">Login with Google</span>
               </button>
             </motion.div>
 
@@ -182,14 +175,14 @@ export default function AuthPage() {
                 <div className="w-full border-t border-[var(--border)] opacity-20"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-[var(--card)]/10 backdrop-blur-md px-4 text-[9px] tracking-[0.2em] font-bold uppercase text-[var(--muted)]/50">
-                  Secure Portal
+                <span className="px-4 text-[9px] tracking-[0.2em] font-bold uppercase text-[var(--muted)]/50">
+                  Safe Login
                 </span>
               </div>
             </div>
 
             <p className="text-[10px] text-[var(--muted)]/40 leading-relaxed font-medium">
-              Your login is protected with encryption. <br /> Learn more about our <span className="hover:text-[var(--foreground)] transition-colors cursor-pointer underline underline-offset-4">security</span>.
+              Your account is safe with us.
             </p>
           </div>
         </div>
