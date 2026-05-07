@@ -18,10 +18,10 @@ export default function RecentVerifiedPlayers({
   if (!players.length) return null;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 px-1">
-        <FiClock className="text-[var(--accent)]" size={12} />
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">Recent Transmissions</span>
+    <div className="space-y-2">
+      <div className="flex items-center gap-2 mb-1 px-1">
+        <FiUser className="text-[var(--muted)]" size={12} />
+        <span className="text-[9px] font-black uppercase tracking-wider text-[var(--muted)]">Recent Players</span>
       </div>
 
       <div className="space-y-2">
@@ -45,9 +45,13 @@ export default function RecentVerifiedPlayers({
                 </p>
 
                 <div className="flex items-center gap-2 text-[10px] font-bold text-[var(--muted)] uppercase tracking-tighter">
-                  <span>ID: {p.playerId}</span>
-                  <span className="opacity-30">/</span>
-                  <span>Zone: {p.zoneId}</span>
+                  <span>{p.playerId}</span>
+                  {p.zoneId && p.zoneId !== "NA" && (
+                    <>
+                      <span className="opacity-30">/</span>
+                      <span>{p.zoneId}</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

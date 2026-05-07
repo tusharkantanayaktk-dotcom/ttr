@@ -4,7 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import QRCode from "qrcode";
 import logo from "@/public/logo.png";
-import { FiActivity, FiShield, FiZap, FiCreditCard } from "react-icons/fi";
+import { FiActivity, FiShield, FiZap, FiCreditCard, FiCheck } from "react-icons/fi";
+import { motion } from "framer-motion";
 
 export default function ReviewAndPaymentStep({
   step,
@@ -23,6 +24,7 @@ export default function ReviewAndPaymentStep({
   onPaymentComplete,
   slug,
   itemSlug,
+  isUnified = false,
 }) {
   const [upiQR, setUpiQR] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -92,14 +94,47 @@ export default function ReviewAndPaymentStep({
     }
   };
 
-  return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+  if (step === 3 && paymentMethod === "upi") {
+    return (
+      <div className="bg-[var(--card)] p-8 rounded-2xl border border-[var(--border)] text-center animate-in zoom-in duration-300">
+        <h3 className="text-xl font-bold mb-2">Scan & Pay</h3>
+        <p className="text-sm text-[var(--muted)] mb-6">Scan this QR code in any UPI app to pay.</p>
 
-      {step === 2 && (
+        <div className="relative w-56 h-56 mx-auto bg-white p-4 rounded-2xl shadow-2xl border-4 border-[var(--accent)]">
+          {upiQR ? (
+            <Image src={upiQR} alt="UPI QR" fill className="p-4" />
+          ) : (
+            <div className="h-full flex items-center justify-center animate-pulse text-[var(--muted)] text-xs">Creating QR...</div>
+          )}
+        </div>
+
+        <div className="mt-8 space-y-3">
+          <button
+            onClick={onPaymentComplete}
+            className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-bold shadow-lg"
+          >
+            I have paid
+          </button>
+          <button
+            onClick={() => {
+                if (setStep) setStep(2);
+            }}
+            className="w-full py-3 rounded-xl border border-[var(--border)] text-[var(--muted)] font-medium text-sm"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      
+      {!isUnified && (
         <>
           {/* ITEM SUMMARY */}
           <div className="bg-[var(--card)] p-3 rounded-2xl border border-[var(--border)] shadow-xl flex items-center gap-4">
-
             <div className="relative h-12 w-12 rounded-xl overflow-hidden border border-white/10 shadow-lg">
               <Image src={itemImage || logo} alt={itemName} fill className="object-cover" />
             </div>
@@ -114,25 +149,18 @@ export default function ReviewAndPaymentStep({
           {/* PLAYER & CONTACT DETAILS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
             <div className="bg-[var(--card)]/50 p-4 rounded-2xl border border-[var(--border)]">
-
               <h4 className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
                 <FiShield className="text-indigo-400" /> Account Details
               </h4>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-[var(--muted)]">Name</span>
-                  <span className="font-semibold">{reviewData.userName}</span>
+                  <span className="font-semibold">{reviewData?.userName}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-[var(--muted)]">User ID</span>
-                  <span className="font-semibold text-[var(--accent)]">{reviewData.playerId}</span>
+                  <span className="font-semibold text-[var(--accent)]">{reviewData?.playerId}</span>
                 </div>
-                {reviewData.zoneId && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[var(--muted)]">Zone ID</span>
-                    <span className="font-semibold">{reviewData.zoneId}</span>
-                  </div>
-                )}
               </div>
             </div>
 
@@ -140,7 +168,6 @@ export default function ReviewAndPaymentStep({
               <h4 className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-2 flex items-center gap-2">
                 <FiZap className="text-emerald-400" /> Contact Info
               </h4>
-
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-[var(--muted)]">Email</span>
@@ -153,147 +180,99 @@ export default function ReviewAndPaymentStep({
               </div>
             </div>
           </div>
-
-          {/* PAYMENT OPTIONS */}
-          <div className="bg-[var(--card)] p-4 rounded-2xl border border-[var(--border)] shadow-2xl mt-5">
-            <h3 className="text-base font-bold mb-4 flex items-center gap-2">
-
-              <span className="h-2 w-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
-              Select Payment Method
-            </h3>
-
-            <div className="space-y-4">
-              {/* Wallet Button */}
-              <button
-                onClick={() => {
-                  if (walletBalance < totalPrice) return;
-                  setPaymentMethod("wallet");
-                }}
-                className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all duration-300 ${paymentMethod === "wallet"
-                  ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
-                  : "border-[var(--border)] bg-[var(--foreground)]/[0.03] hover:border-[var(--accent)]/40 hover:bg-[var(--foreground)]/[0.05]"
-                  } ${walletBalance < totalPrice ? "opacity-40 cursor-not-allowed" : ""}`}
-
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.08] text-[var(--muted)]'
-                    }`}>
-
-                    <FiActivity size={20} />
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm">Pay via Wallet</p>
-                    <p className="text-[10px] text-[var(--muted)]">Balance: ₹{walletBalance.toFixed(2)}</p>
-                  </div>
-                </div>
-                {paymentMethod === 'wallet' && <div className="h-5 w-5 rounded-full bg-[var(--accent)] flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-white" /></div>}
-
-              </button>
-
-              {walletBalance < totalPrice && (
-                <p className="text-red-400 text-[10px] mt-2 flex items-center gap-1.5 px-2">
-                  <div className="w-1 h-1 rounded-full bg-red-400 animate-pulse" />
-                  Not enough balance. Add money to your wallet to continue.
-                </p>
-              )}
-
-              {/* UPI Button */}
-              <button
-                onClick={handleUPI}
-                className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all duration-300 ${paymentMethod === "upi"
-                  ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
-                  : "border-[var(--border)] bg-[var(--foreground)]/[0.03] hover:border-[var(--accent)]/40 hover:bg-[var(--foreground)]/[0.05]"
-                  }`}
-
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.08] text-[var(--muted)]'
-                    }`}>
-
-                    <FiCreditCard size={20} />
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm">UPI Gateway</p>
-                    <p className="text-[10px] text-[var(--muted)]">GPay, PhonePe, Paytm and more</p>
-                  </div>
-                </div>
-                {paymentMethod === 'upi' && <div className="h-5 w-5 rounded-full bg-[var(--accent)] flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-white" /></div>}
-
-              </button>
-            </div>
-          </div>
-
-          {/* PRICE SUMMARY & ACTIONS */}
-          <div className="bg-[var(--foreground)]/[0.02] p-5 rounded-2xl border border-[var(--border)] shadow-xl mt-4 relative overflow-hidden">
-
-            {/* SUBTLE AMBIENCE */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 blur-3xl -mr-16 -mt-16 pointer-events-none" />
-
-            <div className="space-y-2 mb-4">
-
-              <div className="flex justify-between text-sm text-[var(--muted)]">
-                <span>Price</span>
-                <span>₹{price}</span>
-              </div>
-              <div className="flex justify-between text-sm text-emerald-500 font-bold">
-
-                <span>Discount</span>
-                <span>-₹{discount}</span>
-              </div>
-              <div className="pt-3 border-t border-[var(--border)] flex justify-between items-center">
-                <span className="font-bold text-lg">Total</span>
-                <span className="text-2xl font-black text-[var(--accent)]">₹{totalPrice}</span>
-              </div>
-            </div>
-
-            <button
-              onClick={handleProceed}
-              disabled={isRedirecting || !paymentMethod || (paymentMethod === "wallet" && walletBalance < totalPrice)}
-              className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-extrabold uppercase tracking-widest shadow-[0_0_30px_rgba(var(--accent-rgb),0.3)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-            >
-              {isRedirecting ? (
-                <>
-                  <div className="w-5 h-5 border-3 border-black border-t-transparent rounded-full animate-spin" />
-                  Processing payment...
-                </>
-              ) : (
-                <>Buy Now <FiZap /></>
-              )}
-            </button>
-          </div>
         </>
       )}
 
-      {step === 3 && paymentMethod === "upi" && (
-        <div className="bg-[var(--card)] p-8 rounded-2xl border border-[var(--border)] text-center animate-in zoom-in duration-300">
-          <h3 className="text-xl font-bold mb-2">Scan & Pay</h3>
-          <p className="text-sm text-[var(--muted)] mb-6">Scan this QR code in any UPI app to pay.</p>
-
-          <div className="relative w-56 h-56 mx-auto bg-white p-4 rounded-2xl shadow-2xl border-4 border-[var(--accent)]">
-            {upiQR ? (
-              <Image src={upiQR} alt="UPI QR" fill className="p-4" />
-            ) : (
-              <div className="h-full flex items-center justify-center animate-pulse text-[var(--muted)] text-xs">Creating QR...</div>
-
-            )}
+      {/* PAYMENT OPTIONS */}
+      <div className="space-y-3">
+        {/* UPI Button */}
+        <button
+          onClick={handleUPI}
+          className={`w-full p-4 rounded-2xl border text-left flex justify-between items-center transition-all duration-500 group ${paymentMethod === "upi"
+            ? "border-[var(--accent)] bg-[var(--accent)]/[0.05] shadow-xl shadow-[var(--accent)]/5"
+            : "border-[var(--border)] bg-[var(--foreground)]/[0.02] hover:border-[var(--accent)]/30"
+          }`}
+        >
+          <div className="flex items-center gap-4">
+            <div className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black shadow-lg shadow-[var(--accent)]/20' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
+            }`}>
+              <FiCreditCard size={20} />
+            </div>
+            <div>
+              <p className="font-black text-base uppercase tracking-tight italic">UPI Gateway</p>
+              <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">GPay, PhonePe, Paytm</p>
+            </div>
           </div>
+          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${paymentMethod === 'upi' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
+            {paymentMethod === 'upi' && <FiCheck size={12} className="text-black" strokeWidth={4} />}
+          </div>
+        </button>
 
-          <div className="mt-8 space-y-3">
-            <button
-              onClick={onPaymentComplete}
-              className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-bold shadow-lg"
-            >
-              I have paid
-            </button>
-            <button
-              onClick={() => setStep(2)}
-              className="w-full py-3 rounded-xl border border-[var(--border)] text-[var(--muted)] font-medium text-sm"
-            >
-              Go Back
-            </button>
+        {/* Wallet Button */}
+        <button
+          onClick={() => {
+            if (walletBalance < totalPrice) return;
+            setPaymentMethod("wallet");
+          }}
+          className={`w-full p-4 rounded-2xl border text-left flex justify-between items-center transition-all duration-500 group ${paymentMethod === "wallet"
+            ? "border-[var(--accent)] bg-[var(--accent)]/[0.05] shadow-xl shadow-[var(--accent)]/5"
+            : "border-[var(--border)] bg-[var(--foreground)]/[0.02] hover:border-[var(--accent)]/30"
+          } ${walletBalance < totalPrice ? "opacity-40 cursor-not-allowed grayscale" : ""}`}
+        >
+          <div className="flex items-center gap-4">
+            <div className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black shadow-lg shadow-[var(--accent)]/20' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
+            }`}>
+              <FiActivity size={20} />
+            </div>
+            <div>
+              <p className="font-black text-base uppercase tracking-tight italic">My Wallet</p>
+              <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">Balance: ₹{walletBalance.toFixed(2)}</p>
+            </div>
+          </div>
+          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${paymentMethod === 'wallet' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
+            {paymentMethod === 'wallet' && <FiCheck size={12} className="text-black" strokeWidth={4} />}
+          </div>
+        </button>
+
+        {walletBalance < totalPrice && (
+          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-2 flex items-center gap-2">
+             <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+             <p className="text-[8px] font-black text-red-500 uppercase tracking-widest">Insufficient balance</p>
+          </div>
+        )}
+      </div>
+
+      {/* PRICE SUMMARY & ACTIONS */}
+      <div className="pt-4 border-t border-[var(--border)]/40 space-y-4">
+        <div className="space-y-2">
+          <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]">
+            <span>Subtotal</span>
+            <span>₹{price}</span>
+          </div>
+          {discount > 0 && (
+            <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-emerald-500">
+              <span>Discount</span>
+              <span>-₹{discount}</span>
+            </div>
+          )}
+          <div className="flex justify-between items-center pt-1">
+            <span className="text-lg font-black uppercase tracking-tight italic">Total Price</span>
+            <span className="text-2xl font-black text-[var(--accent)]">₹{totalPrice}</span>
           </div>
         </div>
-      )}
+
+        <button
+          onClick={handleProceed}
+          disabled={isRedirecting || !paymentMethod || (paymentMethod === "wallet" && walletBalance < totalPrice)}
+          className="w-full py-5 rounded-2xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] italic shadow-2xl shadow-[var(--accent)]/20 hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-sm"
+        >
+          {isRedirecting ? (
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-5 h-5 border-3 border-black border-t-transparent rounded-full" />
+          ) : (
+            <>Buy Now <FiZap /></>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
