@@ -28,7 +28,7 @@ export default function GamesPage() {
 
   const outOfStockGames = [
     "Genshin Impact",
-    "Honor Of Kings",
+
     "TEST 1",
     "Wuthering of Waves",
     "Where Winds Meet"
@@ -90,113 +90,113 @@ export default function GamesPage() {
     return filtered;
   }, [games, hideOOS, searchQuery, sort]);
 
-/* ================= SUB-COMPONENTS ================= */
-const GameCard = React.memo(({ game, disabled }: any) => {
-  return (
-    <div className="group relative">
-      <Link
-        href={disabled ? "#" : `/games/${game.gameSlug}`}
-        className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
-      >
-        {/* IMAGE WRAPPER */}
-        <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-[border-color,transform,box-shadow] duration-300 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-md">
+  /* ================= SUB-COMPONENTS ================= */
+  const GameCard = React.memo(({ game, disabled }: any) => {
+    return (
+      <div className="group relative">
+        <Link
+          href={disabled ? "#" : `/games/${game.gameSlug}`}
+          className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+        >
+          {/* IMAGE WRAPPER */}
+          <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-[border-color,transform,box-shadow] duration-300 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-md">
 
-          <div className="relative w-full h-full">
-            <Image
-              src={game.gameImageId?.image || logo}
-              alt={game.gameName}
-              fill
-              sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
-              className={`object-cover transition-all duration-300 ease-out
+            <div className="relative w-full h-full">
+              <Image
+                src={game.gameImageId?.image || logo}
+                alt={game.gameName}
+                fill
+                sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
+                className={`object-cover transition-all duration-300 ease-out
               ${disabled ? "grayscale opacity-30 scale-100" : "group-hover:scale-105"}`}
-            />
+              />
 
-            {/* High-Fidelity Overlays */}
-            {!disabled && (
-              <>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-
-
-              </>
-            )}
-
-            {/* TAGS / BADGES */}
-            <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-start z-10">
-              {!disabled && game.tagId ? (
-                <div
-                  className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-1.5 backdrop-blur-md border border-white/10"
-                  style={{
-                    backgroundColor: `${game.tagId.tagBackground}cc`, // Add some transparency
-                    color: game.tagId.tagColor,
-                  }}
-                >
-                  <div className="w-1 h-1 rounded-full bg-current" />
-                  {game.tagId.tagName}
-                </div>
-              ) : <div />}
-
+              {/* High-Fidelity Overlays */}
               {!disabled && (
-                <div className="w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 transform scale-75 group-hover:scale-100">
-                  <FiZap size={12} fill="currentColor" />
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+
+
+                </>
+              )}
+
+              {/* TAGS / BADGES */}
+              <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-start z-10">
+                {!disabled && game.tagId ? (
+                  <div
+                    className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-1.5 backdrop-blur-md border border-white/10"
+                    style={{
+                      backgroundColor: `${game.tagId.tagBackground}cc`, // Add some transparency
+                      color: game.tagId.tagColor,
+                    }}
+                  >
+                    <div className="w-1 h-1 rounded-full bg-current" />
+                    {game.tagId.tagName}
+                  </div>
+                ) : <div />}
+
+                {!disabled && (
+                  <div className="w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 transform scale-75 group-hover:scale-100">
+                    <FiZap size={12} fill="currentColor" />
+                  </div>
+                )}
+              </div>
+
+              {/* OUT OF STOCK OVERLAY */}
+              {disabled && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px]">
+                  <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mb-1.5">
+                    <FiX size={16} className="text-red-500" />
+                  </div>
+                  <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500 drop-shadow-md">
+                    OFF
+                  </span>
                 </div>
               )}
             </div>
-
-            {/* OUT OF STOCK OVERLAY */}
-            {disabled && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px]">
-                <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mb-1.5">
-                  <FiX size={16} className="text-red-500" />
-                </div>
-                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500 drop-shadow-md">
-                  OFF
-                </span>
-              </div>
-            )}
           </div>
-        </div>
 
-        {/* CARD FOOTER */}
-        <div className="px-1.5 space-y-0.5">
-          <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors duration-200">
-            {game.gameName}
-          </h3>
+          {/* CARD FOOTER */}
+          <div className="px-1.5 space-y-0.5">
+            <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors duration-200">
+              {game.gameName}
+            </h3>
 
-          <div className="flex items-center gap-1">
-            {game.gameFrom ? (
-              <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] opacity-30 group-hover:opacity-60 transition-opacity duration-200">
-                {game.gameFrom}
-              </p>
-            ) : (
-              <div className="h-2" />
-            )}
+            <div className="flex items-center gap-1">
+              {game.gameFrom ? (
+                <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] opacity-30 group-hover:opacity-60 transition-opacity duration-200">
+                  {game.gameFrom}
+                </p>
+              ) : (
+                <div className="h-2" />
+              )}
+            </div>
           </div>
+        </Link>
+      </div>
+    );
+  });
+  GameCard.displayName = "GameCard";
+
+  const SectionHeader = ({ title, count, icon: Icon }: any) => (
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
+          <Icon size={18} />
         </div>
-      </Link>
+        <div>
+          <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-[var(--foreground)]">
+            {title}
+          </h2>
+          {count !== undefined && (
+            <p className="text-[8px] text-[var(--muted)] font-black uppercase tracking-[0.2em] opacity-40 mt-[-2px]">
+              {count} Games Ready
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
-});
-GameCard.displayName = "GameCard";
-
-const SectionHeader = ({ title, count, icon: Icon }: any) => (
-  <div className="flex items-center justify-between mb-6">
-    <div className="flex items-center gap-3">
-      <div className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
-        <Icon size={18} />
-      </div>
-      <div>
-        <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-[var(--foreground)]">
-          {title}
-        </h2>
-        {count !== undefined && (
-          <p className="text-[8px] text-[var(--muted)] font-black uppercase tracking-[0.2em] opacity-40 mt-[-2px]">
-            {count} Games Ready
-          </p>
-        )}
-      </div>
-    </div>
-  </div>
-);
 
   if (games.length === 0) {
     return (
@@ -239,15 +239,15 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
 
           {/* OTT SECTION PLACEHOLDER */}
           <section className="opacity-50">
-             <div className="flex items-center gap-3 mb-8">
-                <Skeleton width={40} height={40} className="rounded-xl border-none" />
-                <Skeleton width={120} height={20} className="rounded-md border-none" />
-             </div>
-             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                   <Skeleton key={i} className="aspect-[3/4] rounded-[1.5rem] w-full border-none" />
-                ))}
-             </div>
+            <div className="flex items-center gap-3 mb-8">
+              <Skeleton width={40} height={40} className="rounded-xl border-none" />
+              <Skeleton width={120} height={20} className="rounded-md border-none" />
+            </div>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <Skeleton key={i} className="aspect-[3/4] rounded-[1.5rem] w-full border-none" />
+              ))}
+            </div>
           </section>
         </div>
       </div>
@@ -277,12 +277,12 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                        focus:border-[var(--accent)]/30 focus:bg-[var(--card)]/60"
             />
             {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-red-500 transition-colors"
-                >
-                  <FiX size={12} />
-                </button>
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-red-500 transition-colors"
+              >
+                <FiX size={12} />
+              </button>
             )}
           </div>
 
@@ -383,12 +383,12 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 relative rounded-lg overflow-hidden border border-[var(--border)] shrink-0">
-                        <Image 
-                          src={plan.image} 
-                          alt={plan.name} 
-                          fill 
+                        <Image
+                          src={plan.image}
+                          alt={plan.name}
+                          fill
                           sizes="40px"
-                          className="object-cover" 
+                          className="object-cover"
                           loading="lazy"
                         />
                       </div>
@@ -403,7 +403,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
                     </div>
 
                     <div className="flex items-center justify-between pt-2 border-t border-[var(--border)]/30">
-                        <span>View Info</span>
+                      <span>View Info</span>
                       <FiArrowRight size={10} className="text-[var(--accent)] group-hover:translate-x-1 transition-transform" />
                     </div>
                   </Link>

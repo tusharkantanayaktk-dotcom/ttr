@@ -38,6 +38,7 @@ const TronicsWho = dynamic(() => import("./TronicsWho"), {
 });
 const TrustHighlights = dynamic(() => import("./TrustHighlights"), { ssr: false });
 const MLBBPurchaseGuide = dynamic(() => import("../HelpImage/MLBBPurchaseGuide"), { ssr: false });
+const CommunityPopup = dynamic(() => import("./CommunityPopup"), { ssr: false });
 
 
 export default function HeroSection() {
@@ -56,6 +57,7 @@ export default function HeroSection() {
 
   return (
     <>
+      <CommunityPopup />
       <TopNoticeBanner />
 
       <GameBannerCarousel />

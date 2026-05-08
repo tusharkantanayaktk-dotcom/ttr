@@ -88,7 +88,7 @@ export default function BuyFlowPage() {
   }, [slug, initialItemSlug]);
 
   /* ================= GAME CONFIG ================= */
-  const isMLBB = slug?.toLowerCase().includes("mlbb") || slug?.toLowerCase().includes("mobile-legends") || slug?.toLowerCase().includes("legends988") || slug?.toLowerCase().includes("bundle931");
+  const isMLBB = slug?.toLowerCase().includes("mlbb") || slug?.toLowerCase().includes("mobile-legends") || slug?.toLowerCase().includes("legends988") || slug?.toLowerCase().includes("bundle931") || slug?.toLowerCase().includes("magic-chess-gogo");
   const isBGMI = slug?.toLowerCase().includes("pubg") || slug?.toLowerCase().includes("bgmi");
   const isOTT = slug?.toLowerCase().includes("netflix") || slug?.toLowerCase().includes("youtube");
   const isMembership = slug?.toLowerCase().includes("membership");
@@ -106,7 +106,7 @@ export default function BuyFlowPage() {
 
     setLoading(true);
     const name = game?.gameName?.toLowerCase() || "";
-    const isMLBB_local = slug.includes("mlbb") || name.includes("mlbb") || slug.includes("legends988");
+    const isMLBB_local = slug.includes("mlbb") || name.includes("mlbb") || slug.includes("legends988") || slug.includes("magic-chess-gogo");
 
     if (isVerificationBypass) {
       const vData = {

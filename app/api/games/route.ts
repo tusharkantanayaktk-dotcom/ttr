@@ -151,7 +151,7 @@ export async function GET() {
       "pubg-mobile138",
 
       // "genshin-impact742",
-      // "honor-of-kings57",
+      "honor-of-kings57",
       "wuthering-of-waves464",
       "where-winds-meet280",
       "mlbb-smallphp980",
