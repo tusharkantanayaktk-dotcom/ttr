@@ -81,6 +81,7 @@ export default function PricingTab({
           gameSlug,
           itemSlug: item.itemSlug,
           itemName: item.itemName,
+          itemImageId: item.itemImageId,
           fixedPrice: existing?.fixedPrice ?? Number(item.sellingPrice) ?? 0,
         };
       });
@@ -362,8 +363,12 @@ export default function PricingTab({
                           className="p-3 sm:p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.02] transition-all group"
                         >
                           <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)]">
-                              <Package size={14} />
+                            <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] overflow-hidden flex items-center justify-center text-[var(--accent)]">
+                              {o.itemImageId?.image ? (
+                                <img src={o.itemImageId.image} alt="" className="w-full h-full object-cover" />
+                              ) : (
+                                <Package size={14} />
+                              )}
                             </div>
                             <div className="min-w-0">
                               <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase truncate">{o.gameSlug}</p>

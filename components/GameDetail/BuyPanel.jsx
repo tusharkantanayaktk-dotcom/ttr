@@ -8,6 +8,7 @@ export default function BuyPanel({
   onBuy,
   redirecting,
   buyPanelRef,
+  gameLogo,
 }) {
   return (
     <div
@@ -18,7 +19,7 @@ export default function BuyPanel({
       <div className="flex gap-4 items-center">
         <div className="relative w-[110px] h-[110px] rounded-xl overflow-hidden">
           <Image
-            src={activeItem.itemImageId?.image || logo}
+            src={activeItem.itemImageId?.image || gameLogo || logo}
             alt={activeItem.itemName}
             fill
             className="object-cover"

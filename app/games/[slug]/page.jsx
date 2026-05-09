@@ -225,6 +225,7 @@ export default function GameDetailPage() {
         onBuy={goBuy}
         redirecting={redirecting}
         buyPanelRef={buyPanelRef}
+        gameLogo={game?.gameImageId?.image || logo}
       />
 
     </section>

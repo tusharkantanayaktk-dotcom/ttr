@@ -73,8 +73,8 @@ export default function ItemGrid({
               ${isSelected ? "ring-1 ring-[var(--accent)]/50 scale-105" : "grayscale opacity-50 group-hover:opacity-80 group-hover:grayscale-0"}
             `}>
               <Image
-                src={gameLogo}
-                alt="game"
+                src={item.itemImageId?.image || gameLogo}
+                alt={item.itemName}
                 fill
                 sizes="40px"
                 className="object-cover"
