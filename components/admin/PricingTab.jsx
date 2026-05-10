@@ -462,7 +462,7 @@ export default function PricingTab({
                                   {/* PRICE INPUT */}
                                   <div className="space-y-2">
                                     <div className="flex items-center justify-between px-1">
-                                      <label className="text-[8px] font-black text-[var(--muted)]/60 uppercase tracking-widest leading-none">Selling Price (INR)</label>
+                                      <label className="text-[8px] font-black text-[var(--muted)]/60 uppercase tracking-widest leading-none">Base Selling Price (INR)</label>
                                       {o.useOverride && (
                                         <span className="text-[7px] font-black text-[var(--accent)] uppercase animate-pulse leading-none">Fixed</span>
                                       )}
