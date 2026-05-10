@@ -230,9 +230,18 @@ export async function GET(req, { params }) {
             o.itemSlug === item.itemSlug
         );
 
-        if (override?.fixedPrice != null) {
+        // 1. Handle Availability (In Stock)
+        let isAvailable = item.itemAvailablity;
+        if (override && override.inStock === false) {
+          isAvailable = false;
+        }
+
+        // 2. Handle Pricing Logic
+        if (override?.useOverride) {
+          // If override is enabled, use fixed price
           finalPrice = override.fixedPrice;
         } else {
+          // Default: use percentage markup slab
           const slab = pricingConfig?.slabs?.find(
             (s) => basePrice >= s.min && basePrice < s.max
           );
@@ -244,6 +253,7 @@ export async function GET(req, { params }) {
         return {
           ...item,
           sellingPrice: Math.ceil(finalPrice),
+          itemAvailablity: isAvailable,
         };
       });
 

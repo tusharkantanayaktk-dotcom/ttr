@@ -191,6 +191,8 @@ export async function PATCH(req) {
         gameSlug: o.gameSlug,
         itemSlug: o.itemSlug,
         fixedPrice: o.fixedPrice,
+        useOverride: !!o.useOverride,
+        inStock: o.inStock !== false, // default true
       });
     }
 

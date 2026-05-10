@@ -17,6 +17,7 @@ import {
   Loader2,
   Package
 } from "lucide-react";
+import { FiSearch } from "react-icons/fi";
 
 const API_BASE = "https://game-off-ten.vercel.app/api/v1";
 
@@ -36,7 +37,7 @@ export default function PricingTab({
   const [fixedGameFilter, setFixedGameFilter] = useState("");
   const [fixedItemFilter, setFixedItemFilter] = useState("");
   const [loadingFixedPrices, setLoadingFixedPrices] = useState(false);
-  const [bulkPercent, setBulkPercent] = useState("");
+  const [gameSearch, setGameSearch] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -83,9 +84,14 @@ export default function PricingTab({
           itemName: item.itemName,
           itemImageId: item.itemImageId,
           fixedPrice: existing?.fixedPrice ?? Number(item.sellingPrice) ?? 0,
+          useOverride: existing?.useOverride ?? false,
+          inStock: existing?.inStock ?? true,
         };
       });
-      setOverrides(hydrated);
+      setOverrides((prev) => {
+        const others = prev.filter((o) => o.gameSlug !== gameSlug);
+        return [...others, ...hydrated];
+      });
       setFixedItemFilter("");
     } finally {
       setLoadingFixedPrices(false);
@@ -103,27 +109,35 @@ export default function PricingTab({
       if (fixedGameFilter && o.gameSlug !== fixedGameFilter) return false;
       if (fixedItemFilter && o.itemSlug !== fixedItemFilter) return false;
       return true;
-    });
+    }).sort((a, b) => (a.itemName || a.itemSlug).localeCompare(b.itemName || b.itemSlug));
   }, [overrides, fixedGameFilter, fixedItemFilter]);
+
+  const filteredGames = useMemo(() => {
+    return games.filter(g =>
+      g.gameName.toLowerCase().includes(gameSearch.toLowerCase()) ||
+      g.gameSlug.toLowerCase().includes(gameSearch.toLowerCase())
+    );
+  }, [games, gameSearch]);
+
+  const toggleGameStock = (gameSlug, status) => {
+    setOverrides(prev => prev.map(o => {
+      if (o.gameSlug === gameSlug) return { ...o, inStock: status };
+      return o;
+    }));
+  };
+
+  const updateOverrideField = (itemSlug, field, value) => {
+    const next = [...overrides];
+    const idx = next.findIndex((o) => o.itemSlug === itemSlug);
+    if (idx === -1) return;
+    next[idx][field] = value;
+    setOverrides(next);
+  };
 
   const updateOverridePrice = (i, value) => {
     const next = [...overrides];
     next[i].fixedPrice = Math.max(0, Number(value) || 0);
     setOverrides(next);
-  };
-
-  const applyBulkPercentage = () => {
-    const percent = Number(bulkPercent);
-    if (!Number.isFinite(percent) || percent === 0) return;
-    const multiplier = 1 + percent / 100;
-    const next = overrides.map((o) => {
-      if ((fixedGameFilter && o.gameSlug !== fixedGameFilter) || (fixedItemFilter && o.itemSlug !== fixedItemFilter)) {
-        return o;
-      }
-      return { ...o, fixedPrice: Math.round(o.fixedPrice * multiplier) };
-    });
-    setOverrides(next);
-    setBulkPercent("");
   };
 
   const updateSlab = (i, key, value) => {
@@ -136,330 +150,353 @@ export default function PricingTab({
   const deleteSlab = (i) => setSlabs(slabs.filter((_, idx) => idx !== i));
   const canSave = !savingPricing && ((pricingMode === "percent" && slabs.length) || (pricingMode === "fixed" && overrides.length));
 
-  return (
-    <div className="space-y-4 pb-20 max-w-full overflow-x-hidden">
-      {/* ================= HEADER ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-2 md:px-0">
-        <div className="space-y-1">
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Pricing Management</h2>
-          <p className="text-sm text-[var(--muted)]">Configure markups and asset pricing limits.</p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="flex bg-[var(--foreground)]/[0.03] p-1 rounded-xl border border-[var(--border)] w-full sm:w-auto">
-            {[{ id: "percent", label: "Markup", icon: <Percent size={14} /> }, { id: "fixed", label: "Fixed", icon: <Coins size={14} /> }].map((m) => (
-              <button
-                key={m.id}
-                onClick={() => setPricingMode(m.id)}
-                className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${pricingMode === m.id
-                  ? "bg-[var(--accent)] text-white shadow-md shadow-[var(--accent)]/10"
-                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
-                  }`}
-              >
-                {m.icon}
-                {m.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 px-0 md:px-0">
-        {/* ================= MAIN CONFIGURATION AREA ================= */}
-        <div className="lg:col-span-8 space-y-4">
-          {/* TARGET ROLE SELECTOR */}
-          <div className="p-4 sm:p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-4">
-            <div className="flex items-center gap-3">
-              <Settings2 size={16} className="text-[var(--accent)]" />
-              <h3 className="text-xs font-bold text-[var(--muted)]">Target Roles</h3>
+    return (
+      <div className="space-y-6 pb-20 max-w-full overflow-x-hidden">
+        {/* ================= PREMIUM HEADER ================= */}
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 px-2 md:px-0 bg-[var(--card)] p-6 rounded-3xl border border-[var(--border)] shadow-xl shadow-black/20">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <h2 className="text-2xl font-black tracking-tighter text-[var(--foreground)] uppercase">Pricing <span className="text-[var(--accent)]">Config</span></h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">Manage profit margins and fixed item prices</p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4">
+            {/* MODE SWITCHER */}
+            <div className="flex bg-[var(--background)] p-1 rounded-2xl border border-[var(--border)] shadow-inner">
+              {[
+                { id: "percent", label: "Markup", icon: <Percent size={12} /> },
+                { id: "fixed", label: "Fixed", icon: <Coins size={12} /> }
+              ].map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => setPricingMode(m.id)}
+                  className={`flex items-center gap-2 px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${pricingMode === m.id
+                    ? "bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20 scale-105 z-10"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                    }`}
+                >
+                  {m.icon}
+                  {m.label}
+                </button>
+              ))}
+            </div>
+
+            {/* ROLE SELECTOR */}
+            <div className="flex bg-[var(--background)] p-1 rounded-2xl border border-[var(--border)] shadow-inner">
               {["user", "admin"].map((type) => (
                 <button
                   key={type}
                   onClick={() => setPricingType(type)}
-                  className={`h-10 rounded-xl border text-xs font-semibold capitalize transition-all ${pricingType === type
-                    ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-md shadow-[var(--accent)]/10"
-                    : "bg-[var(--foreground)]/[0.03] border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
+                  className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${pricingType === type
+                    ? "bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20 scale-105 z-10"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
                 >
-                  {type}s
+                  {type}
                 </button>
               ))}
             </div>
-          </div>
 
-          <AnimatePresence mode="wait">
-            {pricingMode === "percent" ? (
-              <motion.div
-                key="markup"
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.99 }}
-                className="p-4 sm:p-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-4"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
-                      <Percent size={18} />
-                    </div>
-                    <h3 className="text-base font-bold text-[var(--foreground)]">Markup Ranges</h3>
-                  </div>
-                  <button
-                    onClick={addSlab}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[var(--accent)] text-white text-xs font-bold hover:brightness-110 active:scale-95 transition-all outline-none"
-                  >
-                    + Add New Range
-                  </button>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="hidden sm:grid grid-cols-12 gap-3 px-2 text-[10px] font-bold text-[var(--muted)]">
-                    <div className="col-span-4">Min Price (₹)</div>
-                    <div className="col-span-4">Max Price (₹)</div>
-                    <div className="col-span-3">Markup (%)</div>
-                    <div className="col-span-1"></div>
-                  </div>
-
-                  {slabs.map((s, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -5 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-3 items-center p-3 sm:p-3.5 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.01] hover:bg-[var(--foreground)]/[0.03] transition-colors"
-                    >
-                      <div className="col-span-4 space-y-1 sm:space-y-0">
-                        <label className="sm:hidden text-[10px] font-bold text-[var(--muted)] ml-1">Min Price (₹)</label>
-                        <input
-                          type="number"
-                          value={s.min}
-                          onChange={(e) => updateSlab(i, "min", e.target.value)}
-                          className="w-full h-10 px-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-semibold text-sm outline-none focus:border-[var(--accent)]/50 transition-all font-mono"
-                          placeholder="0"
-                        />
-                      </div>
-                      <div className="col-span-4 space-y-1 sm:space-y-0">
-                        <label className="sm:hidden text-[10px] font-bold text-[var(--muted)] ml-1">Max Price (₹)</label>
-                        <input
-                          type="number"
-                          value={s.max}
-                          onChange={(e) => updateSlab(i, "max", e.target.value)}
-                          className="w-full h-10 px-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-semibold text-sm outline-none focus:border-[var(--accent)]/50 transition-all font-mono"
-                          placeholder="1000"
-                        />
-                      </div>
-                      <div className="col-span-3 space-y-1 sm:space-y-0">
-                        <label className="sm:hidden text-[10px] font-bold text-[var(--muted)] ml-1">Markup (%)</label>
-                        <div className="relative">
-                          <input
-                            type="number"
-                            value={s.percent}
-                            onChange={(e) => updateSlab(i, "percent", e.target.value)}
-                            className="w-full h-10 px-4 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/20 text-[var(--accent)] font-bold text-sm outline-none transition-all placeholder:text-[var(--accent)]/40"
-                            placeholder="5"
-                          />
-                          <Percent size={12} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--accent)]/50" />
-                        </div>
-                      </div>
-                      <div className="col-span-1 flex justify-end sm:justify-center">
-                        <button
-                          onClick={() => deleteSlab(i)}
-                          className="p-2 sm:p-0 text-[var(--muted)] hover:text-rose-500 transition-colors"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
-
-                  {!slabs.length && (
-                    <div className="py-16 text-center border border-dashed border-[var(--border)] rounded-2xl">
-                      <p className="text-xs font-medium text-[var(--muted)]">No markup ranges defined.</p>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="fixed"
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.99 }}
-                className="space-y-4"
-              >
-                {/* GAME SELECTION */}
-                <div className="p-4 sm:p-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
-                      <Coins size={18} />
-                    </div>
-                    <h3 className="text-base font-bold text-[var(--foreground)]">Asset Pricing Overrides</h3>
-                  </div>
-
-                  <div className="relative">
-                    <Gamepad2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/60" size={18} />
-                    <select
-                      value={fixedGameFilter}
-                      onChange={(e) => setFixedGameFilter(e.target.value)}
-                      className="w-full h-11 pl-11 pr-10 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] font-semibold text-sm outline-none appearance-none cursor-pointer focus:border-[var(--accent)]/50 transition-all [color-scheme:dark]"
-                    >
-                      <option value="">Select Target Game</option>
-                      {games.map((g) => (
-                        <option key={g.gameSlug} value={g.gameSlug}>
-                          {g.gameName}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40 pointer-events-none" size={18} />
-                  </div>
-
-                  {fixedGameFilter && (
-                    <div className="flex flex-col gap-3 p-4 rounded-xl bg-[var(--accent)]/5 border border-[var(--accent)]/10">
-                      <div className="flex items-center gap-2.5">
-                        <Info size={14} className="text-[var(--accent)]" />
-                        <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">Bulk adjustment</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="relative flex-1">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[var(--accent)]">%</span>
-                          <input
-                            type="number"
-                            placeholder="+10 or -5"
-                            value={bulkPercent}
-                            onChange={(e) => setBulkPercent(e.target.value)}
-                            className="w-full h-10 pl-9 pr-4 rounded-xl bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)] font-bold text-sm outline-none focus:border-[var(--accent)]/40 transition-all"
-                          />
-                        </div>
-                        <button
-                          onClick={applyBulkPercentage}
-                          disabled={!bulkPercent}
-                          className="px-6 h-10 rounded-xl bg-[var(--accent)] text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-[var(--accent)]/10 disabled:opacity-30 transition-all"
-                        >
-                          Apply
-                        </button>
-                      </div>
-                      <p className="text-[10px] text-[var(--muted)]/50 px-1 italic">
-                        Applies percentage change to all visible items.
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* ITEMS GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  <AnimatePresence>
-                    {loadingFixedPrices ? (
-                      <div className="col-span-full py-16 flex flex-col items-center justify-center opacity-40">
-                        <Loader2 size={28} className="animate-spin text-[var(--accent)] mb-3" />
-                        <p className="text-[10px] font-bold uppercase tracking-widest">Fetching Prices...</p>
-                      </div>
-                    ) : (
-                      visibleOverrides.map((o, idx) => (
-                        <motion.div
-                          key={o.itemSlug}
-                          initial={{ opacity: 0, scale: 0.98 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: idx * 0.01 }}
-                          className="p-3 sm:p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.02] transition-all group"
-                        >
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] overflow-hidden flex items-center justify-center text-[var(--accent)]">
-                              {o.itemImageId?.image ? (
-                                <img src={o.itemImageId.image} alt="" className="w-full h-full object-cover" />
-                              ) : (
-                                <Package size={14} />
-                              )}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase truncate">{o.gameSlug}</p>
-                              <p className="text-xs font-bold text-[var(--foreground)] truncate">{o.itemName || o.itemSlug}</p>
-                            </div>
-                          </div>
-                          <div className="relative">
-                            <IndianRupee size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--accent)]" />
-                            <input
-                              type="number"
-                              value={o.fixedPrice}
-                              onChange={(e) =>
-                                updateOverridePrice(
-                                  overrides.findIndex((x) => x.itemSlug === o.itemSlug),
-                                  e.target.value
-                                )
-                              }
-                              className="w-full h-10 pl-11 pr-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-bold text-sm tabular-nums outline-none focus:bg-[var(--foreground)]/[0.06] transition-all font-mono"
-                              placeholder="0"
-                            />
-                          </div>
-                        </motion.div>
-                      ))
-                    )}
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* ================= PRICING SUMMARY SIDEBAR ================= */}
-        <div className="lg:col-span-4 space-y-4">
-          <div className="lg:sticky lg:top-6 p-5 sm:p-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-5">
-            <div className="flex items-center gap-3 border-b border-[var(--border)] pb-4">
-              <Shield size={18} className="text-[var(--accent)]" />
-              <h3 className="text-base font-bold text-[var(--foreground)]">Pricing Summary</h3>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex justify-between items-center text-xs font-medium">
-                <span className="text-[var(--muted)]">Pricing Mode</span>
-                <span className="text-[var(--foreground)] font-bold capitalize">{pricingMode === 'percent' ? 'Markup %' : 'Fixed Price'}</span>
-              </div>
-              <div className="flex justify-between items-center text-xs font-medium">
-                <span className="text-[var(--muted)]">Applies To</span>
-                <span className="text-white bg-[var(--accent)] px-2.5 py-0.5 rounded-full text-[10px] font-bold capitalize tracking-wide">{pricingType}s</span>
-              </div>
-              <div className="flex justify-between items-center text-xs font-medium">
-                <span className="text-[var(--muted)]">Total Items</span>
-                <span className="text-[var(--foreground)] font-bold tabular-nums">{pricingMode === 'percent' ? slabs.length : visibleOverrides.length}</span>
-              </div>
-            </div>
-
-            <div className="h-px bg-[var(--border)] w-full opacity-30 shadow-sm" />
-
+            {/* SAVE BUTTON */}
             <button
               onClick={onSave}
               disabled={!canSave}
               className={`
-                  w-full h-12 rounded-xl flex items-center justify-center gap-3 text-xs font-bold uppercase tracking-wider transition-all outline-none
+                  h-12 px-8 rounded-2xl flex items-center justify-center gap-3 text-xs font-black uppercase tracking-widest transition-all outline-none shadow-xl
                   ${canSave
-                  ? "bg-[var(--accent)] text-white shadow-xl shadow-[var(--accent)]/10 hover:brightness-110 active:scale-95"
+                  ? "bg-[var(--accent)] text-white shadow-[var(--accent)]/20 hover:brightness-110 active:scale-95"
                   : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]/40 cursor-not-allowed"}
                 `}
             >
               {savingPricing ? (
-                <>
-                  <RefreshCcw size={16} className="animate-spin" />
-                  Saving...
-                </>
+                <RefreshCcw size={16} className="animate-spin" />
               ) : (
-                <>
-                  <Save size={16} />
-                  Save Pricing
-                </>
+                <Save size={16} />
               )}
+              {savingPricing ? "Saving..." : "Save Changes"}
             </button>
+          </div>
+        </div>
 
-            <div className="p-3.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] space-y-2">
-              <div className="flex items-center gap-2 text-[var(--accent)]/60">
-                <Info size={14} />
-                <span className="text-[10px] font-bold uppercase">Important</span>
-              </div>
-              <p className="text-[10px] font-medium text-[var(--muted)] leading-relaxed">
-                Changes will be applied to the website immediately after saving.
-              </p>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-12 space-y-6">
+            <AnimatePresence mode="wait">
+              {pricingMode === "percent" ? (
+                <motion.div
+                  key="markup"
+                  initial={{ opacity: 0, scale: 0.99 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.99 }}
+                  className="p-4 sm:p-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-4"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
+                        <Percent size={18} />
+                      </div>
+                      <h3 className="text-base font-bold text-[var(--foreground)]">Markup Ranges</h3>
+                    </div>
+                    <button
+                      onClick={addSlab}
+                      className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[var(--accent)] text-white text-xs font-bold hover:brightness-110 active:scale-95 transition-all outline-none"
+                    >
+                      + Add New Range
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="hidden sm:grid grid-cols-12 gap-3 px-2 text-[10px] font-bold text-[var(--muted)]">
+                      <div className="col-span-4">Min Price (₹)</div>
+                      <div className="col-span-4">Max Price (₹)</div>
+                      <div className="col-span-3">Markup (%)</div>
+                      <div className="col-span-1"></div>
+                    </div>
+
+                    {slabs.map((s, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -5 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-3 items-center p-3 sm:p-3.5 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.01] hover:bg-[var(--foreground)]/[0.03] transition-colors"
+                      >
+                        <div className="col-span-4 space-y-1 sm:space-y-0">
+                          <label className="sm:hidden text-[10px] font-bold text-[var(--muted)] ml-1">Min Price (₹)</label>
+                          <input
+                            type="number"
+                            value={s.min}
+                            onChange={(e) => updateSlab(i, "min", e.target.value)}
+                            className="w-full h-10 px-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-semibold text-sm outline-none focus:border-[var(--accent)]/50 transition-all font-mono"
+                            placeholder="0"
+                          />
+                        </div>
+                        <div className="col-span-4 space-y-1 sm:space-y-0">
+                          <label className="sm:hidden text-[10px] font-bold text-[var(--muted)] ml-1">Max Price (₹)</label>
+                          <input
+                            type="number"
+                            value={s.max}
+                            onChange={(e) => updateSlab(i, "max", e.target.value)}
+                            className="w-full h-10 px-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-semibold text-sm outline-none focus:border-[var(--accent)]/50 transition-all font-mono"
+                            placeholder="1000"
+                          />
+                        </div>
+                        <div className="col-span-3 space-y-1 sm:space-y-0">
+                          <label className="sm:hidden text-[10px] font-bold text-[var(--muted)] ml-1">Markup (%)</label>
+                          <div className="relative">
+                            <input
+                              type="number"
+                              value={s.percent}
+                              onChange={(e) => updateSlab(i, "percent", e.target.value)}
+                              className="w-full h-10 px-4 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/20 text-[var(--accent)] font-bold text-sm outline-none transition-all placeholder:text-[var(--accent)]/40"
+                              placeholder="5"
+                            />
+                            <Percent size={12} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--accent)]/50" />
+                          </div>
+                        </div>
+                        <div className="col-span-1 flex justify-end sm:justify-center">
+                          <button
+                            onClick={() => deleteSlab(i)}
+                            className="p-2 sm:p-0 text-[var(--muted)] hover:text-rose-500 transition-colors"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+
+                    {!slabs.length && (
+                      <div className="py-16 text-center border border-dashed border-[var(--border)] rounded-2xl">
+                        <p className="text-xs font-medium text-[var(--muted)]">No markup ranges defined.</p>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="fixed"
+                  initial={{ opacity: 0, scale: 0.99 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.99 }}
+                  className="grid grid-cols-1 lg:grid-cols-4 gap-6"
+                >
+                  {/* LEFT SIDEBAR: GAMES LIST */}
+                  <div className="lg:col-span-1 space-y-3">
+                    <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-xl shadow-black/5 flex flex-col h-[600px]">
+                      <div className="flex items-center justify-between mb-3 px-1">
+                        <h3 className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-widest flex items-center gap-2">
+                          <Gamepad2 size={14} className="text-[var(--accent)]" />
+                          Games
+                        </h3>
+                      </div>
+
+                      <div className="relative mb-3">
+                        <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]/50" size={12} />
+                        <input
+                          type="text"
+                          placeholder="Search games..."
+                          value={gameSearch}
+                          onChange={(e) => setGameSearch(e.target.value)}
+                          className="w-full h-9 pl-9 pr-4 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[10px] font-bold outline-none focus:border-[var(--accent)]/40 transition-all"
+                        />
+                      </div>
+
+                      <div className="flex-1 overflow-y-auto pr-1 space-y-1 custom-scrollbar">
+                        {filteredGames.map((g) => {
+                          const isActive = fixedGameFilter === g.gameSlug;
+                          const gameOverrides = overrides.filter(o => o.gameSlug === g.gameSlug);
+                          const allInStock = gameOverrides.length === 0 || gameOverrides.every(o => o.inStock);
+
+                          return (
+                            <div
+                              key={g.gameSlug}
+                              onClick={() => setFixedGameFilter(g.gameSlug)}
+                              className={`group flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all border ${isActive
+                                ? "bg-[var(--accent)]/10 border-[var(--accent)]/30"
+                                : "bg-transparent border-transparent hover:bg-[var(--foreground)]/[0.03]"
+                                }`}
+                            >
+                              <div className="min-w-0">
+                                <p className={`text-[11px] font-black uppercase truncate tracking-tight ${isActive ? "text-[var(--foreground)]" : "text-[var(--foreground)]/70"}`}>
+                                  {g.gameName}
+                                </p>
+                                <p className="text-[9px] font-bold text-[var(--muted)]/50 truncate">
+                                  {g.gameSlug}
+                                </p>
+                              </div>
+
+                              <div className="flex flex-col items-center gap-1 ml-2">
+                                <div
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleGameStock(g.gameSlug, !allInStock);
+                                  }}
+                                  className={`w-8 h-4 rounded-full relative transition-all duration-300 ${allInStock ? 'bg-emerald-500' : 'bg-[var(--foreground)]/[0.1]'}`}
+                                >
+                                  <div className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white transition-all duration-300 ${allInStock ? 'translate-x-4' : 'translate-x-0'}`} />
+                                </div>
+                                <span className="text-[7px] font-black text-[var(--muted)]/40 uppercase tracking-tighter">Stock</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* RIGHT CONTENT: ITEMS GRID */}
+                  <div className="lg:col-span-3 space-y-6">
+                    {!fixedGameFilter ? (
+                      <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-[var(--border)] rounded-3xl opacity-30">
+                        <Gamepad2 size={40} className="mb-4 text-[var(--muted)]" />
+                        <p className="text-sm font-bold uppercase tracking-widest text-[var(--muted)]">Select a game to manage pricing</p>
+                      </div>
+                    ) : (
+                      <>
+                        {/* SEARCH HEADER */}
+                        <div className="bg-[var(--card)] p-3 rounded-2xl border border-[var(--border)]">
+                          <div className="relative w-full">
+                            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]/50" size={14} />
+                            <input
+                              type="text"
+                              placeholder="Search items..."
+                              value={fixedItemFilter}
+                              onChange={(e) => setFixedItemFilter(e.target.value)}
+                              className="w-full h-10 pl-10 pr-4 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs font-bold outline-none focus:border-[var(--accent)]/40 transition-all"
+                            />
+                          </div>
+                        </div>
+
+                        {/* ITEMS GRID */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                          <AnimatePresence mode="popLayout">
+                            {loadingFixedPrices ? (
+                              <div className="col-span-full py-16 flex flex-col items-center justify-center opacity-40">
+                                <Loader2 size={24} className="animate-spin text-[var(--accent)] mb-3" />
+                                <p className="text-[10px] font-bold uppercase tracking-widest">Hydrating Prices...</p>
+                              </div>
+                            ) : (
+                              visibleOverrides.map((o, idx) => (
+                                <motion.div
+                                  key={o.itemSlug}
+                                  initial={{ opacity: 0, y: 5 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: Math.min(idx * 0.01, 0.3) }}
+                                  className="group p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all"
+                                >
+                                  {/* ITEM HEADER */}
+                                  <div className="flex items-start justify-between mb-4">
+                                    <div className="min-w-0">
+                                      <p className="text-[12px] font-black text-[var(--foreground)] truncate leading-tight">
+                                        {o.itemName || o.itemSlug}
+                                      </p>
+                                      <p className="text-[8px] font-bold text-[var(--muted)]/50 tracking-wider">
+                                        {o.itemSlug}
+                                      </p>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                      {/* STOCK TOGGLE */}
+                                      <div className="flex flex-col items-center gap-1">
+                                        <div
+                                          onClick={() => updateOverrideField(o.itemSlug, "inStock", !o.inStock)}
+                                          className={`w-7 h-3.5 rounded-full relative cursor-pointer transition-all duration-300 ${o.inStock ? 'bg-emerald-500' : 'bg-[var(--foreground)]/[0.1]'}`}
+                                        >
+                                          <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 ${o.inStock ? 'translate-x-3.5' : 'translate-x-0'}`} />
+                                        </div>
+                                        <span className="text-[7px] font-black text-[var(--muted)]/60 uppercase tracking-tighter">In Stock</span>
+                                      </div>
+
+                                      {/* OVERRIDE TOGGLE */}
+                                      <div className="flex flex-col items-center gap-1">
+                                        <div
+                                          onClick={() => updateOverrideField(o.itemSlug, "useOverride", !o.useOverride)}
+                                          className={`w-7 h-3.5 rounded-full relative cursor-pointer transition-all duration-300 ${o.useOverride ? 'bg-[var(--accent)]' : 'bg-[var(--foreground)]/[0.1]'}`}
+                                        >
+                                          <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 ${o.useOverride ? 'translate-x-3.5' : 'translate-x-0'}`} />
+                                        </div>
+                                        <span className="text-[7px] font-black text-[var(--muted)]/60 uppercase tracking-tighter whitespace-nowrap">Override</span>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* PRICE INPUT */}
+                                  <div className="space-y-2">
+                                    <div className="flex items-center justify-between px-1">
+                                      <label className="text-[8px] font-black text-[var(--muted)]/60 uppercase tracking-widest leading-none">Selling Price (INR)</label>
+                                      {o.useOverride && (
+                                        <span className="text-[7px] font-black text-[var(--accent)] uppercase animate-pulse leading-none">Fixed</span>
+                                      )}
+                                    </div>
+                                    <div className="relative">
+                                      <IndianRupee size={12} className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${o.useOverride ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`} />
+                                      <input
+                                        type="number"
+                                        value={o.fixedPrice}
+                                        disabled={!o.useOverride}
+                                        onChange={(e) =>
+                                          updateOverridePrice(
+                                            overrides.findIndex((x) => x.itemSlug === o.itemSlug),
+                                            e.target.value
+                                          )
+                                        }
+                                        className={`w-full h-10 pl-9 pr-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-black text-base tabular-nums outline-none transition-all ${!o.useOverride ? 'opacity-30 grayscale cursor-not-allowed' : 'focus:border-[var(--accent)]/50 focus:bg-[var(--accent)]/[0.02]'}`}
+                                        placeholder="0"
+                                      />
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              ))
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }

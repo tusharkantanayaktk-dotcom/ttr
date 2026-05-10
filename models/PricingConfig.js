@@ -35,6 +35,14 @@ const PricingConfigSchema = new mongoose.Schema(
           required: true,
           min: 0,
         },
+        useOverride: {
+          type: Boolean,
+          default: false,
+        },
+        inStock: {
+          type: Boolean,
+          default: true,
+        },
       },
     ],
   },

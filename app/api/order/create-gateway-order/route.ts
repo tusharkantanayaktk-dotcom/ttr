@@ -98,14 +98,22 @@ async function resolvePrice(
     const pricingConfig = await PricingConfig.findOne({ userType }).lean();
 
     if (pricingConfig) {
-      const fixed = pricingConfig.overrides?.find(
+      const override = pricingConfig.overrides?.find(
         (o: any) =>
           o.gameSlug === gameSlug && o.itemSlug === itemSlug
       );
 
-      if (fixed?.fixedPrice != null) {
-        price = Number(fixed.fixedPrice);
+      // 1. Stock Check
+      if (override && override.inStock === false) {
+        throw new Error("Item is currently out of stock");
+      }
+
+      // 2. Price Calculation
+      if (override?.useOverride) {
+        // If override is enabled, use fixed price
+        price = Number(override.fixedPrice);
       } else if (pricingConfig.slabs?.length) {
+        // Default: use percentage markup slab
         const slab = pricingConfig.slabs.find(
           (s: any) => price >= s.min && price < s.max
         );
