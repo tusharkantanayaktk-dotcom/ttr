@@ -153,26 +153,31 @@ export default function PricingTab({
     return (
       <div className="space-y-6 pb-20 max-w-full overflow-x-hidden">
         {/* ================= PREMIUM HEADER ================= */}
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 px-2 md:px-0 bg-[var(--card)] p-6 rounded-3xl border border-[var(--border)] shadow-xl shadow-black/20">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <h2 className="text-2xl font-black tracking-tighter text-[var(--foreground)] uppercase">Pricing <span className="text-[var(--accent)]">Config</span></h2>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] backdrop-blur-md shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
+              <Settings2 size={20} />
             </div>
-            <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">Manage profit margins and fixed item prices</p>
+            <div>
+              <h2 className="text-xl font-black tracking-tighter text-[var(--foreground)] uppercase leading-none">
+                Pricing <span className="text-[var(--accent)]">Config</span>
+              </h2>
+              <p className="text-[9px] font-bold text-[var(--muted)]/60 uppercase tracking-widest mt-1">Global management console</p>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
             {/* MODE SWITCHER */}
-            <div className="flex bg-[var(--background)] p-1 rounded-2xl border border-[var(--border)] shadow-inner">
+            <div className="flex p-1 rounded-xl bg-[var(--background)] border border-[var(--border)]">
               {[
-                { id: "percent", label: "Markup", icon: <Percent size={12} /> },
-                { id: "fixed", label: "Fixed", icon: <Coins size={12} /> }
+                { id: "percent", label: "Markup", icon: <Percent size={10} /> },
+                { id: "fixed", label: "Fixed", icon: <Coins size={10} /> }
               ].map((m) => (
                 <button
                   key={m.id}
                   onClick={() => setPricingMode(m.id)}
-                  className={`flex items-center gap-2 px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${pricingMode === m.id
-                    ? "bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20 scale-105 z-10"
+                  className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${pricingMode === m.id
+                    ? "bg-[var(--accent)] text-white shadow-md shadow-[var(--accent)]/20"
                     : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
                 >
@@ -183,17 +188,17 @@ export default function PricingTab({
             </div>
 
             {/* ROLE SELECTOR */}
-            <div className="flex bg-[var(--background)] p-1 rounded-2xl border border-[var(--border)] shadow-inner">
-              {["user", "admin"].map((type) => (
+            <div className="flex p-1 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              {["user", "admin"].map((role) => (
                 <button
-                  key={type}
-                  onClick={() => setPricingType(type)}
-                  className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${pricingType === type
-                    ? "bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20 scale-105 z-10"
+                  key={role}
+                  onClick={() => setPricingType(role)}
+                  className={`px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${pricingType === role
+                    ? "bg-[var(--accent)] text-white shadow-md shadow-[var(--accent)]/20"
                     : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
                 >
-                  {type}
+                  {role}
                 </button>
               ))}
             </div>
@@ -203,18 +208,18 @@ export default function PricingTab({
               onClick={onSave}
               disabled={!canSave}
               className={`
-                  h-12 px-8 rounded-2xl flex items-center justify-center gap-3 text-xs font-black uppercase tracking-widest transition-all outline-none shadow-xl
+                  h-10 px-6 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all outline-none
                   ${canSave
-                  ? "bg-[var(--accent)] text-white shadow-[var(--accent)]/20 hover:brightness-110 active:scale-95"
+                  ? "bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/10 hover:brightness-110 active:scale-95"
                   : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]/40 cursor-not-allowed"}
                 `}
             >
               {savingPricing ? (
-                <RefreshCcw size={16} className="animate-spin" />
+                <RefreshCcw size={14} className="animate-spin" />
               ) : (
-                <Save size={16} />
+                <Save size={14} />
               )}
-              {savingPricing ? "Saving..." : "Save Changes"}
+              {savingPricing ? "Saving" : "Save Changes"}
             </button>
           </div>
         </div>

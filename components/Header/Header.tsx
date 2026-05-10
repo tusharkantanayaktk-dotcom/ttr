@@ -188,8 +188,7 @@ export default function Header() {
           {/* Wallet balance moved to sidebar */}
 
 
-          {/* ThemeToggle moved to sidebar */}
-
+          <ThemeToggle />
 
           <div className="h-6 w-[1px] bg-[var(--border)] mx-1 hidden sm:block" />
 
@@ -254,7 +253,6 @@ export default function Header() {
                         <h2 className="text-[10px] font-black italic uppercase tracking-[0.2em] text-[var(--muted)] opacity-50">Account</h2>
                       </div>
                       <div className="flex items-center gap-3">
-                        <ThemeToggle />
                         <motion.button
                           onClick={() => setUserMenuOpen(false)}
                           whileHover={{ rotate: 90, scale: 1.1 }}
@@ -358,12 +356,12 @@ export default function Header() {
                             {/* Right: Logout Icon */}
                             <motion.button
                               onClick={handleLogout}
-                              className="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/10"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
+                              className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/10 shadow-sm"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
                               title="Sign Out"
                             >
-                              <FiLogOut size={18} strokeWidth={2.5} />
+                              <FiLogOut size={20} strokeWidth={2.5} />
                             </motion.button>
                           </div>
 

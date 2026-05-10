@@ -31,7 +31,6 @@ export default function GamesPage() {
 
     "TEST 1",
     "Wuthering of Waves",
-    "Where Winds Meet"
   ];
 
   const isOutOfStock = (name: string) =>

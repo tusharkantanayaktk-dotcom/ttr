@@ -482,46 +482,45 @@ export default function OrdersTab() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-full max-w-lg bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
+              className="fixed right-0 top-0 h-full w-full max-w-sm bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
             >
-              <div className="p-6 border-b border-[var(--border)] bg-gradient-to-r from-[var(--foreground)]/[0.02] to-transparent">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-mono font-bold text-[var(--accent)] uppercase tracking-wider">{selectedOrder.orderId}</p>
-                    <h3 className="text-xl font-black uppercase italic tracking-tighter text-[var(--foreground)]">Order Details</h3>
+              <div className="p-4 border-b border-[var(--border)] bg-gradient-to-r from-[var(--foreground)]/[0.02] to-transparent">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="space-y-0.5">
+                    <p className="text-[8px] font-mono font-bold text-[var(--accent)] uppercase tracking-tight opacity-50 truncate max-w-[200px]">{selectedOrder.orderId}</p>
+                    <h3 className="text-base font-black uppercase italic tracking-tighter text-[var(--foreground)]">Order <span className="text-[var(--accent)]">Details</span></h3>
                   </div>
                   <button
                     onClick={() => setSelectedOrder(null)}
-                    className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all font-bold"
+                    className="w-7 h-7 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/10 transition-all"
                   >
-                    <X size={18} />
+                    <X size={14} />
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
-                  <div>
-                    <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mb-1">Price</p>
-                    <span className="text-2xl font-black text-emerald-500 tabular-nums">₹{selectedOrder.price}</span>
+                <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
+                  <div className="flex flex-col">
+                    <p className="text-[8px] font-black text-[var(--muted)]/40 uppercase tracking-[0.2em] mb-0.5">Price</p>
+                    <span className="text-xl font-black text-emerald-500 tabular-nums leading-none">₹{selectedOrder.price}</span>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <StatusDropdown
-                      value={selectedOrder.status}
-                      onChange={(v) => {
-                        updateOrderStatus(selectedOrder.orderId, v);
-                        setSelectedOrder(null);
-                      }}
-                      options={[
-                        { value: "pending", label: "Pending" },
-                        { value: "success", label: "Success" },
-                        { value: "failed", label: "Failed" },
-                        { value: "refund", label: "Refund" },
-                      ]}
-                    />
-                  </div>
+                  <StatusDropdown
+                    value={selectedOrder.status}
+                    compact
+                    onChange={(v) => {
+                      updateOrderStatus(selectedOrder.orderId, v);
+                      setSelectedOrder(null);
+                    }}
+                    options={[
+                      { value: "pending", label: "Pending" },
+                      { value: "success", label: "Success" },
+                      { value: "failed", label: "Failed" },
+                      { value: "refund", label: "Refund" },
+                    ]}
+                  />
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-8">
+              <div className="flex-1 overflow-y-auto p-4 space-y-5 custom-scrollbar">
                 <DrawerSection icon={<Gamepad2 size={16} />} title="Game Info">
                   <DrawerDetail label="Game" value={selectedOrder.gameSlug} emphasize />
                   <DrawerDetail label="Item Name" value={selectedOrder.itemName} />
@@ -634,13 +633,13 @@ function StatusDropdown({ value, onChange, options, disabled, compact }) {
 
 function DrawerSection({ icon, title, children }) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-3 text-[var(--muted)]/40">
-        <div className="p-2 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--accent)]">{icon}</div>
-        <h4 className="text-[10px] font-black uppercase tracking-[0.2em]">{title}</h4>
-        <div className="h-px flex-1 bg-[var(--border)]" />
+    <div className="space-y-3">
+      <div className="flex items-center gap-2 text-[var(--muted)]/40">
+        <div className="p-1.5 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--accent)]">{icon}</div>
+        <h4 className="text-[9px] font-black uppercase tracking-[0.2em]">{title}</h4>
+        <div className="h-px flex-1 bg-[var(--border)] opacity-50" />
       </div>
-      <div className="grid grid-cols-1 gap-4 px-1">{children}</div>
+      <div className="grid grid-cols-1 gap-2.5 px-1">{children}</div>
     </div>
   );
 }
@@ -648,8 +647,8 @@ function DrawerSection({ icon, title, children }) {
 function DrawerDetail({ label, value, emphasize }) {
   return (
     <div className="flex justify-between items-baseline gap-4 group">
-      <span className="text-[9px] font-black text-[var(--muted)]/40 uppercase tracking-tight group-hover:text-[var(--muted)]/60 transition-colors whitespace-nowrap">{label}</span>
-      <span className={`text-xs font-bold text-right truncate ${emphasize ? "text-[var(--accent)] italic uppercase" : "text-[var(--foreground)]"}`}>
+      <span className="text-[8px] font-black text-[var(--muted)]/30 uppercase tracking-tight group-hover:text-[var(--muted)]/50 transition-colors whitespace-nowrap">{label}</span>
+      <span className={`text-[11px] font-bold text-right truncate ${emphasize ? "text-[var(--accent)] italic uppercase" : "text-[var(--foreground)]/80"}`}>
         {value || "N/A"}
       </span>
     </div>

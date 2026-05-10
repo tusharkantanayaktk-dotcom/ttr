@@ -134,6 +134,7 @@ export async function GET() {
           image: MONTHLY_BUNDLE,
         };
       }
+
       return updatedGame;
     };
 
@@ -155,7 +156,8 @@ export async function GET() {
       "wuthering-of-waves464",
       "where-winds-meet280",
       "mlbb-smallphp980",
-      "weeklymonthly-bundle931"
+      "weeklymonthly-bundle931",
+      "where-winds-meet280"
     ];
 
     const filteredGames =
@@ -179,7 +181,7 @@ export async function GET() {
 
     // Featured games
     const featuredGames = filteredGames.filter((g: any) =>
-      ["mobile-legends988", "pubg-mobile138"].includes(
+      ["mobile-legends988", "pubg-mobile138", "where-winds-meet280"].includes(
         g.gameSlug
       )
     );
