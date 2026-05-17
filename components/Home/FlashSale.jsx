@@ -6,13 +6,38 @@ import Link from "next/link";
 import { FiZap, FiClock, FiChevronRight } from "react-icons/fi";
 import { useEffect, useState } from "react";
 
+const FlashSaleImage = ({ src, name }) => {
+    const [err, setErr] = useState(false);
+    const letter = name?.charAt(0).toUpperCase() || "?";
+
+    return (
+        <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-1.5 bg-black/40 flex items-center justify-center">
+            {!err ? (
+                <Image
+                    src={src}
+                    alt={name}
+                    fill
+                    sizes="(max-width: 640px) 45vw, 20vw"
+                    onError={() => setErr(true)}
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+            ) : (
+                <div className="w-full h-full bg-gradient-to-br from-[var(--card)] to-[var(--background)] flex items-center justify-center">
+                    <span className="text-3xl font-black text-amber-500 opacity-30 uppercase">{letter}</span>
+                </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        </div>
+    );
+};
+
 const flashSaleData = [
     {
         id: 1,
         name: "Weekly Pass",
-        game: "MLBB",
+        game: "Mobile Legends",
         image: "/game-assets/weekly-pass.jpeg",
-        price: "₹150",
+        price: "₹149",
         originalPrice: "₹170",
         slug: "mobile-legends988?type=weekly-pass",
         badge: "Hot Deal"
@@ -22,7 +47,7 @@ const flashSaleData = [
         name: "Weekly Bundle",
         game: "MLBB",
         image: "/game-assets/12.jpg",
-        price: "₹81",
+        price: "₹87",
         originalPrice: "₹100",
         slug: "weeklymonthly-bundle931",
         badge: "Best Value"
@@ -32,7 +57,7 @@ const flashSaleData = [
         name: "Monthly Bundle",
         game: "MLBB",
         image: "/game-assets/13.jpg",
-        price: "₹400",
+        price: "₹410",
         originalPrice: "₹500",
         slug: "weeklymonthly-bundle931",
         badge: "Best Value"
@@ -109,24 +134,10 @@ export default function FlashSale() {
                                 </div>
 
                                 {/* IMAGE CONTAINER */}
-                                <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-1.5 bg-black/40">
-                                    <Image
-                                        src={item.image}
-                                        alt={item.name}
-                                        fill
-                                        sizes="(max-width: 640px) 45vw, 20vw"
-                                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                                </div>
+                                <FlashSaleImage src={item.image} name={item.name} />
 
                                 {/* INFO CONTENT */}
                                 <div className="space-y-0.5 px-0.5">
-                                    <div className="flex items-center gap-1 font-black italic uppercase tracking-widest text-[var(--foreground)]/40 text-[7px]">
-                                        <span className="w-1 h-1 rounded-full bg-amber-500" />
-                                        {item.game}
-                                    </div>
-
                                     <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] group-hover:text-amber-500 transition-colors">
                                         {item.name}
                                     </h3>

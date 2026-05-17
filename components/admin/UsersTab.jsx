@@ -177,7 +177,7 @@ export default function UsersTab() {
           </div>
           <button
             onClick={fetchUsers}
-            className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
           </button>
@@ -191,7 +191,7 @@ export default function UsersTab() {
       {/* ================= SEARCH & FILTERS ================= */}
       <div className="flex flex-col md:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={16} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={14} />
           <input
             value={search}
             onChange={(e) => {
@@ -199,15 +199,15 @@ export default function UsersTab() {
               setSearch(e.target.value);
             }}
             placeholder="Search by name, email, or user ID..."
-            className="w-full h-11 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
+            className="w-full h-10 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
           />
         </div>
         <button
           onClick={() => setShowFilters(true)}
-          className="h-11 px-5 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center gap-2.5 hover:bg-[var(--foreground)]/[0.05] transition-all outline-none"
+          className="h-10 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center gap-2 hover:bg-[var(--foreground)]/[0.05] transition-all outline-none"
         >
-          <Filter size={14} className="text-[var(--accent)]" />
-          <span className="text-sm font-semibold">Filters</span>
+          <Filter size={12} className="text-[var(--accent)]" />
+          <span className="text-xs font-semibold">Filters</span>
         </button>
       </div>
 
@@ -230,57 +230,73 @@ export default function UsersTab() {
             className="space-y-4"
           >
             {/* DESKTOP TABLE */}
-            <div className="hidden lg:block rounded-[1.5rem] overflow-hidden border border-[var(--border)] bg-[var(--card)]">
-              <table className="w-full text-left text-sm">
+            <div className="hidden lg:block rounded-[2rem] overflow-hidden border border-[var(--border)] bg-[var(--card)] shadow-sm">
+              <table className="w-full text-left text-sm border-collapse">
                 <thead className="bg-[var(--foreground)]/[0.03] border-b border-[var(--border)] text-[var(--muted)]">
-                  <tr className="text-xs font-semibold">
-                    <th className="px-6 py-4">User</th>
-                    <th className="px-6 py-4">Contact</th>
-                    <th className="px-6 py-4">Role</th>
-                    <th className="px-6 py-4">Joined Date</th>
-                    <th className="px-6 py-4 text-right">Actions</th>
+                  <tr className="text-[9px] font-black uppercase tracking-[0.1em]">
+                    <th className="pl-6 pr-4 py-3">User Profile</th>
+                    <th className="px-4 py-3">Contact Details</th>
+                    <th className="px-4 py-3">Activity Info</th>
+                    <th className="pl-4 pr-6 py-3 text-right">Role Management</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[var(--border)]">
+                <tbody className="divide-y divide-[var(--border)]/50">
                   {users.map((u, idx) => (
                     <motion.tr
                       key={u._id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.03 }}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.02 }}
                       onClick={() => setSelectedUser(u)}
                       className="group hover:bg-[var(--foreground)]/[0.02] transition-colors cursor-pointer"
                     >
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
+                      <td className="pl-8 pr-6 py-4">
+                        <div className="flex items-center gap-4">
                           <Avatar user={u} />
-                          <div className="flex flex-col">
-                            <span className="text-[var(--foreground)] font-semibold text-sm">{u.name}</span>
-                            <span className="text-[11px] text-[var(--muted)]/60 font-mono truncate max-w-[120px]">{u.userId}</span>
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-[var(--foreground)] font-bold text-sm leading-none group-hover:text-[var(--accent)] transition-colors">{u.name}</span>
+                            <span className="text-[10px] text-[var(--muted)] font-mono opacity-50">{u.userId}</span>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex flex-col text-[var(--muted)]">
-                          <span className="text-[var(--foreground)] font-medium text-xs">{u.email}</span>
-                          <span className="text-[11px] mt-0.5">{u.phone || "No phone linked"}</span>
+                        <div className="flex flex-col gap-1 text-[var(--muted)]">
+                          <div className="flex items-center gap-2">
+                            <Mail size={12} className="opacity-40" />
+                            <span className="text-[var(--foreground)] font-semibold text-xs tracking-tight">{u.email}</span>
+                          </div>
+                          {u.phone && (
+                            <div className="flex items-center gap-2">
+                              <Phone size={10} className="opacity-40" />
+                              <span className="text-[10px] font-medium opacity-60">{u.phone}</span>
+                            </div>
+                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border text-[11px] font-semibold tracking-wide capitalize ${getRoleClass(u.userType)}`}>
-                          {getRoleIcon(u.userType)}
-                          {u.userType}
-                        </span>
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2 text-[var(--muted)]">
+                            <Calendar size={12} className="opacity-40" />
+                            <span className="text-[11px] font-bold">
+                              {new Date(u.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 text-[var(--muted)] opacity-60">
+                            <Activity size={10} />
+                            <span className="text-[9px] font-black uppercase tracking-wider">
+                              {u.lastLogin ? "Active Recently" : "Never Logged In"}
+                            </span>
+                          </div>
+                        </div>
                       </td>
-                      <td className="px-6 py-4 text-xs font-medium text-[var(--muted)]">
-                        {new Date(u.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
-                      </td>
-                      <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
-                        <RoleDropdown
-                          value={u.userType}
-                          disabled={updatingUserId === u.userId || u.userType === "owner"}
-                          onChange={(v) => changeUserRole(u.userId, v)}
-                        />
+                      <td className="pl-6 pr-8 py-4 text-right" onClick={(e) => e.stopPropagation()}>
+                        <div className="inline-block">
+                          <RoleDropdown
+                            value={u.userType}
+                            disabled={updatingUserId === u.userId || u.userType === "owner"}
+                            onChange={(v) => changeUserRole(u.userId, v)}
+                          />
+                        </div>
                       </td>
                     </motion.tr>
                   ))}
@@ -289,56 +305,70 @@ export default function UsersTab() {
             </div>
 
             {/* MOBILE LIST */}
-            <div className="lg:hidden space-y-3">
+            <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
               {users.map((u, idx) => (
                 <motion.div
                   key={u._id}
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: idx * 0.03 }}
+                  transition={{ delay: idx * 0.02 }}
                   onClick={() => setSelectedUser(u)}
-                  className="p-5 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.04] transition-all relative"
+                  className="group p-4 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] active:scale-[0.98] transition-all relative overflow-hidden"
                 >
+                  {/* Subtle Background Accent */}
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-[var(--accent)] opacity-[0.03] blur-[30px] rounded-full -mr-10 -mt-10 group-hover:opacity-[0.06] transition-opacity" />
+
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-3">
-                      <Avatar user={u} />
+                      <Avatar user={u} size="sm" />
                       <div className="min-w-0">
-                        <p className="font-semibold text-[var(--foreground)] text-sm truncate">{u.name}</p>
-                        <p className="text-[11px] text-[var(--muted)]/60 font-mono truncate">{u.userId}</p>
+                        <p className="font-bold text-[var(--foreground)] text-xs truncate leading-tight">{u.name}</p>
+                        <p className="text-[9px] text-[var(--muted)] font-mono opacity-40 truncate">{u.userId}</p>
                       </div>
                     </div>
-                    <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border text-[10px] font-semibold capitalize ${getRoleClass(u.userType)}`}>
-                      {getRoleIcon(u.userType)}
-                      {u.userType}
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-[var(--muted)]">
-                        <Mail size={12} className="shrink-0" />
-                        <span className="text-xs truncate">{u.email}</span>
-                      </div>
-                      {u.phone && (
-                        <div className="flex items-center gap-2 text-[var(--muted)]">
-                          <Phone size={12} className="shrink-0" />
-                          <span className="text-xs">{u.phone}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center gap-2 text-[var(--muted)]/60">
-                        <Calendar size={12} />
-                        <span className="text-xs">{new Date(u.createdAt).toLocaleDateString()}</span>
-                      </div>
-
+                    
+                    {/* Role Dropdown at Top Right for better space management */}
+                    <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
                       <RoleDropdown
                         value={u.userType}
                         compact
                         disabled={updatingUserId === u.userId || u.userType === "owner"}
                         onChange={(v) => changeUserRole(u.userId, v)}
                       />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-2 pt-3 border-t border-[var(--border)]/40">
+                    <div className="flex flex-col gap-1.5">
+                      <div className="flex items-center gap-2 text-[var(--muted)]">
+                        <div className="w-5 h-5 rounded-lg bg-[var(--foreground)]/[0.03] flex items-center justify-center">
+                          <Mail size={10} className="opacity-60" />
+                        </div>
+                        <span className="text-[10px] font-bold truncate tracking-tight">{u.email}</span>
+                      </div>
+                      
+                      {u.phone && (
+                        <div className="flex items-center gap-2 text-[var(--muted)]">
+                          <div className="w-5 h-5 rounded-lg bg-[var(--foreground)]/[0.03] flex items-center justify-center">
+                            <Phone size={10} className="opacity-60" />
+                          </div>
+                          <span className="text-[10px] font-bold tracking-tight">{u.phone}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <div className="flex items-center gap-2 text-[var(--muted)] opacity-50">
+                        <Calendar size={11} />
+                        <span className="text-[10px] font-bold tracking-tight">
+                          {new Date(u.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center gap-1.5 text-[var(--accent)] bg-[var(--accent)]/5 px-2.5 py-1 rounded-full">
+                        <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
+                        <span className="text-[8px] font-black uppercase tracking-widest">Details</span>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -416,9 +446,7 @@ export default function UsersTab() {
                   <div className="min-w-0">
                     <h4 className="text-base font-bold text-[var(--foreground)] truncate">{selectedUser.name}</h4>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className={`px-2 py-0.5 rounded-md border text-[10px] font-semibold capitalize ${getRoleClass(selectedUser.userType)}`}>
-                        {selectedUser.userType}
-                      </span>
+
                       <span className="text-[11px] text-[var(--muted)] font-mono">{selectedUser.userId}</span>
                     </div>
                   </div>

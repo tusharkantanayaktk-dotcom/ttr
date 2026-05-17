@@ -21,7 +21,7 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
 
     const page = Math.max(parseInt(searchParams.get("page") || "1"), 1);
-    const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 100);
+    const limit = Math.min(parseInt(searchParams.get("limit") || "10"), 5000);
     const search = searchParams.get("search")?.trim();
     const userType = searchParams.get("userType")?.trim();
 

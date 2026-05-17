@@ -147,7 +147,8 @@ export async function GET() {
       "mlbbbr178",
       "sgmy-mlbb893",
       "magic-chess-gogo-india924",
-      "mlbb-indo42",
+      // "mlbb-indo42",
+      "mobile-legends-exclusive266",
       // "mlbb-russia953",
       "pubg-mobile138",
 
@@ -155,7 +156,7 @@ export async function GET() {
       "honor-of-kings57",
       "wuthering-of-waves464",
       "where-winds-meet280",
-      "mlbb-smallphp980",
+      // "mlbb-smallphp980",
       "weeklymonthly-bundle931",
       "where-winds-meet280"
     ];

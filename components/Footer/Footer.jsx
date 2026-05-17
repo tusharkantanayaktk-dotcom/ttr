@@ -164,10 +164,10 @@ export default function Footer() {
 
         {/* --- BOTTOM SECTION: INFO & MADE BY --- */}
         <div className="pt-4 border-t border-[var(--border)]/60 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4 text-[10px] sm:text-[11px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2 text-[9px] sm:text-[11px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">
             <span className="opacity-60">&copy; {new Date().getFullYear()} {COPYRIGHT_NAME}</span>
-            <div className="hidden md:block w-1 h-1 rounded-full bg-[var(--border)]" />
-            <span className="hidden md:inline opacity-60">All Rights Reserved</span>
+            <div className="w-1 h-1 rounded-full bg-[var(--border)] opacity-40" />
+            <span className="opacity-60">All Rights Reserved</span>
           </div>
 
           <div className="flex items-center gap-2 text-[9px] sm:text-[11px] font-black text-[var(--muted)] uppercase tracking-[0.15em]">

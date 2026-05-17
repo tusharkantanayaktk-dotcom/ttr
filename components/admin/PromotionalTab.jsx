@@ -12,8 +12,6 @@ import {
   RefreshCcw,
   Tag,
   X,
-  ChevronLeft,
-  ChevronRight,
   Loader2,
   Database,
   Globe,
@@ -38,8 +36,6 @@ export default function PromotionalTab() {
   const [recipients, setRecipients] = useState([]);
   const [selectedRecipients, setSelectedRecipients] = useState([]);
   const [loadingRecipients, setLoadingRecipients] = useState(false);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
   const [recipientType, setRecipientType] = useState("all"); // all, user, member, admin, owner, external
   const [tagFilter, setTagFilter] = useState("");
@@ -66,7 +62,7 @@ export default function PromotionalTab() {
 
   useEffect(() => {
     fetchRecipients();
-  }, [page, search, recipientType, tagFilter]);
+  }, [search, recipientType, tagFilter]);
 
   const fetchStats = async () => {
     try {
@@ -90,8 +86,7 @@ export default function PromotionalTab() {
       setLoadingRecipients(true);
       const token = localStorage.getItem("token");
       const params = new URLSearchParams({
-        page,
-        limit: 50,
+        limit: 5000,
         search,
         userType: recipientType === "all" ? "" : recipientType,
       });
@@ -101,7 +96,6 @@ export default function PromotionalTab() {
       const data = await res.json();
       if (data.success) {
         setRecipients(data.data || []);
-        setTotalPages(data.pagination?.totalPages || 1);
         setStats(prev => ({ ...prev, database: data.pagination?.total || 0 }));
       }
     } catch (err) {
@@ -268,7 +262,7 @@ export default function PromotionalTab() {
               {["all", "user", "admin", "owner", "external"].map((type) => (
                 <button
                   key={type}
-                  onClick={() => { setRecipientType(type); setPage(1); }}
+                  onClick={() => { setRecipientType(type); }}
                   className={`px-2 py-1 rounded-md text-[9px] font-black uppercase transition-all border ${
                     recipientType === type
                       ? "bg-[var(--accent)] text-black border-[var(--accent)]"
@@ -306,7 +300,7 @@ export default function PromotionalTab() {
                 type="text"
                 placeholder="Search..."
                 value={search}
-                onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                onChange={(e) => { setSearch(e.target.value); }}
                 className="w-full h-8 pl-9 pr-3 rounded-lg bg-transparent border-b border-[var(--border)] text-[11px] focus:border-[var(--accent)] outline-none transition-all"
               />
             </div>
@@ -314,15 +308,6 @@ export default function PromotionalTab() {
             <div className="space-y-1.5 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
               <div className="flex items-center justify-between text-[8px] font-black text-[var(--muted)] uppercase px-1 pb-1">
                 <span>{recipients.length} of {stats.database} records</span>
-                <div className="flex items-center gap-2">
-                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="hover:text-[var(--foreground)] disabled:opacity-30">
-                    <ChevronLeft size={12} />
-                  </button>
-                  <span>{page}/{totalPages}</span>
-                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="hover:text-[var(--foreground)] disabled:opacity-30">
-                    <ChevronRight size={12} />
-                  </button>
-                </div>
               </div>
 
               {loadingRecipients ? (

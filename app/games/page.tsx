@@ -33,7 +33,7 @@ export default function GamesPage() {
     "Wuthering of Waves",
   ];
 
-  const isOutOfStock = (name: string) =>
+  const isOutOfStock = (name: any) =>
     outOfStockGames.includes(name);
 
   /* ================= FETCH ================= */
@@ -48,11 +48,13 @@ export default function GamesPage() {
 
         setCategory(data?.data?.category || []);
         setGames(
-          (data?.data?.games || []).map((g: any) =>
-            g.gameName === "PUBG Mobile"
-              ? { ...g, gameName: "PUBG Mobile" }
-              : g
-          )
+          (data?.data?.games || []).map((g: any) => {
+            let name = g.gameName;
+            if (name.toUpperCase().includes("MLBB")) {
+              name = name.replace(/MLBB/gi, "Mobile Legends");
+            }
+            return { ...g, gameName: name };
+          })
         );
       });
   }, []);
@@ -91,6 +93,9 @@ export default function GamesPage() {
 
   /* ================= SUB-COMPONENTS ================= */
   const GameCard = React.memo(({ game, disabled }: any) => {
+    const [imgError, setImgError] = useState(false);
+    const firstLetter = game.gameName?.charAt(0).toUpperCase() || "?";
+
     return (
       <div className="group relative">
         <Link
@@ -100,22 +105,29 @@ export default function GamesPage() {
           {/* IMAGE WRAPPER */}
           <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-[border-color,transform,box-shadow] duration-300 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-md">
 
-            <div className="relative w-full h-full">
-              <Image
-                src={game.gameImageId?.image || logo}
-                alt={game.gameName}
-                fill
-                sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
-                className={`object-cover transition-all duration-300 ease-out
-              ${disabled ? "grayscale opacity-30 scale-100" : "group-hover:scale-105"}`}
-              />
+            <div className="relative w-full h-full flex items-center justify-center">
+              {!imgError ? (
+                <Image
+                  src={game.gameImageId?.image || logo}
+                  alt={game.gameName}
+                  fill
+                  sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
+                  onError={() => setImgError(true)}
+                  className={`object-cover transition-all duration-300 ease-out
+                ${disabled ? "grayscale opacity-30 scale-100" : "group-hover:scale-105"}`}
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-[var(--card)] to-[var(--background)] flex items-center justify-center">
+                  <span className="text-4xl font-black text-[var(--accent)] opacity-20 group-hover:opacity-40 transition-opacity">
+                    {firstLetter}
+                  </span>
+                </div>
+              )}
 
               {/* High-Fidelity Overlays */}
               {!disabled && (
                 <>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-
-
                 </>
               )}
 
@@ -160,16 +172,6 @@ export default function GamesPage() {
             <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors duration-200">
               {game.gameName}
             </h3>
-
-            <div className="flex items-center gap-1">
-              {game.gameFrom ? (
-                <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] opacity-30 group-hover:opacity-60 transition-opacity duration-200">
-                  {game.gameFrom}
-                </p>
-              ) : (
-                <div className="h-2" />
-              )}
-            </div>
           </div>
         </Link>
       </div>

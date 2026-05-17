@@ -13,6 +13,33 @@ const MLBBPurchaseGuide = dynamic(() => import("../../../components/HelpImage/ML
 const ItemGrid = dynamic(() => import("@/components/GameDetail/ItemGrid"), { ssr: false });
 const BuyPanel = dynamic(() => import("@/components/GameDetail/BuyPanel"), { ssr: false });
 
+const GameThumbnail = ({ src, name, index, isLarge = false }) => {
+  const [err, setErr] = useState(false);
+  const letter = name?.charAt(0).toUpperCase() || "?";
+
+  if (!src || err) {
+    return (
+      <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--card)] to-[var(--background)] border border-[var(--border)] rounded-xl`}>
+        <span className={`${isLarge ? "text-2xl" : "text-lg"} font-black text-[var(--accent)] opacity-40 uppercase`}>
+          {letter}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={src || logo}
+      alt={name || "Game"}
+      fill
+      sizes={isLarge ? "56px" : "44px"}
+      priority={index !== undefined && index < 8}
+      onError={() => setErr(true)}
+      className="object-cover"
+    />
+  );
+};
+
 export default function GameDetailPage() {
   const { slug } = useParams();
   const router = useRouter();
@@ -29,7 +56,14 @@ export default function GameDetailPage() {
     fetch("/api/games")
       .then((res) => res.json())
       .then((data) => {
-        setAllGames(data?.data?.games || []);
+        const fetchedGames = (data?.data?.games || []).map((g) => {
+          let name = g.gameName;
+          if (name.toUpperCase().includes("MLBB")) {
+            name = name.replace(/MLBB/gi, "Mobile Legends");
+          }
+          return { ...g, gameName: name };
+        });
+        setAllGames(fetchedGames);
       });
   }, []);
 
@@ -48,8 +82,14 @@ export default function GameDetailPage() {
           (a, b) => a.sellingPrice - b.sellingPrice
         );
 
+        let gameName = data.data.gameName;
+        if (gameName.toUpperCase().includes("MLBB")) {
+          gameName = gameName.replace(/MLBB/gi, "Mobile Legends");
+        }
+
         setGame({
           ...data.data,
+          gameName,
           allItems: items,
         });
 
@@ -152,14 +192,7 @@ export default function GameDetailPage() {
                   relative w-11 h-11 rounded-xl overflow-hidden transition-all duration-500 transform
                   ${isActive ? "ring-1 ring-red-500/50 scale-105" : "grayscale opacity-80"}
                 `}>
-                  <Image
-                    src={g.gameImageId?.image || logo}
-                    alt={g.gameName}
-                    fill
-                    sizes="44px"
-                    className="object-cover"
-                    priority={index < 8}
-                  />
+                  <GameThumbnail src={g.gameImageId?.image} name={g.gameName} index={index} />
                 </div>
 
                 {/* LABEL */}
@@ -192,21 +225,13 @@ export default function GameDetailPage() {
       {/* ================= HEADER ================= */}
       <div className="max-w-6xl mx-auto mb-6 flex items-center gap-4">
         <div className="w-14 h-14 relative rounded-lg overflow-hidden">
-          <Image
-            src={game?.gameImageId?.image || logo}
-            alt={game?.gameName || "Game"}
-            fill
-            className="object-cover"
-          />
+          <GameThumbnail src={game?.gameImageId?.image} name={game?.gameName} isLarge />
         </div>
 
         <div>
           <h1 className="text-2xl font-extrabold">
             {isBGMI ? "BGMI" : game?.gameName}
           </h1>
-          <p className="text-xs text-[var(--muted)]">
-            {game?.gameFrom}
-          </p>
         </div>
       </div>
 
