@@ -39,7 +39,7 @@ export type OrderType = {
 
 const getGameName = (slug: string) => {
   const s = slug.toLowerCase();
-  const mlbbSlugs = ["mobile-legends988", "mlbb-smallphp638", "mlbb-double332", "sgmy-mlbb893", "value-pass-ml948", "mlbb-russia953", "mlbb-indo42"];
+  const mlbbSlugs = ["mobile-legends270", "mlbb-smallphp638", "mlbb-double332", "sgmy-mlbb893", "value-pass-ml948", "mlbb-russia953", "mlbb-indo42"];
   if (mlbbSlugs.some((k) => s.includes(k))) return "Mobile Legends";
   if (s.includes("pubg-mobile138")) return "BGMI";
   return slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
