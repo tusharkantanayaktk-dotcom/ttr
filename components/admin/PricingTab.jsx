@@ -127,23 +127,21 @@ export default function PricingTab({
   };
 
   const updateOverrideField = (itemSlug, field, value) => {
-    const next = [...overrides];
-    const idx = next.findIndex((o) => o.itemSlug === itemSlug);
-    if (idx === -1) return;
-    next[idx][field] = value;
-    setOverrides(next);
+    setOverrides((prev) => 
+      prev.map((o) => o.itemSlug === itemSlug ? { ...o, [field]: value } : o)
+    );
   };
 
   const updateOverridePrice = (i, value) => {
-    const next = [...overrides];
-    next[i].fixedPrice = Math.max(0, Number(value) || 0);
-    setOverrides(next);
+    setOverrides((prev) => 
+      prev.map((o, index) => index === i ? { ...o, fixedPrice: Math.max(0, Number(value) || 0) } : o)
+    );
   };
 
   const updateSlab = (i, key, value) => {
-    const next = [...slabs];
-    next[i][key] = Math.max(0, Number(value) || 0);
-    setSlabs(next);
+    setSlabs((prev) => 
+      prev.map((s, index) => index === i ? { ...s, [key]: Math.max(0, Number(value) || 0) } : s)
+    );
   };
 
   const addSlab = () => setSlabs([...slabs, { min: 0, max: 0, percent: 0 }]);

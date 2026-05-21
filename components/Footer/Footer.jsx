@@ -162,26 +162,12 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* --- BOTTOM SECTION: INFO & MADE BY --- */}
-        <div className="pt-4 border-t border-[var(--border)]/60 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2 text-[9px] sm:text-[11px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">
+        {/* --- BOTTOM SECTION: INFO --- */}
+        <div className="pt-4 border-t border-[var(--border)]/60 flex items-center justify-center">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[9px] sm:text-[11px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">
             <span className="opacity-60">&copy; {new Date().getFullYear()} {COPYRIGHT_NAME}</span>
             <div className="w-1 h-1 rounded-full bg-[var(--border)] opacity-40" />
             <span className="opacity-60">All Rights Reserved</span>
-          </div>
-
-          <div className="flex items-center gap-2 text-[9px] sm:text-[11px] font-black text-[var(--muted)] uppercase tracking-[0.15em]">
-            <span className="opacity-50">CRAFTED WITH</span>
-            <FaHeart className="text-red-500 animate-pulse text-[10px]" />
-            <span className="opacity-50 text-[8px] lowercase italic px-0.5">by</span>
-            <a
-              href={MADE_BY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--foreground)] hover:text-red-500 font-black transition-all border-b border-[var(--border)] hover:border-red-500 italic px-1"
-            >
-              {MADE_BY_NAME}
-            </a>
           </div>
         </div>
       </div>
