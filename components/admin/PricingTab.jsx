@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Percent,
@@ -38,6 +38,8 @@ export default function PricingTab({
   const [fixedItemFilter, setFixedItemFilter] = useState("");
   const [loadingFixedPrices, setLoadingFixedPrices] = useState(false);
   const [gameSearch, setGameSearch] = useState("");
+  // useRef so we never get stale closures or re-render loops
+  const hydratedGamesRef = useRef(new Set());
 
   useEffect(() => {
     (async () => {
@@ -69,30 +71,45 @@ export default function PricingTab({
     return [];
   };
 
+  // Reset hydrated-games tracking whenever role (pricingType) changes so fresh data loads
+  useEffect(() => {
+    hydratedGamesRef.current = new Set();
+    setFixedGameFilter("");
+  }, [pricingType]);
+
   const hydrateFixedPricing = async (gameSlug) => {
     if (!gameSlug) return;
+    // Skip if already hydrated — preserves any in-progress price edits
+    if (hydratedGamesRef.current.has(gameSlug)) return;
+    // Mark immediately to prevent double-fetch
+    hydratedGamesRef.current.add(gameSlug);
     setLoadingFixedPrices(true);
     try {
       const items = await fetchItemsForGame(gameSlug);
-      const hydrated = items.map((item) => {
-        const existing = overrides.find(
-          (o) => o.gameSlug === gameSlug && o.itemSlug === item.itemSlug
-        );
-        return {
-          gameSlug,
-          itemSlug: item.itemSlug,
-          itemName: item.itemName,
-          itemImageId: item.itemImageId,
-          fixedPrice: existing?.fixedPrice ?? Number(item.sellingPrice) ?? 0,
-          useOverride: existing?.useOverride ?? false,
-          inStock: existing?.inStock ?? true,
-        };
-      });
+      if (!items.length) return;
       setOverrides((prev) => {
         const others = prev.filter((o) => o.gameSlug !== gameSlug);
+        const hydrated = items.map((item) => {
+          const existing = prev.find(
+            (o) => o.gameSlug === gameSlug && o.itemSlug === item.itemSlug
+          );
+          return {
+            gameSlug,
+            itemSlug: item.itemSlug,
+            itemName: item.itemName,
+            itemImageId: item.itemImageId,
+            fixedPrice: existing?.fixedPrice ?? Number(item.sellingPrice) ?? 0,
+            useOverride: existing?.useOverride ?? false,
+            inStock: existing?.inStock ?? true,
+          };
+        });
         return [...others, ...hydrated];
       });
       setFixedItemFilter("");
+    } catch (e) {
+      // On error, allow retry by removing from hydrated set
+      hydratedGamesRef.current.delete(gameSlug);
+      console.error("Hydration failed", e);
     } finally {
       setLoadingFixedPrices(false);
     }
@@ -102,12 +119,13 @@ export default function PricingTab({
     if (pricingMode !== "fixed") return;
     if (!fixedGameFilter) return;
     hydrateFixedPricing(fixedGameFilter);
-  }, [pricingMode, pricingType, fixedGameFilter]);
+  }, [pricingMode, fixedGameFilter]);
 
   const visibleOverrides = useMemo(() => {
+    const q = fixedItemFilter.toLowerCase();
     return overrides.filter((o) => {
       if (fixedGameFilter && o.gameSlug !== fixedGameFilter) return false;
-      if (fixedItemFilter && o.itemSlug !== fixedItemFilter) return false;
+      if (q && !String(o.itemName || "").toLowerCase().includes(q) && !String(o.itemSlug || "").toLowerCase().includes(q)) return false;
       return true;
     }).sort((a, b) => (a.itemName || a.itemSlug).localeCompare(b.itemName || b.itemSlug));
   }, [overrides, fixedGameFilter, fixedItemFilter]);
@@ -126,9 +144,11 @@ export default function PricingTab({
     }));
   };
 
-  const updateOverrideField = (itemSlug, field, value) => {
-    setOverrides((prev) => 
-      prev.map((o) => o.itemSlug === itemSlug ? { ...o, [field]: value } : o)
+  const updateOverrideField = (gameSlug, itemSlug, field, value) => {
+    setOverrides((prev) =>
+      prev.map((o) =>
+        o.gameSlug === gameSlug && o.itemSlug === itemSlug ? { ...o, [field]: value } : o
+      )
     );
   };
 
@@ -441,7 +461,7 @@ export default function PricingTab({
                                       {/* STOCK TOGGLE */}
                                       <div className="flex flex-col items-center gap-1">
                                         <div
-                                          onClick={() => updateOverrideField(o.itemSlug, "inStock", !o.inStock)}
+                                          onClick={() => updateOverrideField(o.gameSlug, o.itemSlug, "inStock", !o.inStock)}
                                           className={`w-7 h-3.5 rounded-full relative cursor-pointer transition-all duration-300 ${o.inStock ? 'bg-emerald-500' : 'bg-[var(--foreground)]/[0.1]'}`}
                                         >
                                           <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 ${o.inStock ? 'translate-x-3.5' : 'translate-x-0'}`} />
@@ -452,7 +472,7 @@ export default function PricingTab({
                                       {/* OVERRIDE TOGGLE */}
                                       <div className="flex flex-col items-center gap-1">
                                         <div
-                                          onClick={() => updateOverrideField(o.itemSlug, "useOverride", !o.useOverride)}
+                                          onClick={() => updateOverrideField(o.gameSlug, o.itemSlug, "useOverride", !o.useOverride)}
                                           className={`w-7 h-3.5 rounded-full relative cursor-pointer transition-all duration-300 ${o.useOverride ? 'bg-[var(--accent)]' : 'bg-[var(--foreground)]/[0.1]'}`}
                                         >
                                           <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 ${o.useOverride ? 'translate-x-3.5' : 'translate-x-0'}`} />
@@ -462,7 +482,7 @@ export default function PricingTab({
                                     </div>
                                   </div>
 
-                                  {/* PRICE INPUT */}
+                                  {/* PRICE INPUT — always editable; typing auto-enables Override */}
                                   <div className="space-y-2">
                                     <div className="flex items-center justify-between px-1">
                                       <label className="text-[8px] font-black text-[var(--muted)]/60 uppercase tracking-widest leading-none">Base Selling Price (INR)</label>
@@ -475,14 +495,17 @@ export default function PricingTab({
                                       <input
                                         type="number"
                                         value={o.fixedPrice}
-                                        disabled={!o.useOverride}
-                                        onChange={(e) =>
-                                          updateOverridePrice(
-                                            overrides.findIndex((x) => x.itemSlug === o.itemSlug),
-                                            e.target.value
-                                          )
-                                        }
-                                        className={`w-full h-10 pl-9 pr-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-black text-base tabular-nums outline-none transition-all ${!o.useOverride ? 'opacity-30 grayscale cursor-not-allowed' : 'focus:border-[var(--accent)]/50 focus:bg-[var(--accent)]/[0.02]'}`}
+                                        onChange={(e) => {
+                                          // Auto-enable override when user starts typing
+                                          if (!o.useOverride) {
+                                            updateOverrideField(o.gameSlug, o.itemSlug, "useOverride", true);
+                                          }
+                                          const idx = overrides.findIndex(
+                                            (x) => x.gameSlug === o.gameSlug && x.itemSlug === o.itemSlug
+                                          );
+                                          updateOverridePrice(idx, e.target.value);
+                                        }}
+                                        className="w-full h-10 pl-9 pr-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-black text-base tabular-nums outline-none transition-all focus:border-[var(--accent)]/50 focus:bg-[var(--accent)]/[0.02]"
                                         placeholder="0"
                                       />
                                     </div>
