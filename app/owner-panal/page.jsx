@@ -24,6 +24,7 @@ import FlashSaleTab from "@/components/admin/FlashSaleTab";
 
 export default function AdminPanalPage() {
   const [activeTab, setActiveTab] = useState("users");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [queries, setQueries] = useState([]);
 
@@ -150,17 +151,54 @@ export default function AdminPanalPage() {
     <AdminGuard>
       <section className="min-h-screen bg-[var(--background)] px-6 py-3">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-4">
-            <h1 className="text-xl font-bold tracking-tight text-[var(--foreground)]">
-              Admin Panel
-            </h1>
-            <p className="text-[10px] text-[var(--muted)]">
-              Manage users, orders, transactions, queries & pricing
-            </p>
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-bold tracking-tight text-[var(--foreground)]">
+                Admin Panel
+              </h1>
+              <p className="text-[10px] text-[var(--muted)]">
+                Manage users, orders, transactions, queries & pricing
+              </p>
+            </div>
+            
+            <button 
+              className="md:hidden p-2 bg-[var(--card)] border border-[var(--border)] rounded-lg text-[var(--foreground)] active:scale-95 transition-transform"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
           </div>
 
 
-          <div className="mb-4 p-4 rounded-xl border border-[var(--border)] bg-[var(--card)]">
+          <div className="flex flex-col md:flex-row gap-6">
+            
+            {/* Mobile Overlay */}
+            {isSidebarOpen && (
+              <div 
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] md:hidden"
+                onClick={() => setIsSidebarOpen(false)}
+              />
+            )}
+
+            {/* SIDEBAR */}
+            <aside className={`
+              fixed md:static top-0 left-0 h-[100dvh] md:h-auto z-[100] md:z-auto
+              w-[280px] md:w-64 shrink-0 
+              bg-[var(--background)] md:bg-transparent
+              border-r border-[var(--border)] md:border-none
+              p-6 pb-32 md:p-0
+              overflow-y-auto md:overflow-visible
+              transition-transform duration-300 ease-in-out
+              ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+            `}>
+              <div className="flex items-center justify-between mb-6 md:hidden">
+                <h2 className="font-bold text-lg bg-[var(--background)] px-2">Menu</h2>
+                <button type="button" onClick={() => setIsSidebarOpen(false)} className="p-2 bg-[var(--card)] hover:bg-[var(--accent)] hover:text-black rounded-lg border border-[var(--border)] cursor-pointer z-50 transition-colors">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+
+              <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] mb-6">
 
             <p className="text-xs uppercase tracking-wide text-[var(--muted)]">
               Account Balance
@@ -178,57 +216,59 @@ export default function AdminPanalPage() {
           </div>
 
 
-          <div className="mb-6 space-y-4">
-            {[
-              {
-                title: "Management & Finance",
-                tabs: ["users", "orders", "wallet", "transactions", "queries", "pricing"]
-              },
-              {
-                title: "Marketing & Storefront",
-                tabs: ["banners", "promotional", "flash_sale", "announcement"]
-              },
-              {
-                title: "System & Config",
-                tabs: ["settings", "seo"]
-              }
-            ].map(group => (
-              <div key={group.title}>
-                <h3 className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mb-2 ml-1">{group.title}</h3>
-                <div className="flex flex-wrap gap-1.5">
-                  {group.tabs.map(tab => {
-                    const isActive = activeTab === tab;
+              <div className="space-y-4">
+                {[
+                  {
+                    title: "Management & Finance",
+                    tabs: ["users", "orders", "wallet", "transactions", "queries", "pricing"]
+                  },
+                  {
+                    title: "Marketing & Storefront",
+                    tabs: ["banners", "promotional", "flash_sale", "announcement"]
+                  },
+                  {
+                    title: "System & Config",
+                    tabs: ["settings", "seo"]
+                  }
+                ].map(group => (
+                  <div key={group.title}>
+                    <h3 className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mb-2 ml-1">{group.title}</h3>
+                    <div className="flex flex-col gap-1">
+                      {group.tabs.map(tab => {
+                        const isActive = activeTab === tab;
 
-                    return (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`
-                          px-3 py-1.5
-                          rounded-lg
-                          text-[10px] font-bold
-                          transition-all
-                          border
-                          ${isActive
-                            ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-md"
-                            : "bg-[var(--card)] text-[var(--muted)] border-[var(--border)] hover:border-[var(--muted)] hover:text-[var(--foreground)]"
-                          }
-                        `}
-                      >
-                        {tab.replace("_", " ").toUpperCase()}
-                      </button>
-                    );
-                  })}
-                </div>
+                        return (
+                          <button
+                            key={tab}
+                            onClick={() => {
+                              setActiveTab(tab);
+                              setIsSidebarOpen(false);
+                            }}
+                            className={`
+                              w-full text-left px-3 py-2
+                              rounded-lg
+                              text-[10px] font-bold
+                              transition-all
+                              border
+                              ${isActive
+                                ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-md"
+                                : "bg-transparent text-[var(--muted)] border-transparent hover:bg-[var(--card)] hover:border-[var(--border)] hover:text-[var(--foreground)]"
+                              }
+                            `}
+                          >
+                            {tab.replace("_", " ").toUpperCase()}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </aside>
 
-
-
-
-          {/* PANEL */}
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
+            {/* MAIN PANEL */}
+            <main className="flex-1 min-w-0">
+              <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
             {activeTab === "users" && (
               <UsersTab
 
@@ -291,9 +331,9 @@ export default function AdminPanalPage() {
             {activeTab === "flash_sale" && (
               <FlashSaleTab />
             )}
+              </div>
+            </main>
           </div>
-
-
         </div>
       </section>
     </AdminGuard>
