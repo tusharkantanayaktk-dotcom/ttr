@@ -7,12 +7,40 @@ import GlobalElements from "@/components/GlobalElements";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { FEATURE_FLAGS } from "@/lib/config";
+import { connectDB } from "@/lib/mongodb";
+import SystemSetting from "@/models/SystemSetting";
 
+export async function generateMetadata(): Promise<Metadata> {
+  let title = "Tronics Store – MLBB Diamond Top Up | Instant & Secure";
+  let description = "Tronics Store is a fast and secure Mobile Legends (MLBB) diamond top-up platform. Instant delivery, safe payments, and 24/7 automated service.";
+  let keywords = "mlbb top up, buy diamonds, mobile legends diamonds";
 
-export const metadata: Metadata = {
-  title: "Tronics Store – MLBB Diamond Top Up | Instant & Secure",
-  description: "Tronics Store is a fast and secure Mobile Legends (MLBB) diamond top-up platform. Instant delivery, safe payments, and 24/7 automated service.",
-};
+  try {
+    await connectDB();
+    const settings = await SystemSetting.find({ 
+      key: { $in: ['SEO_TITLE', 'SEO_DESCRIPTION', 'SEO_KEYWORDS'] } 
+    }).lean();
+    
+    const titleSetting = settings.find((s: any) => s.key === 'SEO_TITLE');
+    if (titleSetting && titleSetting.value) title = titleSetting.value;
+
+    const descSetting = settings.find((s: any) => s.key === 'SEO_DESCRIPTION');
+    if (descSetting && descSetting.value) description = descSetting.value;
+
+    const kwSetting = settings.find((s: any) => s.key === 'SEO_KEYWORDS');
+    if (kwSetting && Array.isArray(kwSetting.value) && kwSetting.value.length > 0) {
+      keywords = `${keywords}, ${kwSetting.value.join(", ")}`;
+    }
+  } catch (err) {
+    console.error("Failed to load SEO settings", err);
+  }
+
+  return {
+    title,
+    description,
+    keywords,
+  };
+}
 
 export default function RootLayout({
   children,
