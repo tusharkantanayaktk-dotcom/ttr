@@ -31,53 +31,64 @@ const FlashSaleImage = ({ src, name }) => {
     );
 };
 
-const flashSaleData = [
-    {
-        id: 1,
-        name: "Weekly Pass",
-        game: "Mobile Legends",
-        image: "/game-assets/weekly-pass.jpeg",
-        price: "₹149",
-        originalPrice: "₹170",
-        slug: "mobile-legends270?type=weekly-pass",
-        badge: "Hot Deal"
-    },
-    {
-        id: 5,
-        name: "Weekly Bundle",
-        game: "MLBB",
-        image: "/game-assets/12.jpg",
-        price: "₹87",
-        originalPrice: "₹100",
-        slug: "weeklymonthly-bundle261",
-        badge: "Best Value"
-    },
-    {
-        id: 5,
-        name: "Monthly Bundle",
-        game: "MLBB",
-        image: "/game-assets/13.jpg",
-        price: "₹410",
-        originalPrice: "₹500",
-        slug: "weeklymonthly-bundle261",
-        badge: "Best Value"
-    },
-];
-
 export default function FlashSale() {
-    const [timeLeft, setTimeLeft] = useState({ hours: 12, minutes: 45, seconds: 30 });
+    const [config, setConfig] = useState(null);
+    const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft(prev => {
-                if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-                if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-                if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-                return { hours: 23, minutes: 59, seconds: 59 };
+        fetch("/api/flash-sale")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    setConfig(data.data);
+                }
+                setIsLoading(false);
+            })
+            .catch(err => {
+                console.error("Failed to load flash sale:", err);
+                setIsLoading(false);
             });
-        }, 1000);
-        return () => clearInterval(timer);
     }, []);
+
+    useEffect(() => {
+        if (!config || !config.enabled || !config.endTime) return;
+
+        const end = new Date(config.endTime).getTime();
+
+        const calculateTimeLeft = () => {
+            const now = new Date().getTime();
+            const difference = end - now;
+
+            if (difference <= 0) {
+                return { hours: 0, minutes: 0, seconds: 0 };
+            }
+
+            return {
+                hours: Math.floor((difference / (1000 * 60 * 60))),
+                minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((difference % (1000 * 60)) / 1000)
+            };
+        };
+
+        setTimeLeft(calculateTimeLeft());
+
+        const timer = setInterval(() => {
+            setTimeLeft(calculateTimeLeft());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [config]);
+
+    if (isLoading) return null;
+    if (!config || !config.enabled) return null;
+    
+    const now = new Date().getTime();
+    const end = new Date(config.endTime).getTime();
+    if (end - now <= 0) return null;
+
+    const flashSaleData = config.items || [];
+    if (flashSaleData.length === 0) return null;
 
     return (
         <section className="relative py-2 px-4 overflow-hidden border-b border-[var(--border)] opacity-95">
