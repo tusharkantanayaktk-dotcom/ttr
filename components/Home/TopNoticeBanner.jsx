@@ -2,70 +2,57 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, MessageCircle, Zap, ShieldCheck, Clock } from "lucide-react";
+import { X, ArrowRight, MessageCircle, Zap, ShieldCheck, Clock, Gift, Star, Info, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 const STORAGE_KEY = "hide_notice_banner_v3";
-const WHATSAPP_URL = process.env.NEXT_PUBLIC_WHATSAPP_CHANNEL_URL || "https://whatsapp.com/channel/0029Vb7jVuaLtOj7Q889qV1k";
 
-const NOTICES = [
-  {
-    id: "whatsapp",
-    icon: MessageCircle,
-    color: "var(--accent)",
-    title: "Official Community",
-    desc: "Join our WhatsApp for daily giveaways",
-    cta: "Join Now",
-    link: WHATSAPP_URL
-  },
-  {
-    id: "delivery",
-    icon: Zap,
-    color: "#fbbf24",
-    title: "Instant Delivery",
-    desc: "99% of orders completed in < 2 mins",
-    cta: "View Stats",
-    link: WHATSAPP_URL
-  },
-  {
-    id: "support",
-    icon: ShieldCheck,
-    color: "#10b981",
-    title: "Verified Secure",
-    desc: "Official partners for all major games",
-    cta: "Learn More",
-    link: WHATSAPP_URL
-  }
-];
+const ICON_MAP = {
+  MessageCircle, Zap, ShieldCheck, Clock, Gift, Star, Info, AlertCircle
+};
 
 export default function TopNoticeBanner() {
   const [visible, setVisible] = useState(false);
   const [index, setIndex] = useState(0);
+  const [config, setConfig] = useState({ enabled: false, notices: [] });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!localStorage.getItem(STORAGE_KEY)) {
-      const timer = setTimeout(() => setVisible(true), 1200);
-      return () => clearTimeout(timer);
-    }
+    fetch("/api/top-notice")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data) {
+          setConfig(data.data);
+          if (data.data.enabled && data.data.notices && data.data.notices.length > 0) {
+            if (!localStorage.getItem(STORAGE_KEY)) {
+              setTimeout(() => setVisible(true), 1200);
+            }
+          }
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Top notice fetch failed", err);
+        setLoading(false);
+      });
   }, []);
-
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || !config.notices || config.notices.length <= 1) return;
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % NOTICES.length);
+      setIndex((prev) => (prev + 1) % config.notices.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [visible]);
+  }, [visible, config.notices]);
 
   const closeBanner = () => {
     setVisible(false);
     localStorage.setItem(STORAGE_KEY, "true");
   };
 
-  if (!visible) return null;
+  if (loading || !visible || !config.enabled || !config.notices || config.notices.length === 0) return null;
 
-  const current = NOTICES[index];
-  const Icon = current.icon;
+  const current = config.notices[index];
+  const Icon = ICON_MAP[current.icon] || MessageCircle;
 
   return (
     <AnimatePresence>

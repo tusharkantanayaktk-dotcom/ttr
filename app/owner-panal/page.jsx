@@ -18,6 +18,7 @@ import WalletTab from "@/components/admin/WalletTab";
 import SettingsTab from "@/components/admin/SettingsTab";
 import PromotionalTab from "@/components/admin/PromotionalTab";
 import SeoTab from "@/components/admin/SeoTab";
+import NoticeBannerTab from "@/components/admin/NoticeBannerTab";
 import FlashSaleTab from "@/components/admin/FlashSaleTab";
 
 
@@ -177,33 +178,52 @@ export default function AdminPanalPage() {
           </div>
 
 
-          <div className="mb-4 flex flex-wrap gap-1.5">
-            {["users", "orders", "wallet", "transactions", "queries", "pricing", "banners", "promotional", "settings", "seo", "flash_sale"].map(
-              (tab) => {
-                const isActive = activeTab === tab;
-
-                return (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`
-                      px-3 py-1
-                      rounded-lg
-                      text-[10px] font-bold
-                      transition-all
-                      border
-                      ${isActive
-                        ? "bg-[var(--accent)] text-black border-[var(--accent)]"
-                        : "bg-transparent text-[var(--muted)] border-[var(--border)] hover:border-[var(--muted)]"
-                      }
-                    `}
-                  >
-                    {tab.toUpperCase()}
-                  </button>
-                );
+          <div className="mb-6 space-y-4">
+            {[
+              {
+                title: "Management & Finance",
+                tabs: ["users", "orders", "wallet", "transactions", "queries", "pricing"]
+              },
+              {
+                title: "Marketing & Storefront",
+                tabs: ["banners", "promotional", "flash_sale", "announcement"]
+              },
+              {
+                title: "System & Config",
+                tabs: ["settings", "seo"]
               }
-            )}
+            ].map(group => (
+              <div key={group.title}>
+                <h3 className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mb-2 ml-1">{group.title}</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {group.tabs.map(tab => {
+                    const isActive = activeTab === tab;
+
+                    return (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`
+                          px-3 py-1.5
+                          rounded-lg
+                          text-[10px] font-bold
+                          transition-all
+                          border
+                          ${isActive
+                            ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-md"
+                            : "bg-[var(--card)] text-[var(--muted)] border-[var(--border)] hover:border-[var(--muted)] hover:text-[var(--foreground)]"
+                          }
+                        `}
+                      >
+                        {tab.replace("_", " ").toUpperCase()}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
+
 
 
 
@@ -254,6 +274,10 @@ export default function AdminPanalPage() {
 
             {activeTab === "promotional" && (
               <PromotionalTab />
+            )}
+
+            {activeTab === "announcement" && (
+              <NoticeBannerTab />
             )}
 
             {activeTab === "settings" && (
