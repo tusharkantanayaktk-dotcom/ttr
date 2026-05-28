@@ -20,6 +20,7 @@ import PromotionalTab from "@/components/admin/PromotionalTab";
 import SeoTab from "@/components/admin/SeoTab";
 import NoticeBannerTab from "@/components/admin/NoticeBannerTab";
 import FlashSaleTab from "@/components/admin/FlashSaleTab";
+import UiSettingsTab from "@/components/admin/UiSettingsTab";
 
 
 export default function AdminPanalPage() {
@@ -228,7 +229,7 @@ export default function AdminPanalPage() {
                   },
                   {
                     title: "System & Config",
-                    tabs: ["settings", "seo"]
+                    tabs: ["ui_settings", "settings", "seo"]
                   }
                 ].map(group => (
                   <div key={group.title}>
@@ -318,6 +319,10 @@ export default function AdminPanalPage() {
 
             {activeTab === "announcement" && (
               <NoticeBannerTab />
+            )}
+
+            {activeTab === "ui_settings" && (
+              <UiSettingsTab />
             )}
 
             {activeTab === "settings" && (

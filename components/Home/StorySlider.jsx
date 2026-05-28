@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const storyData = [
 
@@ -47,6 +47,20 @@ const storyData = [
 
 export default function StorySlider() {
   const containerRef = useRef(null);
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/ui-settings")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data && data.data.showStorySlider === false) {
+          setShow(false);
+        }
+      })
+      .catch(err => console.error("Failed to fetch UI settings", err));
+  }, []);
+
+  if (!show) return null;
 
   return (
     <section className="relative w-full overflow-hidden py-4 md:py-8">

@@ -138,7 +138,20 @@ export default function SocialFloat() {
     tap: { scale: 0.95 }
   };
 
-  if (pathname !== "/") return null;
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/ui-settings")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data && data.data.showWhatsAppPopup === false) {
+          setShow(false);
+        }
+      })
+      .catch(err => console.error("Failed to fetch UI settings", err));
+  }, []);
+
+  if (!show || pathname !== "/") return null;
 
   return (
     <motion.div

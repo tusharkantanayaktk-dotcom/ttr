@@ -22,6 +22,20 @@ const navItems = [
 
 export default function BottomNav() {
     const pathname = usePathname();
+    const [show, setShow] = useState(true);
+
+    useEffect(() => {
+        fetch("/api/ui-settings")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data && data.data.showBottomNav === false) {
+                    setShow(false);
+                }
+            })
+            .catch(err => console.error("Failed to fetch UI settings", err));
+    }, []);
+
+    if (!show) return null;
 
     return (
         <div
