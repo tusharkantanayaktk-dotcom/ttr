@@ -106,7 +106,7 @@ export default function BuyFlowPage() {
 
     setLoading(true);
     const name = game?.gameName?.toLowerCase() || "";
-    const isMLBB_local = slug.includes("mlbb") || name.includes("mlbb") || slug.includes("legends988") || slug.includes("magic-chess-gogo");
+    const isMLBB_local = slug.includes("mlbb") || name.includes("mlbb") || slug.includes("legends988");
 
     if (isVerificationBypass) {
       const vData = {
