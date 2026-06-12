@@ -150,8 +150,8 @@ export default function AdminPanalPage() {
 
   return (
     <AdminGuard>
-      <section className="min-h-screen bg-[var(--background)] px-6 py-3">
-        <div className="max-w-6xl mx-auto">
+      <section className="min-h-screen bg-[var(--background)] p-4 md:p-6">
+        <div className="w-full">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h1 className="text-xl font-bold tracking-tight text-[var(--foreground)]">

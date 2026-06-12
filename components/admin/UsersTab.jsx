@@ -160,19 +160,14 @@ export default function UsersTab() {
   return (
     <div className="space-y-6 pb-10">
       {/* ================= HEADER ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">User Management</h2>
-          <p className="text-sm text-[var(--muted)] mt-1">
-            Manage all registered users and their account types.
-          </p>
-        </div>
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Users</h2>
 
         <div className="flex items-center gap-3">
           <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
             <Users size={14} className="text-[var(--accent)]" />
             <span className="text-sm font-semibold text-[var(--muted)]">
-              {pagination.total} Total Users
+              {pagination.total}  Users
             </span>
           </div>
           <button
@@ -189,7 +184,7 @@ export default function UsersTab() {
       <StatsOverview stats={stats} loading={statsLoading} />
 
       {/* ================= SEARCH & FILTERS ================= */}
-      <div className="flex flex-col md:flex-row gap-3">
+      <div className="flex flex-row items-center gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={14} />
           <input
@@ -740,54 +735,54 @@ function StatsOverview({ stats, loading }) {
 
   if (loading) {
     return (
-      <div className="space-y-3">
-        <Skeleton height={56} className="w-full" />
-        <Skeleton height={56} className="w-full" />
+      <div className="space-y-2">
+        <Skeleton height={32} className="w-full" />
+        <Skeleton height={32} className="w-full" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1">
       {/* COLUMN HEADERS */}
-      <div className="hidden sm:flex items-center gap-3 px-1">
-        <div className="min-w-[120px]" />
-        <div className="flex-1 grid grid-cols-3 gap-2">
+      <div className="hidden sm:flex items-center gap-2 px-1">
+        <div className="min-w-[110px]" />
+        <div className="flex-1 grid grid-cols-3 gap-1">
           {periods.map((p) => (
             <div key={p.key} className="text-center">
-              <span className="text-[9px] font-black text-[var(--muted)]/40 uppercase tracking-widest">{p.label}</span>
+              <span className="text-[8px] font-black text-[var(--muted)]/40 uppercase tracking-widest">{p.label}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* NEW USERS ROW */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-        <div className="px-4 py-2.5 min-w-[120px] rounded-xl border border-blue-500/20 bg-blue-500/5 flex items-center gap-3">
-          <UserPlus size={14} className="text-blue-500" />
-          <span className="text-[9px] font-black uppercase tracking-widest text-blue-500">NEW USERS</span>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <div className="px-3 py-1.5 min-w-[110px] rounded-lg border border-blue-500/20 bg-blue-500/5 flex items-center gap-2">
+          <UserPlus size={12} className="text-blue-500" />
+          <span className="text-[8px] font-black uppercase tracking-widest text-blue-500">NEW USERS</span>
         </div>
-        <div className="flex-1 grid grid-cols-3 gap-2">
+        <div className="flex-1 grid grid-cols-3 gap-1">
           {periods.map((p) => (
-            <div key={p.key} className="px-5 py-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-blue-500/30 transition-all">
-              <span className="sm:hidden text-[9px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
-              <span className="text-sm font-black text-[var(--foreground)]">{stats[p.key].newUsers}</span>
+            <div key={p.key} className="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-blue-500/30 transition-all">
+              <span className="sm:hidden text-[8px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
+              <span className="text-xs font-black text-[var(--foreground)]">{stats[p.key].newUsers}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* ACTIVE USERS ROW */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-        <div className="px-4 py-2.5 min-w-[120px] rounded-xl border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-3">
-          <Activity size={14} className="text-emerald-500" />
-          <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500">ACTIVE USERS</span>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <div className="px-3 py-1.5 min-w-[110px] rounded-lg border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-2">
+          <Activity size={12} className="text-emerald-500" />
+          <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500">ACTIVE USERS</span>
         </div>
-        <div className="flex-1 grid grid-cols-3 gap-2">
+        <div className="flex-1 grid grid-cols-3 gap-1">
           {periods.map((p) => (
-            <div key={p.key} className="px-5 py-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-emerald-500/30 transition-all">
-              <span className="sm:hidden text-[9px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
-              <span className="text-sm font-black text-[var(--foreground)]">{stats[p.key].activeUsers}</span>
+            <div key={p.key} className="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-emerald-500/30 transition-all">
+              <span className="sm:hidden text-[8px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
+              <span className="text-xs font-black text-[var(--foreground)]">{stats[p.key].activeUsers}</span>
             </div>
           ))}
         </div>

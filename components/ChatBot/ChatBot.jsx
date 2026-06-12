@@ -251,10 +251,13 @@ export default function ChatBot() {
 
     /* ── Gate visibility — NO early return before hooks ── */
     const isGamesPage = pathname.startsWith("/games");
+    const isOwnerPanel = pathname.startsWith("/owner-panal") || pathname.startsWith("/owner-panal") || pathname.startsWith("/admin");
+
+    if (isOwnerPanel) return null;
 
     /* ── FAB animation wrapper ── */
     const fabStyle = {
-        position: "fixed", bottom: 92, left: 16, zIndex: 200,
+        position: "fixed", bottom: 92, left: 4, zIndex: 200,
         transition: "transform 0.4s cubic-bezier(0.23,1,0.32,1), opacity 0.4s",
         transform: visible ? "translateY(0)" : "translateY(110px)",
         opacity: visible ? 1 : 0,

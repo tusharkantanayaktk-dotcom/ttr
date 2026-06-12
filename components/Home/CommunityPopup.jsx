@@ -43,48 +43,48 @@ export default function CommunityPopup() {
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className="relative w-full max-w-[280px] bg-[var(--card)] border border-[var(--white)]/10 rounded-[2.5rem] overflow-hidden shadow-2xl"
+            className="relative w-full max-w-[250px] bg-[var(--card)] border border-[var(--white)]/10 rounded-[2.5rem] overflow-hidden shadow-2xl"
           >
-            <div className="p-6 flex flex-col items-center gap-5">
+            <div className="p-5 flex flex-col items-center gap-4">
               {/* Header Section */}
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 bg-[var(--accent)]/10 rounded-2xl flex items-center justify-center text-[var(--accent)] border border-[var(--accent)]/20 shadow-lg shadow-[var(--accent)]/5">
-                  <MessageSquare size={24} />
-                </div>
-                <div className="text-center">
-                  <h2 className="text-lg font-black uppercase tracking-tight text-[var(--foreground)]">
+              <div className="flex flex-col items-center gap-1">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-[var(--accent)]/10 rounded-2xl flex items-center justify-center text-[var(--accent)] border border-[var(--accent)]/20 shadow-lg shadow-[var(--accent)]/5">
+                    <MessageSquare size={16} />
+                  </div>
+                  <h2 className="text-[15px] font-black uppercase tracking-tight text-[var(--foreground)]">
                     Official Channel
                   </h2>
-                  <p className="text-[9px] font-bold text-[var(--muted)]/60 uppercase tracking-widest">
-                    Updates & Giveaways
-                  </p>
                 </div>
+                <p className="text-[8px] font-bold text-[var(--muted)]/60 uppercase tracking-widest mt-1">
+                  Updates & Giveaways
+                </p>
               </div>
 
               {/* QR Code */}
-              <div className="p-2 bg-white rounded-2xl shadow-xl">
+              <div className="p-2.5 bg-white rounded-3xl shadow-xl">
                 <QRCodeSVG
                   value={COMMUNITY_URL}
-                  size={100}
+                  size={125}
                   level="M"
                 />
               </div>
 
               {/* Action Buttons */}
-              <div className="w-full space-y-3">
+              <div className="w-full flex flex-col items-center space-y-2.5">
                 <a
                   href={COMMUNITY_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3.5 rounded-xl bg-[var(--accent)] flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20 hover:brightness-110 active:scale-[0.98] transition-all"
+                  className="w-4/5 py-2.5 rounded-xl bg-[var(--accent)] flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20 hover:brightness-110 active:scale-[0.98] transition-all"
                 >
-                  <span className="text-black font-black uppercase tracking-[0.1em] italic text-xs">Join Now</span>
-                  <ArrowRight size={14} className="text-black" />
+                  <span className="text-black font-black uppercase tracking-[0.1em] italic text-[11px]">Join Now</span>
+                  <ArrowRight size={12} className="text-black" />
                 </a>
 
                 <button
                   onClick={handleClose}
-                  className="w-full text-[9px] font-black uppercase tracking-widest text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                  className="w-full text-[8px] font-black uppercase tracking-widest text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
                 >
                   Maybe Later
                 </button>
