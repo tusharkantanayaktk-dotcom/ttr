@@ -101,19 +101,14 @@ export default function TransactionsTab() {
   return (
     <div className="space-y-6 pb-10">
       {/* ================= HEADER ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Transactions</h2>
-          <p className="text-xs text-[var(--muted)] font-medium mt-1">
-            View and track all payments and account history
-          </p>
-        </div>
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Transactions</h2>
 
         <div className="flex items-center gap-3">
           <div className="px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-[10px] font-bold text-[var(--muted)] uppercase">
-              {pagination.total} Transactions
+              {pagination.total} Txn
             </span>
           </div>
           <button
@@ -126,7 +121,7 @@ export default function TransactionsTab() {
       </div>
 
       {/* ================= SEARCH & FILTER ================= */}
-      <div className="flex flex-col md:flex-row gap-3">
+      <div className="flex flex-row items-center gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={16} />
           <input
@@ -241,12 +236,17 @@ export default function TransactionsTab() {
                     className="p-4 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.05] transition-all"
                   >
                     <div className="flex justify-between items-start mb-4">
-                      <div className="space-y-0.5">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[8px] font-bold uppercase tracking-widest ${meta.class}`}>
-                          {meta.icon}
-                          {meta.label}
-                        </span>
-                        <p className="text-[10px] font-mono text-[var(--muted)]/40 uppercase mt-1">{t.orderId}</p>
+                      <div className="flex flex-col min-w-0 pr-4">
+                        <div className="mb-2">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[8px] font-bold uppercase tracking-widest ${meta.class}`}>
+                            {meta.icon}
+                            {meta.label}
+                          </span>
+                        </div>
+                        <div className="flex flex-col gap-0.5 min-w-0">
+                          <p className="text-[11px] font-black text-[var(--foreground)] truncate">{t.email || "Guest User"}</p>
+                          <p className="text-[9px] font-mono text-[var(--muted)]/40 uppercase">{t.orderId}</p>
+                        </div>
                       </div>
                       <span className="text-lg font-black text-emerald-500 tracking-tighter">₹{t.price}</span>
                     </div>

@@ -170,19 +170,9 @@ export default function PricingTab({
 
     return (
       <div className="space-y-6 pb-20 max-w-full overflow-x-hidden">
-        {/* ================= PREMIUM HEADER ================= */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] backdrop-blur-md shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
-              <Settings2 size={20} />
-            </div>
-            <div>
-              <h2 className="text-xl font-black tracking-tighter text-[var(--foreground)] uppercase leading-none">
-                Pricing <span className="text-[var(--accent)]">Config</span>
-              </h2>
-              <p className="text-[9px] font-bold text-[var(--muted)]/60 uppercase tracking-widest mt-1">Global management console</p>
-            </div>
-          </div>
+        {/* ================= HEADER ================= */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Pricing Config</h2>
 
           <div className="flex flex-wrap items-center gap-3">
             {/* MODE SWITCHER */}

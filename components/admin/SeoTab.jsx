@@ -112,7 +112,7 @@ export default function SeoTab() {
       </div>
 
       <div className="grid gap-6">
-        <div className="space-y-4 p-6 bg-[var(--background)]/50 border border-[var(--border)] rounded-2xl">
+        <div className="space-y-4 p-3 sm:p-4 bg-[var(--background)]/50 border border-[var(--border)] rounded-2xl">
           <div>
             <label className="block text-sm font-medium text-[var(--foreground)] mb-1">Title</label>
             <input 

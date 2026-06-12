@@ -119,15 +119,10 @@ export default function SupportQueriesTab() {
   const getStatus = (status) => status || "open";
 
   return (
-    <div className="space-y-6 pb-6 px-4 md:px-0 max-w-full overflow-x-hidden">
+    <div className="space-y-6 pb-10 max-w-full overflow-x-hidden">
       {/* ================= HEADER ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Support Queries</h2>
-          <p className="text-xs text-[var(--muted)] font-medium mt-1">
-            Manage your customer support messages
-          </p>
-        </div>
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Support Queries</h2>
 
         <div className="flex items-center gap-3">
           <div className="px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
@@ -145,8 +140,8 @@ export default function SupportQueriesTab() {
       </div>
 
       {/* ================= SEARCH & FILTER ================= */}
-      <div className="flex flex-col gap-3">
-        <div className="relative">
+      <div className="flex flex-row items-center gap-3">
+        <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={16} />
           <input
             value={search}
@@ -191,16 +186,16 @@ export default function SupportQueriesTab() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.03 }}
                     onClick={() => setActiveQuery(q)}
-                    className="group relative rounded-2xl border border-[var(--border)] bg-[var(--foreground)]/[0.01] hover:bg-[var(--foreground)]/[0.03] transition-all cursor-pointer p-4 flex items-center gap-4"
+                    className="group relative rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.01] hover:bg-[var(--foreground)]/[0.03] transition-all cursor-pointer p-3 flex items-center gap-3"
                   >
                     <div
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full"
                       style={{ backgroundColor: meta.label === 'Open' ? '#f59e0b' : meta.label === 'Resolved' ? '#10b981' : '#3b82f6' }}
                     />
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                        <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[8px] font-bold uppercase tracking-wider ${meta.class}`}>
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <span className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md border text-[8px] font-bold uppercase tracking-wider ${meta.class}`}>
                           {meta.icon}
                           {meta.label}
                         </span>
@@ -209,17 +204,17 @@ export default function SupportQueriesTab() {
                         </span>
                       </div>
 
-                      <h4 className="text-sm font-bold text-[var(--foreground)] truncate group-hover:text-[var(--accent)]">
+                      <h4 className="text-xs font-bold text-[var(--foreground)] truncate group-hover:text-[var(--accent)]">
                         {q.email || "Unknown User"}
                       </h4>
 
-                      <p className="text-[11px] text-[var(--muted)]/60 truncate mt-0.5">
+                      <p className="text-[10px] text-[var(--muted)]/60 truncate mt-0.5">
                         {q.message}
                       </p>
                     </div>
 
-                    <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 shrink-0">
-                      <ChevronRight size={16} />
+                    <div className="w-7 h-7 rounded-md bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 shrink-0">
+                      <ChevronRight size={14} />
                     </div>
                   </motion.div>
                 );

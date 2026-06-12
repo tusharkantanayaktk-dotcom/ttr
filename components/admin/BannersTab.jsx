@@ -139,20 +139,22 @@ export default function BannersTab({ banners, onRefresh }) {
     <div className="space-y-10 pb-10">
 
       {/* ================= HEADER SECTION ================= */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Website Banners</h2>
-          <p className="text-xs text-[var(--muted)] font-medium mt-1">
-            Add or edit banners for the home screen
-          </p>
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Website Banners</h2>
+
+        <div className="flex items-center gap-3">
+          <div className="px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
+            <span className="text-[10px] font-bold text-[var(--muted)] uppercase">
+              {banners.length} Total
+            </span>
+          </div>
+          <button
+            onClick={onRefresh}
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] transition-all"
+          >
+            <RefreshCcw size={16} />
+          </button>
         </div>
-        <button
-          onClick={onRefresh}
-          className="flex items-center gap-2 self-start md:self-auto px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.08] transition-all"
-        >
-          <RefreshCcw size={14} />
-          <span className="text-xs font-semibold">Refresh List</span>
-        </button>
       </div>
 
       {/* ================= FORM CARD ================= */}
@@ -165,7 +167,7 @@ export default function BannersTab({ banners, onRefresh }) {
           bg-[var(--card)]
         `}
       >
-        <div className="px-6 py-5 border-b border-[var(--border)] flex items-center justify-between">
+        <div className="p-4 sm:px-6 sm:py-5 border-b border-[var(--border)] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-lg ${editingId ? "bg-[var(--accent)]/20 text-[var(--accent)]" : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]"}`}>
               {editingId ? <Edit3 size={18} /> : <Plus size={18} />}
@@ -181,7 +183,7 @@ export default function BannersTab({ banners, onRefresh }) {
           </div>
         </div>
 
-        <div className="p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8">
 
           {/* FORM FIELDS */}
           <div className="lg:col-span-7 space-y-5">

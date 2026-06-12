@@ -54,6 +54,9 @@ export default function BottomNav() {
         pathname.startsWith("/register") || 
         pathname.startsWith("/games/") || 
         pathname.startsWith("/payment") || 
+        pathname.startsWith("/owner-panel") ||
+        pathname.startsWith("/owner-panal") ||
+        pathname.startsWith("/admin") ||
         pathname.startsWith("/wallet");
 
     if (isHiddenPage) return null;

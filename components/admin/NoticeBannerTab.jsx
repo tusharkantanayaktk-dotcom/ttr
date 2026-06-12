@@ -171,28 +171,23 @@ export default function NoticeBannerTab() {
 
   return (
     <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div>
-        <h2 className="text-xl font-bold flex items-center gap-2">
-          📢 Notice/Broadcast Banner
-        </h2>
-        <p className="text-sm text-[var(--muted)] mt-1">
-          Enable or disable the top broadcast banner and manage the rotating announcements.
-        </p>
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Notice Banner</h2>
       </div>
 
       <div className="grid gap-6">
-        <div className="space-y-6 p-6 bg-[var(--background)]/50 border border-[var(--border)] rounded-2xl">
+        <div className="space-y-6 p-4 sm:p-6 bg-[var(--background)]/50 border border-[var(--border)] rounded-2xl">
           {/* General Settings */}
           <div className="flex items-center justify-between p-4 bg-[var(--card)] border border-[var(--border)] rounded-xl">
             <div>
-              <p className="font-bold text-sm">Enable Notice Banner</p>
+              <p className="font-bold text-sm text-[var(--foreground)]">Enable Notice Banner</p>
               <p className="text-xs text-[var(--muted)]">Show the broadcast banner at the top of the site</p>
             </div>
             <button
               onClick={() => setConfig(prev => ({ ...prev, enabled: !prev.enabled }))}
-              className={`relative w-12 h-6 rounded-full transition-colors ${config.enabled ? "bg-amber-500" : "bg-gray-700"}`}
+              className={`relative w-10 h-5 shrink-0 rounded-full transition-colors ${config.enabled ? "bg-amber-500" : "bg-[var(--foreground)]/[0.1]"}`}
             >
-              <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${config.enabled ? "translate-x-6" : ""}`} />
+              <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-300 ${config.enabled ? "translate-x-5" : "translate-x-0"}`} />
             </button>
           </div>
 

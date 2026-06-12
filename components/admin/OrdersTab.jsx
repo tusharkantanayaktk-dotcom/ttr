@@ -45,6 +45,7 @@ export default function OrdersTab() {
     from: "",
     to: "",
   });
+  const [showFilters, setShowFilters] = useState(false);
 
   const [pagination, setPagination] = useState({
     total: 0,
@@ -171,13 +172,8 @@ export default function OrdersTab() {
   return (
     <div className="space-y-6 pb-10">
       {/* ================= HEADER ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Customer Orders</h2>
-          <p className="text-xs text-[var(--muted)] font-medium mt-1">
-            View and manage all customer orders
-          </p>
-        </div>
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Orders</h2>
 
         <div className="flex items-center gap-3">
           <div className="px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
@@ -199,10 +195,10 @@ export default function OrdersTab() {
       {/* ================= COMPACT STATS OVERVIEW ================= */}
       <StatsOverview stats={stats} loading={statsLoading} />
 
-      {/* ================= FILTERS & SEARCH ================= */}
-      <div className="space-y-3">
+      {/* ================= SEARCH & FILTERS ================= */}
+      <div className="flex flex-row items-center gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/50" size={16} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={14} />
           <input
             value={search}
             onChange={(e) => {
@@ -210,70 +206,16 @@ export default function OrdersTab() {
               setSearch(e.target.value);
             }}
             placeholder="Search by Order ID, Email, or Game Platform..."
-            className="w-full h-11 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
+            className="w-full h-10 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
           />
         </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-          <div className="relative">
-            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]/50" size={12} />
-            <select
-              value={filters.status}
-              onChange={(e) => {
-                setPage(1);
-                setFilters({ ...filters, status: e.target.value });
-              }}
-              className="w-full h-10 pl-9 pr-3 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-xs font-bold uppercase focus:border-[var(--accent)]/50 outline-none appearance-none cursor-pointer"
-            >
-              <option value="" className="bg-[var(--card)]">All Status</option>
-              <option value="pending" className="bg-[var(--card)]">Pending</option>
-              <option value="success" className="bg-[var(--card)]">Success</option>
-              <option value="failed" className="bg-[var(--card)]">Failed</option>
-              <option value="refund" className="bg-[var(--card)]">Refund</option>
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)]/50 pointer-events-none" size={12} />
-          </div>
-
-          <input
-            placeholder="Game Slug"
-            value={filters.gameSlug}
-            onChange={(e) => {
-              setPage(1);
-              setFilters({ ...filters, gameSlug: e.target.value });
-            }}
-            className="h-10 px-3 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-xs font-bold uppercase focus:border-[var(--accent)]/50 outline-none placeholder:text-[var(--muted)]/40"
-          />
-
-          <input
-            type="date"
-            value={filters.from}
-            onChange={(e) => {
-              setPage(1);
-              setFilters({ ...filters, from: e.target.value });
-            }}
-            className="h-10 px-3 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-xs font-bold uppercase focus:border-[var(--accent)]/50 outline-none"
-          />
-
-          <input
-            type="date"
-            value={filters.to}
-            onChange={(e) => {
-              setPage(1);
-              setFilters({ ...filters, to: e.target.value });
-            }}
-            className="h-10 px-3 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-xs font-bold uppercase focus:border-[var(--accent)]/50 outline-none"
-          />
-
-          <button
-            onClick={() => {
-              setPage(1);
-              setFilters({ status: "", gameSlug: "", from: "", to: "" });
-            }}
-            className="h-10 rounded-lg border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-[10px] font-black uppercase tracking-widest hover:bg-[var(--foreground)]/[0.05] transition-all"
-          >
-            Reset Filters
-          </button>
-        </div>
+        <button
+          onClick={() => setShowFilters(true)}
+          className="h-10 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center gap-2 hover:bg-[var(--foreground)]/[0.05] transition-all outline-none shrink-0"
+        >
+          <Filter size={12} className="text-[var(--accent)]" />
+          <span className="text-xs font-semibold">Filters</span>
+        </button>
       </div>
 
       {/* ================= CONTENT ================= */}
@@ -379,37 +321,42 @@ export default function OrdersTab() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.03 }}
                     onClick={() => setSelectedOrder(o)}
-                    className="p-5 rounded-[1.8rem] border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.05] transition-all"
+                    className="p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.05] transition-all"
                   >
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)]">
-                          <Gamepad2 size={16} />
+                    <div className="flex justify-between items-start mb-2.5">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-md bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)] shrink-0">
+                          <Gamepad2 size={12} />
                         </div>
-                        <p className="font-bold text-[var(--foreground)] uppercase text-xs tracking-tight">{o.gameSlug}</p>
+                        <div className="flex flex-col min-w-0">
+                          <p className="font-bold text-[var(--foreground)] uppercase text-[11px] tracking-tight truncate">{o.gameSlug}</p>
+                          <p className="text-[9px] font-medium text-[var(--foreground)]/50 truncate italic">"{o.itemName}"</p>
+                        </div>
                       </div>
-                      <span className="text-lg font-black text-emerald-500">₹{o.price}</span>
+                      <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
+                        <span className="text-base font-black text-emerald-500 leading-none">₹{o.price}</span>
+                        <div className="flex items-center gap-1 text-[8px] font-bold text-[var(--muted)]/60 bg-[var(--foreground)]/[0.05] border border-[var(--border)] px-1 py-0.5 rounded uppercase tracking-wider">
+                          <CreditCard size={8} className="text-[var(--accent)]" />
+                          {o.paymentMethod || "wallet"}
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <p className="text-[11px] font-black text-[var(--foreground)] truncate">{o.email || "Guest User"}</p>
-                        </div>
-                        <p className="text-[11px] font-medium text-[var(--foreground)]/40 line-clamp-1 italic">"{o.itemName}"</p>
-                        <p className="text-[9px] font-mono text-[var(--muted)]/30 mt-1 uppercase">{o.orderId}</p>
+                    <div className="space-y-2">
+                      <div className="flex flex-col gap-0.5">
+                        <p className="text-[11px] font-black text-[var(--foreground)] truncate">{o.email || "Guest User"}</p>
+                        <p className="text-[8px] font-mono text-[var(--muted)]/30 uppercase">{o.orderId}</p>
                       </div>
 
                       <div className="flex items-center justify-between gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--muted)]/60 bg-[var(--foreground)]/[0.05] border border-[var(--border)] px-2 py-1 rounded-lg uppercase tracking-wider">
-                            <CreditCard size={10} className="text-[var(--accent)]" />
-                            {o.paymentMethod || "wallet"}
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <Calendar size={12} className="text-[var(--muted)]/40" />
-                            <span className="text-[10px] font-bold text-[var(--muted)]/60">{new Date(o.createdAt).toLocaleDateString()}</span>
-                          </div>
+                        <div className="flex items-center gap-1.5">
+                          <Clock size={10} className="text-[var(--muted)]/40" />
+                          <span className="text-[9px] font-bold text-[var(--muted)]/60">
+                            {new Date(o.createdAt).toLocaleString('en-IN', {
+                              day: '2-digit', month: '2-digit', year: 'numeric',
+                              hour: '2-digit', minute: '2-digit', hour12: true
+                            })}
+                          </span>
                         </div>
 
                         <StatusDropdown
@@ -548,6 +495,107 @@ export default function OrdersTab() {
           </>
         )}
       </AnimatePresence>
+      {/* ================= FILTER MODAL ================= */}
+      <AnimatePresence>
+        {showFilters && (
+          <div className="fixed inset-0 z-[1200] flex items-center justify-end">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowFilters(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            />
+
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 200 }}
+              className="relative w-full max-w-sm h-full bg-[var(--background)] border-l border-[var(--border)] p-8 space-y-8 shadow-2xl"
+            >
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-bold text-[var(--foreground)]">Filters</h3>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-all outline-none"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <label className="text-xs font-semibold text-[var(--muted)] ml-1">Status</label>
+                  <div className="relative">
+                    <select
+                      value={filters.status}
+                      onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                      className="w-full h-11 pl-4 pr-10 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-sm font-bold uppercase focus:border-[var(--accent)]/50 outline-none appearance-none cursor-pointer"
+                    >
+                      <option value="" className="bg-[var(--card)]">All Status</option>
+                      <option value="pending" className="bg-[var(--card)]">Pending</option>
+                      <option value="success" className="bg-[var(--card)]">Success</option>
+                      <option value="failed" className="bg-[var(--card)]">Failed</option>
+                      <option value="refund" className="bg-[var(--card)]">Refund</option>
+                    </select>
+                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/50 pointer-events-none" size={14} />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-xs font-semibold text-[var(--muted)] ml-1">Game Slug</label>
+                  <input
+                    placeholder="e.g. mobile-legends"
+                    value={filters.gameSlug}
+                    onChange={(e) => setFilters({ ...filters, gameSlug: e.target.value })}
+                    className="w-full h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-sm font-bold uppercase focus:border-[var(--accent)]/50 outline-none placeholder:text-[var(--muted)]/40"
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-xs font-semibold text-[var(--muted)] ml-1">Date From</label>
+                  <input
+                    type="date"
+                    value={filters.from}
+                    onChange={(e) => setFilters({ ...filters, from: e.target.value })}
+                    className="w-full h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-sm font-bold uppercase focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40 [color-scheme:dark]"
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-xs font-semibold text-[var(--muted)] ml-1">Date To</label>
+                  <input
+                    type="date"
+                    value={filters.to}
+                    onChange={(e) => setFilters({ ...filters, to: e.target.value })}
+                    className="w-full h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-sm font-bold uppercase focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40 [color-scheme:dark]"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-4 pt-4">
+                <button
+                  onClick={() => {
+                    setFilters({ status: "", gameSlug: "", from: "", to: "" });
+                    setPage(1);
+                  }}
+                  className="flex-1 h-11 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:bg-[var(--foreground)]/[0.05] hover:text-[var(--foreground)] transition-all outline-none"
+                >
+                  Clear All
+                </button>
+
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="flex-1 h-11 rounded-xl bg-[var(--accent)] text-white text-xs font-semibold shadow-lg shadow-[var(--accent)]/20 hover:brightness-110 active:scale-95 transition-all outline-none"
+                >
+                  Apply
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -664,54 +712,54 @@ function StatsOverview({ stats, loading }) {
 
   if (loading) {
     return (
-      <div className="space-y-3">
-        <Skeleton height={56} className="w-full" />
-        <Skeleton height={56} className="w-full" />
+      <div className="space-y-2">
+        <Skeleton height={32} className="w-full" />
+        <Skeleton height={32} className="w-full" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1">
       {/* COLUMN HEADERS */}
-      <div className="hidden sm:flex items-center gap-3 px-1">
-        <div className="min-w-[120px]" />
-        <div className="flex-1 grid grid-cols-3 gap-2">
+      <div className="hidden sm:flex items-center gap-2 px-1">
+        <div className="min-w-[110px]" />
+        <div className="flex-1 grid grid-cols-3 gap-1">
           {periods.map((p) => (
             <div key={p.key} className="text-center">
-              <span className="text-[9px] font-black text-[var(--muted)]/40 uppercase tracking-widest">{p.label}</span>
+              <span className="text-[8px] font-black text-[var(--muted)]/40 uppercase tracking-widest">{p.label}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* ORDER VOLUME ROW */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-        <div className="px-4 py-2.5 min-w-[120px] rounded-xl border border-blue-500/20 bg-blue-500/5 flex items-center gap-3">
-          <Package size={14} className="text-blue-500" />
-          <span className="text-[9px] font-black uppercase tracking-widest text-blue-500">ORDER VOLUME</span>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <div className="px-3 py-1.5 min-w-[110px] rounded-lg border border-blue-500/20 bg-blue-500/5 flex items-center gap-2">
+          <Package size={12} className="text-blue-500" />
+          <span className="text-[8px] font-black uppercase tracking-widest text-blue-500">ORDER VOLUME</span>
         </div>
-        <div className="flex-1 grid grid-cols-3 gap-2">
+        <div className="flex-1 grid grid-cols-3 gap-1">
           {periods.map((p) => (
-            <div key={p.key} className="px-5 py-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-blue-500/30 transition-all">
-              <span className="sm:hidden text-[9px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
-              <span className="text-sm font-black text-[var(--foreground)]">{stats[p.key].count}</span>
+            <div key={p.key} className="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-blue-500/30 transition-all">
+              <span className="sm:hidden text-[8px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
+              <span className="text-xs font-black text-[var(--foreground)]">{stats[p.key].count}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* REVENUE ROW */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-        <div className="px-4 py-2.5 min-w-[120px] rounded-xl border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-3">
-          <IndianRupee size={14} className="text-emerald-500" />
-          <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500">TOTAL REVENUE</span>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <div className="px-3 py-1.5 min-w-[110px] rounded-lg border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-2">
+          <IndianRupee size={12} className="text-emerald-500" />
+          <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500">TOTAL REVENUE</span>
         </div>
-        <div className="flex-1 grid grid-cols-3 gap-2">
+        <div className="flex-1 grid grid-cols-3 gap-1">
           {periods.map((p) => (
-            <div key={p.key} className="px-5 py-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-emerald-500/30 transition-all">
-              <span className="sm:hidden text-[9px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
-              <span className="text-sm font-black text-[var(--foreground)] whitespace-nowrap ml-1">₹{Number(stats[p.key].totalValue || 0).toLocaleString()}</span>
+            <div key={p.key} className="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-emerald-500/30 transition-all">
+              <span className="sm:hidden text-[8px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
+              <span className="text-xs font-black text-[var(--foreground)] whitespace-nowrap ml-1">₹{Number(stats[p.key].totalValue || 0).toLocaleString()}</span>
             </div>
           ))}
         </div>
