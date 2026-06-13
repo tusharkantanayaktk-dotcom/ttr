@@ -165,15 +165,15 @@ export default function GameDetailPage() {
     <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6">
 
       {/* ================= MODERN GAME SWITCHER ================= */}
-      <div className="max-w-6xl mx-auto mb-6 overflow-hidden px-2">
-        <div className="flex items-center gap-2 mb-3 px-1">
-          <div className="w-1 h-3 bg-red-600 rounded-full shadow-[0_0_8px_rgba(220,38,38,0.5)]" />
-          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] italic">
+      <div className="max-w-6xl mx-auto mb-4 overflow-hidden px-2">
+        <div className="flex items-center gap-2 mb-2 px-1">
+          <div className="w-1 h-2.5 bg-red-600 rounded-full shadow-[0_0_8px_rgba(220,38,38,0.5)]" />
+          <h2 className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)] italic">
             Quick Game Switch
           </h2>
         </div>
 
-        <div className="flex items-center gap-1 overflow-x-auto py-2 no-scrollbar scroll-smooth">
+        <div className="flex items-center gap-0.5 overflow-x-auto py-1 no-scrollbar scroll-smooth">
           {allGames.map((g, index) => {
             const isActive = g.gameSlug === slug;
             return (
@@ -181,7 +181,7 @@ export default function GameDetailPage() {
                 key={g.gameSlug}
                 onClick={() => router.push(`/games/${g.gameSlug}`)}
                 className={`
-                  relative flex-shrink-0 flex flex-col items-center gap-1.5 px-1 py-2 rounded-xl transition-all duration-500 min-w-[68px]
+                  relative flex-shrink-0 flex flex-col items-center gap-1 px-1 py-1.5 rounded-xl transition-all duration-500 min-w-[58px]
                   ${isActive
                     ? "bg-[var(--foreground)]/[0.05] opacity-100"
                     : "hover:bg-[var(--foreground)]/[0.03] opacity-40 hover:opacity-80"}
@@ -189,19 +189,19 @@ export default function GameDetailPage() {
               >
                 {/* THUMBNAIL */}
                 <div className={`
-                  relative w-11 h-11 rounded-xl overflow-hidden transition-all duration-500 transform
+                  relative w-9 h-9 rounded-xl overflow-hidden transition-all duration-500 transform
                   ${isActive ? "ring-1 ring-red-500/50 scale-105" : "grayscale opacity-80"}
                 `}>
                   <GameThumbnail src={g.gameImageId?.image} name={g.gameName} index={index} />
                 </div>
 
                 {/* LABEL */}
-                <div className="flex flex-col items-center text-center w-full px-1">
-                  <div className="h-5 flex items-center justify-center mb-1">
+                <div className="flex flex-col items-center text-center w-full px-0.5">
+                  <div className="h-4 flex items-center justify-center mb-1">
                     <span className={`
-                      text-[7px] font-black italic uppercase tracking-wider transition-colors duration-300 leading-[1]
+                      text-[6px] font-black italic uppercase tracking-wider transition-colors duration-300 leading-[1]
                       ${isActive ? "text-red-500" : "text-[var(--muted)]"}
-                      line-clamp-2 max-w-[64px] whitespace-normal
+                      line-clamp-2 max-w-[56px] whitespace-normal
                     `}>
                       {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
                     </span>
@@ -223,17 +223,19 @@ export default function GameDetailPage() {
       </div>
 
       {/* ================= HEADER ================= */}
-      <div className="max-w-6xl mx-auto mb-6 flex items-center gap-4">
-        <div className="w-14 h-14 relative rounded-lg overflow-hidden">
+      <div className="max-w-6xl mx-auto mb-3 flex items-center gap-3">
+        <div className="w-10 h-10 relative rounded-lg overflow-hidden shadow-md">
           <GameThumbnail src={game?.gameImageId?.image} name={game?.gameName} isLarge />
         </div>
 
         <div>
-          <h1 className="text-2xl font-extrabold">
+          <h1 className="text-xl font-extrabold tracking-tight">
             {isBGMI ? "BGMI" : game?.gameName}
           </h1>
         </div>
       </div>
+      
+      <div className="max-w-6xl mx-auto h-[1px] bg-[var(--border)] mb-4 opacity-50" />
 
       {/* ================= ITEM GRID ================= */}
       <ItemGrid

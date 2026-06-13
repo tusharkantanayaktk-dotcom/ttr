@@ -85,18 +85,18 @@ export default function LeaderboardPage() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-3xl md:text-4xl font-black italic tracking-tighter mb-1"
+              className="text-4xl md:text-5xl font-black italic tracking-tighter mb-2 drop-shadow-xl"
             >
-              TOP <span className="text-[var(--accent)]">PLAYERS</span>
+              LEADER<span className="text-[var(--accent)]">BOARD</span>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-[var(--muted)] text-xs font-medium uppercase tracking-widest max-w-md mx-auto"
+              className="text-[var(--muted)] text-xs md:text-sm font-bold tracking-wide max-w-md mx-auto"
             >
-              Top players for this month.
+              Top players this month
             </motion.p>
           </div>
 
@@ -126,9 +126,9 @@ export default function LeaderboardPage() {
           </div>
 
           {loading ? (
-            <div className="space-y-4 max-w-2xl mx-auto">
+            <div className="space-y-3 max-w-2xl mx-auto">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-16 bg-[var(--card)]/50 animate-pulse rounded-xl border border-[var(--border)]" />
+                <div key={i} className="h-12 bg-[var(--card)]/50 animate-pulse rounded-xl border border-[var(--border)]" />
               ))}
             </div>
           ) : data.length === 0 ? (
@@ -172,15 +172,8 @@ export default function LeaderboardPage() {
                   variants={containerVariants}
                   initial="hidden"
                   animate="visible"
-                  className="max-w-2xl mx-auto space-y-3 px-4"
+                  className="max-w-2xl mx-auto space-y-2 px-4"
                 >
-                  <div className="flex items-center justify-between px-6 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">
-                    <span>Player</span>
-                    <div className="flex justify-end">
-                      <span className="w-24 text-right">Total</span>
-                    </div>
-                  </div>
-
                   {remainingData.map((item, index) => {
                     const rank = index + 4;
                     const style = getRankStyle(rank);
@@ -188,19 +181,21 @@ export default function LeaderboardPage() {
                       <motion.div
                         key={index}
                         variants={itemVariants}
-                        whileHover={{ x: 5 }}
-                        className="group flex items-center justify-between py-2 px-4 rounded-lg hover:bg-[var(--foreground)]/[0.03] transition-all duration-300"
+                        whileHover={{ scale: 1.01 }}
+                        className="group flex items-center justify-between p-2 sm:p-3 rounded-xl bg-[var(--card)]/30 backdrop-blur-md border border-white/5 hover:bg-[var(--card)]/60 hover:border-[var(--accent)]/30 transition-all duration-300 shadow-md"
                       >
-                        <div className="flex items-center gap-4">
-                          <span className="text-xs font-black text-[var(--muted)] italic w-6">#{rank}</span>
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 font-black text-xs text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">
+                            #{rank}
+                          </div>
                           <div className="flex flex-col">
-                            <span className="text-sm font-bold tracking-tight">{item.user?.name || "Player"}</span>
+                            <span className="text-xs sm:text-sm font-bold tracking-tight">{item.user?.name || "Player"}</span>
                           </div>
                         </div>
 
                         <div className="flex justify-end">
-                          <div className="w-24 text-right">
-                            <span className="text-sm font-bold text-[var(--accent)] tracking-tighter">₹{item.totalSpent}</span>
+                          <div className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/5 group-hover:border-[var(--accent)]/20 transition-colors">
+                            <span className="text-xs sm:text-sm font-black text-[var(--accent)] tracking-tighter">₹{item.totalSpent}</span>
                           </div>
                         </div>
                       </motion.div>
@@ -226,35 +221,32 @@ function PodiumCard({ user, rank, style, isMain = false }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: isMain ? -6 : -3 }}
+      whileHover={{ y: isMain ? -6 : -4 }}
       transition={{ duration: 0.5 }}
-      className={`relative group p-1.5 sm:p-2.5 rounded-xl flex flex-col items-center text-center ${isMain ? 'sm:scale-105' : ''}`}
+      className={`relative group p-3 sm:p-4 rounded-2xl flex flex-col items-center text-center bg-[var(--card)]/40 backdrop-blur-xl border ${style.border} ${isMain ? 'sm:scale-110 shadow-xl shadow-[var(--accent)]/10 z-10' : 'shadow-md z-0'} transition-all`}
     >
+      {/* Glow Effect */}
+      <div className={`absolute inset-0 rounded-2xl ${style.bg} blur-xl opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity`} />
 
       {/* RANK BADGE */}
-      <div className={`relative z-10 mb-1.5 sm:mb-2 p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl border ${style.border} bg-[var(--card)]/20`}>
-        <Icon size={isMain ? 24 : 16} className={`sm:hidden ${style.color}`} />
-        <Icon className={`hidden sm:block ${style.color}`} size={isMain ? 32 : 24} />
-        <div className={`absolute -bottom-1 -right-1 sm:-bottom-1 sm:-right-1 w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-full flex items-center justify-center font-black italic text-[6px] sm:text-[8px] border ${style.border} bg-black text-white`}>
+      <div className={`relative z-10 mb-2 p-2 sm:p-3 rounded-xl border ${style.border} ${style.bg} shadow-md`}>
+        <Icon size={isMain ? 24 : 18} className={`sm:hidden ${style.color} drop-shadow-md`} />
+        <Icon className={`hidden sm:block ${style.color} drop-shadow-md`} size={isMain ? 36 : 24} />
+        <div className={`absolute -bottom-2 -right-2 w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center font-black italic text-[10px] sm:text-[11px] border ${style.border} bg-[var(--background)] ${style.color} shadow-lg`}>
           #{rank}
         </div>
       </div>
 
       {/* USER INFO */}
-      <div className="relative z-10 space-y-0.5 sm:space-y-1">
-        <h3 className={`font-black tracking-tight leading-tight truncate w-full ${isMain ? 'text-xs sm:text-xl' : 'text-[10px] sm:text-base'}`}>
+      <div className="relative z-10 w-full mb-2">
+        <h3 className={`font-black tracking-tight leading-tight truncate w-full ${isMain ? 'text-xs sm:text-sm' : 'text-[10px] sm:text-xs'}`}>
           {user.user?.name || "Anonymous"}
         </h3>
-        <p className="text-[7px] sm:text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest mb-1">
-          Rank
-        </p>
       </div>
 
-      <div className="relative z-10 w-full flex flex-col items-center mt-2 pt-2 border-t border-white/5">
-        <span className="text-[6px] sm:text-[8px] font-black text-[var(--muted)] uppercase">Total</span>
+      <div className={`relative z-10 w-full flex items-center justify-center py-1.5 px-2 sm:py-2 sm:px-3 rounded-lg bg-black/40 border ${style.border} shadow-inner`}>
         <span className={`text-xs sm:text-sm font-black tracking-tighter ${style.color}`}>₹{user.totalSpent}</span>
       </div>
-
     </motion.div>
   );
 }

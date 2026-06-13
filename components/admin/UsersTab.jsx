@@ -356,7 +356,7 @@ export default function UsersTab() {
                       <div className="flex items-center gap-2 text-[var(--muted)] opacity-50">
                         <Calendar size={11} />
                         <span className="text-[10px] font-bold tracking-tight">
-                          {new Date(u.createdAt).toLocaleDateString()}
+                          {u.lastLogin ? new Date(u.lastLogin).toLocaleString() : "Never logged in"}
                         </span>
                       </div>
                       

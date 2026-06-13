@@ -172,7 +172,28 @@ export default function PricingTab({
       <div className="space-y-6 pb-20 max-w-full overflow-x-hidden">
         {/* ================= HEADER ================= */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Pricing Config</h2>
+          <div className="flex items-center justify-between w-full lg:w-auto gap-4">
+            <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Pricing Config</h2>
+
+            {/* SAVE BUTTON */}
+            <button
+              onClick={onSave}
+              disabled={!canSave}
+              className={`
+                  h-10 px-6 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all outline-none shrink-0
+                  ${canSave
+                  ? "bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/10 hover:brightness-110 active:scale-95"
+                  : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]/40 cursor-not-allowed"}
+                `}
+            >
+              {savingPricing ? (
+                <RefreshCcw size={14} className="animate-spin" />
+              ) : (
+                <Save size={14} />
+              )}
+              {savingPricing ? "Saving" : "Save"}
+            </button>
+          </div>
 
           <div className="flex flex-wrap items-center gap-3">
             {/* MODE SWITCHER */}
@@ -211,24 +232,6 @@ export default function PricingTab({
               ))}
             </div>
 
-            {/* SAVE BUTTON */}
-            <button
-              onClick={onSave}
-              disabled={!canSave}
-              className={`
-                  h-10 px-6 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all outline-none
-                  ${canSave
-                  ? "bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/10 hover:brightness-110 active:scale-95"
-                  : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]/40 cursor-not-allowed"}
-                `}
-            >
-              {savingPricing ? (
-                <RefreshCcw size={14} className="animate-spin" />
-              ) : (
-                <Save size={14} />
-              )}
-              {savingPricing ? "Saving" : "Save Changes"}
-            </button>
           </div>
         </div>
 
@@ -259,10 +262,10 @@ export default function PricingTab({
                   </div>
 
                   <div className="space-y-2">
-                    <div className="hidden sm:grid grid-cols-12 gap-3 px-2 text-[10px] font-bold text-[var(--muted)]">
-                      <div className="col-span-4">Min Price (₹)</div>
-                      <div className="col-span-4">Max Price (₹)</div>
-                      <div className="col-span-3">Markup (%)</div>
+                    <div className="grid grid-cols-12 gap-2 px-2 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
+                      <div className="col-span-4">Min (₹)</div>
+                      <div className="col-span-4">Max (₹)</div>
+                      <div className="col-span-3">Markup</div>
                       <div className="col-span-1"></div>
                     </div>
 
@@ -271,47 +274,44 @@ export default function PricingTab({
                         key={i}
                         initial={{ opacity: 0, x: -5 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-3 items-center p-3 sm:p-3.5 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.01] hover:bg-[var(--foreground)]/[0.03] transition-colors"
+                        className="grid grid-cols-12 gap-2 items-center p-2 sm:p-3 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.01] hover:bg-[var(--foreground)]/[0.03] transition-colors"
                       >
-                        <div className="col-span-4 space-y-1 sm:space-y-0">
-                          <label className="sm:hidden text-[10px] font-bold text-[var(--muted)] ml-1">Min Price (₹)</label>
+                        <div className="col-span-4">
                           <input
                             type="number"
                             value={s.min}
                             onChange={(e) => updateSlab(i, "min", e.target.value)}
-                            className="w-full h-10 px-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-semibold text-sm outline-none focus:border-[var(--accent)]/50 transition-all font-mono"
+                            className="w-full h-8 sm:h-10 px-2 sm:px-4 rounded-lg sm:rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-semibold text-xs sm:text-sm outline-none focus:border-[var(--accent)]/50 transition-all font-mono"
                             placeholder="0"
                           />
                         </div>
-                        <div className="col-span-4 space-y-1 sm:space-y-0">
-                          <label className="sm:hidden text-[10px] font-bold text-[var(--muted)] ml-1">Max Price (₹)</label>
+                        <div className="col-span-4">
                           <input
                             type="number"
                             value={s.max}
                             onChange={(e) => updateSlab(i, "max", e.target.value)}
-                            className="w-full h-10 px-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-semibold text-sm outline-none focus:border-[var(--accent)]/50 transition-all font-mono"
+                            className="w-full h-8 sm:h-10 px-2 sm:px-4 rounded-lg sm:rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-semibold text-xs sm:text-sm outline-none focus:border-[var(--accent)]/50 transition-all font-mono"
                             placeholder="1000"
                           />
                         </div>
-                        <div className="col-span-3 space-y-1 sm:space-y-0">
-                          <label className="sm:hidden text-[10px] font-bold text-[var(--muted)] ml-1">Markup (%)</label>
+                        <div className="col-span-3">
                           <div className="relative">
                             <input
                               type="number"
                               value={s.percent}
                               onChange={(e) => updateSlab(i, "percent", e.target.value)}
-                              className="w-full h-10 px-4 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/20 text-[var(--accent)] font-bold text-sm outline-none transition-all placeholder:text-[var(--accent)]/40"
+                              className="w-full h-8 sm:h-10 px-2 sm:px-4 pr-6 sm:pr-8 rounded-lg sm:rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/20 text-[var(--accent)] font-bold text-xs sm:text-sm outline-none transition-all placeholder:text-[var(--accent)]/40"
                               placeholder="5"
                             />
-                            <Percent size={12} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--accent)]/50" />
+                            <Percent size={10} className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 text-[var(--accent)]/50" />
                           </div>
                         </div>
-                        <div className="col-span-1 flex justify-end sm:justify-center">
+                        <div className="col-span-1 flex justify-center">
                           <button
                             onClick={() => deleteSlab(i)}
-                            className="p-2 sm:p-0 text-[var(--muted)] hover:text-rose-500 transition-colors"
+                            className="text-[var(--muted)] hover:text-rose-500 transition-colors"
                           >
-                            <Trash2 size={18} />
+                            <Trash2 size={14} className="sm:w-4 sm:h-4" />
                           </button>
                         </div>
                       </motion.div>

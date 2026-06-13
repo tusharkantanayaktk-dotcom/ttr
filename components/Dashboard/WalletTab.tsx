@@ -120,12 +120,8 @@ export default function WalletTab({
             My <span className="text-[var(--accent)]">Wallet</span>
           </h2>
           <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">
-            Wallet and payment
+            Balance
           </p>
-        </div>
-        <div className="h-8 px-3 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center gap-2">
-            <FiShield size={12} className="text-[var(--accent)]" />
-            <span className="text-[9px] font-black uppercase text-[var(--accent)]">Protected</span>
         </div>
       </motion.div>
 
@@ -138,37 +134,37 @@ export default function WalletTab({
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative p-5 sm:p-6 rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)] shadow-xl overflow-hidden group"
+            className="relative p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-lg overflow-hidden group"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent)] opacity-[0.03] blur-[100px] rounded-full" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent)] opacity-[0.03] blur-[80px] rounded-full" />
             
-            <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+            <div className="relative z-10 flex justify-between items-center gap-4">
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60 mb-2">
+                <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60 mb-1">
                   <FiTrendingUp className="text-[var(--accent)]" />
-                  Available Balance
+                  Balance
                 </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-xl font-bold text-[var(--accent)]">₹</span>
-                  <span className="text-3xl sm:text-4xl font-black tracking-tight text-[var(--foreground)] drop-shadow-sm">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-lg font-bold text-[var(--accent)]">₹</span>
+                  <span className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--foreground)] drop-shadow-sm">
                     {walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="pt-4 flex flex-col">
-                  <span className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40">User Identity</span>
-                  <span className="text-[11px] font-mono font-bold text-[var(--foreground)] opacity-80">
-                    {storedPhone ? `+91 ${storedPhone.slice(0, 3)}••••${storedPhone.slice(-3)}` : 'Guest user'}
+                <div className="pt-2 flex flex-col">
+                  <span className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40">Account</span>
+                  <span className="text-[10px] font-mono font-bold text-[var(--foreground)] opacity-80">
+                    {storedPhone ? `+91 ${storedPhone.slice(0, 3)}••••${storedPhone.slice(-3)}` : 'Guest'}
                   </span>
                 </div>
               </div>
 
-              <div className="shrink-0">
-                <div className="h-12 w-12 rounded-xl bg-[var(--accent)] flex items-center justify-center shadow-[0_10px_30px_-5px_var(--accent)]/30 group-hover:scale-105 transition-transform duration-500">
-                  <FaWallet className="text-xl text-black" />
+              <div className="shrink-0 flex flex-col items-end">
+                <div className="h-10 w-10 rounded-lg bg-[var(--accent)] flex items-center justify-center shadow-[0_10px_30px_-5px_var(--accent)]/30 group-hover:scale-105 transition-transform duration-500">
+                  <FaWallet className="text-lg text-black" />
                 </div>
-                <div className="mt-4 flex -space-x-3 opacity-20 justify-end">
-                  <div className="h-7 w-7 rounded-full bg-[var(--accent)]" />
-                  <div className="h-7 w-7 rounded-full bg-[var(--foreground)]" />
+                <div className="mt-2 flex -space-x-2 opacity-20">
+                  <div className="h-5 w-5 rounded-full bg-[var(--accent)]" />
+                  <div className="h-5 w-5 rounded-full bg-[var(--foreground)]" />
                 </div>
               </div>
             </div>

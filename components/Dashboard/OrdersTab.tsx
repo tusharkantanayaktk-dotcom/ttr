@@ -75,17 +75,17 @@ export default function OrdersTab() {
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col gap-1"
       >
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+        <div className="flex flex-row items-center justify-between gap-3">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--foreground)]">
               My <span className="text-[var(--accent)]">Orders</span>
             </h2>
-            <p className="text-[10px] sm:text-xs text-[var(--muted)] max-w-xl">
+            <p className="text-[10px] sm:text-xs text-[var(--muted)] max-w-xl mt-0.5">
               Track your recent transactions and status.
             </p>
           </div>
-          <div className="flex gap-2">
-            <div className="px-3 py-1.5 bg-[var(--card)] border border-[var(--border)] rounded-xl flex flex-col">
+          <div className="flex shrink-0">
+            <div className="px-3 py-1.5 bg-[var(--card)] border border-[var(--border)] rounded-xl flex flex-col items-end text-right shadow-sm">
               <span className="text-[8px] font-bold uppercase tracking-wider text-[var(--muted)]">Total Orders</span>
               <span className="text-sm font-bold text-[var(--foreground)]">{totalCount}</span>
             </div>

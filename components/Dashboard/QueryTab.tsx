@@ -141,7 +141,7 @@ export default function QueryTab() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
         {/* LEFT: FORM & FAQS */}
-        <div className="lg:col-span-3 space-y-10">
+        <div className="lg:col-span-3 space-y-10 order-2 lg:order-1">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -282,7 +282,7 @@ export default function QueryTab() {
         </div>
 
         {/* RIGHT: CONTACT SECTIONS */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-6 order-1 lg:order-2">
           <div>
             <div className="flex items-center gap-2 mb-3">
               <div className="h-8 w-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
