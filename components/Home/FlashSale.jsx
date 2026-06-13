@@ -130,7 +130,7 @@ export default function FlashSale() {
                 <div className="flex overflow-x-auto no-scrollbar gap-2 pb-2 md:grid md:grid-cols-4 lg:grid-cols-6 md:pb-0">
                     {flashSaleData.map((item, index) => (
                         <div
-                            key={item.id}
+                            key={`${item.id}-${index}`}
                             className="shrink-0 w-[140px] xs:w-[160px] md:w-full"
                         >
                             <Link

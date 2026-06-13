@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import QRCode from "qrcode";
 import logo from "@/public/logo.png";
@@ -28,6 +28,19 @@ export default function ReviewAndPaymentStep({
 }) {
   const [upiQR, setUpiQR] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [stopOrders, setStopOrders] = useState(false);
+
+  // Check if orders are being accepted
+  useEffect(() => {
+    fetch("/api/system/order-status")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setStopOrders(data.stopAcceptingOrders);
+        }
+      })
+      .catch(err => console.error("Failed to check order status", err));
+  }, []);
 
   // Generate UPI QR
   const handleUPI = async () => {
@@ -40,6 +53,11 @@ export default function ReviewAndPaymentStep({
 
   // Handle proceed to payment
   const handleProceed = async () => {
+    if (stopOrders) {
+      alert("We are currently not accepting new orders.");
+      return;
+    }
+
     if (!paymentMethod) {
       alert("Please choose a payment method.");
       return;
@@ -184,27 +202,27 @@ export default function ReviewAndPaymentStep({
       )}
 
       {/* PAYMENT OPTIONS */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         {/* UPI Button */}
         <button
           onClick={handleUPI}
-          className={`w-full p-4 rounded-2xl border text-left flex justify-between items-center transition-all duration-500 group ${paymentMethod === "upi"
-            ? "border-[var(--accent)] bg-[var(--accent)]/[0.05] shadow-xl shadow-[var(--accent)]/5"
+          className={`w-full p-3 rounded-xl border text-left flex justify-between items-center transition-all duration-500 group ${paymentMethod === "upi"
+            ? "border-[var(--accent)] bg-[var(--accent)]/[0.05] shadow-lg shadow-[var(--accent)]/5"
             : "border-[var(--border)] bg-[var(--foreground)]/[0.02] hover:border-[var(--accent)]/30"
           }`}
         >
-          <div className="flex items-center gap-4">
-            <div className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black shadow-lg shadow-[var(--accent)]/20' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
+          <div className="flex items-center gap-3">
+            <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-500 ${paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black shadow-md shadow-[var(--accent)]/20' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
             }`}>
-              <FiCreditCard size={20} />
+              <FiCreditCard size={18} />
             </div>
             <div>
-              <p className="font-black text-base uppercase tracking-tight italic">UPI Gateway</p>
+              <p className="font-black text-sm uppercase tracking-tight italic">UPI Gateway</p>
               <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">GPay, PhonePe, Paytm</p>
             </div>
           </div>
-          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${paymentMethod === 'upi' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
-            {paymentMethod === 'upi' && <FiCheck size={12} className="text-black" strokeWidth={4} />}
+          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${paymentMethod === 'upi' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
+            {paymentMethod === 'upi' && <FiCheck size={10} className="text-black" strokeWidth={4} />}
           </div>
         </button>
 
@@ -214,23 +232,23 @@ export default function ReviewAndPaymentStep({
             if (walletBalance < totalPrice) return;
             setPaymentMethod("wallet");
           }}
-          className={`w-full p-4 rounded-2xl border text-left flex justify-between items-center transition-all duration-500 group ${paymentMethod === "wallet"
-            ? "border-[var(--accent)] bg-[var(--accent)]/[0.05] shadow-xl shadow-[var(--accent)]/5"
+          className={`w-full p-3 rounded-xl border text-left flex justify-between items-center transition-all duration-500 group ${paymentMethod === "wallet"
+            ? "border-[var(--accent)] bg-[var(--accent)]/[0.05] shadow-lg shadow-[var(--accent)]/5"
             : "border-[var(--border)] bg-[var(--foreground)]/[0.02] hover:border-[var(--accent)]/30"
           } ${walletBalance < totalPrice ? "opacity-40 cursor-not-allowed grayscale" : ""}`}
         >
-          <div className="flex items-center gap-4">
-            <div className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black shadow-lg shadow-[var(--accent)]/20' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
+          <div className="flex items-center gap-3">
+            <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-500 ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black shadow-md shadow-[var(--accent)]/20' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
             }`}>
-              <FiActivity size={20} />
+              <FiActivity size={18} />
             </div>
             <div>
-              <p className="font-black text-base uppercase tracking-tight italic">My Wallet</p>
+              <p className="font-black text-sm uppercase tracking-tight italic">My Wallet</p>
               <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">Balance: ₹{walletBalance.toFixed(2)}</p>
             </div>
           </div>
-          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${paymentMethod === 'wallet' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
-            {paymentMethod === 'wallet' && <FiCheck size={12} className="text-black" strokeWidth={4} />}
+          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${paymentMethod === 'wallet' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
+            {paymentMethod === 'wallet' && <FiCheck size={10} className="text-black" strokeWidth={4} />}
           </div>
         </button>
 
@@ -261,10 +279,19 @@ export default function ReviewAndPaymentStep({
           </div>
         </div>
 
+        {stopOrders && (
+          <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex items-center justify-center text-center animate-in fade-in zoom-in duration-300">
+            <p className="text-sm font-bold text-red-500 flex items-center gap-2">
+              <FiShield className="shrink-0" />
+              We are currently not accepting new orders.
+            </p>
+          </div>
+        )}
+
         <button
           onClick={handleProceed}
-          disabled={isRedirecting || !paymentMethod || (paymentMethod === "wallet" && walletBalance < totalPrice)}
-          className="w-full py-5 rounded-2xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] italic shadow-2xl shadow-[var(--accent)]/20 hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-sm"
+          disabled={stopOrders || isRedirecting || !paymentMethod || (paymentMethod === "wallet" && walletBalance < totalPrice)}
+          className="w-full py-3.5 rounded-xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] italic shadow-2xl shadow-[var(--accent)]/20 hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-sm"
         >
           {isRedirecting ? (
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-5 h-5 border-3 border-black border-t-transparent rounded-full" />

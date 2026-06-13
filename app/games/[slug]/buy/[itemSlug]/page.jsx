@@ -282,7 +282,7 @@ export default function BuyFlowPage() {
                     <h2 className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">More Packs</h2>
                   </div>
 
-                  <div className="flex overflow-x-auto no-scrollbar gap-2 pb-2 md:grid md:grid-cols-4 lg:grid-cols-3">
+                  <div className="flex overflow-x-auto no-scrollbar gap-1.5 pb-2 md:grid md:grid-cols-4 lg:grid-cols-3">
                     {allItems.map((item) => {
                       const isSelected = activeItem.itemSlug === item.itemSlug;
                       return (
@@ -293,7 +293,7 @@ export default function BuyFlowPage() {
                             router.replace(`/games/${slug}/buy/${item.itemSlug}`, { scroll: false });
                           }}
                           className={`
-                          relative p-2.5 rounded-xl border transition-all duration-300 text-left overflow-hidden group min-h-[64px] flex flex-col justify-center shrink-0 w-[105px] md:w-full
+                          relative p-2 rounded-lg border transition-all duration-300 text-left overflow-hidden group min-h-[52px] flex flex-col justify-center shrink-0 w-[90px] md:w-full
                           ${isSelected
                               ? "bg-[var(--accent)]/[0.08] border-[var(--accent)] shadow-lg shadow-[var(--accent)]/5"
                               : "bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/30 hover:bg-[var(--foreground)]/[0.02]"}

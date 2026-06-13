@@ -133,6 +133,16 @@ export async function POST(req: Request) {
   try {
     await connectDB();
 
+    /* ---------- STOP ACCEPTING ORDERS CHECK ---------- */
+    const SystemSetting = (await import("@/models/SystemSetting")).default;
+    const orderSetting = await SystemSetting.findOne({ key: "STOP_ACCEPTING_ORDERS" }).lean();
+    if (orderSetting && orderSetting.value === true) {
+      return NextResponse.json(
+        { success: false, message: "We are currently not accepting new orders." },
+        { status: 400 }
+      );
+    }
+
     /* ---------- AUTH (JWT) ---------- */
     const authHeader = req.headers.get("authorization");
 
