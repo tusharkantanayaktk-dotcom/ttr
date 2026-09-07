@@ -1,89 +1,56 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import {
   TopNoticeBannerSkeleton,
   GameBannerCarouselSkeleton,
   FlashSaleSkeleton,
   StorySliderSkeleton,
   GamesPageSkeleton,
-  TronicsWhoSkeleton,
-  HomeServicesSkeleton
+  HomeServicesSkeleton,
 } from "./HomeSkeletons";
 
-const TopNoticeBanner = dynamic(() => import("./TopNoticeBanner"), { 
-  ssr: false, 
-  loading: () => <TopNoticeBannerSkeleton /> 
+const TopNoticeBanner = dynamic(() => import("./TopNoticeBanner"), {
+  ssr: false,
+  loading: () => <TopNoticeBannerSkeleton />,
 });
 const GameBannerCarousel = dynamic(() => import("./GameBannerCarousel"), {
   ssr: false,
-  loading: () => <GameBannerCarouselSkeleton />
+  loading: () => <GameBannerCarouselSkeleton />,
 });
-const ScrollingNoticeBand = dynamic(() => import("./ScrollingNoticeBand"), { ssr: false });
-const GamesPage = dynamic(() => import("@/app/games/page"), { 
+const GamesPage = dynamic(() => import("@/app/games/page"), {
   ssr: false,
-  loading: () => <GamesPageSkeleton />
+  loading: () => <GamesPageSkeleton />,
 });
-const FlashSale = dynamic(() => import("./FlashSale"), { 
+const FlashSale = dynamic(() => import("./FlashSale"), {
   ssr: false,
-  loading: () => <FlashSaleSkeleton />
+  loading: () => <FlashSaleSkeleton />,
 });
-const StorySlider = dynamic(() => import("./StorySlider"), { 
+const StorySlider = dynamic(() => import("./StorySlider"), {
   ssr: false,
-  loading: () => <StorySliderSkeleton />
+  loading: () => <StorySliderSkeleton />,
 });
-const HomeQuickActions = dynamic(() => import("./HomeQuickActions"), { ssr: false });
-const HomeServices = dynamic(() => import("./HomeServices"), { 
+const HomeServices = dynamic(() => import("./HomeServices"), {
   ssr: false,
-  loading: () => <HomeServicesSkeleton />
+  loading: () => <HomeServicesSkeleton />,
 });
-const TronicsWho = dynamic(() => import("./TronicsWho"), { 
-  ssr: false,
-  loading: () => <TronicsWhoSkeleton />
-});
-const TrustHighlights = dynamic(() => import("./TrustHighlights"), { ssr: false });
-const MLBBPurchaseGuide = dynamic(() => import("../HelpImage/MLBBPurchaseGuide"), { ssr: false });
 const CommunityPopup = dynamic(() => import("./CommunityPopup"), { ssr: false });
-
 
 export default function HeroSection() {
   const [search, setSearch] = useState("");
   const pathname = usePathname();
 
-  const isLive = pathname.startsWith("/anime-live");
-  //   const checkBalance = async () => {
-  //   const res = await fetch("/api/game/balance");
-  //   const data = await res.json();
-  //   console.log("FINAL BALANCE:", data);
-  // };
-
-  // checkBalance();
-
-
   return (
     <>
       <CommunityPopup />
       <TopNoticeBanner />
-
       <GameBannerCarousel />
-
       <FlashSale />
-
       <StorySlider />
-      {/*  <HomeQuickActions />  */}
-
       <GamesPage />
-
-
-      <TronicsWho />
       <HomeServices />
-      {/* <TrustHighlights /> */}
-
-
     </>
-
   );
 }

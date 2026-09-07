@@ -23,239 +23,59 @@
   --color-card: var(--card);
 }
 
-/* 🌙 Dark Mode */
+/* 🌙 1. Dark Mode (OLED Gaming & Electric Sky) */
 html[data-theme="dark"] {
   --background: #000000;
   --foreground: #f8fafc;
-  --accent: #7dd3fc;
-  /* Electric cyan */
-  --accent-hover: #38bdf8;
-  --muted: #a1a1aa;
-  --border: #18181b;
-  --card: #000000;
+  --accent: #38bdf8;
+  --accent-hover: #0284c7;
+  --muted: #94a3b8;
+  --border: #1e293b;
+  --card: #090d16;
 }
 
-/* 💠 Cyber Theme (Futuristic / Tech Anime) */
+/* ☀️ 2. Light Mode (Crisp Minimalist & Royal Blue) */
+html[data-theme="light"] {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --card: #ffffff;
+}
+
+/* 💠 3. Cyberpunk (Futuristic Void & Neon Cyan) */
 html[data-theme="cyber"] {
   --background: #030712;
   --foreground: #e0f2fe;
   --accent: #00ffff;
-  /* Neon cyan glow */
   --accent-hover: #06b6d4;
   --muted: #94a3b8;
-  --border: #0f172a;
-  --card: #111827;
+  --border: #112240;
+  --card: #0a1128;
 }
 
-/* 🌸 Sakura Theme (Romantic / Soft Anime) */
+/* 🩸 4. Crimson Red (Dark Obsidian & Blood Ruby) */
+html[data-theme="crimson"] {
+  --background: #080202;
+  --foreground: #fee2e2;
+  --accent: #ef4444;
+  --accent-hover: #dc2626;
+  --muted: #9ca3af;
+  --border: #2e0808;
+  --card: #150505;
+}
+
+/* 🌸 5. Sakura (Soft Aesthetic Pastel Rose) */
 html[data-theme="sakura"] {
   --background: #fff5f8;
   --foreground: #1f2937;
-  --accent: #ff4d94;
-  /* Hot pink */
-  --accent-hover: #e11d74;
-  --muted: #6b7280;
-  --border: #fbcfe8;
-  --card: #ffe4ef;
-}
-
-/* 💜 Violet Theme (Mystic / Shonen Anime) */
-html[data-theme="violet"] {
-  --background: #0b0b14;
-  --foreground: #e2e8f0;
-  --accent: #a855f7;
-  /* Soft violet */
-  --accent-hover: #9333ea;
-  --muted: #a1a1aa;
-  --border: #2e1065;
-  --card: #1e1b4b;
-}
-
-/* 🔥 Ember Theme (Energetic / Action Anime) */
-html[data-theme="ember"] {
-  --background: #0f0f0f;
-  --foreground: #fefce8;
-  --accent: #f59e0b;
-  /* Golden amber */
-  --accent-hover: #f97316;
-  --muted: #fcd34d;
-  --border: #78350f;
-  --card: #1c1917;
-}
-
-/* 🌪️ Midnight Purple (Epic Anime Mood) */
-html[data-theme="midnight"] {
-  --background: #080010;
-  --foreground: #e5e7eb;
-  --accent: #8b5cf6;
-  /* Deep purple */
-  --accent-hover: #7c3aed;
-  --muted: #a78bfa;
-  --border: #2d1b69;
-  --card: #100026;
-}
-
-/* 🌊 Ocean Theme (Calm / Slice-of-Life Anime) */
-html[data-theme="ocean"] {
-  --background: #f0f9ff;
-  --foreground: #0c4a6e;
-  --accent: #0ea5e9;
-  /* Sky blue */
-  --accent-hover: #0284c7;
-  --muted: #64748b;
-  --border: #bae6fd;
-  --card: #e0f2fe;
-}
-
-/* 🍃 Forest Theme (Nature / Isekai Anime) */
-html[data-theme="forest"] {
-  --background: #f0fdf4;
-  --foreground: #14532d;
-  --accent: #22c55e;
-  /* Emerald green */
-  --accent-hover: #16a34a;
-  --muted: #6b7280;
-  --border: #bbf7d0;
-  --card: #dcfce7;
-}
-
-/* 🩸 Crimson Theme (Dark / Seinen Anime) */
-html[data-theme="crimson"] {
-  --background: #0a0000;
-  --foreground: #fecaca;
-  --accent: #dc2626;
-  /* Blood red */
-  --accent-hover: #991b1b;
-  --muted: #9ca3af;
-  --border: #450a0a;
-  --card: #1a0000;
-}
-
-/* 🌌 Galaxy Theme (Space / Mecha Anime) */
-html[data-theme="galaxy"] {
-  --background: #020617;
-  --foreground: #cbd5e1;
-  --accent: #6366f1;
-  /* Indigo */
-  --accent-hover: #4f46e5;
-  --muted: #818cf8;
-  --border: #1e293b;
-  --card: #0f172a;
-}
-
-/* 🌅 Sunset Theme (Romance / Drama Anime) */
-html[data-theme="sunset"] {
-  --background: #fef3c7;
-  --foreground: #78350f;
-  --accent: #f97316;
-  /* Warm orange */
-  --accent-hover: #ea580c;
-  --muted: #92400e;
-  --border: #fed7aa;
-  --card: #ffedd5;
-}
-
-/* ❄️ Ice Theme (Winter / Mystery Anime) */
-html[data-theme="ice"] {
-  --background: #ecfeff;
-  --foreground: #083344;
-  --accent: #06b6d4;
-  /* Cyan */
-  --accent-hover: #0891b2;
-  --muted: #475569;
-  --border: #a5f3fc;
-  --card: #cffafe;
-}
-
-/* 🎭 Pitch Black Theme (OLED / Stealth) */
-html[data-theme="monochrome"] {
-  --background: #000000;
-  --foreground: #ffffff;
-  --accent: #ffffff;
-  /* Pure White */
-  --accent-hover: #e2e8f0;
-  --muted: #525252;
-  --border: #171717;
-  --card: #000000;
-}
-
-/* 🌺 Tropical Theme (Summer / Beach Anime) */
-html[data-theme="tropical"] {
-  --background: #fffbeb;
-  --foreground: #134e4a;
-  --accent: #14b8a6;
-  /* Teal */
-  --accent-hover: #0d9488;
-  --muted: #6b7280;
-  --border: #99f6e4;
-  --card: #ccfbf1;
-}
-
-/* 👾 Retro Theme (8-bit / Gaming Anime) */
-html[data-theme="retro"] {
-  --background: #1a1a2e;
-  --foreground: #eee;
-  --accent: #ff006e;
-  /* Hot magenta */
-  --accent-hover: #d90368;
-  --muted: #a8dadc;
-  --border: #16213e;
-  --card: #0f3460;
-}
-
-/* 🌿 Neo Mint (Fresh & Modern) */
-html[data-theme="mint"] {
-  --background: #f0fff4;
-  --foreground: #064e3b;
-  --accent: #10b981;
-  --accent-hover: #059669;
-  --muted: #34d399;
-  --border: #bbf7d0;
-  --card: #d1fae5;
-}
-
-/* 🏆 Royal Gold (Luxurious & Clean) */
-html[data-theme="royal"] {
-  --background: #fafaf9;
-  --foreground: #44403c;
-  --accent: #d4af37;
-  --accent-hover: #b8860b;
-  --muted: #a8a29e;
-  --border: #e7e5e4;
-  --card: #f5f5f4;
-}
-
-/* 🏔️ Nordic (Clean & Cold) */
-html[data-theme="nordic"] {
-  --background: #f8fafc;
-  --foreground: #334155;
-  --accent: #64748b;
-  --accent-hover: #475569;
-  --muted: #94a3b8;
-  --border: #cbd5e1;
-  --card: #e2e8f0;
-}
-
-/* ☕ Mocha (Warm & Cozy) */
-html[data-theme="mocha"] {
-  --background: #fefcfb;
-  --foreground: #451a03;
-  --accent: #92400e;
-  --accent-hover: #78350f;
-  --muted: #b45309;
-  --border: #ffedd5;
-  --card: #fff7ed;
-}
-
-/* 🍬 Candy (Vibrant & Playful) */
-html[data-theme="candy"] {
-  --background: #fffafa;
-  --foreground: #831843;
   --accent: #ec4899;
   --accent-hover: #db2777;
-  --muted: #f472b6;
-  --border: #fce7f3;
-  --card: #fdf2f8;
+  --muted: #9ca3af;
+  --border: #fbcfe8;
+  --card: #ffffff;
 }
 
 /* 🪄 Smooth Transitions */

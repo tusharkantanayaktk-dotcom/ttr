@@ -248,211 +248,231 @@ export default function Header() {
                     initial={{ x: "100%" }}
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}
-                    transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                    className="fixed right-0 top-0 h-[100dvh] w-[80%] sm:w-[300px] bg-[var(--card)] border-l border-[var(--border)] z-[1001] flex flex-col"
+                    transition={{ type: "spring", damping: 28, stiffness: 280 }}
+                    className="fixed right-0 top-0 h-[100dvh] w-[88vw] max-w-[310px] bg-[var(--card)]/95 backdrop-blur-2xl border-l border-[var(--border)] z-[1001] flex flex-col shadow-[-10px_0_30px_rgba(0,0,0,0.3)]"
                   >
-                    {/* CLOSE BUTTON - FLOATING TOP RIGHT */}
-                    <div className="p-4 flex items-center justify-between border-b border-[var(--border)] shrink-0">
-                      <div className="flex flex-col">
-                        <h2 className="text-xs font-black uppercase tracking-widest text-[var(--foreground)]">Account</h2>
+                    {/* Top Header Bar */}
+                    <div className="px-4 py-3 flex items-center justify-between border-b border-[var(--border)] shrink-0 bg-[var(--foreground)]/[0.01]">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                        <span className="text-[11px] font-black uppercase tracking-widest text-[var(--foreground)]/90">Account</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <motion.button
-                          onClick={() => setUserMenuOpen(false)}
-                          whileHover={{ rotate: 90, scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.06] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--accent)] hover:text-black transition-colors"
-                        >
-                          <FiX className="text-lg" />
-                        </motion.button>
-                      </div>
+                      <motion.button
+                        onClick={() => setUserMenuOpen(false)}
+                        whileHover={{ rotate: 90, scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="w-7 h-7 rounded-lg bg-[var(--foreground)]/[0.05] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/50 transition-all"
+                      >
+                        <FiX size={14} />
+                      </motion.button>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto px-3 py-4 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto px-3.5 py-3 custom-scrollbar flex flex-col gap-3">
                       {!user ? (
-                        <div className="flex flex-col items-center justify-center text-center">
-                          <motion.div
-                            initial={{ scale: 0.8, rotate: -5 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            className="w-16 h-16 bg-gradient-to-br from-[var(--accent)]/25 via-[var(--accent)]/10 to-transparent rounded-[1.2rem] flex items-center justify-center mb-5 border border-[var(--accent)]/30 relative group"
-                          >
-                            <div className="absolute inset-0 bg-[var(--accent)]/15 blur-xl group-hover:blur-2xl transition-all opacity-70" />
-                            <FiUser className="text-3xl text-[var(--accent)] relative z-10" />
-                          </motion.div>
+                        <div className="flex flex-col items-center justify-center text-center py-6 my-auto">
+                          {/* Guest Icon */}
+                          <div className="relative mb-4 group">
+                            <div className="absolute inset-0 bg-[var(--accent)]/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
+                            <div className="w-14 h-14 bg-gradient-to-br from-[var(--accent)]/20 via-[var(--card)] to-[var(--foreground)]/[0.04] text-[var(--accent)] rounded-2xl flex items-center justify-center border border-[var(--accent)]/30 relative z-10">
+                              <FiUser size={24} />
+                            </div>
+                          </div>
 
-                          <h3 className="text-[var(--foreground)] font-black uppercase tracking-tight text-xl mb-1 leading-none">
-                            Welcome, <span className="text-[var(--accent)]">User</span>
+                          <h3 className="text-[var(--foreground)] font-bold text-sm mb-1">
+                            Welcome
                           </h3>
-                          <p className="text-xs text-[var(--muted)] mb-6 font-medium leading-relaxed max-w-[200px]">
-                            Sign in to access your wallet and orders.
+                          <p className="text-[11px] text-[var(--muted)] mb-5 max-w-[210px] leading-relaxed">
+                            Sign in to access your wallet, orders, and special discounts.
                           </p>
 
-                          {/* Mobile/Guest Navigation Nodes */}
-                          <div className="grid grid-cols-2 gap-2 w-full mb-8">
+                          {/* Quick Links Grid */}
+                          <div className="grid grid-cols-2 gap-2 w-full mb-4">
                             {[
-                              { label: "Games", icon: FiGrid, href: "/games" },
-                              { label: "Regions", icon: FiGlobe, href: "/region" }
+                              { label: "Games", desc: "All Games", icon: FiGrid, href: "/games" },
+                              { label: "Regions", desc: "Select Region", icon: FiGlobe, href: "/region" }
                             ].map((link) => (
                               <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                <div className="flex flex-col items-center justify-center gap-2 p-3 rounded-2xl bg-[var(--foreground)]/[0.04] border border-[var(--border)] hover:bg-[var(--accent)]/10 hover:border-[var(--accent)] text-[var(--foreground)] transition-all group text-center">
-                                  <link.icon className="text-xl text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)]">{link.label}</span>
+                                <div className="flex flex-col items-start p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/[0.04] text-[var(--foreground)] transition-all group">
+                                  <link.icon size={15} className="text-[var(--accent)] mb-1.5 group-hover:scale-110 transition-transform" />
+                                  <span className="text-[11px] font-bold tracking-tight leading-none">{link.label}</span>
+                                  <span className="text-[9px] text-[var(--muted)] font-mono mt-0.5">{link.desc}</span>
                                 </div>
                               </Link>
                             ))}
                           </div>
 
-                          <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full mt-auto">
+                          <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full">
                             <motion.button
-                              className="w-full py-3.5 bg-[var(--accent)] text-black font-black uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 shadow-md group relative overflow-hidden"
-                              whileHover={{ scale: 1.02 }}
+                              className="w-full py-2.5 bg-[var(--accent)] text-black font-black uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20 hover:brightness-110 transition-all"
+                              whileHover={{ scale: 1.01 }}
                               whileTap={{ scale: 0.98 }}
                             >
-                              <span className="relative z-10">Sign In</span>
-                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-in-out" />
+                              <span>Sign In</span>
                             </motion.button>
                           </Link>
                         </div>
                       ) : (
-                        <div className="space-y-4">
-                          {/* User Profile Header horizontal - COMPACT */}
-                          <div className="flex items-center gap-3 pb-4 border-b border-[var(--border)] relative">
-                            {/* Left: Avatar */}
-                            <div className="w-11 h-11 rounded-xl bg-[var(--accent)] p-[1.5px] shrink-0">
-                              <div className="w-full h-full rounded-[0.65rem] overflow-hidden bg-[var(--card)]">
-                                {user?.avatar && !avatarError ? (
-                                  <img
-                                    src={user.avatar}
-                                    alt="User Avatar"
-                                    className="object-cover w-full h-full"
-                                    onError={() => setAvatarError(true)}
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-[var(--accent)] text-black font-black text-sm uppercase">
-                                    {user.name?.charAt(0) || "U"}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
+                        <>
+                          {/* USER PROFILE CARD */}
+                          <div className="relative p-3 rounded-2xl bg-gradient-to-br from-[var(--accent)]/[0.08] via-[var(--card)] to-[var(--foreground)]/[0.02] border border-[var(--accent)]/25 shadow-sm overflow-hidden">
+                            {/* Ambient Glow */}
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--accent)]/10 rounded-full blur-2xl pointer-events-none" />
 
-                            {/* Center: Details */}
-                            <div className="flex-1 min-w-0">
-                              <h4 className="text-sm font-black uppercase tracking-tight text-[var(--foreground)] truncate">
-                                {user.name}
-                              </h4>
-                              <p className="text-xs text-[var(--muted)] truncate font-mono font-medium">
-                                {user.email}
-                              </p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className={`
-                                  text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded border
-                                  ${user.userType === "owner" 
-                                    ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30" 
-                                    : user.userType === "admin"
-                                    ? "bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30"
-                                    : "bg-[var(--accent)]/15 text-[var(--accent)] border-[var(--accent)]/30"}
-                                `}>
-                                  {user.userType === "owner" ? "Owner" : user.userType === "admin" ? "Reseller" : "User"}
+                            <div className="flex items-center gap-2.5 relative z-10">
+                              {/* Avatar */}
+                              <div className="relative shrink-0">
+                                <div className="w-10 h-10 rounded-xl overflow-hidden bg-[var(--accent)] p-[1.5px] shadow-sm">
+                                  <div className="w-full h-full rounded-[0.6rem] overflow-hidden bg-[var(--card)] flex items-center justify-center">
+                                    {user?.avatar && !avatarError ? (
+                                      <img
+                                        src={user.avatar}
+                                        alt="Avatar"
+                                        className="object-cover w-full h-full"
+                                        onError={() => setAvatarError(true)}
+                                      />
+                                    ) : (
+                                      <span className="text-[var(--accent)] font-black text-sm uppercase">
+                                        {user.name?.charAt(0) || "U"}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[var(--card)]" />
+                              </div>
+
+                              {/* Identity Details */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <h4 className="text-xs font-bold text-[var(--foreground)] truncate">
+                                    {user.name}
+                                  </h4>
+                                </div>
+                                <p className="text-[10px] text-[var(--muted)] truncate font-mono">
+                                  {user.email}
+                                </p>
+                                <div className="mt-1">
+                                  <span className={`
+                                    text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded border inline-block
+                                    ${user.userType === "owner" 
+                                      ? "bg-amber-500/15 text-amber-500 border-amber-500/30" 
+                                      : user.userType === "admin"
+                                      ? "bg-purple-500/15 text-purple-500 border-purple-500/30"
+                                      : "bg-[var(--accent)]/15 text-[var(--accent)] border-[var(--accent)]/30"}
+                                  `}>
+                                    {user.userType === "owner" ? "👑 Owner" : user.userType === "admin" ? "⚡ Reseller" : "User"}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Logout Button */}
+                              <motion.button
+                                onClick={handleLogout}
+                                className="w-7 h-7 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/20"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.9 }}
+                                title="Sign Out"
+                              >
+                                <FiLogOut size={13} />
+                              </motion.button>
+                            </div>
+                          </div>
+
+                          {/* WALLET BALANCE CARD */}
+                          <div className="p-3 rounded-2xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] relative overflow-hidden">
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)]">Wallet Balance</span>
+                              <span className="text-[9px] font-mono text-[var(--accent)] uppercase font-bold">Active</span>
+                            </div>
+                            <div className="flex items-end justify-between">
+                              <div className="flex items-baseline gap-1">
+                                <span className="text-xl font-black text-[var(--foreground)] tracking-tight font-mono">
+                                  ₹{user.wallet?.toFixed(1) || "0.0"}
                                 </span>
                               </div>
+                              <Link
+                                href="/dashboard/wallet"
+                                onClick={() => setUserMenuOpen(false)}
+                              >
+                                <motion.button
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  className="px-2.5 py-1 rounded-lg bg-[var(--accent)] text-black font-black text-[10px] uppercase tracking-wider flex items-center gap-1 shadow-sm"
+                                >
+                                  <FiPlus size={11} />
+                                  <span>Add Money</span>
+                                </motion.button>
+                              </Link>
                             </div>
-
-                            {/* Right: Logout Icon */}
-                            <motion.button
-                              onClick={handleLogout}
-                              className="w-9 h-9 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/20"
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              title="Sign Out"
-                            >
-                              <FiLogOut size={18} strokeWidth={2.5} />
-                            </motion.button>
                           </div>
 
-                          {/* Prominent Wallet Section inside sidebar */}
-                          <Link
-                            href="/dashboard/wallet"
-                            onClick={() => setUserMenuOpen(false)}
-                            className="flex items-center justify-between p-3.5 rounded-2xl bg-[var(--accent)]/[0.09] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/[0.15] transition-all group"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
-                                <FiPlus size={14} />
-                              </div>
-                              <div className="flex flex-col">
-                                <span className="text-[9px] font-black uppercase tracking-wider text-[var(--foreground)]/70">Wallet Balance</span>
-                                <span className="text-lg font-black text-[var(--foreground)] tracking-tight">₹{user.wallet?.toFixed(1) || "0.0"}</span>
-                              </div>
-                            </div>
-                            <div className="w-7 h-7 rounded-full bg-[var(--foreground)]/[0.06] flex items-center justify-center group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
-                              <FiChevronRight size={14} />
-                            </div>
-                          </Link>
-
-                          {/* Navigation nodes compacted */}
-                          <div className="space-y-1">
-                            <div className="lg:hidden grid grid-cols-2 gap-2 mb-3">
-                              {[
-                                { label: "Games", icon: FiGrid, href: "/games" },
-                                { label: "Regions", icon: FiGlobe, href: "/region" }
-                              ].map((link) => (
-                                <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                  <div className="flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-xl bg-[var(--foreground)]/[0.04] text-[var(--foreground)] group transition-all border border-[var(--border)] hover:border-[var(--accent)]/40 text-center">
-                                    <link.icon className="text-lg text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                                    <span className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)]">{link.label}</span>
-                                  </div>
-                                </Link>
-                              ))}
-                            </div>
-                            <div className="h-[1px] bg-[var(--border)] mx-2 my-2" />
-
+                          {/* 2x2 SHORTCUT TILES */}
+                          <div className="grid grid-cols-2 gap-2">
                             {[
-                              { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
-                              { label: "Orders", icon: FiSettings, href: "/dashboard/order" },
-                              { label: "Wallet", icon: FiPlus, href: "/dashboard/wallet" },
-                              { label: "Support", icon: FiLifeBuoy, href: "/dashboard/query" },
-                              { label: "Leaderboard", icon: FiBarChart2, href: "/leaderboard" },
-                            ].map((link, idx) => (
-                              <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                <motion.div
-                                  initial={{ opacity: 0, x: 20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: idx * 0.05 }}
-                                  className="relative flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[var(--foreground)]/[0.06] text-[var(--foreground)] group transition-all duration-200 border border-transparent hover:border-[var(--border)]"
-                                  whileHover={{ x: -2 }}
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <link.icon className="text-lg text-[var(--accent)] transition-all duration-200" />
-                                    <span className="text-xs font-bold uppercase tracking-wide text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">{link.label}</span>
+                              { label: "Orders", desc: "Purchase History", icon: FiSettings, href: "/dashboard/order" },
+                              { label: "Leaderboard", desc: "Top Users", icon: FiBarChart2, href: "/leaderboard" },
+                              { label: "Games", desc: "All Games", icon: FiGrid, href: "/games" },
+                              { label: "Regions", desc: "Countries", icon: FiGlobe, href: "/region" },
+                            ].map((tile) => (
+                              <Link key={tile.label} href={tile.href} onClick={() => setUserMenuOpen(false)}>
+                                <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/[0.04] transition-all group flex flex-col justify-between h-full">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <tile.icon size={14} className="text-[var(--accent)] group-hover:scale-110 transition-transform" />
+                                    <FiChevronRight size={11} className="text-[var(--muted)] opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
                                   </div>
-                                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-200" />
-                                </motion.div>
+                                  <div>
+                                    <div className="text-[11px] font-bold text-[var(--foreground)] tracking-tight leading-none">{tile.label}</div>
+                                    <div className="text-[9px] text-[var(--muted)] font-mono mt-0.5">{tile.desc}</div>
+                                  </div>
+                                </div>
                               </Link>
                             ))}
-
-                            {user.userType === "owner" && (
-                              <Link href="/owner-panal" onClick={() => setUserMenuOpen(false)}>
-                                <motion.div
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: 0.3 }}
-                                  className="flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-[var(--accent)] text-black font-black text-xs uppercase tracking-wider shadow-sm hover:brightness-110 transition-all mt-4 group"
-                                  whileHover={{ scale: 1.02 }}
-                                >
-                                  <FiSettings size={15} className="group-hover:rotate-90 transition-transform duration-700" />
-                                  <span>Admin Panel</span>
-                                </motion.div>
-                              </Link>
-                            )}
                           </div>
-                        </div>
+
+                          {/* ESSENTIAL LINKS */}
+                          <div className="space-y-1">
+                            {[
+                              { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
+                              { label: "Help & Support", icon: FiLifeBuoy, href: "/dashboard/query" },
+                            ].map((link) => (
+                              <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
+                                <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-[var(--foreground)]/[0.015] border border-[var(--border)]/60 hover:border-[var(--accent)]/30 hover:bg-[var(--foreground)]/[0.04] transition-all group">
+                                  <div className="flex items-center gap-2.5">
+                                    <link.icon size={13} className="text-[var(--accent)]" />
+                                    <span className="text-xs font-semibold text-[var(--foreground)]/90 group-hover:text-[var(--foreground)]">{link.label}</span>
+                                  </div>
+                                  <FiChevronRight size={12} className="text-[var(--muted)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+
+                          {/* OWNER ADMIN PANEL */}
+                          {user.userType === "owner" && (
+                            <Link href="/owner-panal" onClick={() => setUserMenuOpen(false)} className="mt-0.5">
+                              <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500/20 via-[var(--accent)]/20 to-amber-500/10 border border-amber-500/30 text-[var(--foreground)] font-bold text-xs uppercase tracking-wider flex items-center justify-between shadow-sm hover:border-amber-500/60 transition-all group"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <FiSettings size={13} className="text-amber-500 group-hover:rotate-90 transition-transform duration-500" />
+                                  <span className="text-[11px] font-black tracking-wide">Owner Panel</span>
+                                </div>
+                                <span className="text-[9px] font-mono text-amber-500 uppercase font-black px-1.5 py-0.5 rounded bg-amber-500/10">ADMIN</span>
+                              </motion.div>
+                            </Link>
+                          )}
+                        </>
                       )}
                     </div>
 
-                    {/* FOOTER OF SIDEBAR */}
-                    <div className="p-3 border-t border-[var(--border)] mt-auto bg-[var(--foreground)]/[0.02] text-center space-y-0.5">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-[var(--accent)]">Love from TK</p>
-                      <p className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider">TRONICS © 2026</p>
+                    {/* Simple Footer */}
+                    <div className="py-2.5 px-4 border-t border-[var(--border)] shrink-0 flex items-center justify-between bg-[var(--foreground)]/[0.01]">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+                        <span className="text-[9px] font-mono text-[var(--muted)] uppercase tracking-wider">TRONICS STORE</span>
+                      </div>
+                      <span className="text-[9px] font-mono text-[var(--muted)]/60">© 2026</span>
                     </div>
                   </motion.div>
                 </>
