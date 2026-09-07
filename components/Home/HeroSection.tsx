@@ -4,11 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import dynamic from 'next/dynamic';
-import GameBannerCarousel from "./GameBannerCarousel";
 import {
   TopNoticeBannerSkeleton,
+  GameBannerCarouselSkeleton,
   FlashSaleSkeleton,
   StorySliderSkeleton,
+  GamesPageSkeleton,
   TronicsWhoSkeleton,
   HomeServicesSkeleton
 } from "./HomeSkeletons";
@@ -17,8 +18,15 @@ const TopNoticeBanner = dynamic(() => import("./TopNoticeBanner"), {
   ssr: false, 
   loading: () => <TopNoticeBannerSkeleton /> 
 });
+const GameBannerCarousel = dynamic(() => import("./GameBannerCarousel"), {
+  ssr: false,
+  loading: () => <GameBannerCarouselSkeleton />
+});
 const ScrollingNoticeBand = dynamic(() => import("./ScrollingNoticeBand"), { ssr: false });
-const GamesPage = dynamic(() => import("@/app/games/page"), { ssr: false });
+const GamesPage = dynamic(() => import("@/app/games/page"), { 
+  ssr: false,
+  loading: () => <GamesPageSkeleton />
+});
 const FlashSale = dynamic(() => import("./FlashSale"), { 
   ssr: false,
   loading: () => <FlashSaleSkeleton />

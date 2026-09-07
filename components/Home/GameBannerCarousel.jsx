@@ -8,6 +8,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import logo from "@/public/logo.png";
 import Skeleton from "@/components/Skeleton";
 
+import { GameBannerCarouselSkeleton } from "./HomeSkeletons";
 
 export default function GameBannerCarousel() {
   const [banners, setBanners] = useState([]);
@@ -72,11 +73,7 @@ export default function GameBannerCarousel() {
   };
 
   if (loading) {
-    return (
-      <div className="relative w-full max-w-[1600px] mx-auto px-4 md:px-12 mt-2 md:mt-6">
-        <Skeleton height={340} className="w-full rounded-none" />
-      </div>
-    );
+    return <GameBannerCarouselSkeleton />;
   }
 
   if (!banners.length) return null;

@@ -253,14 +253,14 @@ export default function Header() {
                     {/* CLOSE BUTTON - FLOATING TOP RIGHT */}
                     <div className="p-4 flex items-center justify-between border-b border-[var(--border)] shrink-0">
                       <div className="flex flex-col">
-                        <h2 className="text-[10px] font-black italic uppercase tracking-[0.2em] text-[var(--muted)] opacity-50">Account</h2>
+                        <h2 className="text-xs font-black uppercase tracking-widest text-[var(--foreground)]">Account</h2>
                       </div>
                       <div className="flex items-center gap-3">
                         <motion.button
                           onClick={() => setUserMenuOpen(false)}
                           whileHover={{ rotate: 90, scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--accent)] hover:text-black transition-colors"
+                          className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.06] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--accent)] hover:text-black transition-colors"
                         >
                           <FiX className="text-lg" />
                         </motion.button>
@@ -279,10 +279,10 @@ export default function Header() {
                             <FiUser className="text-3xl text-[var(--accent)] relative z-10" />
                           </motion.div>
 
-                          <h3 className="text-[var(--foreground)] font-black italic uppercase tracking-tighter text-2xl mb-1 leading-none">
+                          <h3 className="text-[var(--foreground)] font-black uppercase tracking-tight text-xl mb-1 leading-none">
                             Welcome, <span className="text-[var(--accent)]">User</span>
                           </h3>
-                          <p className="text-[9px] text-[var(--muted)] mb-6 font-bold uppercase tracking-[0.2em] opacity-60 leading-relaxed max-w-[180px]">
+                          <p className="text-xs text-[var(--muted)] mb-6 font-medium leading-relaxed max-w-[200px]">
                             Sign in to access your wallet and orders.
                           </p>
 
@@ -293,9 +293,9 @@ export default function Header() {
                               { label: "Regions", icon: FiGlobe, href: "/region" }
                             ].map((link) => (
                               <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                <div className="flex flex-col items-center justify-center gap-2 p-3 rounded-2xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.06] hover:border-[var(--accent)]/30 text-[var(--muted)] transition-all group text-center">
+                                <div className="flex flex-col items-center justify-center gap-2 p-3 rounded-2xl bg-[var(--foreground)]/[0.04] border border-[var(--border)] hover:bg-[var(--accent)]/10 hover:border-[var(--accent)] text-[var(--foreground)] transition-all group text-center">
                                   <link.icon className="text-xl text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                                  <span className="text-[9px] font-black uppercase tracking-[0.2em] group-hover:text-[var(--foreground)]">{link.label}</span>
+                                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)]">{link.label}</span>
                                 </div>
                               </Link>
                             ))}
@@ -303,8 +303,8 @@ export default function Header() {
 
                           <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full mt-auto">
                             <motion.button
-                              className="w-full py-4 bg-[var(--foreground)] text-[var(--background)] font-black italic uppercase tracking-[0.4em] text-[10px] rounded-xl flex items-center justify-center gap-2 group relative overflow-hidden"
-                              whileHover={{ scale: 1.02, backgroundColor: 'var(--accent)', color: 'black' }}
+                              className="w-full py-3.5 bg-[var(--accent)] text-black font-black uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 shadow-md group relative overflow-hidden"
+                              whileHover={{ scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
                             >
                               <span className="relative z-10">Sign In</span>
@@ -317,8 +317,8 @@ export default function Header() {
                           {/* User Profile Header horizontal - COMPACT */}
                           <div className="flex items-center gap-3 pb-4 border-b border-[var(--border)] relative">
                             {/* Left: Avatar */}
-                            <div className="w-10 h-10 rounded-lg bg-[var(--accent)] p-[1.5px] shrink-0">
-                              <div className="w-full h-full rounded-[0.7rem] overflow-hidden bg-[var(--card)]">
+                            <div className="w-11 h-11 rounded-xl bg-[var(--accent)] p-[1.5px] shrink-0">
+                              <div className="w-full h-full rounded-[0.65rem] overflow-hidden bg-[var(--card)]">
                                 {user?.avatar && !avatarError ? (
                                   <img
                                     src={user.avatar}
@@ -336,20 +336,20 @@ export default function Header() {
 
                             {/* Center: Details */}
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-xs font-black uppercase tracking-tight text-[var(--foreground)] truncate">
+                              <h4 className="text-sm font-black uppercase tracking-tight text-[var(--foreground)] truncate">
                                 {user.name}
                               </h4>
-                              <p className="text-[9px] text-[var(--muted)] truncate font-mono opacity-80">
+                              <p className="text-xs text-[var(--muted)] truncate font-mono font-medium">
                                 {user.email}
                               </p>
                               <div className="flex items-center gap-2 mt-1">
                                 <span className={`
-                                  text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded border
+                                  text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded border
                                   ${user.userType === "owner" 
-                                    ? "bg-amber-500/10 text-amber-500 border-amber-500/20" 
+                                    ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30" 
                                     : user.userType === "admin"
-                                    ? "bg-purple-500/10 text-purple-500 border-purple-500/20"
-                                    : "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20"}
+                                    ? "bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30"
+                                    : "bg-[var(--accent)]/15 text-[var(--accent)] border-[var(--accent)]/30"}
                                 `}>
                                   {user.userType === "owner" ? "Owner" : user.userType === "admin" ? "Reseller" : "User"}
                                 </span>
@@ -359,12 +359,12 @@ export default function Header() {
                             {/* Right: Logout Icon */}
                             <motion.button
                               onClick={handleLogout}
-                              className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/10"
+                              className="w-9 h-9 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/20"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               title="Sign Out"
                             >
-                              <FiLogOut size={20} strokeWidth={2.5} />
+                              <FiLogOut size={18} strokeWidth={2.5} />
                             </motion.button>
                           </div>
 
@@ -372,38 +372,38 @@ export default function Header() {
                           <Link
                             href="/dashboard/wallet"
                             onClick={() => setUserMenuOpen(false)}
-                            className="flex items-center justify-between p-4 rounded-2xl bg-[var(--accent)]/[0.08] border border-[var(--accent)]/20 hover:bg-[var(--accent)]/[0.12] transition-all group"
+                            className="flex items-center justify-between p-3.5 rounded-2xl bg-[var(--accent)]/[0.09] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/[0.15] transition-all group"
                           >
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
                                 <FiPlus size={14} />
                               </div>
                               <div className="flex flex-col">
-                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-[var(--accent)]/60">Wallet Balance</span>
+                                <span className="text-[9px] font-black uppercase tracking-wider text-[var(--foreground)]/70">Wallet Balance</span>
                                 <span className="text-lg font-black text-[var(--foreground)] tracking-tight">₹{user.wallet?.toFixed(1) || "0.0"}</span>
                               </div>
                             </div>
-                            <div className="w-7 h-7 rounded-full bg-[var(--foreground)]/[0.03] flex items-center justify-center group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
+                            <div className="w-7 h-7 rounded-full bg-[var(--foreground)]/[0.06] flex items-center justify-center group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
                               <FiChevronRight size={14} />
                             </div>
                           </Link>
 
                           {/* Navigation nodes compacted */}
                           <div className="space-y-1">
-                            <div className="lg:hidden grid grid-cols-2 gap-2 mb-4">
+                            <div className="lg:hidden grid grid-cols-2 gap-2 mb-3">
                               {[
                                 { label: "Games", icon: FiGrid, href: "/games" },
                                 { label: "Regions", icon: FiGlobe, href: "/region" }
                               ].map((link) => (
                                 <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                  <div className="flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl hover:bg-[var(--foreground)]/[0.03] text-[var(--muted)] group transition-all border border-transparent hover:border-[var(--border)] text-center">
+                                  <div className="flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-xl bg-[var(--foreground)]/[0.04] text-[var(--foreground)] group transition-all border border-[var(--border)] hover:border-[var(--accent)]/40 text-center">
                                     <link.icon className="text-lg text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] group-hover:text-[var(--foreground)]">{link.label}</span>
+                                    <span className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)]">{link.label}</span>
                                   </div>
                                 </Link>
                               ))}
                             </div>
-                            <div className="h-[1px] bg-[var(--border)] mx-4 my-2 opacity-50" />
+                            <div className="h-[1px] bg-[var(--border)] mx-2 my-2" />
 
                             {[
                               { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
@@ -417,14 +417,14 @@ export default function Header() {
                                   initial={{ opacity: 0, x: 20 }}
                                   animate={{ opacity: 1, x: 0 }}
                                   transition={{ delay: idx * 0.05 }}
-                                  className="relative flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[var(--foreground)]/[0.04] text-[var(--muted)] group transition-all duration-300 border border-transparent hover:border-[var(--border)]"
+                                  className="relative flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[var(--foreground)]/[0.06] text-[var(--foreground)] group transition-all duration-200 border border-transparent hover:border-[var(--border)]"
                                   whileHover={{ x: -2 }}
                                 >
                                   <div className="flex items-center gap-3">
-                                    <link.icon className="text-lg opacity-50 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all duration-300" />
-                                    <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-[var(--foreground)] transition-colors">{link.label}</span>
+                                    <link.icon className="text-lg text-[var(--accent)] transition-all duration-200" />
+                                    <span className="text-xs font-bold uppercase tracking-wide text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">{link.label}</span>
                                   </div>
-                                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-200" />
                                 </motion.div>
                               </Link>
                             ))}
@@ -435,11 +435,11 @@ export default function Header() {
                                   initial={{ opacity: 0, y: 10 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   transition={{ delay: 0.3 }}
-                                  className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)] hover:bg-[var(--accent)]/20 transition-all mt-4 group"
+                                  className="flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-[var(--accent)] text-black font-black text-xs uppercase tracking-wider shadow-sm hover:brightness-110 transition-all mt-4 group"
                                   whileHover={{ scale: 1.02 }}
                                 >
-                                  <FiSettings size={14} className="group-hover:rotate-90 transition-transform duration-700" />
-                                  <span className="text-[10px] font-black uppercase tracking-widest">Admin Panel</span>
+                                  <FiSettings size={15} className="group-hover:rotate-90 transition-transform duration-700" />
+                                  <span>Admin Panel</span>
                                 </motion.div>
                               </Link>
                             )}
@@ -449,9 +449,9 @@ export default function Header() {
                     </div>
 
                     {/* FOOTER OF SIDEBAR */}
-                    <div className="p-4 border-t border-[var(--border)] mt-auto bg-[var(--foreground)]/[0.02] text-center space-y-1">
-                      <p className="text-[7px] font-black uppercase tracking-[0.4em] text-[var(--accent)] opacity-50">Love from TK</p>
-                      <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-[0.3em] opacity-30">TRONICS © 2026</p>
+                    <div className="p-3 border-t border-[var(--border)] mt-auto bg-[var(--foreground)]/[0.02] text-center space-y-0.5">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-[var(--accent)]">Love from TK</p>
+                      <p className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider">TRONICS © 2026</p>
                     </div>
                   </motion.div>
                 </>

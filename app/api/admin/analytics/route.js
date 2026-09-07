@@ -26,7 +26,7 @@ export async function GET(req) {
     verifyOwnerOrAdmin(req);
 
     const { searchParams } = new URL(req.url);
-    const range = searchParams.get("range") || "30d"; // 1d, 7d, 30d, 90d, all
+    const range = searchParams.get("range") || "1d"; // 1d, 7d, 30d, all
     const customFrom = searchParams.get("from");
     const customTo = searchParams.get("to");
 

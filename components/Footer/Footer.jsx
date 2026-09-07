@@ -85,7 +85,7 @@ export default function Footer() {
                   {BRAND_NAME}
                 </h2>
               </Link>
-              <p className="text-xs text-[var(--muted)] font-medium max-w-sm leading-relaxed opacity-80">
+              <p className="text-xs text-[var(--muted)] font-medium max-w-sm leading-relaxed">
                 {BRAND_DESCRIPTION}
               </p>
             </div>
@@ -99,7 +99,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   whileHover={{ y: -2, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-white hover:bg-[var(--accent)] hover:border-[var(--accent)] transition-all shadow-sm"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] hover:text-black hover:bg-[var(--accent)] hover:border-[var(--accent)] transition-all shadow-sm"
                   title={label}
                 >
                   <Icon size={14} />
@@ -113,8 +113,8 @@ export default function Footer() {
             {FOOTER_LINKS.map((section) => (
               <div key={section.title} className="space-y-2">
                 <div className="flex items-center gap-1.5">
-                  <div className="w-1 h-2.5 rounded-full bg-[var(--accent)] opacity-60" />
-                  <h3 className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-wider opacity-70">
+                  <div className="w-1.5 h-3 rounded-full bg-[var(--accent)]" />
+                  <h3 className="text-xs font-black text-[var(--foreground)] uppercase tracking-wider">
                     {section.title}
                   </h3>
                 </div>
@@ -136,18 +136,18 @@ export default function Footer() {
             {/* Premium Trust Cards */}
             <div className="hidden sm:block space-y-2">
               <div className="flex items-center gap-1.5">
-                <div className="w-1 h-2.5 rounded-full bg-[var(--accent)] opacity-60" />
-                <h3 className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-wider opacity-70">
+                <div className="w-1.5 h-3 rounded-full bg-[var(--accent)]" />
+                <h3 className="text-xs font-black text-[var(--foreground)] uppercase tracking-wider">
                   Trust
                 </h3>
               </div>
               <div className="space-y-1.5">
                 {TRUST_BADGES.map((badge, i) => (
-                  <div key={i} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[var(--card)]/60 border border-[var(--border)]/60 transition-colors group/badge cursor-default">
-                    <badge.icon size={12} className="text-[var(--accent)] shrink-0" />
+                  <div key={i} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] transition-colors group/badge cursor-default">
+                    <badge.icon size={13} className="text-[var(--accent)] shrink-0" />
                     <div className="flex flex-col">
                       <span className="text-[9px] font-black text-[var(--foreground)] tracking-wide uppercase">{badge.label}</span>
-                      <span className="text-[7.5px] font-bold text-[var(--muted)] opacity-60 uppercase tracking-tight">{badge.desc}</span>
+                      <span className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-tight">{badge.desc}</span>
                     </div>
                   </div>
                 ))}
@@ -159,9 +159,9 @@ export default function Footer() {
         {/* --- BOTTOM SECTION: INFO --- */}
         <div className="pt-3 border-t border-[var(--border)] flex items-center justify-center">
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[9px] sm:text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">
-            <span className="opacity-70">&copy; {new Date().getFullYear()} {COPYRIGHT_NAME}</span>
+            <span>&copy; {new Date().getFullYear()} {COPYRIGHT_NAME}</span>
             <div className="w-1 h-1 rounded-full bg-[var(--border)]" />
-            <span className="opacity-70">All Rights Reserved</span>
+            <span>All Rights Reserved</span>
           </div>
         </div>
       </div>

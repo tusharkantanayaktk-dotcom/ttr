@@ -291,8 +291,8 @@ export default function WalletTab({
                             {tx.type.replace("_", " ")}
                             </p>
                             <div className="flex items-center gap-2">
-                                <span className="text-[8px] font-bold text-[var(--muted)] opacity-50">{new Date(tx.createdAt).toLocaleDateString()}</span>
-                                <span className="text-[8px] font-mono text-[var(--muted)] opacity-30 truncate max-w-[60px]">#{tx.transactionId.slice(-8)}</span>
+                                <span className="text-[9px] font-bold text-[var(--muted)]">{new Date(tx.createdAt).toLocaleDateString()}</span>
+                                <span className="text-[9px] font-mono text-[var(--muted)] font-medium truncate max-w-[80px]">#{tx.transactionId.slice(-8)}</span>
                             </div>
                         </div>
                         </div>

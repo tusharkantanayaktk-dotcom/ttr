@@ -4,12 +4,12 @@
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
-  --accent: #3b82f6;
-  /* Bright sky blue (default accent) */
-  --accent-hover: #2563eb;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --card: #f1f5f9;
+  --accent: #2563eb;
+  /* High contrast vibrant blue */
+  --accent-hover: #1d4ed8;
+  --muted: #475569;
+  --border: #cbd5e1;
+  --card: #ffffff;
 }
 
 /* 🧩 Tailwind variable mapping */
