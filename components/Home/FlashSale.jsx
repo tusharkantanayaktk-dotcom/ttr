@@ -11,7 +11,7 @@ const FlashSaleImage = ({ src, name }) => {
     const letter = name?.charAt(0).toUpperCase() || "?";
 
     return (
-        <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-1.5 bg-black/40 flex items-center justify-center">
+        <div className="relative aspect-[4/3] rounded-none overflow-hidden mb-1.5 bg-black/40 flex items-center justify-center">
             {!err ? (
                 <Image
                     src={src}
@@ -135,7 +135,7 @@ export default function FlashSale() {
                         >
                             <Link
                                 href={`/games/${item.slug}`}
-                                className="group relative block bg-[var(--card)]/50 hover:bg-[var(--card)] backdrop-blur-xl border border-[var(--border)] hover:border-amber-500/30 rounded-2xl p-1.5 transition-all duration-300"
+                                className="group relative block bg-[var(--card)]/50 hover:bg-[var(--card)] backdrop-blur-xl border border-[var(--border)] hover:border-amber-500/30 rounded-none p-1.5 transition-all duration-300"
                             >
                                 {/* Badge Overlay */}
                                 <div className="absolute top-3 left-3 z-20">

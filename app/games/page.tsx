@@ -103,7 +103,7 @@ export default function GamesPage() {
           className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         >
           {/* IMAGE WRAPPER */}
-          <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-[border-color,transform] duration-300 group-hover:border-[var(--accent)]/40">
+          <div className="relative aspect-square rounded-none overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-[border-color,transform] duration-300 group-hover:border-[var(--accent)]/40">
 
             <div className="relative w-full h-full flex items-center justify-center">
               {!imgError ? (
@@ -332,7 +332,7 @@ export default function GamesPage() {
                   className="group cursor-pointer transform-gpu"
                 >
                   <Link href={`/games/${ott.slug}`} className="flex flex-col gap-5">
-                    <div className="relative aspect-[3/4] overflow-hidden rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)]/40 transition-[border-color] duration-300 group-hover:border-[var(--accent)]/50">
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-none bg-[var(--card)] border border-[var(--border)]/40 transition-[border-color] duration-300 group-hover:border-[var(--accent)]/50">
                       <Image
                         src={ott.image}
                         alt={ott.name}
@@ -357,7 +357,7 @@ export default function GamesPage() {
                       </div>
 
                       {/* Top Right Accent */}
-                      <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/50 group-hover:text-[var(--accent)] transition-colors">
+                      <div className="absolute top-4 right-4 w-6 h-6 rounded-none bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/50 group-hover:text-[var(--accent)] transition-colors">
                         <FiActivity size={10} />
                       </div>
                     </div>
@@ -380,10 +380,10 @@ export default function GamesPage() {
                 >
                   <Link
                     href={`/games/${plan.slug}`}
-                    className="relative flex flex-col p-4 rounded-[1.2rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-300 hover:border-[var(--accent)] overflow-hidden"
+                    className="relative flex flex-col p-4 rounded-none bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-300 hover:border-[var(--accent)] overflow-hidden"
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 relative rounded-lg overflow-hidden border border-[var(--border)] shrink-0">
+                      <div className="w-10 h-10 relative rounded-none overflow-hidden border border-[var(--border)] shrink-0">
                         <Image
                           src={plan.image}
                           alt={plan.name}

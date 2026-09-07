@@ -76,9 +76,17 @@ export async function GET() {
     const normalizeGame = (game: any) => {
       let updatedGame = { ...game };
 
-      // Rename MLBB SMALL/PHP → MLBB SMALL
-      if (updatedGame.gameName === "MLBB SMALL/PHP") {
+      // Rename MLBB SMALL/PHP & Philippines → MLBB SMALL
+      if (
+        updatedGame.gameName === "MLBB SMALL/PHP" ||
+        updatedGame.gameSlug === "mobile-legends-philippines888" ||
+        updatedGame.gameName === "Mobile Legends Philippines" ||
+        updatedGame.gameName === "MOBILE LEGENDS PHILIPPINES"
+      ) {
         updatedGame.gameName = "MLBB SMALL";
+        if (updatedGame.tagId) {
+          updatedGame.tagId.tagName = "MLBB SMALL";
+        }
       }
 
       // Fix wrong publisher spelling

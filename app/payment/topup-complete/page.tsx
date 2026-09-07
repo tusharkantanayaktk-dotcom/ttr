@@ -88,7 +88,7 @@ export default function TopupComplete() {
       <div
         className="w-full max-w-sm relative z-10"
       >
-        <div className="bg-card/40 backdrop-blur-2xl border border-foreground/5 rounded-[2rem] p-6 md:p-8 shadow-2xl overflow-hidden group">
+        <div className="bg-card/40 backdrop-blur-2xl border border-foreground/5 rounded-[2rem] p-6 md:p-8 overflow-hidden group">
 
           {/* TOP DECORATIVE BAR */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500/30 to-transparent" />

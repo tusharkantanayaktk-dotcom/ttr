@@ -48,11 +48,11 @@ export default function ItemGrid({
             }}
             className={`
               relative overflow-hidden group
-              rounded-2xl border transition-all duration-500
-              flex items-center gap-3 min-h-[82px] p-3 cursor-pointer
+              rounded-2xl border transition-all duration-300
+              flex items-center gap-3.5 min-h-[76px] p-3 cursor-pointer select-none
               ${isSelected
-                ? "border-[var(--accent)] bg-[var(--accent)]/[0.08] shadow-lg shadow-[var(--accent)]/5"
-                : "border-[var(--border)] bg-white/[0.02] hover:border-[var(--accent)]/30 hover:bg-white/[0.04]"
+                ? "border-[var(--accent)] bg-[var(--accent)]/[0.08]"
+                : "border-[var(--border)] bg-[var(--card)]/40 hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/70"
               }
             `}
           >
@@ -61,54 +61,51 @@ export default function ItemGrid({
               <motion.div
                 initial={{ scale: 0, rotate: -20 }}
                 animate={{ scale: 1, rotate: 0 }}
-                className="absolute top-1.5 right-1.5 z-20 w-4.5 h-4.5 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20"
+                className="absolute top-2 right-2 z-20 w-4 h-4 bg-[var(--accent)] text-black rounded-full flex items-center justify-center font-bold"
               >
-                <FiCheck size={11} strokeWidth={4} />
+                <FiCheck size={10} strokeWidth={3.5} />
               </motion.div>
             )}
 
-            {/* Game Icon */}
-            <div className={`
-              relative w-10 h-10 rounded-xl overflow-hidden shrink-0 transition-all duration-500
-              ${isSelected ? "ring-1 ring-[var(--accent)]/50 scale-105" : "grayscale opacity-50 group-hover:opacity-80 group-hover:grayscale-0"}
-            `}>
+            {/* Game Icon - Frameless & Crisp */}
+            <div className="relative w-11 h-11 shrink-0 flex items-center justify-center">
               <Image
                 src={item.itemImageId?.image || gameLogo}
                 alt={item.itemName}
                 fill
-                sizes="40px"
-                className="object-cover"
+                sizes="44px"
+                className={`object-contain transition-transform duration-300 ${isSelected ? 'scale-110 drop-shadow-sm' : 'opacity-85 group-hover:opacity-100 group-hover:scale-105'}`}
                 loading="lazy"
               />
             </div>
 
-            {/* Header: Name & Price */}
-            <div className="relative z-10 flex flex-col flex-1 h-full justify-between overflow-hidden">
-              <div className="flex flex-col">
-                <p className={`font-black text-[11px] uppercase tracking-tight transition-colors duration-300 truncate ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>
+            {/* Content: Name, Discount & Price */}
+            <div className="relative z-10 flex flex-col flex-1 min-w-0 justify-center">
+              <div className="flex items-center justify-between gap-1 pr-3">
+                <p className={`font-extrabold text-[12px] tracking-tight leading-snug transition-colors duration-200 truncate ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground)] group-hover:text-[var(--foreground)]'}`}>
                   {item.itemName}
                 </p>
-                {discount > 0 && (
-                  <span className="text-[8px] font-black text-emerald-400 uppercase tracking-tighter opacity-80">
-                    SAVE {discount}%
-                  </span>
-                )}
               </div>
 
-              <div className="mt-1 flex items-baseline gap-1">
-                <span className={`text-[9px] font-bold ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--muted)]'} opacity-50`}>₹</span>
-                <p className={`text-base font-black tracking-tighter transition-all duration-300 ${isSelected ? 'text-[var(--foreground)] scale-105 origin-left' : 'text-[var(--muted)]'}`}>
+              {discount > 0 && (
+                <div className="mt-0.5">
+                  <span className="text-[9px] font-black text-emerald-400 tracking-tight uppercase">
+                    SAVE {discount}%
+                  </span>
+                </div>
+              )}
+
+              <div className="mt-1 flex items-baseline gap-0.5">
+                <span className={`text-[10px] font-bold ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>₹</span>
+                <p className={`text-base font-black tracking-tight transition-all duration-200 ${isSelected ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]/90'}`}>
                   {item.sellingPrice}
                 </p>
               </div>
             </div>
 
-            {/* Selection Background Glow */}
+            {/* Left Accent Bar for selected */}
             {isSelected && (
-              <motion.div
-                layoutId="active-card-glow"
-                className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/5 to-transparent pointer-events-none"
-              />
+              <div className="absolute left-0 top-2 bottom-2 w-1 bg-[var(--accent)] rounded-r-full" />
             )}
           </motion.div>
         );

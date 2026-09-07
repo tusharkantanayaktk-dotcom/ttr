@@ -17,7 +17,7 @@ export default function ContactPage() {
           </p>
 
           {/* ✉️ Email Highlight Box */}
-          <div className="p-6 border border-[var(--border)] rounded-2xl bg-[var(--card)] shadow-lg">
+          <div className="p-6 border border-[var(--border)] rounded-2xl bg-[var(--card)]">
             <p className="text-lg text-[var(--muted)] mb-2">
               Email us at:
             </p>
@@ -62,7 +62,7 @@ export default function ContactPage() {
         </div>
 
         {/* 🗺️ Right - Map */}
-        <div className="flex-1 h-[400px] rounded-2xl overflow-hidden shadow-2xl border border-[var(--border)]">
+        <div className="flex-1 h-[400px] rounded-2xl overflow-hidden border border-[var(--border)]">
           <iframe
             title="Zyronix Map"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d367144.18514800455!2d77.3507349913945!3d28.63530884925121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d032d37b1b7e9%3A0xf95cb0af544e3a5d!2sIndia!5e0!3m2!1sen!2sin!4v1697641137830!5m2!1sen!2sin"

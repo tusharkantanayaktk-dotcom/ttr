@@ -7,6 +7,13 @@ import { useRef, useState, useEffect } from "react";
 
 const storyData = [
   {
+    id: 1,
+    title: "MLBB Small",
+    image: "/game-assets/mlbb-small.jpg",
+    link: "/games/mobile-legends-philippines888",
+    color: "from-amber-400 via-pink-500 to-rose-500",
+  },
+  {
     id: 2,
     title: "MLBB India",
     image: "/game-assets/11.jpg",

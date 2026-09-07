@@ -7,7 +7,16 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiSend, FiMessageSquare, FiInfo, FiCheckCircle, FiAlertCircle, FiZap } from "react-icons/fi";
+import { FiSend, FiMessageSquare, FiInfo, FiCheckCircle, FiAlertCircle, FiZap, FiPhone } from "react-icons/fi";
+
+const QUERY_TYPES = [
+  { id: "Order Issue", label: "Order Issue", icon: "📦" },
+  { id: "Payment Issue", label: "Payment Issue", icon: "💳" },
+  { id: "Wallet Issue", label: "Wallet Issue", icon: "👛" },
+  { id: "General Inquiry", label: "General Inquiry", icon: "💬" },
+  { id: "Bug Report", label: "Bug Report", icon: "🐛" },
+  { id: "Feedback", label: "Feedback", icon: "⭐" },
+];
 
 /* ===================== ENV ===================== */
 
@@ -145,7 +154,7 @@ export default function QueryTab() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-6 shadow-lg relative overflow-hidden group"
+            className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-6 relative overflow-hidden group"
           >
             <div className="flex items-center gap-2 mb-4">
               <div className="h-8 w-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
@@ -163,55 +172,70 @@ export default function QueryTab() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   className={`mb-6 p-4 rounded-2xl flex items-center gap-3 border ${status.type === "success"
-                    ? "bg-green-500/10 border-green-500/20 text-green-400"
-                    : "bg-red-500/10 border-red-500/20 text-red-400"
+                    ? "bg-green-500/10 border-green-500/20 text-green-500"
+                    : "bg-red-500/10 border-red-500/20 text-red-500"
                     }`}
                 >
-                  {status.type === "success" ? <FiCheckCircle className="shrink-0 text-xl" /> : <FiAlertCircle className="shrink-0 text-xl" />}
-                  <p className="text-sm font-bold">{status.message}</p>
+                  <div className={`p-2 rounded-xl ${status.type === "success" ? "bg-green-500/20" : "bg-red-500/20"}`}>
+                    <FiCheckCircle className="text-xl" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm">{status.type === "success" ? "Message Dispatched" : "Dispatch Failed"}</h4>
+                    <p className="text-xs opacity-80">{status.message}</p>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Case Type</label>
-                <div className="relative">
-                  <select
-                    value={queryType}
-                    onChange={(e) => setQueryType(e.target.value)}
-                    className="w-full p-3.5 rounded-xl border border-[var(--border)] bg-[var(--background)] 
-                               focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all
-                               appearance-none cursor-pointer font-bold text-xs"
-                  >
-                    <option value="">Select Topic</option>
-                    {SUPPORT_CONFIG.queryTypes.map((type) => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
+            <div className="space-y-4 relative z-10">
+              {/* Type Selector Grid */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Topic</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {QUERY_TYPES.map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => setQueryType(t.id)}
+                      className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all text-xs font-bold
+                                  ${queryType === t.id
+                          ? "border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)]"
+                          : "border-[var(--border)] bg-[var(--background)] hover:border-[var(--accent)]/30 text-[var(--foreground)]"
+                        }`}
+                    >
+                      <span className="text-sm">{t.icon}</span>
+                      <span className="truncate">{t.label}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Phone Number</label>
-                <input
-                  type="tel"
-                  value={userPhone}
-                  onChange={(e) => setUserPhone(e.target.value)}
-                  placeholder="Your phone number..."
-                  className="w-full p-3.5 rounded-xl border border-[var(--border)] bg-[var(--background)] 
-                             focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all
-                             font-medium text-xs"
-                />
+              {/* Phone */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">WhatsApp Phone Number</label>
+                <div className="relative group/input">
+                  <FiPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
+                  <input
+                    type="text"
+                    placeholder="10-digit number"
+                    value={userPhone}
+                    onChange={(e) => setUserPhone(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border)] bg-[var(--background)] 
+                               focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all
+                               font-mono text-xs"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Description</label>
+              {/* Message */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Message</label>
                 <textarea
+                  rows={4}
+                  placeholder="Describe your issue in detail..."
                   value={queryMessage}
                   onChange={(e) => setQueryMessage(e.target.value)}
-                  placeholder="Describe your issue..."
-                  className="w-full h-28 p-3.5 rounded-xl border border-[var(--border)] bg-[var(--background)] 
+                  className="w-full p-4 rounded-xl border border-[var(--border)] bg-[var(--background)] 
                              focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all
                              resize-none font-medium text-xs"
                 />
@@ -221,7 +245,7 @@ export default function QueryTab() {
                 disabled={!queryType || !userPhone.trim() || !queryMessage.trim() || isSubmitting}
                 onClick={handleSubmit}
                 className="w-full py-4 rounded-xl bg-[var(--accent)] text-white font-bold uppercase tracking-wider text-xs
-                           flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20
+                           flex items-center justify-center gap-2
                            hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50 
                            disabled:cursor-not-allowed"
               >

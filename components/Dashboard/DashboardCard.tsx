@@ -43,7 +43,6 @@ export default function DashboardCard({
       className={`group p-5 rounded-2xl cursor-pointer border
                   transition-all duration-300
                   active:scale-[0.98]
-                  shadow-sm hover:shadow-lg
         ${isActive
           ? "border-[var(--accent)] bg-[var(--card)]"
           : "border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)]"

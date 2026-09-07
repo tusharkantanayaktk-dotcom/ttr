@@ -54,7 +54,7 @@ export default function PaymentComplete() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--background)] px-4">
-      <div className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-lg p-8 text-center">
+      <div className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8 text-center">
 
         {/* ICON */}
         <div className="flex justify-center mb-4">
