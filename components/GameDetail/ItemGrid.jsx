@@ -41,10 +41,6 @@ export default function ItemGrid({
             whileTap={{ scale: 0.98 }}
             onClick={() => {
               setActiveItem(item);
-              buyPanelRef.current?.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-              });
             }}
             className={`
               relative overflow-hidden group

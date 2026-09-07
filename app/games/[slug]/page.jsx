@@ -101,24 +101,24 @@ export default function GameDetailPage() {
     return (
       <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6">
         {/* ================= MODERN GAME SWITCHER SKELETON ================= */}
-        <div className="max-w-6xl mx-auto mb-4 overflow-hidden px-2">
-          <div className="flex items-center gap-2 mb-2 px-1">
+        <div className="max-w-6xl mx-auto mb-3 overflow-hidden">
+          <div className="flex items-center gap-1.5 mb-1.5 px-0.5">
             <div className="w-1 h-2.5 bg-red-600/60 rounded-full" />
-            <Skeleton width={110} height={10} className="rounded-full" />
+            <Skeleton width={100} height={9} className="rounded-full" />
           </div>
 
-          <div className="flex items-center gap-1 overflow-x-auto py-1 no-scrollbar">
+          <div className="flex items-center gap-1 overflow-x-auto py-0.5 no-scrollbar">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <div
                 key={i}
-                className="flex-shrink-0 flex flex-col items-center gap-1 px-1 py-1.5 rounded-xl min-w-[58px]"
+                className="flex-shrink-0 flex flex-col items-center gap-1 px-1 py-1 rounded-lg min-w-[50px]"
               >
-                <div className="w-9 h-9 rounded-xl overflow-hidden bg-[var(--card)]/50 border border-[var(--border)]">
+                <div className="w-8 h-8 rounded-lg overflow-hidden bg-[var(--card)]/50 border border-[var(--border)]">
                   <Skeleton className="w-full h-full border-none" />
                 </div>
                 <div className="flex flex-col items-center text-center w-full px-0.5 mt-0.5">
-                  <Skeleton width={38} height={7} className="rounded-full" />
-                  <div className="h-[2px] w-full mt-1">
+                  <Skeleton width={32} height={6} className="rounded-full" />
+                  <div className="h-[2px] w-full mt-0.5">
                     {i === 1 && <div className="h-full w-full bg-red-600/40 rounded-full" />}
                   </div>
                 </div>
@@ -214,18 +214,18 @@ export default function GameDetailPage() {
   };
 
   return (
-    <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6">
+    <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6 pb-28 sm:pb-32">
 
       {/* ================= MODERN GAME SWITCHER ================= */}
-      <div className="max-w-6xl mx-auto mb-4 overflow-hidden px-2">
-        <div className="flex items-center gap-2 mb-2 px-1">
+      <div className="max-w-6xl mx-auto mb-3 overflow-hidden">
+        <div className="flex items-center gap-1.5 mb-1.5 px-0.5">
           <div className="w-1 h-2.5 bg-red-600 rounded-full" />
           <h2 className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)] italic">
             Quick Game Switch
           </h2>
         </div>
 
-        <div className="flex items-center gap-0.5 overflow-x-auto py-1 no-scrollbar scroll-smooth">
+        <div className="flex items-center gap-1 overflow-x-auto py-0.5 no-scrollbar scroll-smooth">
           {allGames.map((g, index) => {
             const isActive = g.gameSlug === slug;
             return (
@@ -233,27 +233,27 @@ export default function GameDetailPage() {
                 key={g.gameSlug}
                 onClick={() => router.push(`/games/${g.gameSlug}`)}
                 className={`
-                  relative flex-shrink-0 flex flex-col items-center gap-1 px-1 py-1.5 rounded-xl transition-all duration-300 min-w-[58px]
+                  relative flex-shrink-0 flex flex-col items-center gap-1 px-1 py-1 rounded-lg transition-all duration-200 min-w-[50px]
                   ${isActive
-                    ? "bg-[var(--foreground)]/[0.05] opacity-100"
-                    : "hover:bg-[var(--foreground)]/[0.03] opacity-40 hover:opacity-80"}
+                    ? "opacity-100"
+                    : "opacity-40 hover:opacity-80"}
                 `}
               >
                 {/* THUMBNAIL */}
                 <div className={`
-                  relative w-9 h-9 rounded-xl overflow-hidden transition-all duration-300 transform
-                  ${isActive ? "ring-1 ring-red-500/50 scale-105" : "grayscale opacity-80"}
+                  relative w-8 h-8 rounded-lg overflow-hidden transition-all duration-200
+                  ${isActive ? "" : "grayscale opacity-80"}
                 `}>
                   <GameThumbnail src={g.gameImageId?.image} name={g.gameName} index={index} />
                 </div>
 
                 {/* LABEL */}
                 <div className="flex flex-col items-center text-center w-full px-0.5">
-                  <div className="h-4 flex items-center justify-center mb-1">
+                  <div className="h-3.5 flex items-center justify-center mb-0.5">
                     <span className={`
-                      text-[6px] font-black italic uppercase tracking-wider transition-colors duration-300 leading-[1]
+                      text-[6.5px] font-black italic uppercase tracking-wider transition-colors duration-200 leading-[1]
                       ${isActive ? "text-red-500" : "text-[var(--muted)]"}
-                      line-clamp-2 max-w-[56px] whitespace-normal
+                      line-clamp-2 max-w-[48px] whitespace-normal
                     `}>
                       {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
                     </span>
