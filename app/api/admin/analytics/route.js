@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
+import PwaStat from "@/models/PwaStat";
 import jwt from "jsonwebtoken";
 
 /* ================= AUTH HELPER ================= */
@@ -377,6 +378,74 @@ export async function GET(req) {
       { $sort: { _id: 1 } },
     ]);
 
+    /* ================= 9. PWA ANALYTICS METRICS ================= */
+    const pwaMatch = {
+      createdAt: { $gte: startDate, $lte: now },
+    };
+
+    let pwaStats = {
+      periodPwaInstalls: 0,
+      allTimePwaInstalls: 0,
+      periodPwaLaunches: 0,
+      periodPromptShown: 0,
+      periodPromptDismiss: 0,
+      installConversionRate: 0,
+      platformBreakdown: [],
+    };
+
+    try {
+      const [
+        periodPwaInstalls,
+        allTimePwaInstalls,
+        periodPwaLaunches,
+        periodPromptShown,
+        periodPromptDismiss,
+        pwaPlatformBreakdown
+      ] = await Promise.all([
+        PwaStat.countDocuments({ ...pwaMatch, eventType: "install" }),
+        PwaStat.countDocuments({ eventType: "install" }),
+        PwaStat.countDocuments({ ...pwaMatch, eventType: "launch" }),
+        PwaStat.countDocuments({ ...pwaMatch, eventType: "prompt_shown" }),
+        PwaStat.countDocuments({ ...pwaMatch, eventType: "prompt_dismiss" }),
+        PwaStat.aggregate([
+          { $match: { ...pwaMatch, eventType: { $in: ["install", "launch"] } } },
+          {
+            $group: {
+              _id: "$platform",
+              installs: {
+                $sum: { $cond: [{ $eq: ["$eventType", "install"] }, 1, 0] },
+              },
+              launches: {
+                $sum: { $cond: [{ $eq: ["$eventType", "launch"] }, 1, 0] },
+              },
+            },
+          },
+          { $sort: { installs: -1, launches: -1 } },
+        ]),
+      ]);
+
+      const installConversionRate =
+        periodPromptShown > 0
+          ? Math.round((periodPwaInstalls / periodPromptShown) * 1000) / 10
+          : 0;
+
+      pwaStats = {
+        periodPwaInstalls,
+        allTimePwaInstalls,
+        periodPwaLaunches,
+        periodPromptShown,
+        periodPromptDismiss,
+        installConversionRate,
+        platformBreakdown: pwaPlatformBreakdown.map((p) => ({
+          platform: p._id || "other",
+          installs: p.installs,
+          launches: p.launches,
+        })),
+      };
+    } catch (e) {
+      console.warn("PWA stats collection error:", e);
+    }
+
     return Response.json({
       success: true,
       data: {
@@ -417,6 +486,7 @@ export async function GET(req) {
         paymentMethods,
         topSpenders,
         timelineData,
+        pwaStats,
       },
     });
   } catch (err) {

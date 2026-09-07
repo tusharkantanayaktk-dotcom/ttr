@@ -4,6 +4,7 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import BottomNav from "@/components/BottomNav/BottomNav";
 import GlobalElements from "@/components/GlobalElements";
+import PWAProvider from "@/components/PWA/PWAProvider";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { FEATURE_FLAGS } from "@/lib/config";
@@ -57,6 +58,7 @@ export default function RootLayout({
           <Footer />
           <BottomNav />
           <GlobalElements />
+          <PWAProvider />
         </GoogleOAuthProvider>
 
       </body>

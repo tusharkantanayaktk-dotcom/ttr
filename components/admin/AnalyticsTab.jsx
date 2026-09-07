@@ -14,7 +14,8 @@ import {
   FiCheckCircle,
   FiAlertCircle,
   FiXCircle,
-  FiBarChart2,
+  FiSmartphone,
+  FiDownload,
   FiLayers,
   FiActivity
 } from "react-icons/fi";
@@ -25,7 +26,6 @@ export default function AnalyticsTab() {
   const [loading, setLoading] = useState(true);
   const [analyticsData, setAnalyticsData] = useState(null);
   const [error, setError] = useState(null);
-  const [activeView, setActiveView] = useState("overview"); // overview, peak_hours, products, customers
 
   const fetchAnalytics = async (selectedRange = range) => {
     try {
@@ -62,7 +62,7 @@ export default function AnalyticsTab() {
       <div className="flex flex-col items-center justify-center py-20 space-y-4">
         <div className="w-10 h-10 border-4 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
         <p className="text-xs font-semibold text-[var(--muted)] animate-pulse">
-          Aggregating store analytics, peak hours & customer metrics...
+          Aggregating store analytics, peak hours & PWA metrics...
         </p>
       </div>
     );
@@ -91,11 +91,10 @@ export default function AnalyticsTab() {
     topGames = [],
     paymentMethods = [],
     topSpenders = [],
-    timelineData = [],
+    pwaStats = {},
   } = analyticsData || {};
 
   const maxHourlyOrders = Math.max(...(peakHours.hourlyBreakdown?.map((h) => h.ordersCount) || [1]), 1);
-  const maxTimelineRevenue = Math.max(...(timelineData.map((t) => t.revenue) || [1]), 1);
 
   return (
     <div className="space-y-6">
@@ -111,7 +110,7 @@ export default function AnalyticsTab() {
             </span>
           </div>
           <p className="text-xs text-[var(--muted)] mt-1">
-            Real-time performance, peak ordering hours, AOV & customer retention metrics
+            Real-time performance, peak ordering hours, PWA installs & customer retention metrics
           </p>
         </div>
 
@@ -173,7 +172,6 @@ export default function AnalyticsTab() {
               <span className="text-emerald-400 font-bold">{summary.successfulOrders || 0}</span> successful orders
             </div>
           </div>
-          <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
         </motion.div>
 
         {/* Average Order Value (AOV) */}
@@ -197,7 +195,6 @@ export default function AnalyticsTab() {
               <span className="text-cyan-400 font-bold">{summary.conversionRate || 0}%</span> checkout conversion
             </div>
           </div>
-          <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
         </motion.div>
 
         {/* Peak Ordering Hour */}
@@ -221,7 +218,6 @@ export default function AnalyticsTab() {
               <span className="text-amber-400 font-bold">{peakHours.peakHour?.ordersCount || 0}</span> orders (₹{(peakHours.peakHour?.totalRevenue || 0).toLocaleString("en-IN")})
             </div>
           </div>
-          <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
         </motion.div>
 
         {/* Returning Customer Rate */}
@@ -245,11 +241,84 @@ export default function AnalyticsTab() {
               <span className="text-purple-400 font-bold">{userMetrics.returningBuyersCount || 0}</span> repeat buyers ({userMetrics.avgOrdersPerUser || 0} orders/user)
             </div>
           </div>
-          <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-purple-500/5 rounded-full blur-2xl pointer-events-none" />
         </motion.div>
       </div>
 
-      {/* ================= PEAK HOURS ANALYSIS (24-HOUR HEATMAP / HISTOGRAM) ================= */}
+      {/* ================= PWA & APP ANALYTICS SECTION ================= */}
+      <div className="p-5 rounded-2xl bg-gradient-to-br from-[var(--card)] to-[var(--background)] border border-[var(--border)] space-y-4 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-black uppercase tracking-wider text-[var(--foreground)] flex items-center gap-2">
+              <FiSmartphone className="text-cyan-400" /> Progressive Web App (PWA) & Mobile Installs
+            </h3>
+            <p className="text-[11px] text-[var(--muted)]">
+              Track desktop & mobile app downloads, standalone launches, and platform adoption
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold">
+            <FiDownload className="w-3.5 h-3.5" />
+            <span>All-Time Installs: <strong>{pwaStats.allTimePwaInstalls || 0}</strong></span>
+          </div>
+        </div>
+
+        {/* 4 PWA Metric Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <span className="text-[10px] font-bold uppercase text-cyan-400">Installs (Period)</span>
+            <h4 className="text-xl font-black text-[var(--foreground)] mt-1">
+              {pwaStats.periodPwaInstalls || 0}
+            </h4>
+            <p className="text-[10px] text-[var(--muted)] mt-0.5">
+              {pwaStats.installConversionRate || 0}% install rate
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <span className="text-[10px] font-bold uppercase text-emerald-400">Standalone Launches</span>
+            <h4 className="text-xl font-black text-[var(--foreground)] mt-1">
+              {pwaStats.periodPwaLaunches || 0}
+            </h4>
+            <p className="text-[10px] text-[var(--muted)] mt-0.5">Active app sessions</p>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <span className="text-[10px] font-bold uppercase text-purple-400">Prompt Impressions</span>
+            <h4 className="text-xl font-black text-[var(--foreground)] mt-1">
+              {pwaStats.periodPromptShown || 0}
+            </h4>
+            <p className="text-[10px] text-[var(--muted)] mt-0.5">Install banners shown</p>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <span className="text-[10px] font-bold uppercase text-amber-400">Dismissals</span>
+            <h4 className="text-xl font-black text-[var(--foreground)] mt-1">
+              {pwaStats.periodPromptDismiss || 0}
+            </h4>
+            <p className="text-[10px] text-[var(--muted)] mt-0.5">Dismissed prompts</p>
+          </div>
+        </div>
+
+        {/* PWA Platform Breakdown */}
+        {pwaStats.platformBreakdown && pwaStats.platformBreakdown.length > 0 && (
+          <div className="pt-2 border-t border-[var(--border)]">
+            <span className="text-[10px] font-bold uppercase text-[var(--muted)]">Platform Distribution:</span>
+            <div className="flex flex-wrap gap-2 mt-1.5">
+              {pwaStats.platformBreakdown.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs font-bold capitalize"
+                >
+                  <span className="text-[var(--foreground)]">{item.platform}:</span>
+                  <span className="text-cyan-400">{item.installs} installs</span>
+                  <span className="text-[var(--muted)] text-[10px]">({item.launches} launches)</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ================= PEAK HOURS ANALYSIS ================= */}
       <div className="p-5 rounded-2xl bg-[var(--card)] border border-[var(--border)] space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
@@ -257,7 +326,7 @@ export default function AnalyticsTab() {
               <FiClock className="text-amber-400" /> Peak Hour Order Distribution (24-Hour Timeline)
             </h3>
             <p className="text-[11px] text-[var(--muted)]">
-              Identify your store's highest traffic windows to schedule flash sales, restocks & support
+              Identify your store's highest traffic windows to schedule flash sales & restocks
             </p>
           </div>
           {peakHours.peakHour && (
@@ -412,7 +481,7 @@ export default function AnalyticsTab() {
         </div>
       </div>
 
-      {/* ================= HIGHEST SELLING PRODUCTS (TOP ITEMS) ================= */}
+      {/* ================= HIGHEST SELLING PRODUCTS ================= */}
       <div className="p-5 rounded-2xl bg-[var(--card)] border border-[var(--border)] space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>

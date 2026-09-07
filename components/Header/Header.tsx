@@ -8,6 +8,7 @@ import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogO
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import Skeleton from "../Skeleton";
+import PWAHeaderButton from "../PWA/PWAHeaderButton";
 
 
 export default function Header() {
@@ -186,13 +187,13 @@ export default function Header() {
         </nav>
 
         {/* ACTIONS SECTION */}
-        <div className="flex items-center gap-3 sm:gap-4" ref={dropdownRef}>
-          {/* Wallet balance moved to sidebar */}
-
+        <div className="flex items-center gap-2 sm:gap-3" ref={dropdownRef}>
+          {/* PWA Download Button */}
+          <PWAHeaderButton />
 
           <ThemeToggle />
 
-          <div className="h-6 w-[1px] bg-[var(--border)] mx-1 hidden sm:block" />
+          <div className="h-6 w-[1px] bg-[var(--border)] mx-0.5 hidden sm:block" />
 
           {/* USER PROFILE / LOGIN */}
           <div className="relative mr-2">
