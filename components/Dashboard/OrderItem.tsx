@@ -235,7 +235,7 @@ STATUS:    SUCCESS
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         className="relative w-full max-w-md bg-[var(--card)] border border-[var(--border)] 
-                   rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden"
+                   rounded-3xl p-6 sm:p-8 overflow-hidden"
       >
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-50" />
 
@@ -274,7 +274,7 @@ STATUS:    SUCCESS
           <button
             onClick={handleShare}
             className="flex items-center justify-center gap-2 py-4 rounded-xl font-bold uppercase tracking-wider text-[10px]
-                       bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/20
+                       bg-[var(--accent)] text-white
                        hover:brightness-110 transition-all active:scale-95"
           >
             <FiShare2 className="text-sm" /> Share

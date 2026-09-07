@@ -66,7 +66,7 @@ export default function TrustHighlights() {
             return (
               <div
                 key={i}
-                className="relative group p-4 rounded-2xl bg-gradient-to-b from-[var(--card)]/80 to-transparent backdrop-blur-xl border border-[var(--border)]/40 hover:border-[var(--accent)]/40 hover:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.3)] transition-all duration-500 overflow-hidden"
+                className="relative group p-4 rounded-2xl bg-gradient-to-b from-[var(--card)]/80 to-transparent backdrop-blur-xl border border-[var(--border)]/40 hover:border-[var(--accent)]/40 transition-all duration-300 overflow-hidden"
               >
                 {/* SCANLINE EFFECT */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.05)_50%)] z-0 bg-[length:100%_4px] pointer-events-none opacity-20" />

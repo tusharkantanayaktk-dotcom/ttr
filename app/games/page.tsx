@@ -103,7 +103,7 @@ export default function GamesPage() {
           className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         >
           {/* IMAGE WRAPPER */}
-          <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-[border-color,transform,box-shadow] duration-300 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-md">
+          <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-[border-color,transform] duration-300 group-hover:border-[var(--accent)]/40">
 
             <div className="relative w-full h-full flex items-center justify-center">
               {!imgError ? (
@@ -135,7 +135,7 @@ export default function GamesPage() {
               <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-start z-10">
                 {!disabled && game.tagId ? (
                   <div
-                    className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-1.5 backdrop-blur-md border border-white/10"
+                    className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest flex items-center gap-1.5 backdrop-blur-md border border-white/10"
                     style={{
                       backgroundColor: `${game.tagId.tagBackground}cc`, // Add some transparency
                       color: game.tagId.tagColor,
@@ -159,7 +159,7 @@ export default function GamesPage() {
                   <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mb-1.5">
                     <FiX size={16} className="text-red-500" />
                   </div>
-                  <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500 drop-shadow-md">
+                  <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500">
                     OFF
                   </span>
                 </div>
@@ -332,7 +332,7 @@ export default function GamesPage() {
                   className="group cursor-pointer transform-gpu"
                 >
                   <Link href={`/games/${ott.slug}`} className="flex flex-col gap-5">
-                    <div className="relative aspect-[3/4] overflow-hidden rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)]/40 transition-[border-color,box-shadow] duration-300 group-hover:border-[var(--accent)]/50 group-hover:shadow-lg">
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-[1.5rem] bg-[var(--card)] border border-[var(--border)]/40 transition-[border-color] duration-300 group-hover:border-[var(--accent)]/50">
                       <Image
                         src={ott.image}
                         alt={ott.name}
@@ -347,7 +347,7 @@ export default function GamesPage() {
 
                       <div className="absolute inset-0 p-4 flex flex-col justify-end gap-1.5 z-10">
                         <div className="flex flex-col gap-0.5 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                          <p className="text-[8px] text-[var(--accent)] font-black uppercase tracking-[0.2em] drop-shadow-md">
+                          <p className="text-[8px] text-[var(--accent)] font-black uppercase tracking-[0.2em]">
                             {ott.category}
                           </p>
                           <h4 className="text-[12px] font-black text-white uppercase tracking-tighter italic">
@@ -380,7 +380,7 @@ export default function GamesPage() {
                 >
                   <Link
                     href={`/games/${plan.slug}`}
-                    className="relative flex flex-col p-4 rounded-[1.2rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-300 hover:border-[var(--accent)] hover:shadow-lg hover:shadow-[var(--accent)]/5 overflow-hidden"
+                    className="relative flex flex-col p-4 rounded-[1.2rem] bg-[var(--card)] border border-[var(--border)]/40 transition-all duration-300 hover:border-[var(--accent)] overflow-hidden"
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 relative rounded-lg overflow-hidden border border-[var(--border)] shrink-0">

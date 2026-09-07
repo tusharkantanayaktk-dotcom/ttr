@@ -99,7 +99,7 @@ export default function FlashSale() {
                 {/* COMPACT HEADER */}
                 <div className="flex flex-row items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 rounded-md bg-amber-500 flex items-center justify-center text-black shadow-[0_0_10px_rgba(245,158,11,0.3)]">
+                        <div className="w-5 h-5 rounded-md bg-amber-500 flex items-center justify-center text-black">
                             <FiZap size={12} fill="currentColor" />
                         </div>
                         <h2 className="text-lg font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none">
@@ -139,7 +139,7 @@ export default function FlashSale() {
                             >
                                 {/* Badge Overlay */}
                                 <div className="absolute top-3 left-3 z-20">
-                                    <span className="text-[7px] font-black italic uppercase tracking-widest px-1.5 py-0.5 rounded-sm bg-amber-500 text-black shadow-lg">
+                                    <span className="text-[7px] font-black italic uppercase tracking-widest px-1.5 py-0.5 rounded-sm bg-amber-500 text-black">
                                         {item.badge}
                                     </span>
                                 </div>

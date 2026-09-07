@@ -71,7 +71,7 @@ export default function AboutPage() {
           ].map((val, i) => (
             <div
               key={i}
-              className="group relative p-8 border border-[var(--border)] rounded-2xl bg-[var(--card)] hover:shadow-[0_0_25px_var(--accent)] transition-all duration-300 hover:scale-[1.03]"
+              className="group relative p-8 border border-[var(--border)] rounded-2xl bg-[var(--card)] hover:border-[var(--accent)]/50 transition-all duration-300 hover:scale-[1.02]"
             >
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[var(--accent)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
               <div className="relative z-10">
@@ -105,7 +105,7 @@ export default function AboutPage() {
           href="https://instagram.com/mlbbtopup.in"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 bg-gradient-to-r from-[var(--accent)] to-purple-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:scale-110 hover:shadow-[0_0_20px_var(--accent)] transition-all duration-300"
+          className="inline-flex items-center gap-3 bg-gradient-to-r from-[var(--accent)] to-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-all duration-300"
         >
           <span>@mlbbtopup.in</span>
         </a>

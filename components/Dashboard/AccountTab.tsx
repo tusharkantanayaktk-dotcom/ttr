@@ -108,7 +108,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
             <h3 className="text-lg font-bold">Security</h3>
           </div>
 
-          <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 sm:p-8 shadow-lg relative overflow-hidden group">
+          <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 sm:p-8 relative overflow-hidden group">
 
             <AnimatePresence mode="wait">
               {passSuccess && (
@@ -156,7 +156,7 @@ export default function AccountTab({ userDetails }: AccountTabProps) {
                 disabled={loadingPass || !newPass}
                 onClick={handlePasswordUpdate}
                 className="w-full py-4 rounded-xl bg-[var(--accent)] text-white font-bold uppercase tracking-wider text-xs
-                           flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20
+                           flex items-center justify-center gap-2
                            hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50 
                            disabled:cursor-not-allowed"
               >

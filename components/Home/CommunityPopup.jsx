@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, MessageSquare, ArrowRight } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
+import { X, ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 const COMMUNITY_URL = process.env.NEXT_PUBLIC_WHATSAPP_CHANNEL_URL || "https://whatsapp.com/channel/0029Vb7jVuaLtOj7Q889qV1k";
-const STORAGE_KEY = "community_popup_dismissed_v9";
+const STORAGE_KEY = "community_popup_dismissed_v14";
 
 export default function CommunityPopup() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ export default function CommunityPopup() {
     if (!isDismissed) {
       const timer = setTimeout(() => {
         setIsOpen(true);
-      }, 4000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -35,69 +35,60 @@ export default function CommunityPopup() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
 
-          {/* Compact Themed Modal */}
+          {/* Theme-aligned Wide Landscape Modal */}
           <motion.div
-            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className="relative w-full max-w-[250px] bg-[var(--card)] border border-[var(--white)]/10 rounded-[2.5rem] overflow-hidden shadow-2xl"
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            className="relative w-full max-w-[340px] sm:max-w-[380px] bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden flex flex-col"
           >
-            <div className="p-5 flex flex-col items-center gap-4">
-              {/* Header Section */}
-              <div className="flex flex-col items-center gap-1">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-[var(--accent)]/10 rounded-2xl flex items-center justify-center text-[var(--accent)] border border-[var(--accent)]/20 shadow-lg shadow-[var(--accent)]/5">
-                    <MessageSquare size={16} />
-                  </div>
-                  <h2 className="text-[15px] font-black uppercase tracking-tight text-[var(--foreground)]">
-                    Official Channel
-                  </h2>
-                </div>
-                <p className="text-[8px] font-bold text-[var(--muted)]/60 uppercase tracking-widest mt-1">
-                  Updates & Giveaways
-                </p>
-              </div>
-
-              {/* QR Code */}
-              <div className="p-2.5 bg-white rounded-3xl shadow-xl">
-                <QRCodeSVG
-                  value={COMMUNITY_URL}
-                  size={125}
-                  level="M"
-                />
-              </div>
-
-              {/* Action Buttons */}
-              <div className="w-full flex flex-col items-center space-y-2.5">
-                <a
-                  href={COMMUNITY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-4/5 py-2.5 rounded-xl bg-[var(--accent)] flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20 hover:brightness-110 active:scale-[0.98] transition-all"
-                >
-                  <span className="text-black font-black uppercase tracking-[0.1em] italic text-[11px]">Join Now</span>
-                  <ArrowRight size={12} className="text-black" />
-                </a>
-
-                <button
-                  onClick={handleClose}
-                  className="w-full text-[8px] font-black uppercase tracking-widest text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
-                >
-                  Maybe Later
-                </button>
-              </div>
-            </div>
-
             {/* Close Button */}
             <button
               onClick={handleClose}
-              className="absolute top-4 right-5 text-[var(--muted)] hover:text-[var(--foreground)] transition-all"
+              className="absolute top-2.5 right-2.5 z-10 w-7 h-7 rounded-full bg-[var(--background)]/80 backdrop-blur-md text-[var(--foreground)] hover:bg-[var(--background)] flex items-center justify-center transition-all border border-[var(--border)]"
+              aria-label="Close popup"
             >
-              <X size={16} />
+              <X size={14} />
             </button>
+
+            {/* Clickable Wide Banner Image */}
+            <a
+              href={COMMUNITY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative w-full aspect-[16/9] block overflow-hidden group bg-black"
+            >
+              <Image
+                src="/join-whatsapp.jpg"
+                alt="Join Us on WhatsApp"
+                fill
+                priority
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </a>
+
+            {/* Action Bar */}
+            <div className="px-4 py-3 bg-[var(--card)] border-t border-[var(--border)] flex items-center justify-between gap-3">
+              <button
+                onClick={handleClose}
+                className="text-[10px] font-semibold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors uppercase tracking-wider px-2"
+              >
+                Maybe Later
+              </button>
+
+              <a
+                href={COMMUNITY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] !text-black font-extrabold text-[11px] uppercase tracking-wider flex items-center gap-1.5 active:scale-[0.98] transition-all"
+              >
+                <span className="!text-black">Join Now</span>
+                <ArrowRight size={13} className="!text-black" />
+              </a>
+            </div>
           </motion.div>
         </div>
       )}

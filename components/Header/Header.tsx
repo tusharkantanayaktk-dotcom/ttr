@@ -245,7 +245,7 @@ export default function Header() {
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}
                     transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                    className="fixed right-0 top-0 h-[100dvh] w-[80%] sm:w-[300px] bg-[var(--card)] border-l border-[var(--border)] shadow-2xl z-[1001] flex flex-col"
+                    className="fixed right-0 top-0 h-[100dvh] w-[80%] sm:w-[300px] bg-[var(--card)] border-l border-[var(--border)] z-[1001] flex flex-col"
                   >
                     {/* CLOSE BUTTON - FLOATING TOP RIGHT */}
                     <div className="p-4 flex items-center justify-between border-b border-[var(--border)] shrink-0">
@@ -270,7 +270,7 @@ export default function Header() {
                           <motion.div
                             initial={{ scale: 0.8, rotate: -5 }}
                             animate={{ scale: 1, rotate: 0 }}
-                            className="w-16 h-16 bg-gradient-to-br from-[var(--accent)]/25 via-[var(--accent)]/10 to-transparent rounded-[1.2rem] flex items-center justify-center mb-5 border border-[var(--accent)]/30 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)] relative group"
+                            className="w-16 h-16 bg-gradient-to-br from-[var(--accent)]/25 via-[var(--accent)]/10 to-transparent rounded-[1.2rem] flex items-center justify-center mb-5 border border-[var(--accent)]/30 relative group"
                           >
                             <div className="absolute inset-0 bg-[var(--accent)]/15 blur-xl group-hover:blur-2xl transition-all opacity-70" />
                             <FiUser className="text-3xl text-[var(--accent)] relative z-10" />
@@ -300,7 +300,7 @@ export default function Header() {
 
                           <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full mt-auto">
                             <motion.button
-                              className="w-full py-4 bg-[var(--foreground)] text-[var(--background)] font-black italic uppercase tracking-[0.4em] text-[10px] rounded-xl shadow-[0_10px_20px_-5px_rgba(0,0,0,0.4)] flex items-center justify-center gap-2 group relative overflow-hidden"
+                              className="w-full py-4 bg-[var(--foreground)] text-[var(--background)] font-black italic uppercase tracking-[0.4em] text-[10px] rounded-xl flex items-center justify-center gap-2 group relative overflow-hidden"
                               whileHover={{ scale: 1.02, backgroundColor: 'var(--accent)', color: 'black' }}
                               whileTap={{ scale: 0.98 }}
                             >
@@ -314,7 +314,7 @@ export default function Header() {
                           {/* User Profile Header horizontal - COMPACT */}
                           <div className="flex items-center gap-3 pb-4 border-b border-[var(--border)] relative">
                             {/* Left: Avatar */}
-                            <div className="w-10 h-10 rounded-lg bg-[var(--accent)] p-[1.5px] shadow-lg shrink-0">
+                            <div className="w-10 h-10 rounded-lg bg-[var(--accent)] p-[1.5px] shrink-0">
                               <div className="w-full h-full rounded-[0.7rem] overflow-hidden bg-[var(--card)]">
                                 {user?.avatar && !avatarError ? (
                                   <img
@@ -324,29 +324,29 @@ export default function Header() {
                                     onError={() => setAvatarError(true)}
                                   />
                                 ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)]">
-                                    <span className="text-white text-lg font-black uppercase">
-                                      {(user.name || user.username || user.email || "U")[0]}
-                                    </span>
+                                  <div className="w-full h-full flex items-center justify-center bg-[var(--accent)] text-black font-black text-sm uppercase">
+                                    {user.name?.charAt(0) || "U"}
                                   </div>
                                 )}
                               </div>
                             </div>
 
-                            {/* Middle: Info */}
-                            <div className="flex flex-col flex-1 min-w-0">
-                              <span className="text-sm font-black italic uppercase tracking-tight text-[var(--foreground)] truncate leading-none mb-1">
-                                {user.name || user.username}
-                              </span>
-                              <span className="text-[8px] font-bold text-[var(--muted)] opacity-50 uppercase tracking-widest truncate mb-2">
+                            {/* Center: Details */}
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-xs font-black uppercase tracking-tight text-[var(--foreground)] truncate">
+                                {user.name}
+                              </h4>
+                              <p className="text-[9px] text-[var(--muted)] truncate font-mono opacity-80">
                                 {user.email}
-                              </span>
-                              <div className="flex">
+                              </p>
+                              <div className="flex items-center gap-2 mt-1">
                                 <span className={`
-                                  text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md border
-                                  ${user.userType === 'owner' ? 'bg-orange-500/10 text-orange-500 border-orange-500/20' :
-                                    user.userType === 'admin' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
-                                      'bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20'}
+                                  text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded border
+                                  ${user.userType === "owner" 
+                                    ? "bg-amber-500/10 text-amber-500 border-amber-500/20" 
+                                    : user.userType === "admin"
+                                    ? "bg-purple-500/10 text-purple-500 border-purple-500/20"
+                                    : "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20"}
                                 `}>
                                   {user.userType === "owner" ? "Owner" : user.userType === "admin" ? "Reseller" : "User"}
                                 </span>
@@ -356,7 +356,7 @@ export default function Header() {
                             {/* Right: Logout Icon */}
                             <motion.button
                               onClick={handleLogout}
-                              className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/10 shadow-sm"
+                              className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/10"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               title="Sign Out"
@@ -369,10 +369,10 @@ export default function Header() {
                           <Link
                             href="/dashboard/wallet"
                             onClick={() => setUserMenuOpen(false)}
-                            className="flex items-center justify-between p-4 rounded-2xl bg-[var(--accent)]/[0.08] border border-[var(--accent)]/20 hover:bg-[var(--accent)]/[0.12] transition-all group shadow-inner"
+                            className="flex items-center justify-between p-4 rounded-2xl bg-[var(--accent)]/[0.08] border border-[var(--accent)]/20 hover:bg-[var(--accent)]/[0.12] transition-all group"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-[var(--accent)] flex items-center justify-center text-black shadow-lg shadow-[var(--accent)]/20">
+                              <div className="w-8 h-8 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
                                 <FiPlus size={14} />
                               </div>
                               <div className="flex flex-col">
@@ -421,7 +421,7 @@ export default function Header() {
                                     <link.icon className="text-lg opacity-50 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all duration-300" />
                                     <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-[var(--foreground)] transition-colors">{link.label}</span>
                                   </div>
-                                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_8px_rgba(var(--accent-rgb),0.5)] opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300" />
                                 </motion.div>
                               </Link>
                             ))}
@@ -432,7 +432,7 @@ export default function Header() {
                                   initial={{ opacity: 0, y: 10 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   transition={{ delay: 0.3 }}
-                                  className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)] hover:bg-[var(--accent)]/20 transition-all mt-4 group shadow-sm"
+                                  className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)] hover:bg-[var(--accent)]/20 transition-all mt-4 group"
                                   whileHover={{ scale: 1.02 }}
                                 >
                                   <FiSettings size={14} className="group-hover:rotate-90 transition-transform duration-700" />

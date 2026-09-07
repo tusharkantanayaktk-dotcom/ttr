@@ -134,7 +134,7 @@ export default function WalletTab({
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-lg overflow-hidden group"
+            className="relative p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] overflow-hidden group"
           >
             <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent)] opacity-[0.03] blur-[80px] rounded-full" />
             
@@ -146,7 +146,7 @@ export default function WalletTab({
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-lg font-bold text-[var(--accent)]">₹</span>
-                  <span className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--foreground)] drop-shadow-sm">
+                  <span className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--foreground)]">
                     {walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
@@ -159,7 +159,7 @@ export default function WalletTab({
               </div>
 
               <div className="shrink-0 flex flex-col items-end">
-                <div className="h-10 w-10 rounded-lg bg-[var(--accent)] flex items-center justify-center shadow-[0_10px_30px_-5px_var(--accent)]/30 group-hover:scale-105 transition-transform duration-500">
+                <div className="h-10 w-10 rounded-lg bg-[var(--accent)] flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
                   <FaWallet className="text-lg text-black" />
                 </div>
                 <div className="mt-2 flex -space-x-2 opacity-20">
@@ -249,7 +249,7 @@ export default function WalletTab({
                 onClick={handleProceed}
                 disabled={loading || !method}
                 className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] text-[10px]
-                           flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/30
+                           flex items-center justify-center gap-2
                            hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-40"
               >
                 {loading ? <div className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" /> : <><span>Add Money</span> <FiArrowRight /></>}

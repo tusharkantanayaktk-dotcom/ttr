@@ -74,7 +74,7 @@ export default function GameBannerCarousel() {
   if (loading) {
     return (
       <div className="relative w-full max-w-[1600px] mx-auto px-4 md:px-12 mt-2 md:mt-6">
-        <Skeleton height={340} className="w-full rounded-[2rem] md:rounded-[3.5rem]" />
+        <Skeleton height={340} className="w-full rounded-none" />
       </div>
     );
   }
@@ -90,7 +90,7 @@ export default function GameBannerCarousel() {
       {/* BACKGROUND GLOW */}
 
 
-      <div className="relative h-[220px] sm:h-[240px] md:h-[340px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border border-white/5 shadow-2xl bg-black">
+      <div className="relative h-[220px] sm:h-[240px] md:h-[340px] rounded-none overflow-hidden border border-white/5 bg-black">
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={current}
@@ -125,11 +125,11 @@ export default function GameBannerCarousel() {
                   className="space-y-2 md:space-y-4 max-w-4xl"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_#f59e0b]" />
+                    <span className="w-2 h-2 rounded-full bg-amber-500" />
                     <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-white/50">Exclusive Drop</span>
                   </div>
 
-                  <h2 className="text-2xl sm:text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-white leading-[0.85] drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                  <h2 className="text-2xl sm:text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-white leading-[0.85]">
                     {banners[current].bannerTitle}
                   </h2>
 
@@ -142,7 +142,7 @@ export default function GameBannerCarousel() {
               </div>
 
               {/* VIGNETTE */}
-              <div className="absolute inset-0 border border-white/5 rounded-[2rem] md:rounded-[3.5rem] pointer-events-none" />
+              <div className="absolute inset-0 border border-white/5 rounded-none pointer-events-none" />
             </Link>
           </motion.div>
         </AnimatePresence>
@@ -165,7 +165,7 @@ export default function GameBannerCarousel() {
       </div>
 
       {/* PROGRESS INDICATORS */}
-      <div className="flex justify-center items-center gap-4 mt-6">
+      <div className="flex justify-center items-center gap-2.5 mt-2.5">
         {banners.map((_, i) => (
           <button
             key={i}
@@ -173,11 +173,11 @@ export default function GameBannerCarousel() {
               setDirection(i > current ? 1 : -1);
               setCurrent(i);
             }}
-            className="h-4 flex items-center group/dot"
+            className="h-3 flex items-center group/dot"
           >
             <div className={`h-[2px] rounded-full transition-all duration-700 relative overflow-hidden ${current === i
-              ? "w-12 bg-white"
-              : "w-4 bg-white/10 group-hover/dot:bg-white/30"
+              ? "w-8 bg-white"
+              : "w-3 bg-white/10 group-hover/dot:bg-white/30"
               }`}>
               {current === i && (
                 <div className="absolute inset-0 bg-amber-500" />

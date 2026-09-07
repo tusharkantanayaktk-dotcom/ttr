@@ -221,18 +221,18 @@ function PodiumCard({ user, rank, style, isMain = false }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: isMain ? -6 : -4 }}
-      transition={{ duration: 0.5 }}
-      className={`relative group p-3 sm:p-4 rounded-2xl flex flex-col items-center text-center bg-[var(--card)]/40 backdrop-blur-xl border ${style.border} ${isMain ? 'sm:scale-110 shadow-xl shadow-[var(--accent)]/10 z-10' : 'shadow-md z-0'} transition-all`}
+      whileHover={{ y: isMain ? -4 : -2 }}
+      transition={{ duration: 0.3 }}
+      className={`relative group p-3 sm:p-4 rounded-2xl flex flex-col items-center text-center bg-[var(--card)]/40 backdrop-blur-xl border ${style.border} ${isMain ? 'sm:scale-105 z-10' : 'z-0'} transition-all`}
     >
       {/* Glow Effect */}
-      <div className={`absolute inset-0 rounded-2xl ${style.bg} blur-xl opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity`} />
+      <div className={`absolute inset-0 rounded-2xl ${style.bg} blur-xl opacity-10 pointer-events-none group-hover:opacity-25 transition-opacity`} />
 
       {/* RANK BADGE */}
-      <div className={`relative z-10 mb-2 p-2 sm:p-3 rounded-xl border ${style.border} ${style.bg} shadow-md`}>
-        <Icon size={isMain ? 24 : 18} className={`sm:hidden ${style.color} drop-shadow-md`} />
-        <Icon className={`hidden sm:block ${style.color} drop-shadow-md`} size={isMain ? 36 : 24} />
-        <div className={`absolute -bottom-2 -right-2 w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center font-black italic text-[10px] sm:text-[11px] border ${style.border} bg-[var(--background)] ${style.color} shadow-lg`}>
+      <div className={`relative z-10 mb-2 p-2 sm:p-3 rounded-xl border ${style.border} ${style.bg}`}>
+        <Icon size={isMain ? 24 : 18} className={`sm:hidden ${style.color}`} />
+        <Icon className={`hidden sm:block ${style.color}`} size={isMain ? 36 : 24} />
+        <div className={`absolute -bottom-2 -right-2 w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center font-black italic text-[10px] sm:text-[11px] border ${style.border} bg-[var(--background)] ${style.color}`}>
           #{rank}
         </div>
       </div>
@@ -244,7 +244,7 @@ function PodiumCard({ user, rank, style, isMain = false }) {
         </h3>
       </div>
 
-      <div className={`relative z-10 w-full flex items-center justify-center py-1.5 px-2 sm:py-2 sm:px-3 rounded-lg bg-black/40 border ${style.border} shadow-inner`}>
+      <div className={`relative z-10 w-full flex items-center justify-center py-1.5 px-2 sm:py-2 sm:px-3 rounded-lg bg-black/40 border ${style.border}`}>
         <span className={`text-xs sm:text-sm font-black tracking-tighter ${style.color}`}>₹{user.totalSpent}</span>
       </div>
     </motion.div>

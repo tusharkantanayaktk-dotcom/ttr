@@ -148,9 +148,10 @@ export async function GET() {
       "sgmy-mlbb893",
       "magic-chess-gogo-india924",
       // "mlbb-indo42",
-      "mobile-legends-exclusive952",
+      // "mobile-legends-exclusive952",
       // "mlbb-russia953",
       "pubg-mobile138",
+      "mobile-legends-philippines888",
 
       // "genshin-impact742",
       "honor-of-kings57",

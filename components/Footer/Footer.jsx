@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { FaHeart, FaGamepad } from "react-icons/fa6";
+import logo from "@/public/logo.png";
+import { FaGamepad } from "react-icons/fa6";
 import {
   FiInstagram,
   FiMessageSquare,
@@ -25,8 +27,6 @@ const BRAND_DESCRIPTION = process.env.NEXT_PUBLIC_BRAND_DESCRIPTION || "Fast and
 const INSTAGRAM_URL = process.env.NEXT_PUBLIC_INSTAGRAM_URL;
 const WHATSAPP_URL = process.env.NEXT_PUBLIC_WHATSAPP_URL;
 
-const MADE_BY_NAME = "TK";
-const MADE_BY_URL = "https://wa.me/9178521537";
 const COPYRIGHT_NAME = "TRONICS STORE";
 
 const FOOTER_LINKS = [
@@ -42,7 +42,6 @@ const FOOTER_LINKS = [
   {
     title: "Support",
     links: [
-
       { label: "Privacy", href: "/privacy-policy", icon: FiLock },
       { label: "Terms", href: "/terms-and-conditions", icon: FiFileText },
       { label: "Refund", href: "/refund-policy", icon: FiShield },
@@ -66,71 +65,66 @@ const TRUST_BADGES = [
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[var(--background)] border-t border-[var(--border)] pt-10 pb-20 lg:pb-10 overflow-hidden">
-      {/* --- PREMIUM BACKGROUND DECOR --- */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: `radial-gradient(var(--muted) 0.5px, transparent 0.5px)`, backgroundSize: '24px 24px' }} />
-
-        {/* Ambient Glows */}
-        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[var(--accent)] opacity-[0.04] blur-[100px] rounded-full" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-[var(--accent)] opacity-[0.02] blur-[120px] rounded-full" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* --- TOP SECTION: BRAND & TRUST --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-6">
+    <footer className="relative bg-[var(--background)] border-t border-[var(--border)] pt-6 pb-20 lg:pb-8 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        {/* --- TOP SECTION: BRAND & LINKS --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-5">
 
           {/* Brand Info */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="space-y-3">
-              <Link href="/" className="inline-block group">
-                <h2 className="text-3xl font-black italic uppercase tracking-tighter bg-gradient-to-br from-[var(--accent)] via-[var(--foreground)] to-[var(--accent)] bg-clip-text text-transparent drop-shadow-sm transition-all duration-500 group-hover:scale-[1.02] origin-left">
+          <div className="lg:col-span-5 space-y-3">
+            <div className="space-y-1.5">
+              <Link href="/" className="inline-flex items-center gap-2.5 group">
+                <Image
+                  src={logo}
+                  alt={BRAND_NAME}
+                  width={28}
+                  height={28}
+                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0 transition-transform duration-300 group-hover:scale-105"
+                />
+                <h2 className="text-xl sm:text-2xl font-black italic uppercase tracking-tight text-[var(--foreground)] transition-colors group-hover:text-[var(--accent)]">
                   {BRAND_NAME}
                 </h2>
               </Link>
-              <p className="text-xs md:text-sm text-[var(--muted)] font-medium max-w-sm leading-relaxed opacity-80">
+              <p className="text-xs text-[var(--muted)] font-medium max-w-sm leading-relaxed opacity-80">
                 {BRAND_DESCRIPTION}
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {SOCIALS.map(({ label, href, icon: Icon }) => (
                 <motion.a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ y: -3, scale: 1.05 }}
+                  whileHover={{ y: -2, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-10 h-10 flex items-center justify-center rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-white hover:bg-[var(--accent)] hover:border-[var(--accent)] transition-all shadow-sm hover:shadow-[0_10px_20px_-5px_var(--accent)]/30"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-white hover:bg-[var(--accent)] hover:border-[var(--accent)] transition-all shadow-sm"
                   title={label}
                 >
-                  <Icon size={16} />
+                  <Icon size={14} />
                 </motion.a>
               ))}
             </div>
           </div>
 
           {/* Right Columns: Links & Trust */}
-          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6">
             {FOOTER_LINKS.map((section) => (
-              <div key={section.title} className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-1 h-3 rounded-full bg-[var(--accent)] opacity-40" />
-                  <h3 className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-60">
+              <div key={section.title} className="space-y-2">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-1 h-2.5 rounded-full bg-[var(--accent)] opacity-60" />
+                  <h3 className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-wider opacity-70">
                     {section.title}
                   </h3>
                 </div>
-                <ul className="space-y-1.5">
+                <ul className="space-y-1">
                   {section.links.map((link) => (
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="inline-flex items-center text-xs font-semibold text-[var(--muted)] hover:text-[var(--accent)] transition-all duration-300 group py-0.5"
+                        className="inline-flex items-center text-xs font-semibold text-[var(--muted)] hover:text-[var(--accent)] transition-colors py-0.5"
                       >
-                        <span className="w-0 group-hover:w-3 h-[2px] bg-[var(--accent)] rounded-full transition-all mr-0 group-hover:mr-2" />
                         {link.label}
                       </Link>
                     </li>
@@ -140,20 +134,20 @@ export default function Footer() {
             ))}
 
             {/* Premium Trust Cards */}
-            <div className="hidden sm:block space-y-5">
-              <div className="flex items-center gap-2">
-                <div className="w-1 h-3 rounded-full bg-[var(--accent)] opacity-40" />
-                <h3 className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-[0.2em] opacity-60">
+            <div className="hidden sm:block space-y-2">
+              <div className="flex items-center gap-1.5">
+                <div className="w-1 h-2.5 rounded-full bg-[var(--accent)] opacity-60" />
+                <h3 className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-wider opacity-70">
                   Trust
                 </h3>
               </div>
-              <div className="space-y-2.5">
+              <div className="space-y-1.5">
                 {TRUST_BADGES.map((badge, i) => (
-                  <div key={i} className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[var(--card)]/50 border border-[var(--border)]/60 hover:border-[var(--accent)]/30 hover:bg-[var(--card)] transition-all duration-300 group/badge cursor-default">
-                    <badge.icon size={13} className="text-[var(--accent)] group-hover/badge:scale-110 transition-transform" />
-                    <div className="flex flex-col gap-0.5">
+                  <div key={i} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[var(--card)]/60 border border-[var(--border)]/60 transition-colors group/badge cursor-default">
+                    <badge.icon size={12} className="text-[var(--accent)] shrink-0" />
+                    <div className="flex flex-col">
                       <span className="text-[9px] font-black text-[var(--foreground)] tracking-wide uppercase">{badge.label}</span>
-                      <span className="text-[8px] font-bold text-[var(--muted)] opacity-50 uppercase tracking-tighter">{badge.desc}</span>
+                      <span className="text-[7.5px] font-bold text-[var(--muted)] opacity-60 uppercase tracking-tight">{badge.desc}</span>
                     </div>
                   </div>
                 ))}
@@ -163,11 +157,11 @@ export default function Footer() {
         </div>
 
         {/* --- BOTTOM SECTION: INFO --- */}
-        <div className="pt-4 border-t border-[var(--border)]/60 flex items-center justify-center">
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[9px] sm:text-[11px] font-black text-[var(--muted)] uppercase tracking-[0.2em]">
-            <span className="opacity-60">&copy; {new Date().getFullYear()} {COPYRIGHT_NAME}</span>
-            <div className="w-1 h-1 rounded-full bg-[var(--border)] opacity-40" />
-            <span className="opacity-60">All Rights Reserved</span>
+        <div className="pt-3 border-t border-[var(--border)] flex items-center justify-center">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[9px] sm:text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">
+            <span className="opacity-70">&copy; {new Date().getFullYear()} {COPYRIGHT_NAME}</span>
+            <div className="w-1 h-1 rounded-full bg-[var(--border)]" />
+            <span className="opacity-70">All Rights Reserved</span>
           </div>
         </div>
       </div>

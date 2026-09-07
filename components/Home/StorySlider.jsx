@@ -6,15 +6,12 @@ import { motion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
 const storyData = [
-
   {
     id: 2,
     title: "MLBB India",
     image: "/game-assets/11.jpg",
     link: "/games/mobile-legends270",
     color: "from-cyan-400 via-blue-500 to-indigo-600",
-    isLive: true,
-    label: "LIVE"
   },
   {
     id: 3,
@@ -22,17 +19,13 @@ const storyData = [
     image: "/game-assets/bgmi-logo.webp",
     link: "/games/pubg-mobile138",
     color: "from-orange-400 via-red-500 to-rose-600",
-    isLive: true,
-    label: "TOP"
   },
   {
     id: 4,
-    title: " Bundles",
+    title: "Bundles",
     image: "/game-assets/bundle-weekly.jpg",
     link: "/games/weeklymonthly-bundle261",
     color: "from-fuchsia-400 via-purple-500 to-violet-600",
-    isLive: false,
-    label: "HOT"
   },
   {
     id: 5,
@@ -40,8 +33,6 @@ const storyData = [
     image: "/membership/silver-m.png",
     link: "/games/silver-membership",
     color: "from-emerald-400 via-teal-500 to-green-600",
-    isLive: false,
-    label: "BEST"
   },
 ];
 
@@ -63,98 +54,57 @@ export default function StorySlider() {
   if (!show) return null;
 
   return (
-    <section className="relative w-full overflow-hidden py-4 md:py-8">
-      {/* Background Ambient Glow */}
-
-
+    <section className="relative w-full overflow-hidden py-1 sm:py-2">
       <div className="relative max-w-7xl mx-auto px-4">
         <div
           ref={containerRef}
-          className="flex gap-4 md:gap-8 overflow-x-auto pb-6 pt-2 px-2
+          className="flex gap-4 sm:gap-6 overflow-x-auto py-1 px-1
           [scrollbar-width:none] [&::-webkit-scrollbar]:hidden 
           touch-pan-x snap-x scroll-smooth"
         >
-          {storyData.map((item, index) => (
+          {storyData.map((item) => (
             <div
               key={item.id}
               className="flex-shrink-0 snap-start"
             >
               <Link
                 href={item.link}
-                className="group flex flex-col items-center gap-3.5 cursor-pointer max-w-[80px] md:max-w-[90px]"
+                className="group flex flex-col items-center gap-1.5 cursor-pointer max-w-[72px] sm:max-w-[80px]"
               >
                 {/* RING ASSEMBLY */}
                 <div className="relative">
-                  {/* Outer Pulsing Glow */}
                   <div className={`
-                    absolute -inset-2 rounded-full bg-gradient-to-tr ${item.color} 
-                    opacity-0 group-hover:opacity-30 blur-xl transition-all duration-700 
-                    scale-75 group-hover:scale-110
-                  `} />
-
-                  <div className={`
-                    relative w-16 h-16 md:w-20 md:h-20 rounded-full p-[2.5px]
-                    bg-[#1a1a1a] border border-white/5 shadow-2xl transition-all duration-500
-                    group-hover:translate-y-[-4px] group-active:scale-95
+                    relative w-14 h-14 sm:w-16 sm:h-16 rounded-full p-[2px]
+                    bg-[#1a1a1a] border border-white/10 transition-transform duration-300
+                    group-hover:scale-105 group-active:scale-95
                   `}>
                     <div className={`
                       absolute inset-0 rounded-full bg-gradient-to-tr ${item.color} 
-                      opacity-40 group-hover:opacity-100 transition-opacity
+                      opacity-60 group-hover:opacity-100 transition-opacity
                     `} />
 
                     {/* Inner Image Container */}
-                    <div className="relative w-full h-full rounded-full border-[3px] border-[var(--background)] overflow-hidden bg-black z-10 transition-transform duration-500">
+                    <div className="relative w-full h-full rounded-full border-2 border-[var(--background)] overflow-hidden bg-black z-10">
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
-                        sizes="100px"
-                        className="object-cover transition-all duration-700 group-hover:scale-115 grayscale-[0.3] group-hover:grayscale-0"
+                        sizes="80px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
                       />
-
-                      {/* Glass Overlay effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-40 group-hover:opacity-10 transition-opacity" />
-                    </div>
-                  </div>
-
-                  {/* ENHANCED LABEL / BADGE */}
-                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 z-20 transition-transform duration-500 group-hover:translate-y-1">
-                    <div className={`
-                      flex items-center gap-1.5 bg-[var(--card)] text-[var(--foreground)] px-2.5 py-0.5 rounded-full 
-                      shadow-[0_4px_10px_rgba(0,0,0,0.2)] border border-[var(--border)]
-                      transition-all duration-300 group-hover:scale-110
-                    `}>
-                      {item.isLive && (
-                        <span className="relative flex h-1.5 w-1.5">
-                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
-                        </span>
-                      )}
-                      <span className="text-[8.5px] font-black uppercase tracking-[0.1em] italic">
-                        {item.label}
-                      </span>
                     </div>
                   </div>
                 </div>
 
-                {/* TITLE WITH ACCENT GLOW */}
-                <span className={`
-                  text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-center
-                  transition-all duration-300 mt-1
-                  text-[var(--foreground)] opacity-60
-                  group-hover:text-[var(--accent)] group-hover:opacity-100 group-hover:tracking-[0.25em]
-                `}>
+                {/* TITLE */}
+                <span className="text-[10px] sm:text-[11px] font-semibold text-center transition-colors text-[var(--foreground)] opacity-80 group-hover:text-[var(--accent)] group-hover:opacity-100 line-clamp-1">
                   {item.title}
                 </span>
-
-                {/* Active Indicator dot */}
-                <div className="w-1 h-1 rounded-full bg-[var(--accent)] scale-0 group-hover:scale-100 transition-transform duration-300 shadow-[0_0_8px_var(--accent)]" />
               </Link>
             </div>
           ))}
         </div>
       </div>
-
-
     </section>
   );
 }

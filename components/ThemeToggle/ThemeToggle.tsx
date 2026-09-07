@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiChevronDown, FiMoon, FiSun, FiActivity, FiDroplet, FiZap, FiTarget, FiCommand, FiGrid } from "react-icons/fi";
+import { FiMoon, FiSun, FiActivity, FiDroplet, FiZap, FiTarget, FiCommand, FiGrid } from "react-icons/fi";
 
 const themes = [
   { id: "dark", icon: <FiMoon />, label: "Dark", color: "#9333ea" },
@@ -26,8 +26,6 @@ const themes = [
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<string>("dark");
-  const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("theme") || "dark";
@@ -35,70 +33,40 @@ export default function ThemeToggle() {
     document.documentElement.setAttribute("data-theme", stored);
   }, []);
 
-  const changeTheme = (newTheme: string) => {
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-    setOpen(false);
+  const cycleTheme = () => {
+    const currentIndex = themes.findIndex((t) => t.id === theme);
+    const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % themes.length;
+    const nextTheme = themes[nextIndex];
+    setTheme(nextTheme.id);
+    localStorage.setItem("theme", nextTheme.id);
+    document.documentElement.setAttribute("data-theme", nextTheme.id);
   };
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    if (open) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }
-  }, [open]);
 
   const currentTheme = themes.find((t) => t.id === theme) || themes[0];
 
   return (
-    <div ref={containerRef} className="relative">
-      <motion.button
-        onClick={() => setOpen(!open)}
-        className="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)]/50 hover:bg-[var(--card)] transition-all backdrop-blur-sm"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <span className="text-sm" style={{ color: currentTheme.color }}>{currentTheme.icon}</span>
-      </motion.button>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            className="absolute right-0 mt-2 w-48 bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-xl overflow-hidden z-[100] backdrop-blur-xl"
-          >
-            <div className="p-2 flex flex-col gap-1 max-h-80 overflow-y-auto">
-              <div className="px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.15em] text-[var(--muted)]">
-                Select Theme
-              </div>
-              {themes.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => changeTheme(t.id)}
-                  className={`
-                    flex items-center gap-3 w-full px-3 py-2 rounded-xl text-xs font-semibold transition-all
-                    ${theme === t.id 
-                      ? 'bg-[var(--accent)] text-white' 
-                      : 'hover:bg-[var(--accent)]/10 text-[var(--foreground)]'}
-                  `}
-                >
-                  <span className="text-base" style={{ color: theme === t.id ? '#fff' : t.color }}>{t.icon}</span>
-                  <span>{t.label}</span>
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
+    <motion.button
+      onClick={cycleTheme}
+      className="relative w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)]/50 hover:bg-[var(--card)] transition-all backdrop-blur-sm cursor-pointer overflow-hidden"
+      whileHover={{ scale: 1.08 }}
+      whileTap={{ scale: 0.9 }}
+      title={`Theme: ${currentTheme.label} (Click to switch)`}
+      aria-label={`Current theme: ${currentTheme.label}. Click to switch theme.`}
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={currentTheme.id}
+          initial={{ opacity: 0, rotate: -45, scale: 0.7 }}
+          animate={{ opacity: 1, rotate: 0, scale: 1 }}
+          exit={{ opacity: 0, rotate: 45, scale: 0.7 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+          className="text-sm flex items-center justify-center"
+          style={{ color: currentTheme.color }}
+        >
+          {currentTheme.icon}
+        </motion.span>
       </AnimatePresence>
-    </div>
+    </motion.button>
   );
 }
 
