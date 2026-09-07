@@ -198,7 +198,7 @@ export default function AdminPanalPage() {
       <section className="min-h-screen bg-[var(--background)] p-3 sm:p-4 md:p-6">
         <div className="w-full max-w-7xl mx-auto">
           {/* ================= TOP PANEL BAR ================= */}
-          <div className="mb-4 flex items-center justify-between bg-[var(--card)]/60 backdrop-blur-md border border-[var(--border)] rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3">
+          <div className="mb-5 flex items-center justify-between px-1">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center shrink-0">
                 <Image
@@ -209,25 +209,14 @@ export default function AdminPanalPage() {
                   className="w-5 h-5 object-contain"
                 />
               </div>
-              <h1 className="text-sm sm:text-base font-black tracking-tight text-[var(--foreground)] flex items-center gap-2">
+              <h1 className="text-base sm:text-lg font-black tracking-tight text-[var(--foreground)]">
                 Owner Panel
-                <span className="px-1.5 py-0.5 text-[8.5px] font-black uppercase tracking-wider rounded-md bg-[var(--accent)] text-black">
-                  Admin
-                </span>
               </h1>
             </div>
 
             <div className="flex items-center gap-2">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)] text-xs font-bold transition-all"
-              >
-                <span>Storefront</span>
-                <FiExternalLink className="w-3.5 h-3.5" />
-              </Link>
-              
               <button
-                className="md:hidden p-2 bg-[var(--background)] border border-[var(--border)] rounded-xl text-[var(--foreground)] active:scale-95 transition-transform"
+                className="md:hidden p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-[var(--foreground)] active:scale-95 transition-transform"
                 onClick={() => setIsSidebarOpen(true)}
                 aria-label="Open Menu"
               >
@@ -249,7 +238,7 @@ export default function AdminPanalPage() {
             {/* ================= SIDEBAR ================= */}
             <aside className={`
               fixed md:static top-0 left-0 h-[100dvh] md:h-auto z-[100] md:z-auto
-              w-[290px] md:w-72 shrink-0 
+              w-[290px] md:w-64 shrink-0 
               bg-[var(--background)] md:bg-transparent
               border-r border-[var(--border)] md:border-none
               p-5 pb-32 md:p-0
@@ -273,8 +262,8 @@ export default function AdminPanalPage() {
               </div>
 
               {/* Account / Provider Balance Card */}
-              <div className="p-4 rounded-2xl border border-[var(--border)] bg-gradient-to-br from-[var(--card)] to-[var(--background)] shadow-sm mb-5 relative overflow-hidden">
-                <div className="flex items-center justify-between mb-1.5">
+              <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 shadow-sm mb-5 relative overflow-hidden">
+                <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[var(--muted)]">
                     <FiCreditCard className="text-[var(--accent)] w-3.5 h-3.5" />
                     <span>Provider Balance</span>
@@ -361,7 +350,7 @@ export default function AdminPanalPage() {
 
             {/* ================= MAIN CONTENT PANEL ================= */}
             <main className="flex-1 min-w-0">
-              <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 shadow-sm">
+              <div className="w-full">
                 {activeTab === "analytics" && (
                   <AnalyticsTab />
                 )}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiSettings, FiAlertTriangle, FiCheckCircle, FiSave, FiActivity } from "react-icons/fi";
+import { FiSettings, FiAlertTriangle, FiCheckCircle, FiActivity, FiRefreshCw } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function SettingsTab() {
@@ -82,16 +82,26 @@ export default function SettingsTab() {
     }
 
     return (
-        <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div>
-                <h2 className="text-xl font-bold flex items-center gap-2">
-                    <FiSettings className="text-[var(--accent)]" />
-                    System Settings
-                </h2>
-                <p className="text-sm text-[var(--muted)] mt-1">
-                    Configure global application behavior and maintenance controls.
-                </p>
-            </div>
+    <div className="max-w-4xl space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      {/* ================= HEADER ================= */}
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">System Settings</h2>
+
+        <div className="flex items-center gap-3">
+          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+            <FiSettings size={14} className="text-[var(--accent)]" />
+            <span className="text-sm font-semibold text-[var(--muted)]">
+              {Object.keys(settings).length} Settings
+            </span>
+          </div>
+          <button
+            onClick={fetchSettings}
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+          >
+            <FiRefreshCw size={16} className={loading ? "animate-spin" : ""} />
+          </button>
+        </div>
+      </div>
 
             <div className="grid gap-6">
                 {/* Maintenance Mode Card */}

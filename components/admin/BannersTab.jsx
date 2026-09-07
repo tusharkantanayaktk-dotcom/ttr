@@ -143,14 +143,15 @@ export default function BannersTab({ banners, onRefresh }) {
         <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Website Banners</h2>
 
         <div className="flex items-center gap-3">
-          <div className="px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
-            <span className="text-[10px] font-bold text-[var(--muted)] uppercase">
-              {banners.length} Total
+          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+            <ImageIcon size={14} className="text-[var(--accent)]" />
+            <span className="text-sm font-semibold text-[var(--muted)]">
+              {banners.length} Banners
             </span>
           </div>
           <button
             onClick={onRefresh}
-            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] transition-all"
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
           >
             <RefreshCcw size={16} />
           </button>

@@ -176,15 +176,15 @@ export default function OrdersTab() {
         <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Orders</h2>
 
         <div className="flex items-center gap-3">
-          <div className="px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-            <span className="text-[10px] font-bold text-[var(--muted)] uppercase">
-              {pagination.total} Processed
+          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+            <ShoppingBag size={14} className="text-[var(--accent)]" />
+            <span className="text-sm font-semibold text-[var(--muted)]">
+              {pagination.total} Orders
             </span>
           </div>
           <button
             onClick={fetchOrders}
-            className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all"
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
           </button>
@@ -320,48 +320,35 @@ export default function OrdersTab() {
                 return (
                   <motion.div
                     key={o._id}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: idx * 0.03 }}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.02 }}
                     onClick={() => setSelectedOrder(o)}
-                    className="p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.05] transition-all"
+                    className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)] active:scale-[0.99] transition-all cursor-pointer"
                   >
-                    <div className="flex justify-between items-start mb-2.5">
+                    <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-md bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)] shrink-0">
-                          <Gamepad2 size={12} />
+                        <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] shrink-0">
+                          <Gamepad2 size={14} />
                         </div>
-                        <div className="flex flex-col min-w-0">
-                          <p className="font-bold text-[var(--foreground)] uppercase text-[11px] tracking-tight truncate">{o.gameSlug}</p>
-                          <p className="text-[9px] font-medium text-[var(--foreground)]/50 truncate italic">"{o.itemName}"</p>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <p className="font-bold text-[var(--foreground)] text-xs truncate uppercase">{o.gameSlug}</p>
+                            <span className="text-[9px] text-[var(--muted)] truncate opacity-60">· {o.itemName}</span>
+                          </div>
+                          <p className="text-[10px] text-[var(--muted)] font-mono truncate">{o.orderId}</p>
                         </div>
                       </div>
-                      <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
-                        <span className="text-base font-black text-emerald-500 leading-none">₹{o.price}</span>
-                        <div className="flex items-center gap-1 text-[8px] font-bold text-[var(--muted)]/60 bg-[var(--foreground)]/[0.05] border border-[var(--border)] px-1 py-0.5 rounded uppercase tracking-wider">
-                          <CreditCard size={8} className="text-[var(--accent)]" />
-                          {o.paymentMethod || "wallet"}
-                        </div>
+
+                      <div className="text-right shrink-0">
+                        <span className="text-sm font-black text-emerald-500 block leading-none">₹{o.price}</span>
+                        <span className="text-[8.5px] uppercase font-bold text-[var(--muted)] tracking-wider">{o.paymentMethod || "wallet"}</span>
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <div className="flex flex-col gap-0.5">
-                        <p className="text-[11px] font-black text-[var(--foreground)] truncate">{o.email || "Guest User"}</p>
-                        <p className="text-[8px] font-mono text-[var(--muted)]/30 uppercase">{o.orderId}</p>
-                      </div>
-
-                      <div className="flex items-center justify-between gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center gap-1.5">
-                          <Clock size={10} className="text-[var(--muted)]/40" />
-                          <span className="text-[9px] font-bold text-[var(--muted)]/60">
-                            {new Date(o.createdAt).toLocaleString('en-IN', {
-                              day: '2-digit', month: '2-digit', year: 'numeric',
-                              hour: '2-digit', minute: '2-digit', hour12: true
-                            })}
-                          </span>
-                        </div>
-
+                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-[var(--border)]/30 text-[10px] text-[var(--muted)]">
+                      <span>{new Date(o.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} · {new Date(o.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
                         <StatusDropdown
                           value={o.status}
                           disabled={updating}
@@ -713,56 +700,54 @@ function StatsOverview({ stats, loading }) {
     { key: "30d", label: "30D" },
   ];
 
-  if (loading) {
+  if (loading || !stats) {
     return (
-      <div className="space-y-2">
-        <Skeleton height={32} className="w-full" />
-        <Skeleton height={32} className="w-full" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Skeleton height={52} className="rounded-xl" />
+        <Skeleton height={52} className="rounded-xl" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-1">
-      {/* COLUMN HEADERS */}
-      <div className="hidden sm:flex items-center gap-2 px-1">
-        <div className="min-w-[110px]" />
-        <div className="flex-1 grid grid-cols-3 gap-1">
-          {periods.map((p) => (
-            <div key={p.key} className="text-center">
-              <span className="text-[8px] font-black text-[var(--muted)]/40 uppercase tracking-widest">{p.label}</span>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {/* ORDER VOLUME */}
+      <div className="p-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+            <Package size={14} />
+          </div>
+          <span className="text-xs font-bold text-[var(--foreground)]">Order Volume</span>
+        </div>
+        <div className="flex items-center gap-3 text-xs">
+          {periods.map((p, idx) => (
+            <div key={p.key} className="flex items-center gap-3">
+              {idx > 0 && <div className="h-4 w-[1px] bg-[var(--border)]" />}
+              <div className="text-right">
+                <span className="text-[8.5px] text-[var(--muted)] block font-semibold">{p.label}</span>
+                <span className="font-bold text-[var(--foreground)]">{stats[p.key]?.count ?? 0}</span>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ORDER VOLUME ROW */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <div className="px-3 py-1.5 min-w-[110px] rounded-lg border border-blue-500/20 bg-blue-500/5 flex items-center gap-2">
-          <Package size={12} className="text-blue-500" />
-          <span className="text-[8px] font-black uppercase tracking-widest text-blue-500">ORDER VOLUME</span>
+      {/* TOTAL REVENUE */}
+      <div className="p-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
+            <IndianRupee size={14} />
+          </div>
+          <span className="text-xs font-bold text-[var(--foreground)]">Total Revenue</span>
         </div>
-        <div className="flex-1 grid grid-cols-3 gap-1">
-          {periods.map((p) => (
-            <div key={p.key} className="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-blue-500/30 transition-all">
-              <span className="sm:hidden text-[8px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
-              <span className="text-xs font-black text-[var(--foreground)]">{stats[p.key].count}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* REVENUE ROW */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <div className="px-3 py-1.5 min-w-[110px] rounded-lg border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-2">
-          <IndianRupee size={12} className="text-emerald-500" />
-          <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500">TOTAL REVENUE</span>
-        </div>
-        <div className="flex-1 grid grid-cols-3 gap-1">
-          {periods.map((p) => (
-            <div key={p.key} className="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-emerald-500/30 transition-all">
-              <span className="sm:hidden text-[8px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
-              <span className="text-xs font-black text-[var(--foreground)] whitespace-nowrap ml-1">₹{Number(stats[p.key].totalValue || 0).toLocaleString()}</span>
+        <div className="flex items-center gap-3 text-xs">
+          {periods.map((p, idx) => (
+            <div key={p.key} className="flex items-center gap-3">
+              {idx > 0 && <div className="h-4 w-[1px] bg-[var(--border)]" />}
+              <div className="text-right">
+                <span className="text-[8.5px] text-[var(--muted)] block font-semibold">{p.label}</span>
+                <span className="font-bold text-[var(--foreground)] whitespace-nowrap">₹{Number(stats[p.key]?.totalValue || 0).toLocaleString()}</span>
+              </div>
             </div>
           ))}
         </div>

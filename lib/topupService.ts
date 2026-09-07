@@ -90,12 +90,12 @@ export async function processTopup(orderId: string) {
                 topupResponse: gameData
             };
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Process Topup Error:", error);
         return {
             success: false,
             message: "Server error during topup processing",
-            error: error.message
+            error: error instanceof Error ? error.message : "Unknown error"
         };
     }
 }

@@ -8,7 +8,6 @@ import {
   Clock,
   User,
   Gamepad2,
-  IndianRupee,
   CheckCircle2,
   XCircle,
   AlertCircle,
@@ -17,8 +16,6 @@ import {
   Filter,
   CreditCard,
   Hash,
-  Loader2,
-  Calendar,
   Smartphone
 } from "lucide-react";
 import Skeleton from "../Skeleton";
@@ -105,15 +102,15 @@ export default function TransactionsTab() {
         <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Transactions</h2>
 
         <div className="flex items-center gap-3">
-          <div className="px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-[var(--muted)] uppercase">
-              {pagination.total} Txn
+          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+            <CreditCard size={14} className="text-[var(--accent)]" />
+            <span className="text-sm font-semibold text-[var(--muted)]">
+              {pagination.total} Transactions
             </span>
           </div>
           <button
             onClick={fetchTransactions}
-            className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all"
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
           </button>
@@ -235,35 +232,31 @@ export default function TransactionsTab() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.03 }}
                     onClick={() => setSelectedTx(t)}
-                    className="p-4 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.05] transition-all"
+                    className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)] active:scale-[0.99] transition-all cursor-pointer"
                   >
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex flex-col min-w-0 pr-4">
-                        <div className="mb-2">
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[8px] font-bold uppercase tracking-widest ${meta.class}`}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider ${meta.class}`}>
                             {meta.icon}
                             {meta.label}
                           </span>
+                          <span className="text-[9px] font-mono text-[var(--muted)] truncate">({t.orderId})</span>
                         </div>
-                        <div className="flex flex-col gap-0.5 min-w-0">
-                          <p className="text-[11px] font-black text-[var(--foreground)] truncate">{t.email || "Guest User"}</p>
-                          <p className="text-[9px] font-mono text-[var(--muted)]/40 uppercase">{t.orderId}</p>
-                        </div>
+                        <p className="text-xs font-bold text-[var(--foreground)] truncate">{t.email || "Guest User"}</p>
                       </div>
-                      <span className="text-lg font-black text-emerald-500 tracking-tighter">₹{t.price}</span>
+
+                      <div className="text-right shrink-0">
+                        <span className="text-sm font-black text-emerald-500 block leading-none">₹{t.price}</span>
+                        <span className="text-[8.5px] uppercase font-bold text-[var(--muted)] tracking-wider">{t.paymentMethod || "wallet"}</span>
+                      </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] pt-3 border-t border-[var(--border)] border-dashed">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--muted)]/60 bg-[var(--foreground)]/[0.05] border border-[var(--border)] px-2 py-1 rounded-lg uppercase tracking-wider">
-                          <CreditCard size={10} className="text-[var(--accent)]" />
-                          {t.paymentMethod || "wallet"}
-                        </div>
-                        <div className="text-right shrink-0">
-                          <p className="font-medium text-[var(--muted)]/40 text-[9px] uppercase tracking-tighter">{new Date(t.createdAt).toLocaleDateString()} • {new Date(t.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                        </div>
-                      </div>
-                      <ChevronRight size={14} className="text-[var(--muted)]/20" />
+                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-[var(--border)]/30 text-[10px] text-[var(--muted)]">
+                      <span>{new Date(t.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} · {new Date(t.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      <span className="text-[var(--accent)] font-semibold flex items-center gap-0.5">
+                        Details <ChevronRight size={12} />
+                      </span>
                     </div>
                   </motion.div>
                 );

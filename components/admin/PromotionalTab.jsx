@@ -201,19 +201,22 @@ export default function PromotionalTab() {
     <div className="space-y-4 pb-10">
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Promotional Hub</h2>
-          <p className="text-[10px] text-[var(--muted)] uppercase font-bold tracking-widest mt-0.5">
-            Advanced audience segmentation & automated delivery
-          </p>
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Promotional Hub</h2>
+
+        <div className="flex items-center gap-3">
+          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+            <Mail size={14} className="text-[var(--accent)]" />
+            <span className="text-sm font-semibold text-[var(--muted)]">
+              {stats.totalReach} Reach
+            </span>
+          </div>
+          <button
+            onClick={() => { fetchStats(); fetchCampaigns(); fetchRecipients(); }}
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+          >
+            <RefreshCcw size={16} />
+          </button>
         </div>
-        <button
-          onClick={() => { fetchStats(); fetchCampaigns(); fetchRecipients(); }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--foreground)]/[0.03] text-[var(--muted)] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-black hover:border-[var(--accent)] transition-all text-[10px] font-black uppercase"
-        >
-          <RefreshCcw size={12} />
-          SYNC
-        </button>
       </div>
 
       {/* ================= STATS ================= */}

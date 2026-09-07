@@ -98,25 +98,12 @@ export default function AnalyticsTab() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      {/* ================= HEADER CONTROLS ================= */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-[var(--border)]">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg sm:text-xl font-black tracking-tight text-[var(--foreground)] flex items-center gap-2">
-              <FiActivity className="text-[var(--accent)] shrink-0" /> Store Analytics & Insights
-            </h2>
-            <span className="px-2 py-0.5 text-[9px] sm:text-[10px] font-extrabold uppercase rounded-full bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/30 shrink-0">
-              Live Data
-            </span>
-          </div>
-          <p className="text-[11px] sm:text-xs text-[var(--muted)] mt-1">
-            Real-time performance, peak ordering hours, PWA installs & customer retention metrics
-          </p>
-        </div>
+      {/* ================= HEADER ================= */}
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Analytics</h2>
 
-        {/* Range Selector & Refresh */}
-        <div className="flex items-center gap-2 w-full lg:w-auto justify-between lg:justify-end">
-          <div className="grid grid-cols-4 sm:flex bg-[var(--card)] p-1 rounded-xl border border-[var(--border)] w-full sm:w-auto">
+        <div className="flex items-center gap-3">
+          <div className="flex p-1 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]">
             {[
               { label: "24H", value: "1d" },
               { label: "7D", value: "7d" },
@@ -126,9 +113,9 @@ export default function AnalyticsTab() {
               <button
                 key={tab.value}
                 onClick={() => setRange(tab.value)}
-                className={`py-1.5 px-2 sm:px-3.5 rounded-lg text-[11px] font-bold transition-all text-center ${
+                className={`py-1 px-3 rounded-lg text-xs font-bold transition-all text-center ${
                   range === tab.value
-                    ? "bg-[var(--accent)] text-black shadow-sm"
+                    ? "bg-[var(--accent)] text-white shadow-sm"
                     : "text-[var(--muted)] hover:text-[var(--foreground)]"
                 }`}
               >
@@ -140,7 +127,7 @@ export default function AnalyticsTab() {
           <button
             onClick={() => fetchAnalytics(range)}
             disabled={loading}
-            className="p-2.5 bg-[var(--card)] hover:bg-[var(--accent)] hover:text-black border border-[var(--border)] rounded-xl text-[var(--muted)] transition-all cursor-pointer disabled:opacity-50 shrink-0"
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none shrink-0"
             title="Refresh Analytics"
           >
             <FiRefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiSave, FiAlertTriangle, FiCheckCircle } from "react-icons/fi";
+import { FiSave, FiAlertTriangle, FiCheckCircle, FiSliders, FiRefreshCw } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function UiSettingsTab() {
@@ -81,70 +81,78 @@ export default function UiSettingsTab() {
   }
 
   return (
-    <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div>
-        <h2 className="text-xl font-bold flex items-center gap-2">
-          🎨 UI Settings
-        </h2>
-        <p className="text-sm text-[var(--muted)] mt-1">
-          Globally toggle the visibility of specific UI components across the platform.
-        </p>
-      </div>
+    <div className="max-w-4xl space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      {/* ================= HEADER ================= */}
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">UI Settings</h2>
 
-      <div className="grid gap-6">
-        <div className="space-y-6 p-6 bg-[var(--background)]/50 border border-[var(--border)] rounded-2xl">
-          
-          {/* Story Slider Toggle */}
-          <div className="flex items-center justify-between p-4 bg-[var(--card)] border border-[var(--border)] rounded-xl">
-            <div>
-              <p className="font-bold text-sm">Show Story Slider</p>
-              <p className="text-xs text-[var(--muted)] mt-1 max-w-[250px] sm:max-w-md">Displays the Instagram-style rounded bubbles on the homepage (Live, Top, Hot, Best).</p>
-            </div>
-            <button
-              onClick={() => setConfig(prev => ({ ...prev, showStorySlider: !prev.showStorySlider }))}
-              className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${config.showStorySlider ? "bg-amber-500" : "bg-gray-700"}`}
-            >
-              <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${config.showStorySlider ? "translate-x-6" : ""}`} />
-            </button>
+        <div className="flex items-center gap-3">
+          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+            <FiSliders size={14} className="text-[var(--accent)]" />
+            <span className="text-sm font-semibold text-[var(--muted)]">
+              {Object.keys(config).length} Controls
+            </span>
           </div>
-
-          {/* Bottom Nav Toggle */}
-          <div className="flex items-center justify-between p-4 bg-[var(--card)] border border-[var(--border)] rounded-xl">
-            <div>
-              <p className="font-bold text-sm">Show Bottom Navigation Bar</p>
-              <p className="text-xs text-[var(--muted)] mt-1 max-w-[250px] sm:max-w-md">Displays the fixed bottom menu (Home, Games, Orders, etc.) on mobile devices.</p>
-            </div>
-            <button
-              onClick={() => setConfig(prev => ({ ...prev, showBottomNav: !prev.showBottomNav }))}
-              className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${config.showBottomNav ? "bg-amber-500" : "bg-gray-700"}`}
-            >
-              <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${config.showBottomNav ? "translate-x-6" : ""}`} />
-            </button>
-          </div>
-
-          {/* WhatsApp Popup Toggle */}
-          <div className="flex items-center justify-between p-4 bg-[var(--card)] border border-[var(--border)] rounded-xl">
-            <div>
-              <p className="font-bold text-sm">Show WhatsApp / Social Popup</p>
-              <p className="text-xs text-[var(--muted)] mt-1 max-w-[250px] sm:max-w-md">Displays the floating chat widget on the bottom right of the screen.</p>
-            </div>
-            <button
-              onClick={() => setConfig(prev => ({ ...prev, showWhatsAppPopup: !prev.showWhatsAppPopup }))}
-              className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${config.showWhatsAppPopup ? "bg-amber-500" : "bg-gray-700"}`}
-            >
-              <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${config.showWhatsAppPopup ? "translate-x-6" : ""}`} />
-            </button>
-          </div>
-
-          <button 
-            onClick={handleSave} 
-            disabled={saving}
-            className="w-full mt-4 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-bold py-3 rounded-lg hover:opacity-90 transition-opacity"
+          <button
+            onClick={fetchSettings}
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
           >
-            {saving ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <FiSave />}
-            Save UI Settings
+            <FiRefreshCw size={16} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
+      </div>
+
+      <div className="space-y-4">
+        {/* Story Slider Toggle */}
+        <div className="flex items-center justify-between p-4 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
+          <div>
+            <p className="font-bold text-sm text-[var(--foreground)]">Show Story Slider</p>
+            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Displays the Instagram-style rounded bubbles on the homepage (Live, Top, Hot, Best).</p>
+          </div>
+          <button
+            onClick={() => setConfig(prev => ({ ...prev, showStorySlider: !prev.showStorySlider }))}
+            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${config.showStorySlider ? "bg-[var(--accent)]" : "bg-[var(--foreground)]/20"}`}
+          >
+            <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-black transition-transform ${config.showStorySlider ? "translate-x-6" : "bg-white"}`} />
+          </button>
+        </div>
+
+        {/* Bottom Nav Toggle */}
+        <div className="flex items-center justify-between p-4 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
+          <div>
+            <p className="font-bold text-sm text-[var(--foreground)]">Show Bottom Navigation Bar</p>
+            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Displays the fixed bottom menu (Home, Games, Orders, etc.) on mobile devices.</p>
+          </div>
+          <button
+            onClick={() => setConfig(prev => ({ ...prev, showBottomNav: !prev.showBottomNav }))}
+            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${config.showBottomNav ? "bg-[var(--accent)]" : "bg-[var(--foreground)]/20"}`}
+          >
+            <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-black transition-transform ${config.showBottomNav ? "translate-x-6" : "bg-white"}`} />
+          </button>
+        </div>
+
+        {/* WhatsApp Popup Toggle */}
+        <div className="flex items-center justify-between p-4 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
+          <div>
+            <p className="font-bold text-sm text-[var(--foreground)]">Show WhatsApp / Social Popup</p>
+            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Displays the floating chat widget on the bottom right of the screen.</p>
+          </div>
+          <button
+            onClick={() => setConfig(prev => ({ ...prev, showWhatsAppPopup: !prev.showWhatsAppPopup }))}
+            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${config.showWhatsAppPopup ? "bg-[var(--accent)]" : "bg-[var(--foreground)]/20"}`}
+          >
+            <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-black transition-transform ${config.showWhatsAppPopup ? "translate-x-6" : "bg-white"}`} />
+          </button>
+        </div>
+
+        <button 
+          onClick={handleSave} 
+          disabled={saving}
+          className="w-full mt-4 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-black uppercase tracking-wider text-xs py-3.5 rounded-xl hover:brightness-105 active:scale-95 transition-all shadow-md shadow-[var(--accent)]/15"
+        >
+          {saving ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <FiSave size={15} />}
+          Save UI Settings
+        </button>
       </div>
 
       {/* Message Area */}

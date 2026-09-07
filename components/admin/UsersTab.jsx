@@ -14,18 +14,12 @@ import {
   Calendar,
   Filter,
   X,
-  ChevronRight,
   ChevronDown,
   Loader2,
   Users,
   IdCard,
-  Crown,
-  Type,
   Activity,
-  Globe,
-  TrendingUp,
-  UserPlus,
-  UserCheck
+  UserPlus
 } from "lucide-react";
 import Skeleton from "../Skeleton";
 
@@ -303,29 +297,28 @@ export default function UsersTab() {
             </div>
 
             {/* MOBILE LIST */}
-            <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="lg:hidden space-y-2.5">
               {users.map((u, idx) => (
                 <motion.div
                   key={u._id}
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.02 }}
                   onClick={() => setSelectedUser(u)}
-                  className="group p-4 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] active:scale-[0.98] transition-all relative overflow-hidden"
+                  className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)] active:scale-[0.99] transition-all cursor-pointer"
                 >
-                  {/* Subtle Background Accent */}
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-[var(--accent)] opacity-[0.03] blur-[30px] rounded-full -mr-10 -mt-10 group-hover:opacity-[0.06] transition-opacity" />
-
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <Avatar user={u} size="sm" />
                       <div className="min-w-0">
-                        <p className="font-bold text-[var(--foreground)] text-xs truncate leading-tight">{u.name}</p>
-                        <p className="text-[9px] text-[var(--muted)] font-mono opacity-40 truncate">{u.userId}</p>
+                        <div className="flex items-center gap-1.5">
+                          <p className="font-bold text-[var(--foreground)] text-xs truncate">{u.name}</p>
+                          <span className="text-[9px] text-[var(--muted)] font-mono opacity-50 truncate">({u.userId})</span>
+                        </div>
+                        <p className="text-[10.5px] text-[var(--muted)] truncate">{u.email}</p>
                       </div>
                     </div>
-                    
-                    {/* Role Dropdown at Top Right for better space management */}
+
                     <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
                       <RoleDropdown
                         value={u.userType}
@@ -336,38 +329,11 @@ export default function UsersTab() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-2 pt-3 border-t border-[var(--border)]/40">
-                    <div className="flex flex-col gap-1.5">
-                      <div className="flex items-center gap-2 text-[var(--muted)]">
-                        <div className="w-5 h-5 rounded-lg bg-[var(--foreground)]/[0.03] flex items-center justify-center">
-                          <Mail size={10} className="opacity-60" />
-                        </div>
-                        <span className="text-[10px] font-bold truncate tracking-tight">{u.email}</span>
-                      </div>
-                      
-                      {u.phone && (
-                        <div className="flex items-center gap-2 text-[var(--muted)]">
-                          <div className="w-5 h-5 rounded-lg bg-[var(--foreground)]/[0.03] flex items-center justify-center">
-                            <Phone size={10} className="opacity-60" />
-                          </div>
-                          <span className="text-[10px] font-bold tracking-tight">{u.phone}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between pt-1">
-                      <div className="flex items-center gap-2 text-[var(--muted)] opacity-50">
-                        <Calendar size={11} />
-                        <span className="text-[10px] font-bold tracking-tight">
-                          {u.lastLogin ? new Date(u.lastLogin).toLocaleString() : "Never logged in"}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center gap-1.5 text-[var(--accent)] bg-[var(--accent)]/5 px-2.5 py-1 rounded-full">
-                        <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
-                        <span className="text-[8px] font-black uppercase tracking-widest">Details</span>
-                      </div>
-                    </div>
+                  <div className="flex items-center justify-between pt-2 mt-2 border-t border-[var(--border)]/30 text-[10px] text-[var(--muted)]">
+                    <span>Joined {new Date(u.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    <span className="text-[var(--accent)] font-semibold flex items-center gap-1">
+                      Details →
+                    </span>
                   </div>
                 </motion.div>
               ))}
@@ -736,56 +702,54 @@ function StatsOverview({ stats, loading }) {
     { key: "30d", label: "30D" },
   ];
 
-  if (loading) {
+  if (loading || !stats) {
     return (
-      <div className="space-y-2">
-        <Skeleton height={32} className="w-full" />
-        <Skeleton height={32} className="w-full" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Skeleton height={52} className="rounded-xl" />
+        <Skeleton height={52} className="rounded-xl" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-1">
-      {/* COLUMN HEADERS */}
-      <div className="hidden sm:flex items-center gap-2 px-1">
-        <div className="min-w-[110px]" />
-        <div className="flex-1 grid grid-cols-3 gap-1">
-          {periods.map((p) => (
-            <div key={p.key} className="text-center">
-              <span className="text-[8px] font-black text-[var(--muted)]/40 uppercase tracking-widest">{p.label}</span>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {/* NEW USERS */}
+      <div className="p-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+            <UserPlus size={14} />
+          </div>
+          <span className="text-xs font-bold text-[var(--foreground)]">New Users</span>
+        </div>
+        <div className="flex items-center gap-3 text-xs">
+          {periods.map((p, idx) => (
+            <div key={p.key} className="flex items-center gap-3">
+              {idx > 0 && <div className="h-4 w-[1px] bg-[var(--border)]" />}
+              <div className="text-right">
+                <span className="text-[8.5px] text-[var(--muted)] block font-semibold">{p.label}</span>
+                <span className="font-bold text-[var(--foreground)]">{stats[p.key]?.newUsers ?? 0}</span>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* NEW USERS ROW */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <div className="px-3 py-1.5 min-w-[110px] rounded-lg border border-blue-500/20 bg-blue-500/5 flex items-center gap-2">
-          <UserPlus size={12} className="text-blue-500" />
-          <span className="text-[8px] font-black uppercase tracking-widest text-blue-500">NEW USERS</span>
+      {/* ACTIVE USERS */}
+      <div className="p-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
+            <Activity size={14} />
+          </div>
+          <span className="text-xs font-bold text-[var(--foreground)]">Active Users</span>
         </div>
-        <div className="flex-1 grid grid-cols-3 gap-1">
-          {periods.map((p) => (
-            <div key={p.key} className="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-blue-500/30 transition-all">
-              <span className="sm:hidden text-[8px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
-              <span className="text-xs font-black text-[var(--foreground)]">{stats[p.key].newUsers}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ACTIVE USERS ROW */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <div className="px-3 py-1.5 min-w-[110px] rounded-lg border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-2">
-          <Activity size={12} className="text-emerald-500" />
-          <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500">ACTIVE USERS</span>
-        </div>
-        <div className="flex-1 grid grid-cols-3 gap-1">
-          {periods.map((p) => (
-            <div key={p.key} className="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] flex items-center justify-center group hover:border-emerald-500/30 transition-all">
-              <span className="sm:hidden text-[8px] font-black text-[var(--muted)]/60 mr-auto">{p.label}</span>
-              <span className="text-xs font-black text-[var(--foreground)]">{stats[p.key].activeUsers}</span>
+        <div className="flex items-center gap-3 text-xs">
+          {periods.map((p, idx) => (
+            <div key={p.key} className="flex items-center gap-3">
+              {idx > 0 && <div className="h-4 w-[1px] bg-[var(--border)]" />}
+              <div className="text-right">
+                <span className="text-[8.5px] text-[var(--muted)] block font-semibold">{p.label}</span>
+                <span className="font-bold text-[var(--foreground)]">{stats[p.key]?.activeUsers ?? 0}</span>
+              </div>
             </div>
           ))}
         </div>

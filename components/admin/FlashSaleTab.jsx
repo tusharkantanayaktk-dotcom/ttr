@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiSave, FiAlertTriangle, FiCheckCircle, FiPlus, FiTrash2, FiEdit } from "react-icons/fi";
+import { FiSave, FiAlertTriangle, FiCheckCircle, FiPlus, FiTrash2, FiEdit, FiZap, FiRefreshCw } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function FlashSaleTab() {
@@ -183,117 +183,127 @@ export default function FlashSaleTab() {
   }
 
   return (
-    <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div>
-        <h2 className="text-xl font-bold flex items-center gap-2">
-          ⚡ Flash Sale Configuration
-        </h2>
-        <p className="text-sm text-[var(--muted)] mt-1">
-          Enable or disable the flash sale, set the expiration timer, and manage the items.
-        </p>
-      </div>
+    <div className="max-w-4xl space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      {/* ================= HEADER ================= */}
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Flash Sale</h2>
 
-      <div className="grid gap-6">
-        <div className="space-y-6 p-6 bg-[var(--background)]/50 border border-[var(--border)] rounded-2xl">
-          {/* General Settings */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center justify-between p-4 bg-[var(--card)] border border-[var(--border)] rounded-xl">
-              <div>
-                <p className="font-bold text-sm">Enable Flash Sale</p>
-                <p className="text-xs text-[var(--muted)]">Show on homepage</p>
-              </div>
-              <button
-                onClick={() => setConfig(prev => ({ ...prev, enabled: !prev.enabled }))}
-                className={`relative w-12 h-6 rounded-full transition-colors ${config.enabled ? "bg-amber-500" : "bg-gray-700"}`}
-              >
-                <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${config.enabled ? "translate-x-6" : ""}`} />
-              </button>
-            </div>
-
-            <div className="p-4 bg-[var(--card)] border border-[var(--border)] rounded-xl">
-              <p className="font-bold text-sm mb-2">End Time</p>
-              <input
-                type="datetime-local"
-                value={formatDateForInput(config.endTime)}
-                onChange={handleDateChange}
-                className="w-full bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[var(--accent)]"
-              />
-            </div>
+        <div className="flex items-center gap-3">
+          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+            <FiZap size={14} className="text-[var(--accent)]" />
+            <span className="text-sm font-semibold text-[var(--muted)]">
+              {config.items?.length || 0} Items
+            </span>
           </div>
-
-          <hr className="border-[var(--border)]" />
-
-          {/* Current Items */}
-          <div>
-            <h3 className="font-bold text-lg mb-3">Flash Sale Items ({config.items.length})</h3>
-            
-            <div className="space-y-3 mb-6">
-              {config.items.map(item => (
-                <div key={item.id} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-3 bg-[var(--card)] border border-[var(--border)] rounded-xl">
-                  <div className="flex gap-4 items-center">
-                    {item.image ? (
-                      <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg bg-black" />
-                    ) : (
-                      <div className="w-16 h-16 rounded-lg bg-[var(--background)] flex items-center justify-center text-xs text-[var(--muted)]">No Img</div>
-                    )}
-                    <div>
-                      <h4 className="font-bold text-sm">{item.name} <span className="text-[10px] bg-amber-500 text-black px-1.5 rounded ml-2">{item.badge}</span></h4>
-                      <p className="text-xs text-[var(--muted)]">{item.game} | Slug: {item.slug}</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-sm font-bold">{item.price}</span>
-                        <span className="text-xs line-through text-[var(--muted)]">{item.originalPrice}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 self-end md:self-auto">
-                    <button onClick={() => handleEdit(item)} className="text-blue-500 hover:bg-blue-500/10 p-2 rounded-lg transition-colors">
-                      <FiEdit />
-                    </button>
-                    <button onClick={() => removeItem(item.id)} className="text-red-500 hover:bg-red-500/10 p-2 rounded-lg transition-colors">
-                      <FiTrash2 />
-                    </button>
-                  </div>
-                </div>
-              ))}
-              {config.items.length === 0 && (
-                <p className="text-sm text-[var(--muted)] text-center py-4 bg-[var(--card)] rounded-xl border border-[var(--border)] border-dashed">No items added yet.</p>
-              )}
-            </div>
-
-            {/* Add/Edit Item Form */}
-            <div className="bg-[var(--card)] p-4 rounded-xl border border-[var(--border)] mt-4">
-              <h4 className="font-bold text-sm mb-4">{editingItemId ? "Edit Item" : "Add New Item"}</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                <input type="text" placeholder="Item Name (e.g. Weekly Pass)" value={newItem.name} onChange={e => setNewItem({...newItem, name: e.target.value})} className="bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent)] outline-none" />
-                <input type="text" placeholder="Game Name (e.g. Mobile Legends)" value={newItem.game} onChange={e => setNewItem({...newItem, game: e.target.value})} className="bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent)] outline-none" />
-                <input type="text" placeholder="Discounted Price (e.g. ₹149)" value={newItem.price} onChange={e => setNewItem({...newItem, price: e.target.value})} className="bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent)] outline-none" />
-                <input type="text" placeholder="Original Price (e.g. ₹170)" value={newItem.originalPrice} onChange={e => setNewItem({...newItem, originalPrice: e.target.value})} className="bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent)] outline-none" />
-                <input type="text" placeholder="Link Slug (e.g. mobile-legends114)" value={newItem.slug} onChange={e => setNewItem({...newItem, slug: e.target.value})} className="bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent)] outline-none" />
-                <input type="text" placeholder="Image URL (e.g. /game-assets/1.jpg)" value={newItem.image} onChange={e => setNewItem({...newItem, image: e.target.value})} className="bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent)] outline-none" />
-                <input type="text" placeholder="Badge (e.g. Hot Deal)" value={newItem.badge} onChange={e => setNewItem({...newItem, badge: e.target.value})} className="bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent)] outline-none" />
-              </div>
-              <div className="flex gap-2">
-                <button onClick={addItem} className="flex-1 flex items-center justify-center gap-2 bg-[var(--background)] border border-[var(--border)] hover:border-amber-500 hover:text-amber-500 py-2 rounded-lg text-sm font-bold transition-colors">
-                  {editingItemId ? <><FiSave /> Update Item</> : <><FiPlus /> Add Item</>}
-                </button>
-                {editingItemId && (
-                  <button onClick={cancelEdit} className="px-4 py-2 bg-[var(--background)] border border-[var(--border)] hover:border-red-500 hover:text-red-500 rounded-lg text-sm font-bold transition-colors">
-                    Cancel
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-          
-          <button 
-            onClick={handleSave} 
-            disabled={saving}
-            className="w-full mt-4 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-bold py-3 rounded-lg hover:opacity-90 transition-opacity"
+          <button
+            onClick={fetchConfig}
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
           >
-            {saving ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <FiSave />}
-            Save Flash Sale Config
+            <FiRefreshCw size={16} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
+      </div>
+
+      <div className="space-y-6">
+        {/* General Settings */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="flex items-center justify-between p-3.5 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
+            <div>
+              <p className="font-bold text-sm text-[var(--foreground)]">Enable Flash Sale</p>
+              <p className="text-xs text-[var(--muted)] mt-0.5">Show on homepage</p>
+            </div>
+            <button
+              onClick={() => setConfig(prev => ({ ...prev, enabled: !prev.enabled }))}
+              className={`relative w-12 h-6 shrink-0 rounded-full transition-colors ${config.enabled ? "bg-[var(--accent)]" : "bg-[var(--foreground)]/20"}`}
+            >
+              <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-black transition-transform duration-200 ${config.enabled ? "translate-x-6" : "bg-white"}`} />
+            </button>
+          </div>
+
+          <div className="p-3.5 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl flex items-center justify-between gap-3">
+            <p className="font-bold text-xs uppercase tracking-wider text-[var(--foreground)] shrink-0">End Time</p>
+            <input
+              type="datetime-local"
+              value={formatDateForInput(config.endTime)}
+              onChange={handleDateChange}
+              className="bg-[var(--card)] border border-[var(--border)] rounded-lg px-3 py-1.5 text-xs text-[var(--foreground)] focus:outline-none focus:border-[var(--accent)] transition-all font-mono"
+            />
+          </div>
+        </div>
+
+        {/* Current Items */}
+        <div>
+          <h3 className="font-bold text-sm text-[var(--foreground)] uppercase tracking-wider mb-3">Flash Sale Items ({config.items.length})</h3>
+          
+          <div className="space-y-2.5 mb-5">
+            {config.items.map(item => (
+              <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
+                <div className="flex gap-3 items-center min-w-0">
+                  {item.image ? (
+                    <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded-lg bg-black border border-[var(--border)] shrink-0" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-lg bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[10px] text-[var(--muted)] shrink-0">No Img</div>
+                  )}
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-bold text-xs text-[var(--foreground)] truncate">{item.name}</h4>
+                      <span className="text-[9px] font-black uppercase tracking-wider bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/30 px-1.5 py-0.2 rounded">{item.badge}</span>
+                    </div>
+                    <p className="text-[11px] text-[var(--muted)] truncate">{item.game} · <span className="font-mono opacity-70">{item.slug}</span></p>
+                    <div className="flex items-baseline gap-1.5 mt-0.5">
+                      <span className="text-xs font-black text-emerald-500">{item.price}</span>
+                      <span className="text-[10px] line-through text-[var(--muted)]">{item.originalPrice}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 self-end sm:self-auto shrink-0">
+                  <button onClick={() => handleEdit(item)} className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 transition-colors" title="Edit">
+                    <FiEdit size={14} />
+                  </button>
+                  <button onClick={() => removeItem(item.id)} className="p-2 rounded-lg text-rose-500 hover:bg-rose-500/10 transition-colors" title="Delete">
+                    <FiTrash2 size={14} />
+                  </button>
+                </div>
+              </div>
+            ))}
+            {config.items.length === 0 && (
+              <p className="text-xs text-[var(--muted)] text-center py-6 bg-[var(--foreground)]/[0.01] rounded-xl border border-[var(--border)] border-dashed">No flash sale items configured yet.</p>
+            )}
+          </div>
+
+          {/* Add/Edit Item Form */}
+          <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.01] space-y-3">
+            <h4 className="font-bold text-xs uppercase tracking-wider text-[var(--foreground)]">{editingItemId ? "Edit Item" : "Add New Item"}</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+              <input type="text" placeholder="Item Name (e.g. Weekly Pass)" value={newItem.name} onChange={e => setNewItem({...newItem, name: e.target.value})} className="bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-3.5 py-2 text-xs focus:border-[var(--accent)] outline-none transition-all" />
+              <input type="text" placeholder="Game Name (e.g. Mobile Legends)" value={newItem.game} onChange={e => setNewItem({...newItem, game: e.target.value})} className="bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-3.5 py-2 text-xs focus:border-[var(--accent)] outline-none transition-all" />
+              <input type="text" placeholder="Discounted Price (e.g. ₹149)" value={newItem.price} onChange={e => setNewItem({...newItem, price: e.target.value})} className="bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-3.5 py-2 text-xs focus:border-[var(--accent)] outline-none transition-all" />
+              <input type="text" placeholder="Original Price (e.g. ₹170)" value={newItem.originalPrice} onChange={e => setNewItem({...newItem, originalPrice: e.target.value})} className="bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-3.5 py-2 text-xs focus:border-[var(--accent)] outline-none transition-all" />
+              <input type="text" placeholder="Link Slug (e.g. mobile-legends114)" value={newItem.slug} onChange={e => setNewItem({...newItem, slug: e.target.value})} className="bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-3.5 py-2 text-xs focus:border-[var(--accent)] outline-none transition-all" />
+              <input type="text" placeholder="Image URL (e.g. /game-assets/1.jpg)" value={newItem.image} onChange={e => setNewItem({...newItem, image: e.target.value})} className="bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-3.5 py-2 text-xs focus:border-[var(--accent)] outline-none transition-all" />
+              <input type="text" placeholder="Badge (e.g. Hot Deal)" value={newItem.badge} onChange={e => setNewItem({...newItem, badge: e.target.value})} className="bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-3.5 py-2 text-xs focus:border-[var(--accent)] outline-none transition-all" />
+            </div>
+            <div className="flex gap-2 pt-1">
+              <button onClick={addItem} className="flex-1 flex items-center justify-center gap-1.5 bg-[var(--card)] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--accent)] py-2 rounded-xl text-xs font-bold transition-colors">
+                {editingItemId ? <><FiSave size={13} /> Update Item</> : <><FiPlus size={13} /> Add Item</>}
+              </button>
+              {editingItemId && (
+                <button onClick={cancelEdit} className="px-4 py-2 bg-[var(--card)] border border-[var(--border)] hover:border-rose-500 hover:text-rose-500 rounded-xl text-xs font-bold transition-colors">
+                  Cancel
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        <button 
+          onClick={handleSave} 
+          disabled={saving}
+          className="w-full mt-4 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-black uppercase tracking-wider text-xs py-3.5 rounded-xl hover:brightness-105 active:scale-95 transition-all shadow-md shadow-[var(--accent)]/15"
+        >
+          {saving ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <FiSave size={15} />}
+          Save Flash Sale Config
+        </button>
       </div>
 
       {/* Message Area */}

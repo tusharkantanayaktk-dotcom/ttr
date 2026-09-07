@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiSearch, FiPlus, FiMinus, FiClock, FiUser, FiActivity, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiSearch, FiPlus, FiMinus, FiClock, FiUser, FiActivity, FiChevronLeft, FiChevronRight, FiCreditCard, FiRefreshCw } from "react-icons/fi";
 
 export default function WalletTab() {
     const [users, setUsers] = useState([]);
@@ -110,16 +110,24 @@ export default function WalletTab() {
     };
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
+        <div className="space-y-6 animate-in fade-in duration-500">
+            {/* ================= HEADER ================= */}
+            <div className="flex items-center justify-between gap-4">
+                <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">User Wallets</h2>
 
-            {/* TOTAL SYSTEM BALANCE STAT */}
-            <div className="p-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-sm flex items-center justify-between group hover:border-[var(--accent)] transition-all">
-                <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest">Total System Liability</p>
-                    <h2 className="text-3xl font-black text-[var(--accent)] tabular-nums">₹{totalWalletCredit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</h2>
-                </div>
-                <div className="w-12 h-12 rounded-full bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] group-hover:scale-110 transition-transform">
-                    <FiActivity size={24} />
+                <div className="flex items-center gap-3">
+                    <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+                        <FiCreditCard size={14} className="text-[var(--accent)]" />
+                        <span className="text-sm font-semibold text-[var(--muted)]">
+                            ₹{totalWalletCredit.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} Total
+                        </span>
+                    </div>
+                    <button
+                        onClick={() => { fetchUsers(); fetchTransactions(); }}
+                        className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+                    >
+                        <FiRefreshCw size={16} className={loading ? "animate-spin" : ""} />
+                    </button>
                 </div>
             </div>
 

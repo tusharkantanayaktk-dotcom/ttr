@@ -171,42 +171,21 @@ export default function PricingTab({
     return (
       <div className="space-y-6 pb-20 max-w-full overflow-x-hidden">
         {/* ================= HEADER ================= */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex items-center justify-between w-full lg:w-auto gap-4">
-            <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Pricing Config</h2>
-
-            {/* SAVE BUTTON */}
-            <button
-              onClick={onSave}
-              disabled={!canSave}
-              className={`
-                  h-10 px-6 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all outline-none shrink-0
-                  ${canSave
-                  ? "bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent)]/10 hover:brightness-110 active:scale-95"
-                  : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]/40 cursor-not-allowed"}
-                `}
-            >
-              {savingPricing ? (
-                <RefreshCcw size={14} className="animate-spin" />
-              ) : (
-                <Save size={14} />
-              )}
-              {savingPricing ? "Saving" : "Save"}
-            </button>
-          </div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Pricing</h2>
 
           <div className="flex flex-wrap items-center gap-3">
             {/* MODE SWITCHER */}
-            <div className="flex p-1 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div className="flex p-1 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]">
               {[
-                { id: "percent", label: "Markup", icon: <Percent size={10} /> },
-                { id: "fixed", label: "Fixed", icon: <Coins size={10} /> }
+                { id: "percent", label: "Markup", icon: <Percent size={12} /> },
+                { id: "fixed", label: "Fixed", icon: <Coins size={12} /> }
               ].map((m) => (
                 <button
                   key={m.id}
                   onClick={() => setPricingMode(m.id)}
-                  className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${pricingMode === m.id
-                    ? "bg-[var(--accent)] text-white shadow-md shadow-[var(--accent)]/20"
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all ${pricingMode === m.id
+                    ? "bg-[var(--accent)] text-white shadow-sm"
                     : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
                 >
@@ -217,13 +196,13 @@ export default function PricingTab({
             </div>
 
             {/* ROLE SELECTOR */}
-            <div className="flex p-1 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+            <div className="flex p-1 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]">
               {["user", "admin"].map((role) => (
                 <button
                   key={role}
                   onClick={() => setPricingType(role)}
-                  className={`px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${pricingType === role
-                    ? "bg-[var(--accent)] text-white shadow-md shadow-[var(--accent)]/20"
+                  className={`px-3 py-1 rounded-lg text-xs font-bold uppercase transition-all ${pricingType === role
+                    ? "bg-[var(--accent)] text-white shadow-sm"
                     : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`}
                 >
@@ -232,6 +211,24 @@ export default function PricingTab({
               ))}
             </div>
 
+            {/* SAVE BUTTON */}
+            <button
+              onClick={onSave}
+              disabled={!canSave}
+              className={`
+                  h-9 px-4 rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-all outline-none shrink-0
+                  ${canSave
+                  ? "bg-[var(--accent)] text-white shadow-sm hover:brightness-110 active:scale-95"
+                  : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]/40 cursor-not-allowed"}
+                `}
+            >
+              {savingPricing ? (
+                <RefreshCcw size={14} className="animate-spin" />
+              ) : (
+                <Save size={14} />
+              )}
+              {savingPricing ? "Saving" : "Save"}
+            </button>
           </div>
         </div>
 
@@ -244,18 +241,18 @@ export default function PricingTab({
                   initial={{ opacity: 0, scale: 0.99 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.99 }}
-                  className="p-4 sm:p-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-4"
+                  className="space-y-4"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
-                        <Percent size={18} />
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
+                        <Percent size={16} />
                       </div>
-                      <h3 className="text-base font-bold text-[var(--foreground)]">Markup Ranges</h3>
+                      <h3 className="text-sm font-bold text-[var(--foreground)]">Markup Ranges</h3>
                     </div>
                     <button
                       onClick={addSlab}
-                      className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[var(--accent)] text-white text-xs font-bold hover:brightness-110 active:scale-95 transition-all outline-none"
+                      className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[var(--accent)] text-white text-xs font-bold hover:brightness-110 active:scale-95 transition-all outline-none"
                     >
                       + Add New Range
                     </button>
@@ -333,23 +330,23 @@ export default function PricingTab({
                   className="grid grid-cols-1 lg:grid-cols-4 gap-6"
                 >
                   {/* LEFT SIDEBAR: GAMES LIST */}
-                  <div className="lg:col-span-1 space-y-3">
-                    <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-xl shadow-black/5 flex flex-col h-[600px]">
-                      <div className="flex items-center justify-between mb-3 px-1">
-                        <h3 className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-widest flex items-center gap-2">
-                          <Gamepad2 size={14} className="text-[var(--accent)]" />
-                          Games
+                  <div className="lg:col-span-1 space-y-2">
+                    <div className="p-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-sm flex flex-col h-[260px] sm:h-[300px] lg:h-[500px]">
+                      <div className="flex items-center justify-between mb-2 px-1">
+                        <h3 className="text-[10px] font-black text-[var(--foreground)] uppercase tracking-widest flex items-center gap-1.5">
+                          <Gamepad2 size={13} className="text-[var(--accent)]" />
+                          Games ({filteredGames.length})
                         </h3>
                       </div>
 
-                      <div className="relative mb-3">
-                        <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]/50" size={12} />
+                      <div className="relative mb-2">
+                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]/50" size={12} />
                         <input
                           type="text"
                           placeholder="Search games..."
                           value={gameSearch}
                           onChange={(e) => setGameSearch(e.target.value)}
-                          className="w-full h-9 pl-9 pr-4 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[10px] font-bold outline-none focus:border-[var(--accent)]/40 transition-all"
+                          className="w-full h-8 pl-8 pr-3 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[10px] font-bold outline-none focus:border-[var(--accent)]/40 transition-all"
                         />
                       </div>
 
@@ -363,7 +360,7 @@ export default function PricingTab({
                             <div
                               key={g.gameSlug}
                               onClick={() => setFixedGameFilter(g.gameSlug)}
-                              className={`group flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all border ${isActive
+                              className={`group flex items-center justify-between p-2 rounded-xl cursor-pointer transition-all border ${isActive
                                 ? "bg-[var(--accent)]/10 border-[var(--accent)]/30"
                                 : "bg-transparent border-transparent hover:bg-[var(--foreground)]/[0.03]"
                                 }`}
@@ -372,20 +369,20 @@ export default function PricingTab({
                                 <p className={`text-[11px] font-black uppercase truncate tracking-tight ${isActive ? "text-[var(--foreground)]" : "text-[var(--foreground)]/70"}`}>
                                   {g.gameName}
                                 </p>
-                                <p className="text-[9px] font-bold text-[var(--muted)]/50 truncate">
+                                <p className="text-[8.5px] font-bold text-[var(--muted)]/50 truncate">
                                   {g.gameSlug}
                                 </p>
                               </div>
 
-                              <div className="flex flex-col items-center gap-1 ml-2">
+                              <div className="flex flex-col items-center gap-0.5 ml-2">
                                 <div
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     toggleGameStock(g.gameSlug, !allInStock);
                                   }}
-                                  className={`w-8 h-4 rounded-full relative transition-all duration-300 ${allInStock ? 'bg-emerald-500' : 'bg-[var(--foreground)]/[0.1]'}`}
+                                  className={`w-7 h-3.5 rounded-full relative transition-all duration-300 ${allInStock ? 'bg-emerald-500' : 'bg-[var(--foreground)]/[0.1]'}`}
                                 >
-                                  <div className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white transition-all duration-300 ${allInStock ? 'translate-x-4' : 'translate-x-0'}`} />
+                                  <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 ${allInStock ? 'translate-x-3.5' : 'translate-x-0'}`} />
                                 </div>
                                 <span className="text-[7px] font-black text-[var(--muted)]/40 uppercase tracking-tighter">Stock</span>
                               </div>
@@ -397,30 +394,28 @@ export default function PricingTab({
                   </div>
 
                   {/* RIGHT CONTENT: ITEMS GRID */}
-                  <div className="lg:col-span-3 space-y-6">
+                  <div className="lg:col-span-3 space-y-3">
                     {!fixedGameFilter ? (
-                      <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-[var(--border)] rounded-3xl opacity-30">
-                        <Gamepad2 size={40} className="mb-4 text-[var(--muted)]" />
-                        <p className="text-sm font-bold uppercase tracking-widest text-[var(--muted)]">Select a game to manage pricing</p>
+                      <div className="h-[180px] sm:h-[240px] lg:h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-[var(--border)] rounded-2xl opacity-40">
+                        <Gamepad2 size={32} className="mb-2 text-[var(--muted)]" />
+                        <p className="text-xs font-bold uppercase tracking-widest text-[var(--muted)]">Select a game to manage pricing</p>
                       </div>
                     ) : (
                       <>
-                        {/* SEARCH HEADER */}
-                        <div className="bg-[var(--card)] p-3 rounded-2xl border border-[var(--border)]">
-                          <div className="relative w-full">
-                            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]/50" size={14} />
-                            <input
-                              type="text"
-                              placeholder="Search items..."
-                              value={fixedItemFilter}
-                              onChange={(e) => setFixedItemFilter(e.target.value)}
-                              className="w-full h-10 pl-10 pr-4 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs font-bold outline-none focus:border-[var(--accent)]/40 transition-all"
-                            />
-                          </div>
+                        {/* SEARCH INPUT */}
+                        <div className="relative w-full">
+                          <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]/50" size={14} />
+                          <input
+                            type="text"
+                            placeholder="Search items by name or slug..."
+                            value={fixedItemFilter}
+                            onChange={(e) => setFixedItemFilter(e.target.value)}
+                            className="w-full h-10 pl-10 pr-4 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] text-xs font-semibold focus:border-[var(--accent)]/50 transition-all outline-none"
+                          />
                         </div>
 
                         {/* ITEMS GRID */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
                           <AnimatePresence mode="popLayout">
                             {loadingFixedPrices ? (
                               <div className="col-span-full py-16 flex flex-col items-center justify-center opacity-40">
@@ -434,68 +429,60 @@ export default function PricingTab({
                                   initial={{ opacity: 0, y: 5 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   transition={{ delay: Math.min(idx * 0.01, 0.3) }}
-                                  className="group p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all"
+                                  className="p-3 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.01] hover:bg-[var(--foreground)]/[0.03] hover:border-[var(--accent)]/30 transition-all space-y-2.5"
                                 >
                                   {/* ITEM HEADER */}
-                                  <div className="flex items-start justify-between mb-4">
+                                  <div className="flex items-start justify-between gap-2">
                                     <div className="min-w-0">
-                                      <p className="text-[12px] font-black text-[var(--foreground)] truncate leading-tight">
+                                      <p className="text-xs font-bold text-[var(--foreground)] truncate leading-tight">
                                         {o.itemName || o.itemSlug}
                                       </p>
-                                      <p className="text-[8px] font-bold text-[var(--muted)]/50 tracking-wider">
+                                      <p className="text-[9px] font-mono text-[var(--muted)]/50 truncate">
                                         {o.itemSlug}
                                       </p>
                                     </div>
 
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-2 shrink-0">
                                       {/* STOCK TOGGLE */}
-                                      <div className="flex flex-col items-center gap-1">
+                                      <div className="flex items-center gap-1">
                                         <div
                                           onClick={() => updateOverrideField(o.gameSlug, o.itemSlug, "inStock", !o.inStock)}
-                                          className={`w-7 h-3.5 rounded-full relative cursor-pointer transition-all duration-300 ${o.inStock ? 'bg-emerald-500' : 'bg-[var(--foreground)]/[0.1]'}`}
+                                          className={`w-7 h-3.5 rounded-full relative cursor-pointer transition-all ${o.inStock ? 'bg-emerald-500' : 'bg-[var(--foreground)]/15'}`}
+                                          title="In Stock"
                                         >
-                                          <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 ${o.inStock ? 'translate-x-3.5' : 'translate-x-0'}`} />
+                                          <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 rounded-full bg-white transition-transform ${o.inStock ? 'translate-x-3.5' : 'translate-x-0'}`} />
                                         </div>
-                                        <span className="text-[7px] font-black text-[var(--muted)]/60 uppercase tracking-tighter">In Stock</span>
                                       </div>
 
                                       {/* OVERRIDE TOGGLE */}
-                                      <div className="flex flex-col items-center gap-1">
+                                      <div className="flex items-center gap-1">
                                         <div
                                           onClick={() => updateOverrideField(o.gameSlug, o.itemSlug, "useOverride", !o.useOverride)}
-                                          className={`w-7 h-3.5 rounded-full relative cursor-pointer transition-all duration-300 ${o.useOverride ? 'bg-[var(--accent)]' : 'bg-[var(--foreground)]/[0.1]'}`}
+                                          className={`w-7 h-3.5 rounded-full relative cursor-pointer transition-all ${o.useOverride ? 'bg-[var(--accent)]' : 'bg-[var(--foreground)]/15'}`}
+                                          title="Enable Fixed Price Override"
                                         >
-                                          <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 ${o.useOverride ? 'translate-x-3.5' : 'translate-x-0'}`} />
+                                          <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 rounded-full bg-white transition-transform ${o.useOverride ? 'translate-x-3.5' : 'translate-x-0'}`} />
                                         </div>
-                                        <span className="text-[7px] font-black text-[var(--muted)]/60 uppercase tracking-tighter whitespace-nowrap">Override</span>
                                       </div>
                                     </div>
                                   </div>
 
-                                  {/* PRICE INPUT — always editable; typing auto-enables Override */}
-                                  <div className="space-y-2">
-                                    <div className="flex items-center justify-between px-1">
-                                      <label className="text-[8px] font-black text-[var(--muted)]/60 uppercase tracking-widest leading-none">Base Selling Price (INR)</label>
-                                      {o.useOverride && (
-                                        <span className="text-[7px] font-black text-[var(--accent)] uppercase animate-pulse leading-none">Fixed</span>
-                                      )}
-                                    </div>
-                                    <div className="relative">
-                                      <IndianRupee size={12} className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${o.useOverride ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`} />
+                                  {/* PRICE INPUT ROW */}
+                                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--border)]/30">
+                                    <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">
+                                      Price (₹)
+                                    </span>
+                                    <div className="relative w-28 sm:w-32">
+                                      <IndianRupee size={11} className={`absolute left-2.5 top-1/2 -translate-y-1/2 transition-colors ${o.useOverride ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`} />
                                       <input
                                         type="number"
                                         value={o.fixedPrice}
                                         onChange={(e) => {
-                                          // Auto-enable override when user starts typing
-                                          if (!o.useOverride) {
-                                            updateOverrideField(o.gameSlug, o.itemSlug, "useOverride", true);
-                                          }
-                                          const idx = overrides.findIndex(
-                                            (x) => x.gameSlug === o.gameSlug && x.itemSlug === o.itemSlug
-                                          );
+                                          if (!o.useOverride) updateOverrideField(o.gameSlug, o.itemSlug, "useOverride", true);
+                                          const idx = overrides.findIndex((x) => x.gameSlug === o.gameSlug && x.itemSlug === o.itemSlug);
                                           updateOverridePrice(idx, e.target.value);
                                         }}
-                                        className="w-full h-10 pl-9 pr-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--foreground)] font-black text-base tabular-nums outline-none transition-all focus:border-[var(--accent)]/50 focus:bg-[var(--accent)]/[0.02]"
+                                        className="w-full h-8 pl-6 pr-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)] font-bold text-xs tabular-nums outline-none focus:border-[var(--accent)]/50 transition-all text-right"
                                         placeholder="0"
                                       />
                                     </div>
