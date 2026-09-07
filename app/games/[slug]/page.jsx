@@ -100,38 +100,90 @@ export default function GameDetailPage() {
   if (!game || !activeItem) {
     return (
       <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6">
-        {/* Modern Game Switcher Skeleton */}
-        <div className="max-w-6xl mx-auto mb-6 px-2 overflow-hidden">
-          <div className="flex items-center gap-2 mb-3 px-1">
-            <div className="w-1 h-3 bg-[var(--muted)] opacity-20 rounded-full" />
-            <Skeleton width={100} height={12} className="rounded-sm" />
+        {/* ================= MODERN GAME SWITCHER SKELETON ================= */}
+        <div className="max-w-6xl mx-auto mb-4 overflow-hidden px-2">
+          <div className="flex items-center gap-2 mb-2 px-1">
+            <div className="w-1 h-2.5 bg-red-600/60 rounded-full" />
+            <Skeleton width={110} height={10} className="rounded-full" />
           </div>
-          <div className="flex gap-2 py-2 overflow-x-auto no-scrollbar">
+
+          <div className="flex items-center gap-1 overflow-x-auto py-1 no-scrollbar">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <Skeleton key={i} width={68} height={85} className="shrink-0 rounded-xl" />
+              <div
+                key={i}
+                className="flex-shrink-0 flex flex-col items-center gap-1 px-1 py-1.5 rounded-xl min-w-[58px]"
+              >
+                <div className="w-9 h-9 rounded-xl overflow-hidden bg-[var(--card)]/50 border border-[var(--border)]">
+                  <Skeleton className="w-full h-full border-none" />
+                </div>
+                <div className="flex flex-col items-center text-center w-full px-0.5 mt-0.5">
+                  <Skeleton width={38} height={7} className="rounded-full" />
+                  <div className="h-[2px] w-full mt-1">
+                    {i === 1 && <div className="h-full w-full bg-red-600/40 rounded-full" />}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
 
-        {/* Header Skeleton */}
-        <div className="max-w-6xl mx-auto mb-8 flex items-center gap-4">
-          <Skeleton width={56} height={56} className="rounded-lg shrink-0" />
-          <div className="space-y-2">
-            <Skeleton width={180} height={28} className="rounded-md" />
-            <Skeleton width={100} height={14} className="rounded-md" />
+        {/* ================= HEADER SKELETON ================= */}
+        <div className="max-w-6xl mx-auto mb-3 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-[var(--border)] bg-[var(--card)]/50">
+            <Skeleton className="w-full h-full border-none" />
+          </div>
+
+          <div className="space-y-1">
+            <Skeleton width={160} height={24} className="rounded-md" />
           </div>
         </div>
 
-        {/* Item Grid Skeleton */}
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <Skeleton key={i} height={100} className="rounded-2xl" />
+        <div className="max-w-6xl mx-auto h-[1px] bg-[var(--border)] mb-4 opacity-50" />
+
+        {/* ================= ITEM GRID SKELETON ================= */}
+        <div className="max-w-6xl mx-auto mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+            <div
+              key={i}
+              className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 flex items-center gap-3.5 min-h-[76px] p-3"
+            >
+              {/* Diamond / Item Icon */}
+              <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 bg-[var(--foreground)]/[0.04]">
+                <Skeleton className="w-full h-full border-none" />
+              </div>
+
+              {/* Details Column */}
+              <div className="flex flex-col flex-1 min-w-0 justify-center space-y-1.5">
+                <Skeleton width="80%" height={12} className="rounded" />
+                <Skeleton width="45%" height={9} className="rounded" />
+                <div className="flex items-baseline gap-1 pt-0.5">
+                  <Skeleton width={48} height={14} className="rounded" />
+                </div>
+              </div>
+            </div>
           ))}
         </div>
 
-        {/* Footer/Panel Placeholder */}
-        <div className="max-w-6xl mx-auto mt-10">
-          <Skeleton height={140} className="w-full rounded-[2rem]" />
+        {/* ================= BUY PANEL SKELETON ================= */}
+        <div className="max-w-6xl mx-auto bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-col gap-4 shadow-sm">
+          <div className="flex gap-4 items-center">
+            {/* Big Preview Image */}
+            <div className="w-[100px] sm:w-[110px] h-[100px] sm:h-[110px] rounded-xl overflow-hidden shrink-0 bg-[var(--foreground)]/[0.04] border border-[var(--border)]">
+              <Skeleton className="w-full h-full border-none" />
+            </div>
+
+            {/* Price & Details */}
+            <div className="flex-1 min-w-0 space-y-2">
+              <Skeleton width={180} height={20} className="rounded-md" />
+              <div className="flex items-center gap-2 pt-1">
+                <Skeleton width={90} height={26} className="rounded-lg" />
+                <Skeleton width={50} height={14} className="rounded" />
+              </div>
+            </div>
+          </div>
+
+          {/* Action Button */}
+          <Skeleton height={48} className="w-full rounded-xl" />
         </div>
       </section>
     );

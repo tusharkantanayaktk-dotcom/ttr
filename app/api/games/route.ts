@@ -67,7 +67,7 @@ export async function GET() {
       headers: {
         "x-api-key": process.env.API_SECRET_KEY!,
       },
-      cache: "no-store",
+      next: { revalidate: 60 },
     });
 
     const data = await response.json();

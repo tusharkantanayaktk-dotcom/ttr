@@ -37,11 +37,8 @@ export default function BottomNav() {
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() ?? 0;
-        if (latest > previous && latest > 50) {
-            setHiddenByScroll(true);
-        } else {
-            setHiddenByScroll(false);
-        }
+        const shouldHide = latest > previous && latest > 60;
+        setHiddenByScroll((prev) => (prev !== shouldHide ? shouldHide : prev));
     });
 
     useEffect(() => {

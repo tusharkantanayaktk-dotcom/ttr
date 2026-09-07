@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX, FiChevronRight } from "react-icons/fi";
 import Image from "next/image";
@@ -19,12 +19,6 @@ export default function Header() {
   const [avatarError, setAvatarError] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-
-  // Dynamic header styles based on scroll
-  const headerOpacity = useTransform(scrollY, [0, 50], [0, 0.9]);
-  const headerBlur = useTransform(scrollY, [0, 50], [0, 16]);
-  const headerBorder = useTransform(scrollY, [0, 50], ["rgba(0,0,0,0)", "var(--border)"]);
 
   /* ================= FETCH USER ================= */
   useEffect(() => {
@@ -54,8 +48,15 @@ export default function Header() {
 
   /* ================= SCROLL EFFECT ================= */
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    let lastState = window.scrollY > 20;
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      if (isScrolled !== lastState) {
+        lastState = isScrolled;
+        setScrolled(isScrolled);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

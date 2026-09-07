@@ -192,6 +192,7 @@ export async function GET(req, { params }) {
       `https://game-off-ten.vercel.app/api/v1/game/${slug}`,
       {
         headers: { "x-api-key": process.env.API_SECRET_KEY },
+        next: { revalidate: 60 },
       }
     );
 

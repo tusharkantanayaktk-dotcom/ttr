@@ -37,20 +37,19 @@ export default function SocialFloat() {
 
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
+  const visibleRef = useRef(true);
 
   /* ================= SHOW/HIDE ON SCROLL ================= */
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const shouldHide = currentScrollY > lastScrollY.current && currentScrollY > 100;
+      const nextVisible = !shouldHide;
 
-      // If user scrolls down and has scrolled more than 100px, hide
-      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-        setIsVisible(false);
-        setIsOpen(false); // Close menu if scrolling down
-      }
-      // If user scrolls up, show
-      else {
-        setIsVisible(true);
+      if (nextVisible !== visibleRef.current) {
+        visibleRef.current = nextVisible;
+        setIsVisible(nextVisible);
+        if (shouldHide) setIsOpen(false);
       }
 
       lastScrollY.current = currentScrollY;
