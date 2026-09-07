@@ -40,4 +40,12 @@ const OrderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+/* ================= COMPOUND & PERFORMANCE INDEXES ================= */
+OrderSchema.index({ createdAt: -1, status: 1 });
+OrderSchema.index({ createdAt: -1, paymentStatus: 1 });
+OrderSchema.index({ userId: 1, createdAt: -1 });
+OrderSchema.index({ gameSlug: 1, status: 1 });
+OrderSchema.index({ phone: 1 });
+OrderSchema.index({ email: 1 });
+
 export default mongoose.models.Order || mongoose.model("Order", OrderSchema);

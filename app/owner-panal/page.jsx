@@ -198,45 +198,40 @@ export default function AdminPanalPage() {
       <section className="min-h-screen bg-[var(--background)] p-3 sm:p-4 md:p-6">
         <div className="w-full max-w-7xl mx-auto">
           {/* ================= TOP PANEL BAR ================= */}
-          <div className="mb-5 flex items-center justify-between bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 shadow-sm">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/25 flex items-center justify-center shrink-0">
+          <div className="mb-4 flex items-center justify-between bg-[var(--card)]/60 backdrop-blur-md border border-[var(--border)] rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center shrink-0">
                 <Image
                   src={logo}
                   alt="Tronics"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 object-contain"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 object-contain"
                 />
               </div>
-              <div>
-                <h1 className="text-base sm:text-lg font-black tracking-tight text-[var(--foreground)] flex items-center gap-2">
-                  Owner Suite
-                  <span className="px-2 py-0.5 text-[9px] font-black uppercase rounded-full bg-[var(--accent)] text-black">
-                    Master
-                  </span>
-                </h1>
-                <p className="text-[11px] text-[var(--muted)]">
-                  Store performance, management, pricing & storefront controls
-                </p>
-              </div>
+              <h1 className="text-sm sm:text-base font-black tracking-tight text-[var(--foreground)] flex items-center gap-2">
+                Owner Panel
+                <span className="px-1.5 py-0.5 text-[8.5px] font-black uppercase tracking-wider rounded-md bg-[var(--accent)] text-black">
+                  Admin
+                </span>
+              </h1>
             </div>
 
             <div className="flex items-center gap-2">
               <Link
                 href="/"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)] text-xs font-bold transition-all"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)] text-xs font-bold transition-all"
               >
                 <span>Storefront</span>
                 <FiExternalLink className="w-3.5 h-3.5" />
               </Link>
               
               <button
-                className="md:hidden p-2.5 bg-[var(--background)] border border-[var(--border)] rounded-xl text-[var(--foreground)] active:scale-95 transition-transform"
+                className="md:hidden p-2 bg-[var(--background)] border border-[var(--border)] rounded-xl text-[var(--foreground)] active:scale-95 transition-transform"
                 onClick={() => setIsSidebarOpen(true)}
                 aria-label="Open Menu"
               >
-                <FiMenu className="w-5 h-5" />
+                <FiMenu className="w-4 h-4" />
               </button>
             </div>
           </div>

@@ -47,5 +47,9 @@ const WalletTransactionSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+/* ================= COMPOUND INDEXES ================= */
+WalletTransactionSchema.index({ userId: 1, createdAt: -1 });
+WalletTransactionSchema.index({ status: 1, createdAt: -1 });
+
 export default mongoose.models.WalletTransaction ||
     mongoose.model("WalletTransaction", WalletTransactionSchema);
