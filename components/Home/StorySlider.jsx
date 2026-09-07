@@ -17,7 +17,7 @@ const storyData = [
     id: 2,
     title: "MLBB India",
     image: "/game-assets/11.jpg",
-    link: "/games/mobile-legends270",
+    link: "/games/mobile-legends114",
     color: "from-cyan-400 via-blue-500 to-indigo-600",
   },
   {
@@ -31,7 +31,7 @@ const storyData = [
     id: 4,
     title: "Bundles",
     image: "/game-assets/bundle-weekly.jpg",
-    link: "/games/weeklymonthly-bundle261",
+    link: "/games/weeklymonthly-bundle468",
     color: "from-fuchsia-400 via-purple-500 to-violet-600",
   },
   {

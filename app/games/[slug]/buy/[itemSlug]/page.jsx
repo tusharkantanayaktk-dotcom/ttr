@@ -128,7 +128,7 @@ export default function BuyFlowPage() {
     }
 
     try {
-      const baseGameId = isMLBB_local ? "mobile-legends270" : (game?.gameId || slug);
+      const baseGameId = isMLBB_local ? "mobile-legends114" : (game?.gameId || slug);
       const productId = `${baseGameId}_${activeItem?.itemId || initialItemSlug}`;
 
       const nameRes = await fetch("/api/check-region/namecheck", {

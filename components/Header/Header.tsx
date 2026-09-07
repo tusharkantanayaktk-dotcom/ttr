@@ -141,22 +141,24 @@ export default function Header() {
 
         {/* LOGO SECTION */}
         <div className="flex items-center">
-          <Link href="/" className="relative group">
+          <Link href="/" className="relative group flex items-center gap-2">
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative z-10"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative z-10 flex items-center"
             >
               <Image
                 src={logo}
-                alt="Logo"
-                width={90}
-                height={30}
+                alt="Tronics Logo"
+                width={36}
+                height={36}
                 priority
-                className="object-contain -ml-2"
+                className="w-9 h-9 object-contain drop-shadow-sm"
               />
             </motion.div>
-            <div className="absolute -inset-2 bg-[var(--accent)]/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity blur-md" />
+            <span className="font-black text-base sm:text-lg tracking-tighter uppercase italic bg-gradient-to-r from-[var(--foreground)] to-[var(--foreground)]/80 bg-clip-text">
+              Tronics<span className="text-[var(--accent)]">Store</span>
+            </span>
           </Link>
         </div>
 
