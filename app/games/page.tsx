@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiFilter, FiX, FiSearch, FiZap, FiBox, FiActivity, FiArrowRight } from "react-icons/fi";
+import { Gamepad2, Zap, Sparkles } from "lucide-react";
 import logo from "@/public/logo.png";
 import dynamic from "next/dynamic";
 import Skeleton from "@/components/Skeleton";
@@ -180,18 +181,29 @@ export default function GamesPage() {
   GameCard.displayName = "GameCard";
 
   const SectionHeader = ({ title, count, icon: Icon }: any) => (
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex items-center justify-between mb-5">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
-          <Icon size={18} />
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--card)] to-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm shrink-0">
+          {Icon ? <Icon size={19} /> : <Gamepad2 size={19} />}
         </div>
         <div>
-          <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-[var(--foreground)]">
-            {title}
-          </h2>
-          {count !== undefined && (
-            <p className="text-[8px] text-[var(--muted)] font-black uppercase tracking-[0.2em] opacity-40 mt-[-2px]">
-              {count} Games Ready
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg md:text-xl font-black italic uppercase tracking-tight text-[var(--foreground)]">
+              {title}
+            </h2>
+            {count !== undefined && (
+              <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">
+                {count} Available
+              </span>
+            )}
+          </div>
+          {count !== undefined ? (
+            <p className="text-[10px] sm:text-[11px] text-[var(--muted)] font-semibold tracking-wide mt-0.5">
+              Instant top-up & fast automated delivery
+            </p>
+          ) : (
+            <p className="text-[10px] sm:text-[11px] text-[var(--muted)] font-semibold tracking-wide mt-0.5">
+              Verified digital codes & subscriptions
             </p>
           )}
         </div>
@@ -312,7 +324,7 @@ export default function GamesPage() {
           <SectionHeader
             title="Our Games"
             count={processedGames.length}
-            icon={FiBox}
+            icon={Gamepad2}
           />
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-5">
             {processedGames.map((game: any, i: number) => (
@@ -324,7 +336,7 @@ export default function GamesPage() {
         {/* OTT SECTION */}
         {otts?.items?.length > 0 && (
           <section>
-            <SectionHeader title={otts.title} icon={FiZap} />
+            <SectionHeader title={otts.title} icon={Zap} />
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-6">
               {otts.items.map((ott: any) => (
                 <div
@@ -371,7 +383,7 @@ export default function GamesPage() {
         {/* MEMBERSHIP SECTION */}
         {memberships?.items?.length > 0 && (
           <section>
-            <SectionHeader title={memberships.title} icon={FiActivity} />
+            <SectionHeader title={memberships.title} icon={Sparkles} />
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {memberships.items.map((plan: any) => (
                 <div

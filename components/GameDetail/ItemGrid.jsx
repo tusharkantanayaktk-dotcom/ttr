@@ -9,7 +9,6 @@ export default function ItemGrid({
   gameLogo,
   activeItem,
   setActiveItem,
-  buyPanelRef,
 }) {
   return (
     <motion.div
@@ -22,9 +21,9 @@ export default function ItemGrid({
           transition: { staggerChildren: 0.02 }
         }
       }}
-      className="max-w-6xl mx-auto mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+      className="max-w-6xl mx-auto mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 sm:gap-3.5"
     >
-      {items.map((item, index) => {
+      {items.map((item) => {
         const isSelected = activeItem?.itemSlug === item.itemSlug;
         const discount = item.dummyPrice
           ? Math.round(((item.dummyPrice - item.sellingPrice) / item.dummyPrice) * 100)
@@ -34,75 +33,64 @@ export default function ItemGrid({
           <motion.div
             key={item.itemSlug}
             variants={{
-              hidden: { opacity: 0, y: 20, scale: 0.95 },
+              hidden: { opacity: 0, y: 12, scale: 0.98 },
               visible: { opacity: 1, y: 0, scale: 1 }
             }}
-            whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => {
-              setActiveItem(item);
-            }}
+            whileHover={{ y: -3, transition: { duration: 0.15 } }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setActiveItem(item)}
             className={`
               relative overflow-hidden group
-              rounded-2xl border transition-all duration-300
-              flex items-center gap-3.5 min-h-[76px] p-3 cursor-pointer select-none
+              rounded-2xl border transition-all duration-200
+              p-3 sm:p-3.5 cursor-pointer select-none
+              flex items-center gap-2.5 sm:gap-3.5
               ${isSelected
-                ? "border-[var(--accent)] bg-[var(--accent)]/[0.08]"
-                : "border-[var(--border)] bg-[var(--card)]/40 hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/70"
+                ? "border-[var(--accent)] bg-[var(--accent)]/[0.07] ring-1 ring-[var(--accent)] shadow-[0_4px_20px_rgba(255,46,99,0.12)]"
+                : "border-[var(--border)] bg-[var(--card)]/50 hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/90"
               }
             `}
           >
-            {/* Selection Checkmark */}
-            {isSelected && (
-              <motion.div
-                initial={{ scale: 0, rotate: -20 }}
-                animate={{ scale: 1, rotate: 0 }}
-                className="absolute top-2 right-2 z-20 w-4 h-4 bg-[var(--accent)] text-black rounded-full flex items-center justify-center font-bold"
-              >
-                <FiCheck size={10} strokeWidth={3.5} />
-              </motion.div>
+            {/* Top-Right Discount Badge */}
+            {discount > 0 && (
+              <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-emerald-600 dark:text-emerald-400 text-[8.5px] sm:text-[9px] font-black tracking-tight uppercase leading-none">
+                SAVE {discount}%
+              </div>
             )}
 
-            {/* Game Icon - Frameless & Crisp */}
-            <div className="relative w-11 h-11 shrink-0 flex items-center justify-center">
+            {/* Game / Item Icon */}
+            <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 flex items-center justify-center">
               <Image
                 src={item.itemImageId?.image || gameLogo}
                 alt={item.itemName}
                 fill
-                sizes="44px"
-                className={`object-contain transition-transform duration-300 ${isSelected ? 'scale-110 drop-shadow-sm' : 'opacity-85 group-hover:opacity-100 group-hover:scale-105'}`}
+                sizes="48px"
+                className={`object-contain transition-transform duration-200 ${
+                  isSelected ? "scale-105 drop-shadow-sm" : "opacity-90 group-hover:scale-105 group-hover:opacity-100"
+                }`}
                 loading="lazy"
               />
             </div>
 
-            {/* Content: Name, Discount & Price */}
-            <div className="relative z-10 flex flex-col flex-1 min-w-0 justify-center">
-              <div className="flex items-center justify-between gap-1 pr-3">
-                <p className={`font-extrabold text-[12px] tracking-tight leading-snug transition-colors duration-200 truncate ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground)] group-hover:text-[var(--foreground)]'}`}>
-                  {item.itemName}
-                </p>
-              </div>
+            {/* Content: Name & Price */}
+            <div className="flex-1 min-w-0 flex flex-col justify-center pr-0.5">
+              <p className={`text-xs sm:text-sm font-bold tracking-tight truncate transition-colors ${
+                isSelected ? "text-[var(--accent)]" : "text-[var(--foreground)]"
+              }`}>
+                {item.itemName}
+              </p>
 
-              {discount > 0 && (
-                <div className="mt-0.5">
-                  <span className="text-[9px] font-black text-emerald-400 tracking-tight uppercase">
-                    SAVE {discount}%
+              <div className="flex items-baseline gap-1.5 mt-1">
+                <span className="text-sm sm:text-base font-black text-[var(--foreground)] tracking-tight">
+                  ₹{item.sellingPrice}
+                </span>
+
+                {item.dummyPrice && (
+                  <span className="text-[10px] sm:text-xs line-through text-[var(--muted)] font-semibold">
+                    ₹{item.dummyPrice}
                   </span>
-                </div>
-              )}
-
-              <div className="mt-1 flex items-baseline gap-0.5">
-                <span className={`text-[10px] font-bold ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--muted)]'}`}>₹</span>
-                <p className={`text-base font-black tracking-tight transition-all duration-200 ${isSelected ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]/90'}`}>
-                  {item.sellingPrice}
-                </p>
+                )}
               </div>
             </div>
-
-            {/* Left Accent Bar for selected */}
-            {isSelected && (
-              <div className="absolute left-0 top-2 bottom-2 w-1 bg-[var(--accent)] rounded-r-full" />
-            )}
           </motion.div>
         );
       })}
