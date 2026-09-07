@@ -23,21 +23,23 @@ export default function Loader({ fullScreen = true }) {
 
       <div className="relative flex flex-col items-center">
         {/* Pulsing Logo */}
-        <div
-          className="relative mb-8"
+        <motion.div
+          className="relative mb-6"
+          animate={{ scale: [1, 1.05, 1], opacity: [0.9, 1, 0.9] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
           <Image
             src={logo}
             alt="Logo"
-            width={120}
-            height={40}
+            width={64}
+            height={64}
             priority
-            className="object-contain"
+            className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-[0_0_15px_rgba(0,242,254,0.3)]"
           />
           
           {/* Subtle underline glow */}
-          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-[2px] bg-[var(--accent)]/40 blur-[2px]" />
-        </div>
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-[2px] bg-[var(--accent)]/50 blur-[3px]" />
+        </motion.div>
 
         {/* Simplified Progress / Text */}
         <div className="flex flex-col items-center gap-3">

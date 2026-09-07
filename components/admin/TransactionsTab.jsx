@@ -134,9 +134,11 @@ export default function TransactionsTab() {
             className="w-full h-11 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
           />
         </div>
-        <button className="h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center gap-2 hover:bg-[var(--foreground)]/[0.05] transition-all sm:w-max">
-          <Filter size={14} className="text-[var(--accent)]" />
-          <span className="text-xs font-bold uppercase">Filters</span>
+        <button
+          className="h-11 w-11 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center hover:bg-[var(--foreground)]/[0.05] hover:border-[var(--accent)]/50 transition-all shrink-0"
+          title="Filter Transactions"
+        >
+          <Filter size={16} className="text-[var(--accent)]" />
         </button>
       </div>
 

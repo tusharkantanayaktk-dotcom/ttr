@@ -199,10 +199,13 @@ export default function UsersTab() {
         </div>
         <button
           onClick={() => setShowFilters(true)}
-          className="h-10 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center gap-2 hover:bg-[var(--foreground)]/[0.05] transition-all outline-none"
+          className="h-10 w-10 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center hover:bg-[var(--foreground)]/[0.05] hover:border-[var(--accent)]/50 transition-all outline-none shrink-0 relative"
+          title="Filter Users"
         >
-          <Filter size={12} className="text-[var(--accent)]" />
-          <span className="text-xs font-semibold">Filters</span>
+          <Filter size={15} className="text-[var(--accent)]" />
+          {Object.values(filters).some(Boolean) && (
+            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[var(--accent)]" />
+          )}
         </button>
       </div>
 
