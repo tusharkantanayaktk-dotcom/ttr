@@ -94,7 +94,7 @@ export default function SeoTab() {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
         <div className="w-10 h-10 border-4 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
-        <p className="text-[var(--muted)] text-sm font-medium animate-pulse">Loading SEO Configurations...</p>
+        <p className="text-[var(--muted)] text-sm font-medium animate-pulse">Loading SEO settings...</p>
       </div>
     );
   }
@@ -103,7 +103,7 @@ export default function SeoTab() {
     <div className="max-w-4xl space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">SEO Settings</h2>
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">SEO & Google</h2>
 
         <div className="flex items-center gap-3">
           <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
@@ -123,29 +123,29 @@ export default function SeoTab() {
 
       <div className="space-y-5">
         <div>
-          <label className="block text-xs font-bold text-[var(--foreground)] uppercase tracking-wider mb-1.5">Title</label>
+          <label className="block text-xs font-bold text-[var(--foreground)] uppercase tracking-wider mb-1.5">Website Title (Google Title)</label>
           <input 
             type="text" 
             value={settings.SEO_TITLE}
             onChange={(e) => setSettings(prev => ({...prev, SEO_TITLE: e.target.value}))}
             className="w-full bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--accent)] transition-all"
-            placeholder="e.g. Tronics Store - MLBB Diamond Top Up"
+            placeholder="e.g. Tronics Store - Instant Game Top Up"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-[var(--foreground)] uppercase tracking-wider mb-1.5">Description</label>
+          <label className="block text-xs font-bold text-[var(--foreground)] uppercase tracking-wider mb-1.5">Website Description (Google Description)</label>
           <textarea 
             value={settings.SEO_DESCRIPTION}
             onChange={(e) => setSettings(prev => ({...prev, SEO_DESCRIPTION: e.target.value}))}
             className="w-full bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--accent)] min-h-[100px] transition-all"
-            placeholder="e.g. Fast and secure top-up platform..."
+            placeholder="e.g. Fast, cheap and safe top-up service for mobile games..."
           />
         </div>
 
         <div>
           <label className="block text-xs font-bold text-[var(--foreground)] uppercase tracking-wider mb-1.5">
-            Keywords (Up to 20) — {settings.SEO_KEYWORDS.length}/20
+            Search Keywords (Up to 20) — {settings.SEO_KEYWORDS.length}/20
           </label>
           <div className="flex gap-2 mb-2">
             <input 
@@ -155,7 +155,7 @@ export default function SeoTab() {
               onKeyDown={addKeyword}
               disabled={settings.SEO_KEYWORDS.length >= 20}
               className="flex-1 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--accent)] disabled:opacity-50 transition-all"
-              placeholder="Type a keyword and press Enter"
+              placeholder="Type a word and press Enter"
             />
             <button 
               onClick={addKeyword}

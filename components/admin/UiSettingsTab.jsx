@@ -106,8 +106,8 @@ export default function UiSettingsTab() {
         {/* Story Slider Toggle */}
         <div className="flex items-center justify-between p-4 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
           <div>
-            <p className="font-bold text-sm text-[var(--foreground)]">Show Story Slider</p>
-            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Displays the Instagram-style rounded bubbles on the homepage (Live, Top, Hot, Best).</p>
+            <p className="font-bold text-sm text-[var(--foreground)]">Story Bubbles</p>
+            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Show or hide the top story bubbles on the homepage.</p>
           </div>
           <button
             onClick={() => setConfig(prev => ({ ...prev, showStorySlider: !prev.showStorySlider }))}
@@ -120,8 +120,8 @@ export default function UiSettingsTab() {
         {/* Bottom Nav Toggle */}
         <div className="flex items-center justify-between p-4 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
           <div>
-            <p className="font-bold text-sm text-[var(--foreground)]">Show Bottom Navigation Bar</p>
-            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Displays the fixed bottom menu (Home, Games, Orders, etc.) on mobile devices.</p>
+            <p className="font-bold text-sm text-[var(--foreground)]">Mobile Bottom Bar</p>
+            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Show or hide the bottom navigation menu on mobile phones.</p>
           </div>
           <button
             onClick={() => setConfig(prev => ({ ...prev, showBottomNav: !prev.showBottomNav }))}
@@ -134,8 +134,8 @@ export default function UiSettingsTab() {
         {/* WhatsApp Popup Toggle */}
         <div className="flex items-center justify-between p-4 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
           <div>
-            <p className="font-bold text-sm text-[var(--foreground)]">Show WhatsApp / Social Popup</p>
-            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Displays the floating chat widget on the bottom right of the screen.</p>
+            <p className="font-bold text-sm text-[var(--foreground)]">WhatsApp Chat Button</p>
+            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Show or hide the floating WhatsApp chat icon at the bottom right.</p>
           </div>
           <button
             onClick={() => setConfig(prev => ({ ...prev, showWhatsAppPopup: !prev.showWhatsAppPopup }))}
@@ -151,7 +151,7 @@ export default function UiSettingsTab() {
           className="w-full mt-4 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-black uppercase tracking-wider text-xs py-3.5 rounded-xl hover:brightness-105 active:scale-95 transition-all shadow-md shadow-[var(--accent)]/15"
         >
           {saving ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <FiSave size={15} />}
-          Save UI Settings
+          Save Design Settings
         </button>
       </div>
 

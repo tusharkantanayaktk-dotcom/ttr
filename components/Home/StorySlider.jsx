@@ -31,7 +31,7 @@ const storyData = [
     id: 4,
     title: "Bundles",
     image: "/game-assets/bundle-weekly.jpg",
-    link: "/games/weeklymonthly-bundle468",
+    link: "/games/weeklymonthly-bundle646",
     color: "from-fuchsia-400 via-purple-500 to-violet-600",
   },
   {

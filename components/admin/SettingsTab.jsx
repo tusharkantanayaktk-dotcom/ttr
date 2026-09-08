@@ -76,7 +76,7 @@ export default function SettingsTab() {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <div className="w-10 h-10 border-4 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
-                <p className="text-[var(--muted)] text-sm font-medium animate-pulse">Loading System Configurations...</p>
+                <p className="text-[var(--muted)] text-sm font-medium animate-pulse">Loading settings...</p>
             </div>
         );
     }
@@ -85,7 +85,7 @@ export default function SettingsTab() {
     <div className="max-w-4xl space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">System Settings</h2>
+        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Store Settings</h2>
 
         <div className="flex items-center gap-3">
           <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
@@ -122,8 +122,7 @@ export default function SettingsTab() {
                             <div>
                                 <h3 className="text-lg font-bold">Maintenance Mode</h3>
                                 <p className="text-sm text-[var(--muted)] max-w-md mt-1 leading-relaxed">
-                                    When enabled, all public pages will redirect to a maintenance screen.
-                                    Only authorized admins can still access the platform.
+                                    Turn on to temporarily close the website for maintenance. Only admins can access the site.
                                 </p>
                             </div>
                         </div>
@@ -159,7 +158,7 @@ export default function SettingsTab() {
                             className="mt-6 flex items-center gap-3 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-medium"
                         >
                             <FiAlertTriangle className="shrink-0 text-base" />
-                            <span>Warning: Enabling maintenance mode will disrupt service for all regular users. Use with caution.</span>
+                            <span>Notice: Visitors cannot view products or place orders while maintenance mode is active.</span>
                         </motion.div>
                     )}
                 </div>
@@ -180,9 +179,9 @@ export default function SettingsTab() {
                                 <FiAlertTriangle size={24} className={settings.STOP_ACCEPTING_ORDERS ? "animate-pulse" : ""} />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold">Stop Accepting Orders</h3>
+                                <h3 className="text-lg font-bold">Pause New Orders</h3>
                                 <p className="text-sm text-[var(--muted)] max-w-md mt-1 leading-relaxed">
-                                    When enabled, users will see a banner and will be unable to place new orders. Useful during high traffic or backend issues.
+                                    Turn on to temporarily pause new customer orders if the game provider or server is busy.
                                 </p>
                             </div>
                         </div>

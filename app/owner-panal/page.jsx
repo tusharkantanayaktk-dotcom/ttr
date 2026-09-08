@@ -43,37 +43,37 @@ import UiSettingsTab from "@/components/admin/UiSettingsTab";
 
 const SIDEBAR_GROUPS = [
   {
-    title: "Overview & Intelligence",
+    title: "Overview",
     items: [
-      { id: "analytics", label: "Analytics & Insights", icon: FiActivity, badge: "Live" }
+      { id: "analytics", label: "Analytics", icon: FiActivity, badge: "Live" }
     ]
   },
   {
-    title: "Management & Finance",
+    title: "Management",
     items: [
-      { id: "users", label: "User Accounts", icon: FiUsers },
-      { id: "orders", label: "Orders & Top-ups", icon: FiShoppingBag },
+      { id: "users", label: "Users", icon: FiUsers },
+      { id: "orders", label: "Orders", icon: FiShoppingBag },
       { id: "wallet", label: "Wallet Deposits", icon: FiCreditCard },
-      { id: "transactions", label: "Transactions Log", icon: FiList },
-      { id: "queries", label: "Support Queries", icon: FiMessageSquare },
-      { id: "pricing", label: "Pricing & Margins", icon: FiDollarSign },
+      { id: "transactions", label: "Transactions", icon: FiList },
+      { id: "queries", label: "Support Messages", icon: FiMessageSquare },
+      { id: "pricing", label: "Game Prices", icon: FiDollarSign },
     ]
   },
   {
-    title: "Marketing & Growth",
+    title: "Marketing",
     items: [
-      { id: "banners", label: "Game Banners", icon: FiImage },
-      { id: "promotional", label: "Marketing Campaigns", icon: FiSend },
+      { id: "banners", label: "Banners", icon: FiImage },
+      { id: "promotional", label: "Promo Messages", icon: FiSend },
       { id: "flash_sale", label: "Flash Sales", icon: FiZap },
-      { id: "announcement", label: "Notice Announcement", icon: FiBell },
+      { id: "announcement", label: "Notice Bar", icon: FiBell },
     ]
   },
   {
-    title: "System & Storefront",
+    title: "Settings",
     items: [
-      { id: "ui_settings", label: "UI & Theme Settings", icon: FiSliders },
-      { id: "settings", label: "Maintenance & Mode", icon: FiSettings },
-      { id: "seo", label: "SEO & Search Engine", icon: FiGlobe },
+      { id: "ui_settings", label: "Themes & Design", icon: FiSliders },
+      { id: "settings", label: "Store Settings", icon: FiSettings },
+      { id: "seo", label: "SEO & Google", icon: FiGlobe },
     ]
   }
 ];
@@ -250,7 +250,7 @@ export default function AdminPanalPage() {
               <div className="flex items-center justify-between mb-5 md:hidden pb-3 border-b border-[var(--border)]">
                 <div className="flex items-center gap-2">
                   <Image src={logo} alt="Logo" width={22} height={22} className="w-5.5 h-5.5 object-contain" />
-                  <h2 className="font-black text-sm tracking-tight text-[var(--foreground)]">Control Center</h2>
+                  <h2 className="font-black text-sm tracking-tight text-[var(--foreground)]">Menu</h2>
                 </div>
                 <button
                   type="button"
@@ -266,7 +266,7 @@ export default function AdminPanalPage() {
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[var(--muted)]">
                     <FiCreditCard className="text-[var(--accent)] w-3.5 h-3.5" />
-                    <span>Provider Balance</span>
+                    <span>API Balance</span>
                   </div>
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />

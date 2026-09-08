@@ -136,7 +136,7 @@ export async function GET() {
           image: MLBB_INDO_IMAGE,
         };
       }
-      if (updatedGame.gameSlug === "weeklymonthly-bundle468") {
+      if (updatedGame.gameSlug === "weeklymonthly-bundle646") {
         updatedGame.gameImageId = {
           ...updatedGame.gameImageId,
           image: MONTHLY_BUNDLE,
@@ -154,19 +154,23 @@ export async function GET() {
       "mlbbtr112",
       "mlbbbr178",
       "sgmy-mlbb893",
-      "magic-chess-gogo-india924",
+      // "magic-chess-gogo-india924",
       // "mlbb-indo42",
       // "mobile-legends-exclusive952",
       // "mlbb-russia953",
       "pubg-mobile138",
       "mobile-legends-philippines888",
+        "mobile-legends-united-states41",
+
+          "mlbb-russia46",
+
 
       // "genshin-impact265",
       "honor-of-kings57",
       "wuthering-of-waves464",
       "where-winds-meet280",
       // "mlbb-smallphp980",
-      "weeklymonthly-bundle468",
+      "weeklymonthly-bundle646",
       "where-winds-meet280"
     ];
 
