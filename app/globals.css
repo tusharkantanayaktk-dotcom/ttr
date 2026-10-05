@@ -397,3 +397,13 @@ a:hover {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
 }
+
+/* 🚫 Global Shadow Removal */
+*, *::before, *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+[class*="drop-shadow"] {
+  filter: none !important;
+}

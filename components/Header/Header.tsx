@@ -155,7 +155,7 @@ export default function Header() {
                 width={36}
                 height={36}
                 priority
-                className="w-9 h-9 object-contain drop-shadow-sm"
+                className="w-9 h-9 object-contain"
               />
             </motion.div>
             <span className="font-black text-base sm:text-lg tracking-tighter uppercase italic bg-gradient-to-r from-[var(--foreground)] to-[var(--foreground)]/80 bg-clip-text">
@@ -212,7 +212,7 @@ export default function Header() {
                 whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.97 }}
               >
-                <div className="w-full h-full rounded-full bg-[var(--accent)] flex items-center justify-center overflow-hidden shadow-sm">
+                <div className="w-full h-full rounded-full bg-[var(--accent)] flex items-center justify-center overflow-hidden">
                   {user?.avatar && !avatarError ? (
                     <img
                       src={user.avatar}
@@ -313,14 +313,14 @@ export default function Header() {
                       ) : (
                         <>
                           {/* USER PROFILE CARD */}
-                          <div className="relative p-3 rounded-2xl bg-gradient-to-br from-[var(--accent)]/[0.08] via-[var(--card)] to-[var(--foreground)]/[0.02] border border-[var(--accent)]/25 shadow-sm overflow-hidden">
+                          <div className="relative p-3 rounded-2xl bg-gradient-to-br from-[var(--accent)]/[0.08] via-[var(--card)] to-[var(--foreground)]/[0.02] border border-[var(--accent)]/25 overflow-hidden">
                             {/* Ambient Glow */}
                             <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--accent)]/10 rounded-full blur-2xl pointer-events-none" />
 
                             <div className="flex items-center gap-2.5 relative z-10">
                               {/* Avatar */}
                               <div className="relative shrink-0">
-                                <div className="w-10 h-10 rounded-xl overflow-hidden bg-[var(--accent)] p-[1.5px] shadow-sm">
+                                <div className="w-10 h-10 rounded-xl overflow-hidden bg-[var(--accent)] p-[1.5px]">
                                   <div className="w-full h-full rounded-[0.6rem] overflow-hidden bg-[var(--card)] flex items-center justify-center">
                                     {user?.avatar && !avatarError ? (
                                       <img
@@ -395,7 +395,7 @@ export default function Header() {
                                 <motion.button
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
-                                  className="px-2.5 py-1 rounded-lg bg-[var(--accent)] text-black font-black text-[10px] uppercase tracking-wider flex items-center gap-1 shadow-sm"
+                                  className="px-2.5 py-1 rounded-lg bg-[var(--accent)] text-black font-black text-[10px] uppercase tracking-wider flex items-center gap-1"
                                 >
                                   <FiPlus size={11} />
                                   <span>Add Money</span>
@@ -451,7 +451,7 @@ export default function Header() {
                               <motion.div
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500/20 via-[var(--accent)]/20 to-amber-500/10 border border-amber-500/30 text-[var(--foreground)] font-bold text-xs uppercase tracking-wider flex items-center justify-between shadow-sm hover:border-amber-500/60 transition-all group"
+                                className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500/20 via-[var(--accent)]/20 to-amber-500/10 border border-amber-500/30 text-[var(--foreground)] font-bold text-xs uppercase tracking-wider flex items-center justify-between hover:border-amber-500/60 transition-all group"
                               >
                                 <div className="flex items-center gap-2">
                                   <FiSettings size={13} className="text-amber-500 group-hover:rotate-90 transition-transform duration-500" />
