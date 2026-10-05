@@ -4,16 +4,18 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX, FiChevronRight } from "react-icons/fi";
+import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX, FiChevronRight, FiSearch } from "react-icons/fi";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import Skeleton from "../Skeleton";
 import PWAHeaderButton from "../PWA/PWAHeaderButton";
+import SearchModal from "./SearchModal";
 
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [avatarError, setAvatarError] = useState(false);
@@ -58,6 +60,18 @@ export default function Header() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  /* ================= GLOBAL SEARCH SHORTCUT ================= */
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   /* ================= BODY SCROLL LOCK ================= */
@@ -189,6 +203,21 @@ export default function Header() {
 
         {/* ACTIONS SECTION */}
         <div className="flex items-center gap-2 sm:gap-3" ref={dropdownRef}>
+          {/* Quick Search Button */}
+          <motion.button
+            onClick={() => setSearchOpen(true)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/50 transition-all text-xs"
+            title="Search games & items (Ctrl+K)"
+          >
+            <FiSearch size={14} className="text-[var(--accent)]" />
+            <span className="hidden md:inline font-medium">Search</span>
+            <kbd className="hidden lg:inline-block px-1.5 py-0.2 text-[9px] font-mono rounded bg-[var(--foreground)]/[0.06] border border-[var(--border)] text-[var(--muted)]">
+              ⌘K
+            </kbd>
+          </motion.button>
+
           {/* PWA Download Button */}
           <PWAHeaderButton />
 
@@ -481,6 +510,9 @@ export default function Header() {
 
         </div>
       </div>
+
+      {/* SEARCH MODAL */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </motion.header>
   );
 }

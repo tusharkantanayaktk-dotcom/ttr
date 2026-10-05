@@ -54,12 +54,13 @@ export default function RegionPage() {
   };
 
   return (
-    <div className="min-h-screen pt-12 pb-12 px-4 md:px-8 bg-[var(--background)] text-[var(--foreground)] relative overflow-hidden">
+    <div className="min-h-screen pt-16 md:pt-20 pb-12 bg-[var(--background)] text-[var(--foreground)] relative overflow-hidden">
 
       {/* BACKGROUND DECORATION */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.02] pointer-events-none" />
 
-      <div className="max-w-2xl relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-2xl relative z-10">
 
 
         {/* HEADER SECTION */}
@@ -204,6 +205,7 @@ export default function RegionPage() {
           />
         </motion.div>
 
+        </div>
       </div>
 
       {/* FIXED OVERLAY SCANLINE */}

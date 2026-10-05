@@ -85,149 +85,113 @@ export default function SettingsTab() {
     <div className="max-w-4xl space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Store Settings</h2>
+        <div>
+          <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Store Settings</h2>
+          <p className="text-xs text-[var(--muted)] mt-0.5">Manage store availability and order acceptance</p>
+        </div>
 
-        <div className="flex items-center gap-3">
-          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
-            <FiSettings size={14} className="text-[var(--accent)]" />
-            <span className="text-sm font-semibold text-[var(--muted)]">
-              {Object.keys(settings).length} Settings
-            </span>
+        <button
+          onClick={fetchSettings}
+          className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+          title="Refresh Settings"
+        >
+          <FiRefreshCw size={15} className={loading ? "animate-spin" : ""} />
+        </button>
+      </div>
+
+      {/* ================= CONTROLS ================= */}
+      <div className="space-y-3">
+        {/* Maintenance Mode */}
+        <div className={`p-4 bg-[var(--foreground)]/[0.02] border rounded-xl transition-colors ${settings.MAINTENANCE_MODE ? "border-amber-500/40 bg-amber-500/[0.03]" : "border-[var(--border)]"}`}>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 border ${settings.MAINTENANCE_MODE ? "bg-amber-500/15 border-amber-500/30 text-amber-500" : "bg-[var(--foreground)]/[0.04] border-[var(--border)] text-[var(--muted)]"}`}>
+                <FiActivity size={18} />
+              </div>
+              <div className="min-w-0">
+                <p className="font-bold text-sm text-[var(--foreground)]">Maintenance Mode</p>
+                <p className="text-xs text-[var(--muted)] mt-0.5">Close website for visitors. Only administrators can access.</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleToggle("MAINTENANCE_MODE")}
+              disabled={saving}
+              className={`relative w-12 h-6 shrink-0 rounded-full transition-colors ${
+                settings.MAINTENANCE_MODE ? "bg-amber-500" : "bg-[var(--foreground)]/20"
+              } ${saving ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+            >
+              <div
+                className={`absolute top-1 left-1 w-4 h-4 rounded-full transition-transform duration-200 ${
+                  settings.MAINTENANCE_MODE ? "translate-x-6 bg-black" : "bg-white"
+                }`}
+              />
+            </button>
           </div>
-          <button
-            onClick={fetchSettings}
-            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
-          >
-            <FiRefreshCw size={16} className={loading ? "animate-spin" : ""} />
-          </button>
+
+          {settings.MAINTENANCE_MODE && (
+            <div className="mt-3 pt-3 border-t border-amber-500/20 flex items-center gap-2 text-xs text-amber-500">
+              <FiAlertTriangle className="shrink-0" size={13} />
+              <span>Active: Visitors cannot view products or place orders.</span>
+            </div>
+          )}
+        </div>
+
+        {/* Pause Orders */}
+        <div className={`p-4 bg-[var(--foreground)]/[0.02] border rounded-xl transition-colors ${settings.STOP_ACCEPTING_ORDERS ? "border-amber-500/40 bg-amber-500/[0.03]" : "border-[var(--border)]"}`}>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 border ${settings.STOP_ACCEPTING_ORDERS ? "bg-amber-500/15 border-amber-500/30 text-amber-500" : "bg-[var(--foreground)]/[0.04] border-[var(--border)] text-[var(--muted)]"}`}>
+                <FiAlertTriangle size={18} />
+              </div>
+              <div className="min-w-0">
+                <p className="font-bold text-sm text-[var(--foreground)]">Pause New Orders</p>
+                <p className="text-xs text-[var(--muted)] mt-0.5">Temporarily stop accepting checkout orders if servers or providers are busy.</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleToggle("STOP_ACCEPTING_ORDERS")}
+              disabled={saving}
+              className={`relative w-12 h-6 shrink-0 rounded-full transition-colors ${
+                settings.STOP_ACCEPTING_ORDERS ? "bg-amber-500" : "bg-[var(--foreground)]/20"
+              } ${saving ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+            >
+              <div
+                className={`absolute top-1 left-1 w-4 h-4 rounded-full transition-transform duration-200 ${
+                  settings.STOP_ACCEPTING_ORDERS ? "translate-x-6 bg-black" : "bg-white"
+                }`}
+              />
+            </button>
+          </div>
+
+          {settings.STOP_ACCEPTING_ORDERS && (
+            <div className="mt-3 pt-3 border-t border-amber-500/20 flex items-center gap-2 text-xs text-amber-500">
+              <FiAlertTriangle className="shrink-0" size={13} />
+              <span>Active: Customer checkouts and order placements are currently paused.</span>
+            </div>
+          )}
         </div>
       </div>
 
-            <div className="grid gap-6">
-                {/* Maintenance Mode Card */}
-                <div className={`
-          relative overflow-hidden rounded-2xl border transition-all duration-500 p-6
-          ${settings.MAINTENANCE_MODE
-                        ? "bg-amber-500/5 border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.05)]"
-                        : "bg-[var(--background)]/50 border-[var(--border)]"}
-        `}>
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div className="flex items-start gap-4">
-                            <div className={`
-                w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors
-                ${settings.MAINTENANCE_MODE ? "bg-amber-500 text-black" : "bg-[var(--card)] text-[var(--muted)] border border-[var(--border)]"}
-              `}>
-                                <FiActivity size={24} className={settings.MAINTENANCE_MODE ? "animate-pulse" : ""} />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-bold">Maintenance Mode</h3>
-                                <p className="text-sm text-[var(--muted)] max-w-md mt-1 leading-relaxed">
-                                    Turn on to temporarily close the website for maintenance. Only admins can access the site.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            <span className={`text-xs font-bold uppercase tracking-widest ${settings.MAINTENANCE_MODE ? "text-amber-500" : "text-[var(--muted)]"}`}>
-                                {settings.MAINTENANCE_MODE ? "Active" : "Inactive"}
-                            </span>
-
-                            <button
-                                onClick={() => handleToggle("MAINTENANCE_MODE")}
-                                disabled={saving}
-                                className={`
-                  relative w-14 h-7 rounded-full transition-all duration-300 focus:outline-none
-                  ${settings.MAINTENANCE_MODE ? "bg-amber-500" : "bg-gray-700"}
-                  ${saving ? "opacity-50 cursor-not-allowed" : ""}
-                `}
-                            >
-                                <div className={`
-                  absolute top-1 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300 flex items-center justify-center
-                  ${settings.MAINTENANCE_MODE ? "left-8" : "left-1"}
-                `}>
-                                    {saving && <div className="w-3 h-3 border border-[var(--background)] border-t-transparent rounded-full animate-spin" />}
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    {settings.MAINTENANCE_MODE && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mt-6 flex items-center gap-3 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-medium"
-                        >
-                            <FiAlertTriangle className="shrink-0 text-base" />
-                            <span>Notice: Visitors cannot view products or place orders while maintenance mode is active.</span>
-                        </motion.div>
-                    )}
-                </div>
-
-                {/* Stop Accepting Orders Card */}
-                <div className={`
-          relative overflow-hidden rounded-2xl border transition-all duration-500 p-6
-          ${settings.STOP_ACCEPTING_ORDERS
-                        ? "bg-amber-500/5 border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.05)]"
-                        : "bg-[var(--background)]/50 border-[var(--border)]"}
-        `}>
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div className="flex items-start gap-4">
-                            <div className={`
-                w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors
-                ${settings.STOP_ACCEPTING_ORDERS ? "bg-amber-500 text-black" : "bg-[var(--card)] text-[var(--muted)] border border-[var(--border)]"}
-              `}>
-                                <FiAlertTriangle size={24} className={settings.STOP_ACCEPTING_ORDERS ? "animate-pulse" : ""} />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-bold">Pause New Orders</h3>
-                                <p className="text-sm text-[var(--muted)] max-w-md mt-1 leading-relaxed">
-                                    Turn on to temporarily pause new customer orders if the game provider or server is busy.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            <span className={`text-xs font-bold uppercase tracking-widest ${settings.STOP_ACCEPTING_ORDERS ? "text-amber-500" : "text-[var(--muted)]"}`}>
-                                {settings.STOP_ACCEPTING_ORDERS ? "Active" : "Inactive"}
-                            </span>
-
-                            <button
-                                onClick={() => handleToggle("STOP_ACCEPTING_ORDERS")}
-                                disabled={saving}
-                                className={`
-                  relative w-14 h-7 rounded-full transition-all duration-300 focus:outline-none
-                  ${settings.STOP_ACCEPTING_ORDERS ? "bg-amber-500" : "bg-gray-700"}
-                  ${saving ? "opacity-50 cursor-not-allowed" : ""}
-                `}
-                            >
-                                <div className={`
-                  absolute top-1 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300 flex items-center justify-center
-                  ${settings.STOP_ACCEPTING_ORDERS ? "left-8" : "left-1"}
-                `}>
-                                    {saving && <div className="w-3 h-3 border border-[var(--background)] border-t-transparent rounded-full animate-spin" />}
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Message Area */}
-            <div className="h-10 pt-4 border-t border-[var(--border)]">
-                <AnimatePresence>
-                    {message.text && (
-                        <motion.div
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 10 }}
-                            className={`flex items-center gap-2 text-sm font-medium ${message.type === "success" ? "text-green-500" : "text-red-500"}`}
-                        >
-                            {message.type === "success" ? <FiCheckCircle /> : <FiAlertTriangle />}
-                            {message.text}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
-        </div>
-    );
+      {/* Message Feedback */}
+      <AnimatePresence>
+        {message.text && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            className={`flex items-center gap-2 text-xs font-semibold p-3 rounded-lg border ${
+              message.type === "success" 
+                ? "bg-green-500/10 border-green-500/20 text-green-500" 
+                : "bg-red-500/10 border-red-500/20 text-red-500"
+            }`}
+          >
+            {message.type === "success" ? <FiCheckCircle size={14} /> : <FiAlertTriangle size={14} />}
+            {message.text}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 }

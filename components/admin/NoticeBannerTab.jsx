@@ -183,7 +183,7 @@ export default function NoticeBannerTab() {
             </span>
           </div>
           <button
-            onClick={fetchConfig}
+            onClick={fetchSettings}
             className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
