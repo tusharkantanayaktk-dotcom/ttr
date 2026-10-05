@@ -217,16 +217,16 @@ export const TronicsWhoSkeleton = () => (
  * Matches the compact bottom banner
  */
 export const HomeServicesSkeleton = () => (
-  <section className="px-4 py-3 bg-[var(--background)]">
-    <div className="max-w-2xl mx-auto flex items-center justify-between gap-4 p-4 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)]">
+  <section className="px-4 pt-2 pb-8 sm:pb-10 bg-[var(--background)]">
+    <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-[var(--card)]/40 border border-[var(--border)]">
       <div className="flex-1 space-y-1.5">
         <div className="flex items-center gap-2">
           <Skeleton width={8} height={8} variant="circle" />
-          <Skeleton width={100} height={14} className="rounded" />
+          <Skeleton width={120} height={14} className="rounded" />
         </div>
-        <Skeleton width="70%" height={10} className="rounded max-w-[200px]" />
+        <Skeleton width="60%" height={12} className="rounded max-w-md" />
       </div>
-      <Skeleton width={96} height={34} className="rounded-xl shrink-0" />
+      <Skeleton width={100} height={36} className="rounded-xl shrink-0" />
     </div>
   </section>
 );

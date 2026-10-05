@@ -357,101 +357,128 @@ export default function AnalyticsTab() {
       </div>
 
       {/* ================= RETURNING USERS & ORDER STATUS SPLIT ================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4">
         {/* Customer Acquisition vs Retention */}
-        <div className="lg:col-span-6 p-4 sm:p-5 rounded-2xl bg-[var(--card)] border border-[var(--border)] space-y-4">
-          <h3 className="text-sm font-black uppercase tracking-wider text-[var(--foreground)] flex items-center gap-2">
-            <FiUsers className="text-purple-400 shrink-0" /> New vs. Returning Buyers
-          </h3>
-          <p className="text-[11px] text-[var(--muted)]">
-            Analyze customer loyalty and repeat purchasing patterns
-          </p>
+        <div className="lg:col-span-6 p-4 sm:p-5 rounded-2xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between gap-4">
+          <div>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[var(--foreground)] flex items-center gap-2">
+                <FiUsers className="text-purple-400 shrink-0" size={15} /> Customer Loyalty
+              </h3>
+              <span className="px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-[10px] font-bold text-purple-400">
+                {userMetrics.returningUserRate || 0}% Repeat Rate
+              </span>
+            </div>
+            <p className="text-[11px] text-[var(--muted)] mt-1">
+              New vs. returning buyer conversion and spend split
+            </p>
+          </div>
 
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-            <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
-              <span className="text-[10px] font-bold uppercase text-cyan-400">New Buyers</span>
-              <h4 className="text-lg sm:text-xl font-black text-[var(--foreground)] mt-1">
+          <div className="grid grid-cols-2 gap-2.5">
+            <div className="p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
+              <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-cyan-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                <span>New Buyers</span>
+              </div>
+              <h4 className="text-xl font-black text-[var(--foreground)] mt-1.5 tracking-tight">
                 {userMetrics.newBuyersCount || 0}
               </h4>
-              <p className="text-[10px] text-[var(--muted)] mt-0.5">
-                ₹{(userMetrics.newBuyersRevenue || 0).toLocaleString("en-IN")} revenue
+              <p className="text-[11px] font-semibold text-[var(--muted)] mt-0.5">
+                ₹{(userMetrics.newBuyersRevenue || 0).toLocaleString("en-IN")}
               </p>
             </div>
 
-            <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
-              <span className="text-[10px] font-bold uppercase text-purple-400">Returning Buyers</span>
-              <h4 className="text-lg sm:text-xl font-black text-[var(--foreground)] mt-1">
+            <div className="p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
+              <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-purple-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                <span>Returning Buyers</span>
+              </div>
+              <h4 className="text-xl font-black text-[var(--foreground)] mt-1.5 tracking-tight">
                 {userMetrics.returningBuyersCount || 0}
               </h4>
-              <p className="text-[10px] text-[var(--muted)] mt-0.5">
-                ₹{(userMetrics.returningBuyersRevenue || 0).toLocaleString("en-IN")} revenue
+              <p className="text-[11px] font-semibold text-[var(--muted)] mt-0.5">
+                ₹{(userMetrics.returningBuyersRevenue || 0).toLocaleString("en-IN")}
               </p>
             </div>
           </div>
 
-          {/* Retention Progress Bar */}
-          <div className="space-y-1.5 pt-1">
-            <div className="flex justify-between text-xs font-bold">
+          {/* Retention Ratio Stacked Bar */}
+          <div className="space-y-1.5 pt-1 border-t border-[var(--border)]/60">
+            <div className="flex items-center justify-between text-[11px] font-semibold">
               <span className="text-[var(--muted)]">Retention Ratio</span>
-              <span className="text-purple-400">{userMetrics.returningUserRate || 0}% Repeat Rate</span>
+              <div className="flex items-center gap-3 text-[10px]">
+                <span className="text-cyan-400 font-bold">New: {100 - (userMetrics.returningUserRate || 0)}%</span>
+                <span className="text-purple-400 font-bold">Returning: {userMetrics.returningUserRate || 0}%</span>
+              </div>
             </div>
-            <div className="h-3 w-full bg-[var(--background)] rounded-full overflow-hidden flex border border-[var(--border)]">
+            <div className="h-2 w-full bg-[var(--foreground)]/[0.06] rounded-full overflow-hidden flex">
               <div
-                style={{ width: `${100 - (userMetrics.returningUserRate || 0)}%` }}
-                className="bg-cyan-500 transition-all duration-500"
-                title="New Buyers"
+                style={{ width: `${Math.max(100 - (userMetrics.returningUserRate || 0), 0)}%` }}
+                className="bg-cyan-500 transition-all duration-500 rounded-l-full"
+                title={`New: ${100 - (userMetrics.returningUserRate || 0)}%`}
               />
               <div
-                style={{ width: `${userMetrics.returningUserRate || 0}%` }}
-                className="bg-purple-500 transition-all duration-500"
-                title="Returning Buyers"
+                style={{ width: `${Math.max(userMetrics.returningUserRate || 0, 0)}%` }}
+                className="bg-purple-500 transition-all duration-500 rounded-r-full"
+                title={`Returning: ${userMetrics.returningUserRate || 0}%`}
               />
-            </div>
-            <div className="flex justify-between text-[10px] text-[var(--muted)] font-medium pt-0.5">
-              <span>🔵 New: {100 - (userMetrics.returningUserRate || 0)}%</span>
-              <span>🟣 Returning: {userMetrics.returningUserRate || 0}%</span>
             </div>
           </div>
         </div>
 
         {/* Order Status Breakdown */}
-        <div className="lg:col-span-6 p-4 sm:p-5 rounded-2xl bg-[var(--card)] border border-[var(--border)] space-y-4">
-          <h3 className="text-sm font-black uppercase tracking-wider text-[var(--foreground)] flex items-center gap-2">
-            <FiShoppingBag className="text-[var(--accent)] shrink-0" /> Order Fulfillment Pipeline
-          </h3>
-          <p className="text-[11px] text-[var(--muted)]">
-            Total of <strong>{summary.totalOrders || 0}</strong> transactions placed in this period
-          </p>
+        <div className="lg:col-span-6 p-4 sm:p-5 rounded-2xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between gap-4">
+          <div>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[var(--foreground)] flex items-center gap-2">
+                <FiShoppingBag className="text-[var(--accent)] shrink-0" size={15} /> Order Pipeline
+              </h3>
+              <span className="text-xs font-bold text-[var(--muted)]">
+                {summary.totalOrders || 0} Total in period
+              </span>
+            </div>
+            <p className="text-[11px] text-[var(--muted)] mt-1">
+              Fulfillment and transaction status breakdown
+            </p>
+          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
-            <div className="p-2.5 sm:p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center">
-              <FiCheckCircle className="w-4 h-4 mx-auto text-emerald-400 mb-1" />
-              <span className="text-[10px] font-bold uppercase text-emerald-400">Success</span>
-              <h4 className="text-base sm:text-lg font-black text-emerald-400 mt-0.5">{summary.successfulOrders || 0}</h4>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] text-center">
+              <div className="w-7 h-7 mx-auto rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-1.5">
+                <FiCheckCircle size={14} />
+              </div>
+              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] block">Success</span>
+              <h4 className="text-base sm:text-lg font-black text-emerald-500 mt-0.5">{summary.successfulOrders || 0}</h4>
             </div>
 
-            <div className="p-2.5 sm:p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-center">
-              <FiClock className="w-4 h-4 mx-auto text-amber-400 mb-1" />
-              <span className="text-[10px] font-bold uppercase text-amber-400">Pending</span>
-              <h4 className="text-base sm:text-lg font-black text-amber-400 mt-0.5">{summary.pendingOrders || 0}</h4>
+            <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] text-center">
+              <div className="w-7 h-7 mx-auto rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center mb-1.5">
+                <FiClock size={14} />
+              </div>
+              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] block">Pending</span>
+              <h4 className="text-base sm:text-lg font-black text-amber-500 mt-0.5">{summary.pendingOrders || 0}</h4>
             </div>
 
-            <div className="p-2.5 sm:p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-center">
-              <FiXCircle className="w-4 h-4 mx-auto text-red-400 mb-1" />
-              <span className="text-[10px] font-bold uppercase text-red-400">Failed</span>
-              <h4 className="text-base sm:text-lg font-black text-red-400 mt-0.5">{summary.failedOrders || 0}</h4>
+            <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] text-center">
+              <div className="w-7 h-7 mx-auto rounded-lg bg-rose-500/10 text-rose-500 flex items-center justify-center mb-1.5">
+                <FiXCircle size={14} />
+              </div>
+              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] block">Failed</span>
+              <h4 className="text-base sm:text-lg font-black text-rose-500 mt-0.5">{summary.failedOrders || 0}</h4>
             </div>
 
-            <div className="p-2.5 sm:p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-center">
-              <FiRepeat className="w-4 h-4 mx-auto text-blue-400 mb-1" />
-              <span className="text-[10px] font-bold uppercase text-blue-400">Refund</span>
-              <h4 className="text-base sm:text-lg font-black text-blue-400 mt-0.5">{summary.refundOrders || 0}</h4>
+            <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] text-center">
+              <div className="w-7 h-7 mx-auto rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center mb-1.5">
+                <FiRepeat size={14} />
+              </div>
+              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] block">Refund</span>
+              <h4 className="text-base sm:text-lg font-black text-blue-500 mt-0.5">{summary.refundOrders || 0}</h4>
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-between text-xs">
-            <span className="text-[var(--muted)] font-medium">All-Time Platform Orders:</span>
-            <span className="font-black text-[var(--foreground)]">{summary.allTimeOrdersCount?.toLocaleString() || 0}</span>
+          <div className="px-3 py-2 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] flex items-center justify-between text-xs">
+            <span className="text-[var(--muted)] text-[11px] font-medium">All-Time Platform Orders:</span>
+            <span className="font-black text-[var(--foreground)] tracking-tight">{(summary.allTimeOrdersCount || 0).toLocaleString("en-IN")}</span>
           </div>
         </div>
       </div>

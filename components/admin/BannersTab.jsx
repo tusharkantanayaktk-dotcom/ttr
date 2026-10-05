@@ -13,10 +13,12 @@ import {
   Type,
   ImageIcon,
   CheckCircle2,
-  XCircle
+  XCircle,
+  X
 } from "lucide-react";
 
 export default function BannersTab({ banners, onRefresh }) {
+  const [showAddForm, setShowAddForm] = useState(false);
   const [form, setForm] = useState({
     bannerImage: "",
     bannerTitle: "",
@@ -60,6 +62,7 @@ export default function BannersTab({ banners, onRefresh }) {
 
       if (res.ok) {
         resetForm();
+        setShowAddForm(false);
         onRefresh();
       }
     } finally {
@@ -78,6 +81,7 @@ export default function BannersTab({ banners, onRefresh }) {
       gameId: b.gameId?.join(", ") || "",
       isShow: b.isShow ?? true,
     });
+    setShowAddForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -102,6 +106,7 @@ export default function BannersTab({ banners, onRefresh }) {
 
       if (res.ok) {
         resetForm();
+        setShowAddForm(false);
         onRefresh();
       }
     } finally {
@@ -142,47 +147,81 @@ export default function BannersTab({ banners, onRefresh }) {
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Website Banners</h2>
 
-        <div className="flex items-center gap-3">
-          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => {
+              if (showAddForm && !editingId) {
+                setShowAddForm(false);
+              } else {
+                resetForm();
+                setShowAddForm(true);
+              }
+            }}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 ${
+              showAddForm
+                ? "bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)]"
+                : "bg-[var(--accent)] text-black shadow-sm"
+            }`}
+          >
+            {showAddForm ? <X size={14} /> : <Plus size={14} />}
+            <span>{showAddForm ? "Close Form" : "Add Banner"}</span>
+          </button>
+
+          <div className="px-3.5 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
             <ImageIcon size={14} className="text-[var(--accent)]" />
-            <span className="text-sm font-semibold text-[var(--muted)]">
+            <span className="text-xs font-semibold text-[var(--muted)]">
               {banners.length} Banners
             </span>
           </div>
+
           <button
             onClick={onRefresh}
             className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+            title="Refresh Banners"
           >
-            <RefreshCcw size={16} />
+            <RefreshCcw size={15} />
           </button>
         </div>
       </div>
 
       {/* ================= FORM CARD ================= */}
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={`
-          relative rounded-3xl overflow-hidden border backdrop-blur-3xl transition-all duration-500
-          ${editingId ? "border-[var(--accent)]/50 shadow-[0_0_40px_rgba(var(--accent-rgb),0.05)]" : "border-[var(--border)]"}
-          bg-[var(--card)]
-        `}
-      >
-        <div className="p-4 sm:px-6 sm:py-5 border-b border-[var(--border)] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-lg ${editingId ? "bg-[var(--accent)]/20 text-[var(--accent)]" : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]"}`}>
-              {editingId ? <Edit3 size={18} /> : <Plus size={18} />}
+      <AnimatePresence>
+        {showAddForm && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, overflow: "hidden" }}
+            animate={{ opacity: 1, height: "auto", overflow: "visible" }}
+            exit={{ opacity: 0, height: 0, overflow: "hidden" }}
+            transition={{ duration: 0.25 }}
+            className={`
+              relative rounded-3xl overflow-hidden border backdrop-blur-3xl transition-all duration-300
+              ${editingId ? "border-[var(--accent)]/50 shadow-[0_0_40px_rgba(var(--accent-rgb),0.05)]" : "border-[var(--border)]"}
+              bg-[var(--card)]
+            `}
+          >
+            <div className="p-4 sm:px-6 sm:py-5 border-b border-[var(--border)] flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg ${editingId ? "bg-[var(--accent)]/20 text-[var(--accent)]" : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]"}`}>
+                  {editingId ? <Edit3 size={18} /> : <Plus size={18} />}
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-[var(--foreground)]">
+                    {editingId ? "Update Banner" : "Add Banner"}
+                  </h3>
+                  <p className="text-[10px] text-[var(--muted)] font-medium mt-0.5">
+                    {editingId ? "Change banner details" : "Fill out the fields below"}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  resetForm();
+                  setShowAddForm(false);
+                }}
+                className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] transition-colors"
+              >
+                <X size={16} />
+              </button>
             </div>
-            <div>
-              <h3 className="text-sm font-bold text-[var(--foreground)]">
-                {editingId ? "Update Banner" : "Add Banner"}
-              </h3>
-              <p className="text-[10px] text-[var(--muted)] font-medium mt-0.5">
-                {editingId ? "Change banner details" : "Fill out the fields below"}
-              </p>
-            </div>
-          </div>
-        </div>
 
         <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8">
 
@@ -321,12 +360,30 @@ export default function BannersTab({ banners, onRefresh }) {
           </div>
         </div>
       </motion.div>
+    )}
+  </AnimatePresence>
 
       {/* ================= LIST SECTION ================= */}
-      <div className="space-y-5">
-        <h3 className="text-sm font-bold ml-1 text-[var(--foreground)]">Banner List ({banners.length})</h3>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-bold ml-1 text-[var(--foreground)]">
+            Banner List ({banners.length})
+          </h3>
+          {!showAddForm && (
+            <button
+              onClick={() => {
+                resetForm();
+                setShowAddForm(true);
+              }}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:border-[var(--accent)]/50 text-[var(--muted)] hover:text-[var(--foreground)] text-xs font-medium transition-all"
+            >
+              <Plus size={13} />
+              <span>New Banner</span>
+            </button>
+          )}
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
           <AnimatePresence mode="popLayout">
             {banners.map((b, idx) => (
               <motion.div
@@ -338,29 +395,29 @@ export default function BannersTab({ banners, onRefresh }) {
                 transition={{ delay: idx * 0.05 }}
                 className="group relative rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--card)] transition-all hover:shadow-xl hover:shadow-black/5"
               >
-                <div className="relative h-36 overflow-hidden">
+                <div className="relative h-28 overflow-hidden">
                   <img
                     src={b.bannerImage}
                     alt={b.bannerTitle}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute top-2.5 right-2.5">
                     {b.isShow ? (
-                      <span className="px-2 py-1 rounded-md bg-green-500/20 text-[8px] font-black text-green-500 uppercase border border-green-500/20 backdrop-blur-md">Visible</span>
+                      <span className="px-2 py-0.5 rounded-md bg-green-500/20 text-[8px] font-black text-green-500 uppercase border border-green-500/20 backdrop-blur-md">Visible</span>
                     ) : (
-                      <span className="px-2 py-1 rounded-md bg-red-500/20 text-[8px] font-black text-red-500 uppercase border border-red-500/20 backdrop-blur-md">Hidden</span>
+                      <span className="px-2 py-0.5 rounded-md bg-red-500/20 text-[8px] font-black text-red-500 uppercase border border-red-500/20 backdrop-blur-md">Hidden</span>
                     )}
                   </div>
-                  <div className="absolute bottom-3 left-3 right-3">
+                  <div className="absolute bottom-2.5 left-2.5 right-2.5">
                     <p className="text-xs font-bold text-white truncate">{b.bannerTitle}</p>
                   </div>
                 </div>
 
-                <div className="p-4 flex items-center justify-between gap-3 bg-[var(--card)]">
+                <div className="p-3 flex items-center justify-between gap-2 bg-[var(--card)]">
                   <p className="text-[10px] font-black text-[var(--accent)] truncate uppercase italic">/{b.bannerSlug}</p>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       onClick={() => toggleShow(b._id, b.isShow)}
                       className="p-2 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"

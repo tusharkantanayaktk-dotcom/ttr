@@ -35,11 +35,9 @@ export default function ThemeToggle() {
   const currentTheme = themes.find((t) => t.id === theme) || themes[0];
 
   return (
-    <motion.button
+    <button
       onClick={cycleTheme}
-      className="relative w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)]/50 hover:bg-[var(--card)] transition-all backdrop-blur-sm cursor-pointer overflow-hidden"
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.9 }}
+      className="relative w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)]/50 hover:bg-[var(--card)] transition-colors backdrop-blur-sm cursor-pointer overflow-hidden"
       title={`Theme: ${currentTheme.label} (Click to switch)`}
       aria-label={`Current theme: ${currentTheme.label}. Click to switch theme.`}
     >
@@ -56,7 +54,7 @@ export default function ThemeToggle() {
           {currentTheme.icon}
         </motion.span>
       </AnimatePresence>
-    </motion.button>
+    </button>
   );
 }
 

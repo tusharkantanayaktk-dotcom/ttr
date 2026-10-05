@@ -98,13 +98,13 @@ export default function GamesPage() {
     const firstLetter = game.gameName?.charAt(0).toUpperCase() || "?";
 
     return (
-      <div className="group relative">
+      <div className="relative">
         <Link
           href={disabled ? "#" : `/games/${game.gameSlug}`}
           className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         >
           {/* IMAGE WRAPPER */}
-          <div className="relative aspect-square rounded-none overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-[border-color,transform] duration-300 group-hover:border-[var(--accent)]/40">
+          <div className="relative aspect-square rounded-none overflow-hidden bg-[var(--card)] border border-[var(--border)]">
 
             <div className="relative w-full h-full flex items-center justify-center">
               {!imgError ? (
@@ -114,12 +114,11 @@ export default function GamesPage() {
                   fill
                   sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
                   onError={() => setImgError(true)}
-                  className={`object-cover transition-all duration-300 ease-out
-                ${disabled ? "grayscale opacity-30 scale-100" : "group-hover:scale-105"}`}
+                  className={`object-cover ${disabled ? "grayscale opacity-30" : ""}`}
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-[var(--card)] to-[var(--background)] flex items-center justify-center">
-                  <span className="text-4xl font-black text-[var(--accent)] opacity-20 group-hover:opacity-40 transition-opacity">
+                  <span className="text-4xl font-black text-[var(--accent)] opacity-20">
                     {firstLetter}
                   </span>
                 </div>
@@ -127,9 +126,7 @@ export default function GamesPage() {
 
               {/* High-Fidelity Overlays */}
               {!disabled && (
-                <>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-                </>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
               )}
 
               {/* TAGS / BADGES */}
@@ -138,7 +135,7 @@ export default function GamesPage() {
                   <div
                     className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest flex items-center gap-1.5 backdrop-blur-md border border-white/10"
                     style={{
-                      backgroundColor: `${game.tagId.tagBackground}cc`, // Add some transparency
+                      backgroundColor: `${game.tagId.tagBackground}cc`,
                       color: game.tagId.tagColor,
                     }}
                   >
@@ -146,12 +143,6 @@ export default function GamesPage() {
                     {game.tagId.tagName}
                   </div>
                 ) : <div />}
-
-                {!disabled && (
-                  <div className="w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 transform scale-75 group-hover:scale-100">
-                    <FiZap size={12} fill="currentColor" />
-                  </div>
-                )}
               </div>
 
               {/* OUT OF STOCK OVERLAY */}
@@ -170,7 +161,7 @@ export default function GamesPage() {
 
           {/* CARD FOOTER */}
           <div className="px-1.5 space-y-0.5">
-            <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors duration-200">
+            <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none">
               {game.gameName}
             </h3>
           </div>

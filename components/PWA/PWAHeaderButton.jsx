@@ -101,24 +101,22 @@ export default function PWAHeaderButton() {
 
   return (
     <>
-      <motion.button
+      <button
         onClick={handleClick}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.92 }}
-        className="relative flex items-center justify-center w-9 h-9 rounded-full bg-[var(--card)] hover:bg-[var(--accent)] hover:text-black border border-[var(--border)] hover:border-[var(--accent)] text-[var(--foreground)] transition-all duration-200 cursor-pointer shadow-sm group"
+        className="relative flex items-center justify-center w-9 h-9 rounded-full bg-[var(--card)] hover:bg-[var(--accent)] hover:text-black border border-[var(--border)] hover:border-[var(--accent)] text-[var(--foreground)] transition-colors duration-200 cursor-pointer shadow-sm group"
         title="Download / Install Tronics App"
         aria-label="Install App"
       >
         {installed ? (
           <FiCheck className="w-4 h-4 text-emerald-400" />
         ) : (
-          <FiDownload className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+          <FiDownload className="w-4 h-4" />
         )}
 
         {canInstall && (
           <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
         )}
-      </motion.button>
+      </button>
 
       {/* iOS / Browser Install Instructions Modal */}
       <AnimatePresence>

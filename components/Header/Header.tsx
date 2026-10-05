@@ -157,12 +157,8 @@ export default function Header() {
 
         {/* LOGO SECTION */}
         <div className="flex items-center">
-          <Link href="/" className="relative group flex items-center gap-2">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative z-10 flex items-center"
-            >
+          <Link href="/" className="relative flex items-center gap-2">
+            <div className="relative z-10 flex items-center">
               <Image
                 src={logo}
                 alt="Tronics Logo"
@@ -171,7 +167,7 @@ export default function Header() {
                 priority
                 className="w-9 h-9 object-contain"
               />
-            </motion.div>
+            </div>
             <span className="font-black text-base sm:text-lg tracking-tighter uppercase italic bg-gradient-to-r from-[var(--foreground)] to-[var(--foreground)]/80 bg-clip-text">
               Tronics<span className="text-[var(--accent)]">Store</span>
             </span>
@@ -187,16 +183,10 @@ export default function Header() {
             <Link
               key={item.name}
               href={item.href}
-              className="relative flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] transition-colors group"
+              className="relative flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--foreground)]"
             >
-              <item.icon className="text-lg opacity-70 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all" />
+              <item.icon className="text-lg text-[var(--accent)]" />
               <span>{item.name}</span>
-              <motion.span
-                className="absolute bottom-0 left-4 right-4 h-0.5 bg-[var(--accent)] rounded-full origin-left opacity-0 group-hover:opacity-100"
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              />
             </Link>
           ))}
         </nav>
@@ -204,11 +194,9 @@ export default function Header() {
         {/* ACTIONS SECTION */}
         <div className="flex items-center gap-2 sm:gap-3" ref={dropdownRef}>
           {/* Quick Search Button */}
-          <motion.button
+          <button
             onClick={() => setSearchOpen(true)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/50 transition-all text-xs"
+            className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-[var(--foreground)] text-xs"
             title="Search games & items (Ctrl+K)"
           >
             <FiSearch size={14} className="text-[var(--accent)]" />
@@ -216,7 +204,7 @@ export default function Header() {
             <kbd className="hidden lg:inline-block px-1.5 py-0.2 text-[9px] font-mono rounded bg-[var(--foreground)]/[0.06] border border-[var(--border)] text-[var(--muted)]">
               ⌘K
             </kbd>
-          </motion.button>
+          </button>
 
           {/* PWA Download Button */}
           <PWAHeaderButton />
@@ -230,16 +218,14 @@ export default function Header() {
             {loading ? (
               <Skeleton variant="circle" className="w-9 h-9 border-none" />
             ) : (
-              <motion.button
+              <button
                 onClick={() => {
                   setUserMenuOpen(!userMenuOpen);
                 }}
                 className={`
-                  flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300
-                  ${userMenuOpen ? 'bg-[var(--accent)] ring-2 ring-[var(--accent)]/50' : 'hover:bg-[var(--card)]/50 border border-transparent hover:border-[var(--border)]'}
+                  flex items-center justify-center w-9 h-9 rounded-full transition-colors
+                  ${userMenuOpen ? 'ring-2 ring-[var(--accent)]' : ''}
                 `}
-                whileHover={{ y: -1 }}
-                whileTap={{ scale: 0.97 }}
               >
                 <div className="w-full h-full rounded-full bg-[var(--accent)] flex items-center justify-center overflow-hidden">
                   {user?.avatar && !avatarError ? (
@@ -255,7 +241,7 @@ export default function Header() {
                     </span>
                   )}
                 </div>
-              </motion.button>
+              </button>
             )}
 
 
@@ -342,14 +328,11 @@ export default function Header() {
                       ) : (
                         <>
                           {/* USER PROFILE CARD */}
-                          <div className="relative p-3 rounded-2xl bg-gradient-to-br from-[var(--accent)]/[0.08] via-[var(--card)] to-[var(--foreground)]/[0.02] border border-[var(--accent)]/25 overflow-hidden">
-                            {/* Ambient Glow */}
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--accent)]/10 rounded-full blur-2xl pointer-events-none" />
-
-                            <div className="flex items-center gap-2.5 relative z-10">
+                          <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-[var(--foreground)]/[0.04] to-[var(--foreground)]/[0.01] border border-[var(--border)] overflow-hidden shadow-sm">
+                            <div className="flex items-center gap-3 relative z-10">
                               {/* Avatar */}
                               <div className="relative shrink-0">
-                                <div className="w-10 h-10 rounded-xl overflow-hidden bg-[var(--accent)] p-[1.5px]">
+                                <div className="w-11 h-11 rounded-xl overflow-hidden p-[1.5px] bg-gradient-to-tr from-[var(--accent)] via-blue-500 to-indigo-500">
                                   <div className="w-full h-full rounded-[0.6rem] overflow-hidden bg-[var(--card)] flex items-center justify-center">
                                     {user?.avatar && !avatarError ? (
                                       <img
@@ -365,70 +348,64 @@ export default function Header() {
                                     )}
                                   </div>
                                 </div>
-                                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[var(--card)]" />
+                                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[var(--card)] ring-1 ring-emerald-400/40" />
                               </div>
 
                               {/* Identity Details */}
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-1.5">
-                                  <h4 className="text-xs font-bold text-[var(--foreground)] truncate">
-                                    {user.name}
-                                  </h4>
-                                </div>
-                                <p className="text-[10px] text-[var(--muted)] truncate font-mono">
+                                <h4 className="text-sm font-bold text-[var(--foreground)] tracking-tight truncate">
+                                  {user.name}
+                                </h4>
+                                <p className="text-[10px] text-[var(--muted)] truncate font-medium mt-0.5 opacity-80">
                                   {user.email}
                                 </p>
-                                <div className="mt-1">
+                                <div className="mt-1.5 flex items-center gap-1.5">
                                   <span className={`
-                                    text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded border inline-block
+                                    text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border inline-flex items-center gap-1
                                     ${user.userType === "owner" 
-                                      ? "bg-amber-500/15 text-amber-500 border-amber-500/30" 
+                                      ? "bg-amber-500/10 text-amber-500 border-amber-500/20" 
                                       : user.userType === "admin"
-                                      ? "bg-purple-500/15 text-purple-500 border-purple-500/30"
-                                      : "bg-[var(--accent)]/15 text-[var(--accent)] border-[var(--accent)]/30"}
+                                      ? "bg-purple-500/10 text-purple-500 border-purple-500/20"
+                                      : "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20"}
                                   `}>
-                                    {user.userType === "owner" ? "👑 Owner" : user.userType === "admin" ? "⚡ Reseller" : "User"}
+                                    {user.userType === "owner" ? "👑 OWNER" : user.userType === "admin" ? "⚡ RESELLER" : "MEMBER"}
                                   </span>
                                 </div>
                               </div>
 
                               {/* Logout Button */}
-                              <motion.button
+                              <button
                                 onClick={handleLogout}
-                                className="w-7 h-7 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/20"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.9 }}
+                                className="w-8 h-8 rounded-xl bg-[var(--foreground)]/[0.03] text-[var(--muted)] hover:text-rose-500 hover:bg-rose-500/10 transition-colors flex items-center justify-center shrink-0 border border-[var(--border)] active:scale-95"
                                 title="Sign Out"
                               >
                                 <FiLogOut size={13} />
-                              </motion.button>
+                              </button>
                             </div>
                           </div>
 
                           {/* WALLET BALANCE CARD */}
-                          <div className="p-3 rounded-2xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] relative overflow-hidden">
-                            <div className="flex items-center justify-between mb-1.5">
-                              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)]">Wallet Balance</span>
-                              <span className="text-[9px] font-mono text-[var(--accent)] uppercase font-bold">Active</span>
+                          <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[var(--foreground)]/[0.03] to-[var(--foreground)]/[0.005] border border-[var(--border)] relative overflow-hidden">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">Wallet Balance</span>
+                              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[9px] font-bold uppercase tracking-wider">
+                                Active
+                              </span>
                             </div>
-                            <div className="flex items-end justify-between">
-                              <div className="flex items-baseline gap-1">
-                                <span className="text-xl font-black text-[var(--foreground)] tracking-tight font-mono">
-                                  ₹{user.wallet?.toFixed(1) || "0.0"}
-                                </span>
-                              </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-2xl font-black text-[var(--foreground)] tracking-tight">
+                                ₹{user.wallet?.toFixed(1) || "0.0"}
+                              </span>
                               <Link
                                 href="/dashboard/wallet"
                                 onClick={() => setUserMenuOpen(false)}
                               >
-                                <motion.button
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  className="px-2.5 py-1 rounded-lg bg-[var(--accent)] text-black font-black text-[10px] uppercase tracking-wider flex items-center gap-1"
+                                <button
+                                  className="px-3.5 py-1.5 rounded-xl bg-[var(--accent)] text-black font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm active:scale-95 transition-transform"
                                 >
-                                  <FiPlus size={11} />
+                                  <FiPlus size={12} />
                                   <span>Add Money</span>
-                                </motion.button>
+                                </button>
                               </Link>
                             </div>
                           </div>
@@ -442,14 +419,16 @@ export default function Header() {
                               { label: "Regions", desc: "Countries", icon: FiGlobe, href: "/region" },
                             ].map((tile) => (
                               <Link key={tile.label} href={tile.href} onClick={() => setUserMenuOpen(false)}>
-                                <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/[0.04] transition-all group flex flex-col justify-between h-full">
-                                  <div className="flex items-center justify-between mb-2">
-                                    <tile.icon size={14} className="text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                                    <FiChevronRight size={11} className="text-[var(--muted)] opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                                <div className="p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] flex flex-col justify-between h-full hover:border-[var(--accent)]/40 transition-colors">
+                                  <div className="flex items-center justify-between mb-2.5">
+                                    <div className="w-6 h-6 rounded-lg bg-[var(--foreground)]/[0.04] flex items-center justify-center text-[var(--accent)]">
+                                      <tile.icon size={13} />
+                                    </div>
+                                    <FiChevronRight size={12} className="text-[var(--muted)] opacity-40" />
                                   </div>
                                   <div>
-                                    <div className="text-[11px] font-bold text-[var(--foreground)] tracking-tight leading-none">{tile.label}</div>
-                                    <div className="text-[9px] text-[var(--muted)] font-mono mt-0.5">{tile.desc}</div>
+                                    <div className="text-xs font-bold text-[var(--foreground)] tracking-tight">{tile.label}</div>
+                                    <div className="text-[10px] text-[var(--muted)] font-medium mt-0.5">{tile.desc}</div>
                                   </div>
                                 </div>
                               </Link>
@@ -457,18 +436,20 @@ export default function Header() {
                           </div>
 
                           {/* ESSENTIAL LINKS */}
-                          <div className="space-y-1">
+                          <div className="space-y-1.5">
                             {[
                               { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
                               { label: "Help & Support", icon: FiLifeBuoy, href: "/dashboard/query" },
                             ].map((link) => (
                               <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-[var(--foreground)]/[0.015] border border-[var(--border)]/60 hover:border-[var(--accent)]/30 hover:bg-[var(--foreground)]/[0.04] transition-all group">
+                                <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:border-[var(--accent)]/30 transition-colors">
                                   <div className="flex items-center gap-2.5">
-                                    <link.icon size={13} className="text-[var(--accent)]" />
-                                    <span className="text-xs font-semibold text-[var(--foreground)]/90 group-hover:text-[var(--foreground)]">{link.label}</span>
+                                    <div className="w-5 h-5 rounded-md bg-[var(--foreground)]/[0.04] flex items-center justify-center text-[var(--accent)]">
+                                      <link.icon size={12} />
+                                    </div>
+                                    <span className="text-xs font-bold text-[var(--foreground)]">{link.label}</span>
                                   </div>
-                                  <FiChevronRight size={12} className="text-[var(--muted)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                                  <FiChevronRight size={12} className="text-[var(--muted)] opacity-50" />
                                 </div>
                               </Link>
                             ))}
@@ -477,17 +458,17 @@ export default function Header() {
                           {/* OWNER ADMIN PANEL */}
                           {user.userType === "owner" && (
                             <Link href="/owner-panal" onClick={() => setUserMenuOpen(false)} className="mt-0.5">
-                              <motion.div
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500/20 via-[var(--accent)]/20 to-amber-500/10 border border-amber-500/30 text-[var(--foreground)] font-bold text-xs uppercase tracking-wider flex items-center justify-between hover:border-amber-500/60 transition-all group"
+                              <div
+                                className="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-[var(--foreground)]/[0.03] to-amber-500/5 border border-amber-500/25 text-[var(--foreground)] font-bold text-xs uppercase tracking-wider flex items-center justify-between shadow-sm active:scale-[0.99] transition-transform"
                               >
-                                <div className="flex items-center gap-2">
-                                  <FiSettings size={13} className="text-amber-500 group-hover:rotate-90 transition-transform duration-500" />
-                                  <span className="text-[11px] font-black tracking-wide">Owner Panel</span>
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-6 h-6 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-500">
+                                    <FiSettings size={13} />
+                                  </div>
+                                  <span className="text-xs font-black tracking-wide">Owner Panel</span>
                                 </div>
-                                <span className="text-[9px] font-mono text-amber-500 uppercase font-black px-1.5 py-0.5 rounded bg-amber-500/10">ADMIN</span>
-                              </motion.div>
+                                <span className="text-[9px] font-mono text-amber-500 uppercase font-black px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20">ADMIN</span>
+                              </div>
                             </Link>
                           )}
                         </>
