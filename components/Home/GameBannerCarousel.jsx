@@ -80,7 +80,7 @@ export default function GameBannerCarousel() {
 
   return (
     <div
-      className="relative w-full max-w-[1600px] mx-auto px-4 md:px-12 mt-2 md:mt-6 select-none group overflow-hidden"
+      className="relative w-full max-w-7xl mx-auto px-4 md:px-12 mt-2 md:mt-6 select-none group overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

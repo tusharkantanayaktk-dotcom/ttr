@@ -249,12 +249,12 @@ export default function Header() {
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}
                     transition={{ type: "spring", damping: 28, stiffness: 280 }}
-                    className="fixed right-0 top-0 h-[100dvh] w-[88vw] max-w-[310px] bg-[var(--card)]/95 backdrop-blur-2xl border-l border-[var(--border)] z-[1001] flex flex-col shadow-[-10px_0_30px_rgba(0,0,0,0.3)]"
+                    className="fixed right-0 top-0 h-[100dvh] w-[88vw] max-w-[310px] bg-[var(--card)]/95 backdrop-blur-2xl border-l border-[var(--border)] z-[1001] flex flex-col"
                   >
                     {/* Top Header Bar */}
                     <div className="px-4 py-3 flex items-center justify-between border-b border-[var(--border)] shrink-0 bg-[var(--foreground)]/[0.01]">
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         <span className="text-[11px] font-black uppercase tracking-widest text-[var(--foreground)]/90">Account</span>
                       </div>
                       <motion.button
@@ -272,7 +272,6 @@ export default function Header() {
                         <div className="flex flex-col items-center justify-center text-center py-6 my-auto">
                           {/* Guest Icon */}
                           <div className="relative mb-4 group">
-                            <div className="absolute inset-0 bg-[var(--accent)]/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
                             <div className="w-14 h-14 bg-gradient-to-br from-[var(--accent)]/20 via-[var(--card)] to-[var(--foreground)]/[0.04] text-[var(--accent)] rounded-2xl flex items-center justify-center border border-[var(--accent)]/30 relative z-10">
                               <FiUser size={24} />
                             </div>
@@ -303,7 +302,7 @@ export default function Header() {
 
                           <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full">
                             <motion.button
-                              className="w-full py-2.5 bg-[var(--accent)] text-black font-black uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20 hover:brightness-110 transition-all"
+                              className="w-full py-2.5 bg-[var(--accent)] text-black font-black uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 hover:brightness-110 transition-all"
                               whileHover={{ scale: 1.01 }}
                               whileTap={{ scale: 0.98 }}
                             >

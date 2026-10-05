@@ -22,7 +22,7 @@ export const TopNoticeBannerSkeleton = () => (
  * Matches the exact dimensions and controls of GameBannerCarousel
  */
 export const GameBannerCarouselSkeleton = () => (
-  <div className="relative w-full max-w-[1600px] mx-auto px-4 md:px-12 mt-2 md:mt-6">
+  <div className="relative w-full max-w-7xl mx-auto px-4 md:px-12 mt-2 md:mt-6">
     <div className="relative h-[220px] sm:h-[240px] md:h-[340px] rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] bg-[var(--card)]/40 p-4 sm:p-8 flex flex-col justify-between">
       {/* Top Tag & Indicator */}
       <div className="flex items-center justify-between">
