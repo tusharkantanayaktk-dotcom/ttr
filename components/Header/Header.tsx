@@ -327,147 +327,154 @@ export default function Header() {
                         </div>
                       ) : (
                         <>
-                          {/* USER PROFILE CARD */}
-                          <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-[var(--foreground)]/[0.04] to-[var(--foreground)]/[0.01] border border-[var(--border)] overflow-hidden shadow-sm">
-                            <div className="flex items-center gap-3 relative z-10">
-                              {/* Avatar */}
-                              <div className="relative shrink-0">
-                                <div className="w-11 h-11 rounded-xl overflow-hidden p-[1.5px] bg-gradient-to-tr from-[var(--accent)] via-blue-500 to-indigo-500">
-                                  <div className="w-full h-full rounded-[0.6rem] overflow-hidden bg-[var(--card)] flex items-center justify-center">
-                                    {user?.avatar && !avatarError ? (
-                                      <img
-                                        src={user.avatar}
-                                        alt="Avatar"
-                                        className="object-cover w-full h-full"
-                                        onError={() => setAvatarError(true)}
-                                      />
-                                    ) : (
-                                      <span className="text-[var(--accent)] font-black text-sm uppercase">
-                                        {user.name?.charAt(0) || "U"}
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[var(--card)] ring-1 ring-emerald-400/40" />
-                              </div>
-
-                              {/* Identity Details */}
-                              <div className="flex-1 min-w-0">
-                                <h4 className="text-sm font-bold text-[var(--foreground)] tracking-tight truncate">
-                                  {user.name}
-                                </h4>
-                                <p className="text-[10px] text-[var(--muted)] truncate font-medium mt-0.5 opacity-80">
-                                  {user.email}
-                                </p>
-                                <div className="mt-1.5 flex items-center gap-1.5">
-                                  <span className={`
-                                    text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border inline-flex items-center gap-1
-                                    ${user.userType === "owner" 
-                                      ? "bg-amber-500/10 text-amber-500 border-amber-500/20" 
-                                      : user.userType === "admin"
-                                      ? "bg-purple-500/10 text-purple-500 border-purple-500/20"
-                                      : "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20"}
-                                  `}>
-                                    {user.userType === "owner" ? "👑 OWNER" : user.userType === "admin" ? "⚡ RESELLER" : "MEMBER"}
-                                  </span>
+                          {/* USER PROFILE INFO */}
+                          <div className="flex items-center gap-3 py-1">
+                            {/* Avatar */}
+                            <div className="relative shrink-0">
+                              <div className="w-9 h-9 rounded-lg overflow-hidden p-[1.5px] bg-gradient-to-tr from-[var(--accent)] via-blue-500 to-indigo-500">
+                                <div className="w-full h-full rounded-[0.45rem] overflow-hidden bg-[var(--card)] flex items-center justify-center">
+                                  {user?.avatar && !avatarError ? (
+                                    <img
+                                      src={user.avatar}
+                                      alt="Avatar"
+                                      className="object-cover w-full h-full"
+                                      onError={() => setAvatarError(true)}
+                                    />
+                                  ) : (
+                                    <span className="text-[var(--accent)] font-black text-xs uppercase">
+                                      {user.name?.charAt(0) || "U"}
+                                    </span>
+                                  )}
                                 </div>
                               </div>
-
-                              {/* Logout Button */}
-                              <button
-                                onClick={handleLogout}
-                                className="w-8 h-8 rounded-xl bg-[var(--foreground)]/[0.03] text-[var(--muted)] hover:text-rose-500 hover:bg-rose-500/10 transition-colors flex items-center justify-center shrink-0 border border-[var(--border)] active:scale-95"
-                                title="Sign Out"
-                              >
-                                <FiLogOut size={13} />
-                              </button>
+                              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[var(--card)] ring-1 ring-emerald-400/40" />
                             </div>
+
+                            {/* Identity Details */}
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-sm font-bold text-[var(--foreground)] tracking-tight truncate">
+                                {user.name}
+                              </h4>
+                              <p className="text-[10px] text-[var(--muted)] truncate font-medium mt-0.5 opacity-80">
+                                {user.email}
+                              </p>
+                              <div className="mt-1.5 flex items-center gap-1.5">
+                                <span className={`
+                                  text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border inline-flex items-center gap-1
+                                  ${user.userType === "owner" 
+                                    ? "bg-amber-500/10 text-amber-500 border-amber-500/20" 
+                                    : user.userType === "admin"
+                                    ? "bg-purple-500/10 text-purple-500 border-purple-500/20"
+                                    : "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20"}
+                                `}>
+                                  {user.userType === "owner" ? "👑 OWNER" : user.userType === "admin" ? "⚡ RESELLER" : "MEMBER"}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Logout Button */}
+                            <button
+                              onClick={handleLogout}
+                              className="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-rose-500/20 active:scale-95 shadow-sm"
+                              title="Sign Out"
+                            >
+                              <FiLogOut size={14} />
+                            </button>
                           </div>
 
-                          {/* WALLET BALANCE CARD */}
-                          <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[var(--foreground)]/[0.03] to-[var(--foreground)]/[0.005] border border-[var(--border)] relative overflow-hidden">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">Wallet Balance</span>
-                              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[9px] font-bold uppercase tracking-wider">
-                                Active
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-2xl font-black text-[var(--foreground)] tracking-tight">
+                          {/* WALLET SECTION - CLEAN FLOATING DESIGN */}
+                          <div className="py-2.5 px-3 rounded-2xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]/70 flex items-center justify-between">
+                            <div>
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">Wallet</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                              </div>
+                              <div className="text-xl font-black text-[var(--foreground)] tracking-tight mt-0.5">
                                 ₹{user.wallet?.toFixed(1) || "0.0"}
-                              </span>
-                              <Link
-                                href="/dashboard/wallet"
-                                onClick={() => setUserMenuOpen(false)}
+                              </div>
+                            </div>
+                            <Link
+                              href="/dashboard/wallet"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              <button
+                                className="px-3 py-1.5 rounded-xl bg-[var(--accent)] text-black font-extrabold text-[11px] tracking-wide flex items-center gap-1 hover:brightness-110 active:scale-95 transition-all shadow-sm"
                               >
-                                <button
-                                  className="px-3.5 py-1.5 rounded-xl bg-[var(--accent)] text-black font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm active:scale-95 transition-transform"
-                                >
-                                  <FiPlus size={12} />
-                                  <span>Add Money</span>
-                                </button>
-                              </Link>
+                                <FiPlus size={13} />
+                                <span>Top Up</span>
+                              </button>
+                            </Link>
+                          </div>
+
+                          {/* NAVIGATION LIST (CLEAN, BORDERLESS & PREMIUM) */}
+                          <div className="pt-1 flex flex-col divide-y divide-[var(--border)]/40">
+                            {/* Primary Navigation */}
+                            <div className="space-y-0.5 pb-2">
+                              {[
+                                { label: "Orders", desc: "Purchase history", icon: FiSettings, href: "/dashboard/order" },
+                                { label: "Leaderboard", desc: "Top spenders", icon: FiBarChart2, href: "/leaderboard" },
+                                { label: "Games", desc: "Browse catalog", icon: FiGrid, href: "/games" },
+                                { label: "Regions", desc: "Server locations", icon: FiGlobe, href: "/region" },
+                              ].map((item) => (
+                                <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)}>
+                                  <div className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[var(--foreground)]/[0.04] transition-all group">
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-7 h-7 rounded-lg bg-[var(--foreground)]/[0.03] group-hover:bg-[var(--accent)]/10 text-[var(--muted)] group-hover:text-[var(--accent)] flex items-center justify-center transition-colors">
+                                        <item.icon size={14} />
+                                      </div>
+                                      <div>
+                                        <div className="text-xs font-semibold text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors">
+                                          {item.label}
+                                        </div>
+                                        <div className="text-[10px] text-[var(--muted)] font-medium mt-0.5">
+                                          {item.desc}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <FiChevronRight size={13} className="text-[var(--muted)]/50 group-hover:text-[var(--foreground)] group-hover:translate-x-0.5 transition-all" />
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+
+                            {/* Secondary Navigation */}
+                            <div className="space-y-0.5 pt-2">
+                              {[
+                                { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
+                                { label: "Help & Support", icon: FiLifeBuoy, href: "/dashboard/query" },
+                              ].map((item) => (
+                                <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)}>
+                                  <div className="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-[var(--foreground)]/[0.04] transition-all group">
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-7 h-7 rounded-lg bg-[var(--foreground)]/[0.03] group-hover:bg-[var(--accent)]/10 text-[var(--muted)] group-hover:text-[var(--accent)] flex items-center justify-center transition-colors">
+                                        <item.icon size={14} />
+                                      </div>
+                                      <span className="text-xs font-semibold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+                                        {item.label}
+                                      </span>
+                                    </div>
+                                    <FiChevronRight size={13} className="text-[var(--muted)]/50 group-hover:text-[var(--foreground)] group-hover:translate-x-0.5 transition-all" />
+                                  </div>
+                                </Link>
+                              ))}
                             </div>
                           </div>
 
-                          {/* 2x2 SHORTCUT TILES */}
-                          <div className="grid grid-cols-2 gap-2">
-                            {[
-                              { label: "Orders", desc: "Purchase History", icon: FiSettings, href: "/dashboard/order" },
-                              { label: "Leaderboard", desc: "Top Users", icon: FiBarChart2, href: "/leaderboard" },
-                              { label: "Games", desc: "All Games", icon: FiGrid, href: "/games" },
-                              { label: "Regions", desc: "Countries", icon: FiGlobe, href: "/region" },
-                            ].map((tile) => (
-                              <Link key={tile.label} href={tile.href} onClick={() => setUserMenuOpen(false)}>
-                                <div className="p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] flex flex-col justify-between h-full hover:border-[var(--accent)]/40 transition-colors">
-                                  <div className="flex items-center justify-between mb-2.5">
-                                    <div className="w-6 h-6 rounded-lg bg-[var(--foreground)]/[0.04] flex items-center justify-center text-[var(--accent)]">
-                                      <tile.icon size={13} />
-                                    </div>
-                                    <FiChevronRight size={12} className="text-[var(--muted)] opacity-40" />
-                                  </div>
-                                  <div>
-                                    <div className="text-xs font-bold text-[var(--foreground)] tracking-tight">{tile.label}</div>
-                                    <div className="text-[10px] text-[var(--muted)] font-medium mt-0.5">{tile.desc}</div>
-                                  </div>
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-
-                          {/* ESSENTIAL LINKS */}
-                          <div className="space-y-1.5">
-                            {[
-                              { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
-                              { label: "Help & Support", icon: FiLifeBuoy, href: "/dashboard/query" },
-                            ].map((link) => (
-                              <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] hover:border-[var(--accent)]/30 transition-colors">
-                                  <div className="flex items-center gap-2.5">
-                                    <div className="w-5 h-5 rounded-md bg-[var(--foreground)]/[0.04] flex items-center justify-center text-[var(--accent)]">
-                                      <link.icon size={12} />
-                                    </div>
-                                    <span className="text-xs font-bold text-[var(--foreground)]">{link.label}</span>
-                                  </div>
-                                  <FiChevronRight size={12} className="text-[var(--muted)] opacity-50" />
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-
-                          {/* OWNER ADMIN PANEL */}
+                          {/* OWNER PANEL - SUBTLE GOLD ACCENT */}
                           {user.userType === "owner" && (
-                            <Link href="/owner-panal" onClick={() => setUserMenuOpen(false)} className="mt-0.5">
+                            <Link href="/owner-panal" onClick={() => setUserMenuOpen(false)} className="mt-1">
                               <div
-                                className="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-[var(--foreground)]/[0.03] to-amber-500/5 border border-amber-500/25 text-[var(--foreground)] font-bold text-xs uppercase tracking-wider flex items-center justify-between shadow-sm active:scale-[0.99] transition-transform"
+                                className="w-full py-2.5 px-3 rounded-xl bg-amber-500/[0.06] hover:bg-amber-500/[0.12] border border-amber-500/20 text-[var(--foreground)] transition-all flex items-center justify-between group cursor-pointer"
                               >
                                 <div className="flex items-center gap-2.5">
-                                  <div className="w-6 h-6 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-500">
+                                  <div className="w-6 h-6 rounded-md bg-amber-500/15 text-amber-500 flex items-center justify-center group-hover:scale-105 transition-transform">
                                     <FiSettings size={13} />
                                   </div>
-                                  <span className="text-xs font-black tracking-wide">Owner Panel</span>
+                                  <span className="text-xs font-bold text-amber-400">Owner Panel</span>
                                 </div>
-                                <span className="text-[9px] font-mono text-amber-500 uppercase font-black px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20">ADMIN</span>
+                                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400">
+                                  ADMIN
+                                </span>
                               </div>
                             </Link>
                           )}
