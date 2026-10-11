@@ -125,137 +125,126 @@ export default function WalletTab({
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-        {/* LEFT: ADD MONEY */}
+        {/* LEFT: BALANCE & RECHARGE (CLEAN, CARDLESS, PREMIUM) */}
         <div className="lg:col-span-7 space-y-6">
 
-          {/* BALANCE CARD (Compact Premium) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] overflow-hidden group"
-          >
-            <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent)] opacity-[0.03] blur-[80px] rounded-full" />
-            
-            <div className="relative z-10 flex justify-between items-center gap-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)] opacity-60 mb-1">
-                  <FiTrendingUp className="text-[var(--accent)]" />
-                  Balance
-                </div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-lg font-bold text-[var(--accent)]">₹</span>
-                  <span className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--foreground)]">
+          {/* BALANCE HERO (NO CARD BORDER) */}
+          <div className="pb-4 border-b border-[var(--border)]/50">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)]">
+                  Available Balance
+                </span>
+                <div className="flex items-baseline gap-1 mt-1">
+                  <span className="text-2xl font-bold text-[var(--accent)]">₹</span>
+                  <span className="text-4xl sm:text-5xl font-black tracking-tight text-[var(--foreground)]">
                     {walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="pt-2 flex flex-col">
-                  <span className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40">Account</span>
-                  <span className="text-[10px] font-mono font-bold text-[var(--foreground)] opacity-80">
-                    {storedPhone ? `+91 ${storedPhone.slice(0, 3)}••••${storedPhone.slice(-3)}` : 'Guest'}
-                  </span>
+                <div className="text-xs font-mono text-[var(--muted)] mt-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>{storedPhone ? `+91 ${storedPhone.slice(0, 3)}••••${storedPhone.slice(-3)}` : 'Active Account'}</span>
                 </div>
               </div>
 
-              <div className="shrink-0 flex flex-col items-end">
-                <div className="h-10 w-10 rounded-lg bg-[var(--accent)] flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                  <FaWallet className="text-lg text-black" />
-                </div>
-                <div className="mt-2 flex -space-x-2 opacity-20">
-                  <div className="h-5 w-5 rounded-full bg-[var(--accent)]" />
-                  <div className="h-5 w-5 rounded-full bg-[var(--foreground)]" />
-                </div>
+              <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0">
+                <FaWallet size={16} />
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* ADD MONEY COMPONENT */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)]/50 p-5 sm:p-6 shadow-sm relative overflow-hidden"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <div className="h-7 w-7 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
-                <FiPlus size={14} />
+          {/* RECHARGE INPUT & CHIPS */}
+          <div className="space-y-5">
+            <div>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)] block mb-2">
+                Amount to Add
+              </label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-[var(--muted)]">₹</span>
+                <input
+                  type="number"
+                  value={amount}
+                  placeholder="0.00"
+                  onChange={(e) => { setAmount(e.target.value); setAmountError(""); }}
+                  className="w-full pl-9 pr-4 py-3.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/40 
+                             focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] outline-none transition-all 
+                             text-2xl font-bold placeholder:opacity-20 shadow-sm"
+                />
               </div>
-              <h3 className="text-xs font-black uppercase tracking-widest">Recharge</h3>
-            </div>
+              {amountError && <p className="text-rose-500 text-[11px] font-medium mt-1.5">{amountError}</p>}
 
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <div className="relative group/input">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-bold text-[var(--muted)] group-focus-within/input:text-[var(--accent)] transition-colors">₹</div>
-                  <input
-                    type="number"
-                    value={amount}
-                    placeholder="0.00"
-                    onChange={(e) => { setAmount(e.target.value); setAmountError(""); }}
-                    className="w-full pl-10 pr-5 py-4 rounded-xl border border-[var(--border)] bg-[var(--background)] 
-                                   focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all 
-                                   text-xl font-black placeholder:opacity-20 placeholder:font-bold"
-                  />
-                </div>
-                {amountError && <p className="text-red-500 text-[9px] font-black uppercase pl-2">{amountError}</p>}
-
-                <div className="grid grid-cols-4 gap-2">
-                  {[100, 500, 1000, 2000].map((val) => (
-                    <button
-                      key={val}
-                      onClick={() => setAmount(val.toString())}
-                      className="py-2.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[8px] font-black uppercase tracking-tight
-                                 hover:bg-[var(--accent)] hover:text-black transition-all active:scale-95"
-                    >
-                      +₹{val}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Quick Amount Chips */}
+              <div className="grid grid-cols-4 gap-2 mt-2.5">
+                {[100, 500, 1000, 2000].map((val) => (
                   <button
+                    key={val}
                     type="button"
-                    onClick={() => setMethod("upi")}
-                    className={`relative overflow-hidden p-4 rounded-2xl border transition-all duration-300 flex items-center gap-3 ${method === "upi"
-                      ? "border-[var(--accent)] bg-[var(--accent)]/5 shadow-inner"
-                      : "border-[var(--border)] bg-[var(--background)]/30 hover:border-[var(--accent)]/30"
-                      }`}
+                    onClick={() => setAmount(val.toString())}
+                    className="py-2 rounded-lg border border-[var(--border)]/70 bg-[var(--card)]/30 text-xs font-bold
+                               hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all active:scale-95"
                   >
-                    <div className={`p-2 rounded-lg transition-all ${method === "upi" ? "bg-[var(--accent)] text-black" : "bg-[var(--card)] text-[var(--muted)]"}`}>
-                      <FiZap size={16} />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-xs font-black uppercase">UPI Pay</p>
-                      <p className="text-[9px] text-[var(--muted)] opacity-60">Fast payment</p>
-                    </div>
-                    {method === "upi" && <FiCheckCircle size={14} className="text-[var(--accent)] ml-auto" />}
+                    +₹{val}
                   </button>
-
-                  <button disabled className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--background)]/20 opacity-30 cursor-not-allowed flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-[var(--card)] text-[var(--muted)]">
-                      <FiCreditCard size={16} />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-xs font-black uppercase">Crypto</p>
-                      <p className="text-[9px] text-[var(--muted)]">Offline</p>
-                    </div>
-                  </button>
-                </div>
+                ))}
               </div>
-
-              <button
-                onClick={handleProceed}
-                disabled={loading || !method}
-                className="w-full py-4 rounded-xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] text-[10px]
-                           flex items-center justify-center gap-2
-                           hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-40"
-              >
-                {loading ? <div className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" /> : <><span>Add Money</span> <FiArrowRight /></>}
-              </button>
             </div>
-          </motion.div>
+
+            {/* Payment Methods */}
+            <div>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)] block mb-2">
+                Payment Method
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setMethod("upi")}
+                  className={`p-3 rounded-xl border transition-all flex items-center gap-3 ${method === "upi"
+                    ? "border-[var(--accent)] bg-[var(--accent)]/[0.08]"
+                    : "border-[var(--border)]/70 bg-[var(--card)]/30 hover:border-[var(--border)]"
+                    }`}
+                >
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${method === "upi" ? "bg-[var(--accent)] text-black" : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]"}`}>
+                    <FiZap size={15} />
+                  </div>
+                  <div className="text-left flex-1 min-w-0">
+                    <p className="text-xs font-bold leading-none">UPI Pay</p>
+                    <p className="text-[10px] text-[var(--muted)] mt-0.5">Instant delivery</p>
+                  </div>
+                  {method === "upi" && <FiCheckCircle size={15} className="text-[var(--accent)] shrink-0" />}
+                </button>
+
+                <button disabled className="p-3 rounded-xl border border-[var(--border)]/40 bg-[var(--card)]/10 opacity-40 cursor-not-allowed flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--muted)] flex items-center justify-center">
+                    <FiCreditCard size={15} />
+                  </div>
+                  <div className="text-left flex-1 min-w-0">
+                    <p className="text-xs font-bold leading-none">Crypto</p>
+                    <p className="text-[10px] text-[var(--muted)] mt-0.5">Offline</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <button
+              onClick={handleProceed}
+              disabled={loading || !method}
+              className="w-full py-3.5 rounded-xl bg-[var(--accent)] text-black font-extrabold uppercase tracking-wider text-xs
+                         flex items-center justify-center gap-2
+                         hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-40 shadow-sm"
+            >
+              {loading ? (
+                <div className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+              ) : (
+                <>
+                  <span>Add Money</span>
+                  <FiArrowRight size={14} />
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* RIGHT: TRANSACTIONS (Tight Layout) */}

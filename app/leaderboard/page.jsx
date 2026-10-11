@@ -71,55 +71,39 @@ export default function LeaderboardPage() {
         <div className="max-w-5xl mx-auto relative z-10">
 
           {/* HEADER SECTION */}
-          <div className="text-center mb-4">
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 mb-2"
-            >
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-              <span className="text-[10px] font-bold tracking-[0.2em] text-[var(--accent)] uppercase">Live</span>
-            </motion.div>
-
+          <div className="text-center mb-6">
             <motion.h1
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl font-black italic tracking-tighter mb-2 drop-shadow-xl"
+              className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--foreground)]"
             >
-              LEADER<span className="text-[var(--accent)]">BOARD</span>
+              Leaderboard
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-[var(--muted)] text-xs md:text-sm font-bold tracking-wide max-w-md mx-auto"
+              transition={{ delay: 0.1 }}
+              className="text-[var(--muted)] text-xs font-medium mt-1"
             >
-              Top players this month
+              Top players and top spenders
             </motion.p>
           </div>
 
           {/* RANGE TOGGLE */}
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex p-1 bg-[var(--card)]/50 border border-[var(--border)] rounded-xl backdrop-blur-md">
-              {[{ id: "current", label: "This Month" }, { id: "previous", label: "Prev Month" }].map((r) => (
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex p-1 bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-sm">
+              {[{ id: "current", label: "This Month" }, { id: "previous", label: "Previous Month" }].map((r) => (
                 <button
                   key={r.id}
                   onClick={() => setRange(r.id)}
-                  className={`px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all duration-300 relative overflow-hidden ${range === r.id
-                    ? "text-white"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
-                    }`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all relative ${
+                    range === r.id
+                      ? "bg-[var(--accent)] text-black font-bold shadow-sm"
+                      : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                  }`}
                 >
-                  <span className="relative z-10 uppercase tracking-tighter">{r.label}</span>
-                  {range === r.id && (
-                    <motion.div
-                      layoutId="activeRange"
-                      className="absolute inset-0 bg-[var(--accent)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.5)]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
+                  {r.label}
                 </button>
               ))}
             </div>

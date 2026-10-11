@@ -167,16 +167,14 @@ export default function BannersTab({ banners, onRefresh }) {
             <span>{showAddForm ? "Close Form" : "Add Banner"}</span>
           </button>
 
-          <div className="px-3.5 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
             <ImageIcon size={14} className="text-[var(--accent)]" />
-            <span className="text-xs font-semibold text-[var(--muted)]">
-              {banners.length} Banners
-            </span>
+            <span>{banners.length} Banners</span>
           </div>
 
           <button
             onClick={onRefresh}
-            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none"
             title="Refresh Banners"
           >
             <RefreshCcw size={15} />

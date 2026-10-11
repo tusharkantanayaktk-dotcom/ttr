@@ -45,30 +45,40 @@ export async function POST(req) {
     const page = Math.max(1, Number(body.page) || 1);
     const limit = Math.max(1, Number(body.limit) || 10);
     const search = body.search?.trim();
+    const status = body.status?.trim()?.toLowerCase();
 
     const skip = (page - 1) * limit;
 
     /* ================= EMAIL-ONLY FILTER ================= */
     const userFilter = { email: user.email };
 
-    /* ================= SEARCH FILTER ================= */
-    let finalFilter = userFilter;
+    /* ================= COMBINED FILTER ================= */
+    const andConditions = [userFilter];
 
     if (search) {
-      finalFilter = {
-        $and: [
-          userFilter,
-          {
-            $or: [
-              { orderId: { $regex: search, $options: "i" } },
-              { gameSlug: { $regex: search, $options: "i" } },
-              { itemName: { $regex: search, $options: "i" } },
-              { status: { $regex: search, $options: "i" } },
-            ],
-          },
+      andConditions.push({
+        $or: [
+          { orderId: { $regex: search, $options: "i" } },
+          { gameSlug: { $regex: search, $options: "i" } },
+          { itemName: { $regex: search, $options: "i" } },
+          { status: { $regex: search, $options: "i" } },
         ],
-      };
+      });
     }
+
+    if (status && status !== "all") {
+      if (status === "refund") {
+        andConditions.push({
+          $or: [{ status: "refund" }, { topupStatus: "refund" }],
+        });
+      } else {
+        andConditions.push({
+          $or: [{ status: status }, { topupStatus: status }],
+        });
+      }
+    }
+
+    const finalFilter = andConditions.length > 1 ? { $and: andConditions } : userFilter;
 
     /* ================= FETCH ORDERS ================= */
     const orders = await Order.find(finalFilter)

@@ -210,16 +210,14 @@ export default function FlashSaleTab() {
             <span>{showAddForm ? "Close Form" : "Add Item"}</span>
           </button>
 
-          <div className="px-3.5 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
             <FiZap size={14} className="text-[var(--accent)]" />
-            <span className="text-xs font-semibold text-[var(--muted)]">
-              {config.items?.length || 0} Items
-            </span>
+            <span>{config.items?.length || 0} Items</span>
           </div>
 
           <button
             onClick={fetchSettings}
-            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none"
             title="Refresh Flash Sale"
           >
             <FiRefreshCw size={15} className={loading ? "animate-spin" : ""} />

@@ -173,9 +173,9 @@ export default function GamesPage() {
 
   const SectionHeader = ({ title, count, icon: Icon }: any) => (
     <div className="flex items-center justify-between mb-5">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--card)] to-[var(--background)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm shrink-0">
-          {Icon ? <Icon size={19} /> : <Gamepad2 size={19} />}
+      <div className="flex items-center gap-2.5">
+        <div className="flex items-center justify-center text-[var(--accent)] shrink-0">
+          {Icon ? <Icon size={22} /> : <Gamepad2 size={22} />}
         </div>
         <div>
           <div className="flex items-center gap-2">
@@ -294,12 +294,12 @@ export default function GamesPage() {
           <button
             onClick={() => setShowFilter(true)}
             className="flex items-center justify-center w-9 h-9 rounded-full 
-                     bg-[var(--foreground)] text-[var(--background)] relative
-                     hover:bg-[var(--accent)] hover:text-white transition-all active:scale-95 shrink-0"
+                     bg-[var(--card)]/60 border border-[var(--border)]/70 text-[var(--foreground)] relative
+                     hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all active:scale-95 shrink-0 shadow-sm"
           >
-            <FiFilter size={15} />
+            <FiFilter size={14} />
             {activeFilterCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center text-[9px] rounded-full bg-[var(--accent)] text-white font-black border-2 border-[var(--background)]">
+              <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center text-[9px] rounded-full bg-[var(--accent)] text-black font-black border-2 border-[var(--card)]">
                 {activeFilterCount}
               </span>
             )}

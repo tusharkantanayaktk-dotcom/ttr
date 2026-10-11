@@ -86,18 +86,17 @@ export default function UiSettingsTab() {
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">UI Settings</h2>
 
-        <div className="flex items-center gap-3">
-          <div className="px-4 py-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
             <FiSliders size={14} className="text-[var(--accent)]" />
-            <span className="text-sm font-semibold text-[var(--muted)]">
-              {Object.keys(config).length} Controls
-            </span>
+            <span>{Object.keys(config).length} Controls</span>
           </div>
           <button
             onClick={fetchSettings}
-            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none"
+            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none"
+            title="Refresh"
           >
-            <FiRefreshCw size={16} className={loading ? "animate-spin" : ""} />
+            <FiRefreshCw size={15} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
       </div>
