@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiFilter, FiX, FiSearch, FiZap, FiBox, FiActivity, FiArrowRight } from "react-icons/fi";
 import { Gamepad2, Zap, Sparkles } from "lucide-react";
+import { IoGameController } from "react-icons/io5";
 const logo = "/logo.svg";
 import dynamic from "next/dynamic";
 import Skeleton from "@/components/Skeleton";
@@ -172,33 +173,34 @@ export default function GamesPage() {
   GameCard.displayName = "GameCard";
 
   const SectionHeader = ({ title, count, icon: Icon }: any) => (
-    <div className="flex items-center justify-between mb-5">
-      <div className="flex items-center gap-2.5">
-        <div className="flex items-center justify-center text-[var(--accent)] shrink-0">
-          {Icon ? <Icon size={22} /> : <Gamepad2 size={22} />}
+    <div className="flex items-center justify-between gap-4 mb-6 pb-3 border-b border-[var(--border)]/40">
+      <div className="flex items-center gap-2.5 min-w-0">
+        <div className="text-[var(--accent)] shrink-0 flex items-center justify-center">
+          {Icon ? <Icon size={24} /> : <IoGameController size={24} />}
         </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg md:text-xl font-black italic uppercase tracking-tight text-[var(--foreground)]">
-              {title}
-            </h2>
-            {count !== undefined && (
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">
-                {count} Available
-              </span>
-            )}
-          </div>
-          {count !== undefined ? (
-            <p className="text-[10px] sm:text-[11px] text-[var(--muted)] font-semibold tracking-wide mt-0.5">
-              Instant top-up & fast automated delivery
-            </p>
-          ) : (
-            <p className="text-[10px] sm:text-[11px] text-[var(--muted)] font-semibold tracking-wide mt-0.5">
-              Verified digital codes & subscriptions
-            </p>
-          )}
+        <div className="min-w-0">
+          <h2 className="text-lg md:text-xl font-black italic uppercase tracking-tight text-[var(--foreground)] truncate">
+            {title}
+          </h2>
+          <p className="text-[10px] sm:text-[11px] text-[var(--muted)] font-semibold tracking-wide mt-0.5 truncate">
+            {count !== undefined
+              ? "Instant top-up & fast automated delivery"
+              : "Verified digital codes & subscriptions"}
+          </p>
         </div>
       </div>
+
+      {count !== undefined && (
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--card)] border border-[var(--border)] shadow-sm shrink-0">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[var(--foreground)]">
+            {count}
+          </span>
+          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[var(--muted)]">
+            Available
+          </span>
+        </div>
+      )}
     </div>
   );
 
@@ -220,12 +222,15 @@ export default function GamesPage() {
         <div className="max-w-7xl mx-auto px-6 mt-10 space-y-12">
           {/* GAMES SECTION */}
           <section>
-            <div className="flex items-center gap-3 mb-8">
-              <Skeleton width={40} height={40} className="rounded-xl border-none" />
-              <div className="space-y-2">
-                <Skeleton width={140} height={24} className="rounded-md border-none" />
-                <Skeleton width={80} height={10} className="rounded-md border-none" />
+            <div className="flex items-center justify-between gap-4 mb-6 pb-3 border-b border-[var(--border)]/40">
+              <div className="flex items-center gap-2.5">
+                <Skeleton width={24} height={24} variant="circle" className="border-none shrink-0" />
+                <div className="space-y-2">
+                  <Skeleton width={140} height={20} className="rounded-md border-none" />
+                  <Skeleton width={100} height={10} className="rounded-md border-none" />
+                </div>
               </div>
+              <Skeleton width={88} height={28} className="rounded-full border-none" />
             </div>
 
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-8">
@@ -315,7 +320,7 @@ export default function GamesPage() {
           <SectionHeader
             title="Our Games"
             count={processedGames.length}
-            icon={Gamepad2}
+            icon={IoGameController}
           />
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-5">
             {processedGames.map((game: any, i: number) => (

@@ -36,7 +36,7 @@ export default function ThemeToggle() {
           exit={{ opacity: 0, rotate: 45, scale: 0.7 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
           className="text-sm flex items-center justify-center"
-          style={{ color: theme === "dark" ? "#38bdf8" : "#2563eb" }}
+          style={{ color: theme === "dark" ? "#a855f7" : "#7c3aed" }}
         >
           {theme === "dark" ? <FiMoon /> : <FiSun />}
         </motion.span>

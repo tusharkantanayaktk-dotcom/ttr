@@ -260,12 +260,11 @@ export default function SocialFloat() {
         className={`
           relative w-10 h-10 sm:w-12 sm:h-12
           rounded-full
-          text-white
           flex items-center justify-center
           transition-all duration-300
           overflow-hidden
           z-[91]
-          ${isOpen ? 'bg-[var(--foreground)] border border-[var(--white)]/20' : 'bg-gradient-to-br from-[var(--accent)] to-purple-600 border border-[var(--white)]/10'}
+          ${isOpen ? 'bg-[var(--foreground)] text-[var(--background)] border border-[var(--border)]' : 'bg-gradient-to-br from-[var(--accent)] to-purple-600 text-white border border-white/10'}
         `}
         aria-label="Toggle social menu"
       >
@@ -276,12 +275,12 @@ export default function SocialFloat() {
             animate={{ scale: 1, rotate: 0, opacity: 1 }}
             exit={{ scale: 0, rotate: 90, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute"
+            className="absolute flex items-center justify-center"
           >
             {isOpen ? (
-              <RiCloseFill className="text-2xl" />
+              <RiCloseFill className="text-2xl text-[var(--background)]" />
             ) : (
-              <RiChatSmile3Fill className="text-2xl" />
+              <RiChatSmile3Fill className="text-2xl text-white" />
             )}
           </motion.div>
         </AnimatePresence>
