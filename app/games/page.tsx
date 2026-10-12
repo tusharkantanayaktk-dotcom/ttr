@@ -99,14 +99,37 @@ export default function GamesPage() {
     const firstLetter = game.gameName?.charAt(0).toUpperCase() || "?";
 
     return (
-      <div className="relative">
+      <div className="relative group">
         <Link
           href={disabled ? "#" : `/games/${game.gameSlug}`}
-          className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+          className={`flex flex-col gap-2 p-1.5 sm:p-2 rounded-2xl bg-[var(--card)] border border-[var(--border)] transition-all duration-300 relative overflow-hidden ${
+            disabled
+              ? "cursor-not-allowed opacity-60"
+              : "cursor-pointer hover:border-[var(--accent)]/60 hover:-translate-y-1 hover:shadow-[0_12px_32px_-6px_rgba(139,92,246,0.3)]"
+          }`}
         >
-          {/* IMAGE WRAPPER */}
-          <div className="relative aspect-square rounded-none overflow-hidden bg-[var(--card)] border border-[var(--border)]">
+          {/* BLURRED BACKGROUND ART */}
+          {!imgError && (
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <Image
+                src={game.gameImageId?.image || logo}
+                alt=""
+                fill
+                sizes="15vw"
+                className="object-cover scale-150 blur-2xl opacity-25 dark:opacity-35 group-hover:opacity-50 transition-opacity duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-[var(--card)]/80 to-[var(--card)]" />
+            </div>
+          )}
 
+          {/* Subtle top ambient sheen */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
+
+          {/* Bottom neon trace (visible on hover) */}
+          <div className="absolute bottom-0 left-3 right-3 h-[2px] bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+          {/* IMAGE CONTAINER */}
+          <div className="relative aspect-square rounded-xl overflow-hidden bg-black/40 z-10">
             <div className="relative w-full h-full flex items-center justify-center">
               {!imgError ? (
                 <Image
@@ -115,7 +138,9 @@ export default function GamesPage() {
                   fill
                   sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
                   onError={() => setImgError(true)}
-                  className={`object-cover ${disabled ? "grayscale opacity-30" : ""}`}
+                  className={`object-cover transition-transform duration-500 ease-out group-hover:scale-108 ${
+                    disabled ? "grayscale opacity-30" : ""
+                  }`}
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-[var(--card)] to-[var(--background)] flex items-center justify-center">
@@ -125,34 +150,49 @@ export default function GamesPage() {
                 </div>
               )}
 
-              {/* High-Fidelity Overlays */}
+              {/* Cinematic Vignette */}
               {!disabled && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-60 group-hover:opacity-75 transition-opacity duration-300" />
               )}
 
-              {/* TAGS / BADGES */}
-              <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-start z-10">
+              {/* TOP BADGES */}
+              <div className="absolute top-2 left-2 right-2 flex justify-between items-center z-10 pointer-events-none">
                 {!disabled && game.tagId ? (
                   <div
-                    className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest flex items-center gap-1.5 backdrop-blur-md border border-white/10"
+                    className="px-2 py-0.5 rounded-md text-[7.5px] font-black uppercase tracking-wider flex items-center gap-1 backdrop-blur-md border border-white/20 shadow-sm max-w-[75%] truncate"
                     style={{
-                      backgroundColor: `${game.tagId.tagBackground}cc`,
+                      backgroundColor: `${game.tagId.tagBackground}dd`,
                       color: game.tagId.tagColor,
                     }}
                   >
-                    <div className="w-1 h-1 rounded-full bg-current" />
-                    {game.tagId.tagName}
+                    <div className="w-1.5 h-1.5 rounded-full bg-current shrink-0 animate-pulse" />
+                    <span className="truncate">{game.tagId.tagName}</span>
                   </div>
                 ) : <div />}
+
+                {/* Instant Delivery Icon */}
+                {!disabled && (
+                  <div className="w-5 h-5 rounded-md bg-black/60 backdrop-blur-md border border-white/15 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:text-amber-300 transition-all shadow-sm">
+                    <FiZap size={10} />
+                  </div>
+                )}
               </div>
+
+              {/* HOVER "TOP UP" REVEAL PILL */}
+              {!disabled && (
+                <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md border border-[var(--accent)]/40 flex items-center gap-1 text-[8px] font-black uppercase tracking-wider text-[var(--accent)] opacity-0 group-hover:opacity-100 translate-y-1.5 group-hover:translate-y-0 transition-all duration-300 shadow-md">
+                  <span>TOP UP</span>
+                  <FiArrowRight size={8} />
+                </div>
+              )}
 
               {/* OUT OF STOCK OVERLAY */}
               {disabled && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px]">
-                  <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mb-1.5">
-                    <FiX size={16} className="text-red-500" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-[2px]">
+                  <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mb-1">
+                    <FiX size={15} className="text-red-500" />
                   </div>
-                  <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500">
+                  <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-400">
                     OFF
                   </span>
                 </div>
@@ -161,10 +201,14 @@ export default function GamesPage() {
           </div>
 
           {/* CARD FOOTER */}
-          <div className="px-1.5 space-y-0.5">
-            <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none">
+          <div className="px-1 py-0.5 space-y-0.5 relative z-10">
+            <h3 className="text-[11px] sm:text-xs font-black uppercase tracking-tight text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors truncate">
               {game.gameName}
             </h3>
+            <div className="flex items-center justify-between gap-1 text-[9px] text-[var(--muted)] font-semibold">
+              <span className="truncate">{game.gameFrom || "Instant Top-up"}</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" title="Online" />
+            </div>
           </div>
         </Link>
       </div>
@@ -340,7 +384,7 @@ export default function GamesPage() {
                   className="group cursor-pointer transform-gpu"
                 >
                   <Link href={`/games/${ott.slug}`} className="flex flex-col gap-5">
-                    <div className="relative aspect-[3/4] overflow-hidden rounded-none bg-[var(--card)] border border-[var(--border)]/40 transition-[border-color] duration-300 group-hover:border-[var(--accent)]/50">
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-[var(--card)] border border-[var(--border)]/70 transition-all duration-300 group-hover:border-[var(--accent)]/60 group-hover:shadow-[0_8px_25px_rgba(139,92,246,0.2)] group-hover:-translate-y-1">
                       <Image
                         src={ott.image}
                         alt={ott.name}
@@ -358,14 +402,14 @@ export default function GamesPage() {
                           <p className="text-[8px] text-[var(--accent)] font-black uppercase tracking-[0.2em]">
                             {ott.category}
                           </p>
-                          <h4 className="text-[12px] font-black text-white uppercase tracking-tighter italic">
+                          <h4 className="text-[12px] font-black text-white uppercase tracking-tighter">
                             {ott.name}
                           </h4>
                         </div>
                       </div>
 
                       {/* Top Right Accent */}
-                      <div className="absolute top-4 right-4 w-6 h-6 rounded-none bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/50 group-hover:text-[var(--accent)] transition-colors">
+                      <div className="absolute top-3 right-3 w-6 h-6 rounded-lg bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/50 group-hover:text-[var(--accent)] transition-colors">
                         <FiActivity size={10} />
                       </div>
                     </div>

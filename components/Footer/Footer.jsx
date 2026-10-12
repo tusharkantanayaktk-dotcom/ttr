@@ -4,10 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 const logo = "/logo.svg";
-import { FaGamepad } from "react-icons/fa6";
+import { FaGamepad, FaWhatsapp, FaInstagram } from "react-icons/fa6";
 import {
-  FiInstagram,
-  FiMessageSquare,
   FiHome,
   FiGlobe,
   FiInfo,
@@ -21,8 +19,8 @@ import {
 
 /* ===================== ENV & CONSTANTS ===================== */
 
-const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || "MewJi";
-const BRAND_DESCRIPTION = process.env.NEXT_PUBLIC_BRAND_DESCRIPTION || "Fast and secure gaming top-ups.";
+const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || "Tronics Store";
+const BRAND_DESCRIPTION = process.env.NEXT_PUBLIC_BRAND_DESCRIPTION || "Fast, secure MLBB top-ups with instant delivery and 24×7 support — recharge diamonds in seconds.";
 
 const INSTAGRAM_URL = process.env.NEXT_PUBLIC_INSTAGRAM_URL;
 const WHATSAPP_URL = process.env.NEXT_PUBLIC_WHATSAPP_URL;
@@ -51,8 +49,18 @@ const FOOTER_LINKS = [
 ];
 
 const SOCIALS = [
-  { label: "Instagram", href: INSTAGRAM_URL, icon: FiInstagram },
-  { label: "WhatsApp", href: WHATSAPP_URL, icon: FiMessageSquare },
+  {
+    label: "Instagram",
+    href: INSTAGRAM_URL,
+    icon: FaInstagram,
+    hoverClass: "hover:text-pink-400 hover:border-pink-500/40 hover:bg-pink-500/10",
+  },
+  {
+    label: "WhatsApp",
+    href: WHATSAPP_URL,
+    icon: FaWhatsapp,
+    hoverClass: "hover:text-emerald-400 hover:border-emerald-500/40 hover:bg-emerald-500/10",
+  },
 ];
 
 const TRUST_BADGES = [
@@ -91,7 +99,7 @@ export default function Footer() {
             </div>
 
             <div className="flex flex-wrap gap-2">
-              {SOCIALS.map(({ label, href, icon: Icon }) => (
+              {SOCIALS.map(({ label, href, icon: Icon, hoverClass }) => (
                 <motion.a
                   key={label}
                   href={href}
@@ -99,10 +107,10 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   whileHover={{ y: -2, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] hover:text-black hover:bg-[var(--accent)] hover:border-[var(--accent)] transition-all shadow-sm"
+                  className={`w-9 h-9 flex items-center justify-center rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] transition-all shadow-sm ${hoverClass}`}
                   title={label}
                 >
-                  <Icon size={14} />
+                  <Icon size={16} />
                 </motion.a>
               ))}
             </div>
@@ -111,24 +119,32 @@ export default function Footer() {
           {/* Right Columns: Links & Trust */}
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6">
             {FOOTER_LINKS.map((section) => (
-              <div key={section.title} className="space-y-2">
+              <div key={section.title} className="space-y-2.5">
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-3 rounded-full bg-[var(--accent)]" />
                   <h3 className="text-xs font-black text-[var(--foreground)] uppercase tracking-wider">
                     {section.title}
                   </h3>
                 </div>
-                <ul className="space-y-1">
-                  {section.links.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="inline-flex items-center text-xs font-semibold text-[var(--muted)] hover:text-[var(--accent)] transition-colors py-0.5"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
+                <ul className="space-y-1.5">
+                  {section.links.map((link) => {
+                    const Icon = link.icon;
+                    return (
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          className="group inline-flex items-center gap-2 text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors py-0.5"
+                        >
+                          <div className="w-5 h-5 rounded-md bg-[var(--card)] border border-[var(--border)] group-hover:border-[var(--accent)]/50 group-hover:bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center transition-all shrink-0">
+                            {Icon && <Icon size={11} />}
+                          </div>
+                          <span className="group-hover:translate-x-0.5 transition-transform">
+                            {link.label}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}
