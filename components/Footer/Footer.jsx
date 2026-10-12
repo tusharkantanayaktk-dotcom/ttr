@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 import { FaGamepad } from "react-icons/fa6";
 import {
   FiInstagram,

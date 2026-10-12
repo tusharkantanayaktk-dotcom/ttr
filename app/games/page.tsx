@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiFilter, FiX, FiSearch, FiZap, FiBox, FiActivity, FiArrowRight } from "react-icons/fi";
 import { Gamepad2, Zap, Sparkles } from "lucide-react";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 import dynamic from "next/dynamic";
 import Skeleton from "@/components/Skeleton";
 const GamesFilterModal = dynamic(() => import("@/components/Games/GamesFilterModal"), { ssr: false });

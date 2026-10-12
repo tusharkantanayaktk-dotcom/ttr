@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 
 /**
  * SimpleLoader - A clean, fast, and user-friendly loader.

@@ -45,38 +45,7 @@ html[data-theme="light"] {
   --card: #ffffff;
 }
 
-/* 💠 3. Cyberpunk (Futuristic Void & Neon Cyan) */
-html[data-theme="cyber"] {
-  --background: #030712;
-  --foreground: #e0f2fe;
-  --accent: #00ffff;
-  --accent-hover: #06b6d4;
-  --muted: #94a3b8;
-  --border: #112240;
-  --card: #0a1128;
-}
 
-/* 🩸 4. Crimson Red (Dark Obsidian & Blood Ruby) */
-html[data-theme="crimson"] {
-  --background: #080202;
-  --foreground: #fee2e2;
-  --accent: #ef4444;
-  --accent-hover: #dc2626;
-  --muted: #9ca3af;
-  --border: #2e0808;
-  --card: #150505;
-}
-
-/* 🌸 5. Sakura (Soft Aesthetic Pastel Rose) */
-html[data-theme="sakura"] {
-  --background: #fff5f8;
-  --foreground: #1f2937;
-  --accent: #ec4899;
-  --accent-hover: #db2777;
-  --muted: #9ca3af;
-  --border: #fbcfe8;
-  --card: #ffffff;
-}
 
 /* 🪄 Smooth Transitions */
 body {

@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX, FiChevronRight, FiSearch } from "react-icons/fi";
 import Image from "next/image";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 import Skeleton from "../Skeleton";
 import PWAHeaderButton from "../PWA/PWAHeaderButton";
 import SearchModal from "./SearchModal";
@@ -165,12 +165,10 @@ export default function Header() {
                 width={36}
                 height={36}
                 priority
-                className="w-9 h-9 object-contain"
+                unoptimized
+                className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(0,200,255,0.45)]"
               />
             </div>
-            <span className="font-black text-base sm:text-lg tracking-tighter uppercase italic bg-gradient-to-r from-[var(--foreground)] to-[var(--foreground)]/80 bg-clip-text">
-              Tronics<span className="text-[var(--accent)]">Store</span>
-            </span>
           </Link>
         </div>
 

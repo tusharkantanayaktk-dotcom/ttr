@@ -26,7 +26,7 @@ import {
   FiCheck
 } from "react-icons/fi";
 
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 import AdminGuard from "@/components/AdminGuard";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import UsersTab from "@/components/admin/UsersTab";

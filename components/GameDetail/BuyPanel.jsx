@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 
 export default function BuyPanel({
   activeItem,

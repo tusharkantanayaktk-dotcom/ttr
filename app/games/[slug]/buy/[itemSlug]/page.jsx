@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiUser, FiHash, FiSearch, FiArrowLeft, FiCheck, FiHelpCircle } from "react-icons/fi";
 import AuthGuard from "../../../../../components/AuthGuard";
 import Skeleton from "@/components/Skeleton";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 import { saveVerifiedPlayer } from "@/utils/storage/verifiedPlayerStorage";
 import RecentVerifiedPlayers from "../../../../region/RecentVerifiedPlayers";
 import ReviewAndPaymentStep from "./ReviewAndPaymentStep";

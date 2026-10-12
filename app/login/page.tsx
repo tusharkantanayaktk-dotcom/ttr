@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 import { motion, AnimatePresence } from "framer-motion";
 import { RiShieldKeyholeFill, RiLockPasswordLine } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";

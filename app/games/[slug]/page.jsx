@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 import dynamic from "next/dynamic";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 import Skeleton from "@/components/Skeleton";
 
 const MLBBPurchaseGuide = dynamic(() => import("../../../components/HelpImage/MLBBPurchaseGuide"), { ssr: false });

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiSearch, FiX, FiZap, FiPackage, FiArrowRight } from "react-icons/fi";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 
 interface SearchModalProps {
   isOpen: boolean;

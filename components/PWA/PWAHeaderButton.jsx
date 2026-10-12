@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { FiDownload, FiCheck, FiShare, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 
 function detectPlatform() {
   if (typeof window === "undefined") return "other";

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import QRCode from "qrcode";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 import { FiActivity, FiShield, FiZap, FiCreditCard, FiCheck } from "react-icons/fi";
 import { motion } from "framer-motion";
 

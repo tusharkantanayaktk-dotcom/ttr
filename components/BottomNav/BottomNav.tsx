@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import Image from "next/image";
-import logo from "@/public/logo.png";
+const logo = "/logo.svg";
 import {
     Compass,
     Gamepad2,
