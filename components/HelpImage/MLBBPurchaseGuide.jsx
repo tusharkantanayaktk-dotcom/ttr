@@ -12,29 +12,29 @@ import {
 
 const steps = [
   {
-    title: "Select Diamond Package",
+    title: "Pick Your Pack",
     icon: FaShoppingCart,
-    content: "Choose the diamond pack you want to purchase.",
+    content: "Choose the diamond or item pack you want to buy.",
   },
   {
-    title: "Enter User ID & Zone ID",
+    title: "Enter Player ID & Zone ID",
     icon: FaIdCard,
-    content: "Fill in your MLBB Player ID, Zone ID, and In-Game Name correctly.",
+    content: "Type your game Player ID and Zone ID accurately.",
   },
   {
     title: "Choose Payment Method",
     icon: FaWallet,
-    content: "Select UPI, Wallet, or other available options.",
+    content: "Pay easily with UPI (GPay, PhonePe, Paytm) or Wallet.",
   },
   {
-    title: "Complete Payment",
+    title: "Pay Securely",
     icon: FaMoneyBillWave,
-    content: "Pay securely using the selected method.",
+    content: "Complete payment through our secure payment gateway.",
   },
   {
-    title: "Receive Diamonds",
+    title: "Enjoy Your Diamonds!",
     icon: FaGem,
-    content: "Diamonds will be credited instantly.",
+    content: "Your diamonds are delivered automatically to your game.",
   },
 ];
 

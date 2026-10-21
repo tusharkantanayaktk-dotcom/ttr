@@ -85,7 +85,7 @@ export default function Dashboard() {
               Welcome back, {userDetails.name || "Player"} 👋
             </h1>
             <p className="text-sm text-[var(--muted)] mt-1">
-              Track orders and manage your wallet and account
+              View your orders, manage your wallet, and get help.
             </p>
           </div>
 

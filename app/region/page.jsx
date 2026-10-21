@@ -80,7 +80,7 @@ export default function RegionPage() {
             transition={{ delay: 0.1 }}
             className="text-[var(--muted)] text-xs opacity-70"
           >
-            Enter details to verify your account region
+            Check your game account region and player name
           </motion.p>
         </div>
 
@@ -96,7 +96,7 @@ export default function RegionPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-1 h-1 rounded-full bg-[var(--accent)] animate-ping" />
-                <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Player Details</span>
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Player Info</span>
               </div>
 
               <HelpImagePopup />
@@ -133,7 +133,7 @@ export default function RegionPage() {
               ) : (
                 <>
                   <FiSearch size={16} />
-                  <span className="text-xs">Verify</span>
+                  <span className="text-xs">Check Region</span>
                 </>
               )}
             </button>
@@ -180,7 +180,7 @@ export default function RegionPage() {
                   <div>
                     <div className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-0.5">Error</div>
                     <h3 className="text-lg font-bold tracking-tight text-[var(--foreground)] uppercase italic leading-none">Not Found</h3>
-                    <p className="text-[10px] text-[var(--muted)] mt-1">Player not found. Check details.</p>
+                    <p className="text-[10px] text-[var(--muted)] mt-1">Player not found. Please double-check your Player ID and Zone ID.</p>
                   </div>
                 </div>
               )}

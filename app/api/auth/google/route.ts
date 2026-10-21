@@ -65,6 +65,8 @@ export async function POST(req: Request) {
     } else {
       user.lastLogin = new Date();
       user.lastIp = ip;
+      if (!user.googleId) user.googleId = sub;
+      if (!user.avatar && picture) user.avatar = picture;
       await user.save();
     }
 
@@ -75,12 +77,16 @@ export async function POST(req: Request) {
       { expiresIn: "7d" }
     );
 
+    const hasPhone = Boolean(user.phone && typeof user.phone === "string" && user.phone.trim().length > 0);
+
     return Response.json({
       success: true,
       token: jwtToken,
+      needsPhone: !hasPhone,
       user: {
         name: user.name,
         email: user.email,
+        phone: user.phone || null,
         userId: user.userId,
         userType: user.userType,
       },

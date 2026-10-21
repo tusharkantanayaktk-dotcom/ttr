@@ -23,7 +23,7 @@ const QUERY_TYPES = [
 const SUPPORT_CONFIG = {
   header: {
     title: process.env.NEXT_PUBLIC_SUPPORT_TITLE || "Support Center",
-    subtitle: process.env.NEXT_PUBLIC_SUPPORT_SUBTITLE || "Our dedicated support team is here to assist you with any questions or issues.",
+    subtitle: process.env.NEXT_PUBLIC_SUPPORT_SUBTITLE || "Need help with an order or have questions? We are here to help 24/7.",
   },
 
   contacts: {
@@ -75,9 +75,9 @@ const ICON_MAP: Record<string, JSX.Element> = {
 };
 
 const FAQS = [
-  { question: "When will my order be completed?", answer: "Most orders are processed within 5-15 minutes. Heavy server traffic might take up to 2 hours." },
-  { question: "How do I top up my wallet?", answer: "Go to the Wallet section, enter the amount, select UPI, and complete the payment on the gateway." },
-  { question: "Is my payment secure?", answer: "Yes, we use industry-standard encrypted payment gateways to ensure your data is always safe." },
+  { question: "How long does delivery take?", answer: "Most orders arrive in 1 to 5 minutes. During busy hours, it may take up to 30 minutes." },
+  { question: "How do I add money to my wallet?", answer: "Go to your Wallet, enter the amount, select UPI, and complete the payment." },
+  { question: "Is my payment safe?", answer: "Yes, 100%. All payments are processed through secure, bank-grade payment gateways." },
 ];
 
 /* ===================== COMPONENT ===================== */
@@ -212,7 +212,7 @@ export default function QueryTab() {
 
               {/* Phone */}
               <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">WhatsApp Phone Number</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">WhatsApp Mobile Number</label>
                 <div className="relative group/input">
                   <FiPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
                   <input
@@ -232,7 +232,7 @@ export default function QueryTab() {
                 <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Message</label>
                 <textarea
                   rows={4}
-                  placeholder="Describe your issue in detail..."
+                  placeholder="Tell us what happened (include your Order ID if you have one)..."
                   value={queryMessage}
                   onChange={(e) => setQueryMessage(e.target.value)}
                   className="w-full p-4 rounded-xl border border-[var(--border)] bg-[var(--background)] 
@@ -256,7 +256,7 @@ export default function QueryTab() {
                   </>
                 ) : (
                   <>
-                    <span>Submit Query</span>
+                    <span>Send Message</span>
                     <FiSend size={14} />
                   </>
                 )}

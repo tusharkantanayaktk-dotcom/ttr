@@ -11,18 +11,18 @@ export default function ContactPage() {
           <h1 className="text-4xl font-bold text-[var(--accent)] mb-4">
             Contact Us
           </h1>
-          <p className="text-[var(--muted)] leading-relaxed text-lg">
-            Have a question or suggestion?
-            Contact us by email or social media.
+          <p className="text-[var(--muted)] leading-relaxed text-base sm:text-lg">
+            Have a question or need help with an order?
+            Reach out to us by email or social media. We're here to help!
           </p>
 
           {/* ✉️ Email Highlight Box */}
           <div className="p-6 border border-[var(--border)] rounded-2xl bg-[var(--card)]">
-            <p className="text-lg text-[var(--muted)] mb-2">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[var(--muted)] mb-2">
               Email us at:
             </p>
             <a
-              href="mailto:zyronix.innovations@gmail.com"
+              href="mailto:zynx.anime@gmail.com"
               className="text-xl font-semibold text-[var(--accent)] hover:underline break-all"
             >
               zynx.anime@gmail.com

@@ -35,8 +35,14 @@ export default function Header() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) setUser(data.user);
-        else localStorage.removeItem("token");
+        if (data.success) {
+          setUser(data.user);
+          if (data.user?.phone && !localStorage.getItem("phone")) {
+            localStorage.setItem("phone", data.user.phone);
+          }
+        } else {
+          localStorage.removeItem("token");
+        }
       })
       .finally(() => setLoading(false));
   }, []);
@@ -44,6 +50,10 @@ export default function Header() {
   /* ================= LOGOUT ================= */
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("phone");
+    localStorage.removeItem("email");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userId");
     setUser(null);
     window.location.href = "/";
   };

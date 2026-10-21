@@ -12,8 +12,8 @@ export default function ValidationStep({
   loading,
   error = "",
   showZoneId = true,
-  label = "Player Check",
-  placeholder = "Enter Player ID",
+  label = "Enter Game Details",
+  placeholder = "Enter your Player ID",
 }) {
   return (
     <div className="space-y-5">
@@ -49,7 +49,7 @@ export default function ValidationStep({
             <input
               value={zoneId}
               onChange={(e) => setZoneId(e.target.value)}
-              placeholder="Enter zone ID"
+              placeholder="Zone ID (e.g. 1234)"
               className="p-3 pl-12 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]/40 w-full text-[var(--foreground)] focus:border-[var(--accent)]/50 transition-all outline-none placeholder:text-[var(--muted)]/40"
               disabled={loading}
             />
@@ -95,7 +95,7 @@ export default function ValidationStep({
         ) : (
           <FiSearch size={18} />
         )}
-        <span>{loading ? "Validating…" : "Continue"}</span>
+        <span>{loading ? "Checking ID…" : "Continue"}</span>
       </button>
 
       <RecentVerifiedPlayers

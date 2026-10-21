@@ -1,6 +1,6 @@
 "use client";
 
-const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "Meow Ji";
+const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "Tronics Store";
 
 export default function PrivacyPolicy() {
   return (
@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
         </h1>
 
         <p className="text-[var(--muted)] mb-10">
-          Last updated: December 2025
+          Last updated: February 2026
         </p>
 
         <p className="mb-6 leading-relaxed">

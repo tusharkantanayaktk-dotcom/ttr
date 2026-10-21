@@ -17,39 +17,39 @@ export default function ServicesPage() {
   const services = [
     {
       title: "Reseller Program",
-      desc: "Join as a verified reseller and get better rates to earn more profit.",
+      desc: "Buy in bulk at special discounted rates and earn more profit selling to your customers.",
       icon: FiUsers,
       badge: "Available",
-      status: "Cheapest",
+      status: "Best Rates",
       active: true,
-      tag: "COMMERCIAL"
+      tag: "RESELLER"
     },
     {
-      title: "Whitelabel Assets",
-      desc: "Get your own branded domain with a full top-up setup under your brand name.",
+      title: "Your Own Top-Up Website",
+      desc: "Get your own branded website with domain, logo, and full top-up system ready to sell.",
       icon: FiGlobe,
       badge: "Available",
-      status: "Verified",
+      status: "Ready to Use",
       active: true,
-      tag: "PLATFORM"
+      tag: "WEBSITE"
     },
     {
-      title: "Custom Infrastructure",
-      desc: "Get a custom top-up setup built for your business needs.",
+      title: "Custom Store Software",
+      desc: "Custom web development, Telegram bots, and automated tools built for your gaming store.",
       icon: FiZap,
       badge: "Available",
-      status: "Specialized",
+      status: "Custom Made",
       active: true,
-      tag: "DEVELOPMENT"
+      tag: "CUSTOM"
     },
     {
-      title: "API Integration",
-      desc: "Connect your current system with our API for automatic service delivery.",
+      title: "Auto-Delivery API",
+      desc: "Connect your website or app to our fast API for instant, automatic order processing.",
       icon: FiCode,
       badge: "Coming Soon",
-      status: "Development",
+      status: "In Progress",
       active: false,
-      tag: "PROTOCOLS"
+      tag: "API"
     },
   ];
 

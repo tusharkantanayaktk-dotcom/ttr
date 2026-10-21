@@ -159,7 +159,7 @@ export default function WalletTab({
           <div className="space-y-5">
             <div>
               <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)] block mb-2">
-                Amount to Add
+                Enter Amount to Add
               </label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-[var(--muted)]">₹</span>
@@ -183,7 +183,7 @@ export default function WalletTab({
                     type="button"
                     onClick={() => setAmount(val.toString())}
                     className="py-2 rounded-lg border border-[var(--border)]/70 bg-[var(--card)]/30 text-xs font-bold
-                               hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all active:scale-95"
+                                hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all active:scale-95"
                   >
                     +₹{val}
                   </button>
@@ -210,7 +210,7 @@ export default function WalletTab({
                   </div>
                   <div className="text-left flex-1 min-w-0">
                     <p className="text-xs font-bold leading-none">UPI Pay</p>
-                    <p className="text-[10px] text-[var(--muted)] mt-0.5">Instant delivery</p>
+                    <p className="text-[10px] text-[var(--muted)] mt-0.5">Instant recharge</p>
                   </div>
                   {method === "upi" && <FiCheckCircle size={15} className="text-[var(--accent)] shrink-0" />}
                 </button>

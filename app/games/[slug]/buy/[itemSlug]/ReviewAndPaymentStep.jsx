@@ -54,12 +54,12 @@ export default function ReviewAndPaymentStep({
   // Handle proceed to payment
   const handleProceed = async () => {
     if (stopOrders) {
-      alert("We are currently not accepting new orders.");
+      alert("Orders are temporarily paused. Please try again shortly.");
       return;
     }
 
     if (!paymentMethod) {
-      alert("Please choose a payment method.");
+      alert("Please select a payment method (UPI or Wallet).");
       return;
     }
 
@@ -217,8 +217,8 @@ export default function ReviewAndPaymentStep({
               <FiCreditCard size={18} />
             </div>
             <div>
-              <p className="font-black text-sm uppercase tracking-tight italic">UPI Gateway</p>
-              <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">GPay, PhonePe, Paytm</p>
+              <p className="font-black text-sm uppercase tracking-tight italic">Pay with UPI</p>
+              <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">Google Pay, PhonePe, Paytm</p>
             </div>
           </div>
           <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${paymentMethod === 'upi' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
@@ -243,7 +243,7 @@ export default function ReviewAndPaymentStep({
               <FiActivity size={18} />
             </div>
             <div>
-              <p className="font-black text-sm uppercase tracking-tight italic">My Wallet</p>
+              <p className="font-black text-sm uppercase tracking-tight italic">Pay with Wallet</p>
               <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">Balance: ₹{walletBalance.toFixed(2)}</p>
             </div>
           </div>
@@ -255,7 +255,7 @@ export default function ReviewAndPaymentStep({
         {walletBalance < totalPrice && (
           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-2 flex items-center gap-2">
              <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-             <p className="text-[8px] font-black text-red-500 uppercase tracking-widest">Insufficient balance</p>
+             <p className="text-[8px] font-black text-red-500 uppercase tracking-widest">Not enough wallet balance</p>
           </div>
         )}
       </div>

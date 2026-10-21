@@ -1,6 +1,6 @@
 "use client";
 
-const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "Meow Ji";
+const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "Tronics Store";
 
 export default function RefundPolicy() {
     return (

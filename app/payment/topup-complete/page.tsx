@@ -140,8 +140,8 @@ export default function TopupComplete() {
 
                 <p className="text-[10px] md:text-xs font-bold text-muted/60 max-w-[280px] mx-auto uppercase tracking-wide leading-relaxed">
                   {status === "checking" && "Please wait while we confirm your payment."}
-                  {status === "success" && "Your order is confirmed and will be delivered soon."}
-                  {status === "failed" && "If money was deducted, your diamonds will be added soon or your amount will be refunded. Please contact support if needed."}
+                  {status === "success" && "Your order is confirmed and will be added to your game in seconds."}
+                  {status === "failed" && "If money was deducted from your bank, don't worry! Your items will arrive shortly, or your money will be refunded to your wallet."}
                 </p>
               </div>
 
@@ -163,13 +163,13 @@ export default function TopupComplete() {
                   <Link href="/dashboard/order" className="w-full flex">
                     <button className="group w-full relative h-12 bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 rounded-xl overflow-hidden transition-all active:scale-95 hover:bg-[var(--accent)]/20 flex items-center justify-center gap-3 font-black italic uppercase tracking-widest text-xs">
                       <FiShoppingBag size={14} />
-                      Check Order
+                      View Order Status
                     </button>
                   </Link>
                 )}
 
                 {status === "failed" && (
-                  <Link href="/support" className="w-full flex">
+                  <Link href="/dashboard/query" className="w-full flex">
                     <button className="group w-full relative h-12 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl overflow-hidden transition-all active:scale-95 hover:bg-red-500/20 flex items-center justify-center gap-3 font-black italic uppercase tracking-widest text-xs">
                       <FiHelpCircle size={14} />
                       Contact Support

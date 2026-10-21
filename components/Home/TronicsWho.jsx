@@ -6,22 +6,22 @@ const FEATURES = [
   {
     icon: FiShield,
     title: "100% Official",
-    desc: "Direct top-ups through authorized official channels."
+    desc: "Safe and official top-ups for your game account."
   },
   {
     icon: FiZap,
     title: "Instant Delivery",
-    desc: "Automatic fulfillment in seconds after payment."
+    desc: "Delivered to your game right after payment."
   },
   {
     icon: FiLock,
     title: "Safe & Secure",
-    desc: "Encrypted payment gateways with zero risk."
+    desc: "Zero-risk payments with trusted UPI and cards."
   },
   {
     icon: FiHeadphones,
     title: "24/7 Support",
-    desc: "Dedicated support team available anytime."
+    desc: "Friendly support team ready to help anytime."
   }
 ];
 
@@ -39,7 +39,7 @@ export default function TronicsWho() {
             Why Choose <span className="text-[var(--accent)]">Tronics?</span>
           </h2>
           <p className="text-xs text-[var(--muted)] font-normal max-w-xl mx-auto leading-relaxed px-2">
-            Your trusted destination for fast, verified, and secure gaming top-ups with instant delivery.
+            The easiest and fastest way to top up your favorite games with instant delivery.
           </p>
         </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "Meow Ji";
+const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "Tronics Store";
 
 export default function TermsAndConditions() {
   return (
@@ -12,11 +12,11 @@ export default function TermsAndConditions() {
         </h1>
 
         <p className="text-[var(--muted)] mb-10">
-          Last updated: December 2025
+          Last updated: February 2026
         </p>
 
         <p className="mb-6 leading-relaxed">
-          Welcome to <strong>{BRAND}</strong>. By accessing or using our website,
+          Welcome to <strong>{BRAND}</strong>. By accessing our website,
           placing an order, or using our services, you agree to these Terms &
           Conditions. If you do not agree, please do not use our
           platform.
@@ -29,9 +29,9 @@ export default function TermsAndConditions() {
         <p className="mb-6 leading-relaxed">
           You agree to use {BRAND} only for legal purposes and follow these Terms.
           <br /><br />
-          You must make sure all details you enter at checkout - such as
-          game ID, server/zone, and contact details — is accurate. Incorrect
-          details may cause failed top-ups that cannot be reversed.
+          You must make sure all details you enter at checkout — such as your
+          Game ID, server/zone, and contact number — are accurate. Incorrect
+          details may cause a failed top-up that cannot be reversed.
         </p>
 
         {/* 2 */}

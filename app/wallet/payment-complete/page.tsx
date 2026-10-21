@@ -76,9 +76,9 @@ export default function PaymentComplete() {
           {status === "checking" &&
             "Please wait while we verify your payment."}
           {status === "success" &&
-            "Your wallet has been updated successfully."}
+            "Your wallet balance has been updated successfully."}
           {status === "failed" &&
-            "If money was deducted, it will be refunded or added to your wallet soon."}
+            "If money was deducted from your bank, don't worry! It will be added to your wallet in a few minutes or refunded automatically."}
         </p>
 
         {/* ACTION */}

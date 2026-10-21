@@ -15,37 +15,37 @@ const HIGHLIGHTS = [
     title: "FAST",
     subtitle: "DELIVERY",
     icon: FiZap,
-    description: "Quick top-up delivery"
+    description: "Delivered in seconds"
   },
   {
     title: "SAFE",
     subtitle: "PAYMENT",
     icon: FiShield,
-    description: "Protected payment flow"
+    description: "100% secure payments"
   },
   {
     title: "SECURE",
-    subtitle: "SYSTEM",
+    subtitle: "ACCOUNT",
     icon: FiLock,
-    description: "Strong account safety"
+    description: "Safe for your game ID"
   },
   {
     title: "24/7",
-    subtitle: "SERVICE",
+    subtitle: "SUPPORT",
     icon: FiClock,
-    description: "Support anytime"
+    description: "Always here to help"
   },
   {
     title: "ACTIVE",
-    subtitle: "COMMUNITY",
+    subtitle: "GAMERS",
     icon: FiUsers,
-    description: "Many happy users"
+    description: "Trusted by gamers"
   },
   {
     title: "AUTO",
-    subtitle: "PROCESS",
+    subtitle: "DELIVERY",
     icon: FiCpu,
-    description: "Automatic handling"
+    description: "Instant auto-credit"
   },
 ];
 

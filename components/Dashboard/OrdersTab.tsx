@@ -67,9 +67,9 @@ export default function OrdersTab() {
 
   const filterOptions = [
     { id: "all", label: "All Orders", icon: FiPackage, color: "text-[var(--foreground)]", count: undefined },
-    { id: "pending", label: "Pending", icon: FiClock, color: "text-amber-500", desc: "Processing topup" },
-    { id: "success", label: "Success", icon: FiCheckCircle, color: "text-emerald-500", desc: "Completed orders" },
-    { id: "failed", label: "Failed", icon: FiAlertCircle, color: "text-rose-500", desc: "Unsuccessful attempts" },
+    { id: "pending", label: "Pending", icon: FiClock, color: "text-amber-500", desc: "Adding to your game" },
+    { id: "success", label: "Success", icon: FiCheckCircle, color: "text-emerald-500", desc: "Delivered successfully" },
+    { id: "failed", label: "Failed", icon: FiAlertCircle, color: "text-rose-500", desc: "Order failed" },
     { id: "refund", label: "Refunded", icon: FiRotateCcw, color: "text-blue-500", desc: "Returned to wallet" },
   ];
 
@@ -100,7 +100,7 @@ export default function OrdersTab() {
               My <span className="text-[var(--accent)]">Orders</span>
             </h2>
             <p className="text-[10px] sm:text-xs text-[var(--muted)] max-w-xl mt-0.5">
-              Track your recent transactions and status.
+              Track all your orders and delivery status.
             </p>
           </div>
           <div className="flex shrink-0 items-center">

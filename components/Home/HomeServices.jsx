@@ -16,11 +16,11 @@ export default function HomeServices() {
           <div className="flex items-center gap-1.5 mb-0.5">
              <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
              <h3 className="text-[11px] sm:text-xs font-black uppercase tracking-[0.1em] text-[var(--accent)] truncate">
-               Build Your Site
+               Need Your Own Website?
              </h3>
           </div>
           <p className="text-[10px] sm:text-[11px] text-[var(--muted)] font-medium leading-tight opacity-80 max-w-lg truncate sm:whitespace-normal">
-            We build clean, fast websites and software for your business.
+            We build fast top-up websites and custom software for your store.
           </p>
         </div>
 
