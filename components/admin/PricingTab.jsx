@@ -420,7 +420,7 @@ export default function PricingTab({
                             {loadingFixedPrices ? (
                               <div className="col-span-full py-16 flex flex-col items-center justify-center opacity-40">
                                 <Loader2 size={24} className="animate-spin text-[var(--accent)] mb-3" />
-                                <p className="text-[10px] font-bold uppercase tracking-widest">Hydrating Prices...</p>
+                                <p className="text-[10px] font-bold uppercase tracking-widest">Loading prices...</p>
                               </div>
                             ) : (
                               visibleOverrides.map((o, idx) => (

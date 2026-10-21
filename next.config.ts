@@ -47,6 +47,15 @@ const nextConfig = {
       bodySizeLimit: '100mb', // increase global body size limit
     },
   },
+  async redirects() {
+    return [
+      {
+        source: "/owner-panel",
+        destination: "/owner-panal",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

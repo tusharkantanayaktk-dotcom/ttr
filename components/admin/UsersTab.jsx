@@ -314,7 +314,9 @@ export default function UsersTab() {
                           <p className="font-bold text-[var(--foreground)] text-xs truncate">{u.name}</p>
                           <span className="text-[9px] text-[var(--muted)] font-mono opacity-50 truncate">({u.userId})</span>
                         </div>
-                        <p className="text-[10.5px] text-[var(--muted)] truncate">{u.email}</p>
+                        <p className="text-[10.5px] text-[var(--muted)] truncate">
+                          {u.email}{u.phone ? ` • ${u.phone}` : ""}
+                        </p>
                       </div>
                     </div>
 

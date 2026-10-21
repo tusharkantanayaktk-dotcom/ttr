@@ -34,6 +34,11 @@ export async function GET(req) {
       paymentStatus: { $in: ["success", "completed", "paid"] },
     };
 
+    const status = searchParams.get("status");
+    if (status) {
+      filter.status = status;
+    }
+
     /* ================= SEARCH FILTER ================= */
     if (search) {
       filter.$or = [
@@ -41,6 +46,8 @@ export async function GET(req) {
         { gameSlug: { $regex: search, $options: "i" } },
         { itemName: { $regex: search, $options: "i" } },
         { playerId: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
         { paymentMethod: { $regex: search, $options: "i" } },
       ];
     }

@@ -377,23 +377,23 @@ export default function OrdersTab() {
             {/* ================= PAGINATION ================= */}
             {pagination.totalPages > 1 && (
               <div className="flex items-center justify-between pt-6 border-t border-[var(--border)]">
-                <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase">
-                  Batch <b className="text-[var(--foreground)]">{pagination.page}</b> / {pagination.totalPages}
+                <p className="text-xs font-semibold text-[var(--muted)]">
+                  Page <b className="text-[var(--foreground)]">{pagination.page}</b> of {pagination.totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
-                    className="px-5 py-2.5 rounded-xl border border-[var(--border)] text-[10px] font-bold uppercase text-[var(--muted)]/60 hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] disabled:opacity-20 transition-all font-mono"
+                    className="px-4 py-2 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.04] disabled:opacity-20 transition-all outline-none"
                   >
-                    PREVIOUS
+                    Previous
                   </button>
                   <button
                     onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                     disabled={page === pagination.totalPages}
-                    className="px-5 py-2.5 rounded-xl border border-[var(--border)] text-[10px] font-bold uppercase text-[var(--muted)]/60 hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] disabled:opacity-20 transition-all font-mono"
+                    className="px-4 py-2 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.04] disabled:opacity-20 transition-all outline-none"
                   >
-                    NEXT
+                    Next
                   </button>
                 </div>
               </div>

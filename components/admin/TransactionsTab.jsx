@@ -29,6 +29,7 @@ export default function TransactionsTab() {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   const [pagination, setPagination] = useState({
     total: 0,
@@ -38,15 +39,22 @@ export default function TransactionsTab() {
 
   useEffect(() => {
     fetchTransactions();
-  }, [page, limit, search]);
+  }, [page, limit, search, statusFilter]);
 
   const fetchTransactions = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
 
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+        search,
+        ...(statusFilter && { status: statusFilter }),
+      });
+
       const res = await fetch(
-        `/api/admin/transactions?page=${page}&limit=${limit}&search=${search}`,
+        `/api/admin/transactions?${params.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -130,12 +138,23 @@ export default function TransactionsTab() {
             className="w-full h-11 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
           />
         </div>
-        <button
-          className="h-11 w-11 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center hover:bg-[var(--foreground)]/[0.05] hover:border-[var(--accent)]/50 transition-all shrink-0"
-          title="Filter Transactions"
-        >
-          <Filter size={16} className="text-[var(--accent)]" />
-        </button>
+        <div className="relative shrink-0">
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setPage(1);
+              setStatusFilter(e.target.value);
+            }}
+            className="h-11 pl-3.5 pr-8 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-xs font-bold text-[var(--foreground)] uppercase focus:border-[var(--accent)]/50 outline-none appearance-none cursor-pointer"
+          >
+            <option value="" className="bg-[var(--card)]">All Status</option>
+            <option value="success" className="bg-[var(--card)]">Success</option>
+            <option value="pending" className="bg-[var(--card)]">Pending</option>
+            <option value="failed" className="bg-[var(--card)]">Failed</option>
+            <option value="refund" className="bg-[var(--card)]">Refund</option>
+          </select>
+          <Filter size={13} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--accent)] pointer-events-none" />
+        </div>
       </div>
 
       {/* ================= CONTENT ================= */}
@@ -272,23 +291,23 @@ export default function TransactionsTab() {
             {/* ================= PAGINATION ================= */}
             {pagination.totalPages > 1 && (
               <div className="flex items-center justify-between pt-6 border-t border-[var(--border)]">
-                <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase">
-                  Listing <b className="text-[var(--foreground)]">{pagination.page}</b> / {pagination.totalPages}
+                <p className="text-xs font-semibold text-[var(--muted)]">
+                  Page <b className="text-[var(--foreground)]">{pagination.page}</b> of {pagination.totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
-                    className="px-5 py-2.5 rounded-xl border border-[var(--border)] text-[10px] font-bold uppercase text-[var(--muted)]/60 hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] disabled:opacity-20 transition-all font-mono"
+                    className="px-4 py-2 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.04] disabled:opacity-20 transition-all outline-none"
                   >
-                    PREV
+                    Previous
                   </button>
                   <button
                     onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                     disabled={page === pagination.totalPages}
-                    className="px-5 py-2.5 rounded-xl border border-[var(--border)] text-[10px] font-bold uppercase text-[var(--muted)]/60 hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] disabled:opacity-20 transition-all font-mono"
+                    className="px-4 py-2 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.04] disabled:opacity-20 transition-all outline-none"
                   >
-                    NEXT
+                    Next
                   </button>
                 </div>
               </div>
@@ -365,8 +384,8 @@ export default function TransactionsTab() {
                 </DrawerSection>
 
                 <DrawerSection icon={<User size={16} />} title="Customer Info">
-                  <DrawerDetail label="Email" value={selectedTx.email || "GUEST"} />
-                  <DrawerDetail label="Phone" value={selectedTx.phone || "UNLINKED"} />
+                  <DrawerDetail label="Email" value={selectedTx.email || "Guest User"} />
+                  <DrawerDetail label="Phone" value={selectedTx.phone || "Not provided"} />
                   <DrawerDetail label="Date & Time" value={new Date(selectedTx.createdAt).toLocaleString()} />
                 </DrawerSection>
               </div>

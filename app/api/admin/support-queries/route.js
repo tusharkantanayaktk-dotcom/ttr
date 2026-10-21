@@ -30,8 +30,14 @@ export async function GET(req) {
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
     const search = searchParams.get("search");
+    const status = searchParams.get("status");
 
     const query = {};
+
+    // -------- STATUS (optional) --------
+    if (status) {
+      query.status = status;
+    }
 
     // -------- SEARCH (optional) --------
     if (search) {

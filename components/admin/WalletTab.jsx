@@ -395,10 +395,10 @@ export default function WalletTab() {
                                                             alert("Failed to mark success");
                                                         }
                                                     }}
-                                                    className="px-2 py-1 bg-green-600 text-white text-[9px] font-bold rounded hover:bg-green-500"
-                                                    title="Manual Success"
+                                                    className="px-2.5 py-1 bg-green-600 text-white text-[10px] font-bold rounded-lg hover:bg-green-500 transition-colors"
+                                                    title="Manually credit user and mark as success"
                                                 >
-                                                    M-Success
+                                                    Mark Success
                                                 </button>
                                             )}
 
@@ -426,10 +426,10 @@ export default function WalletTab() {
                                                         alert("Failed to update transaction");
                                                     }
                                                 }}
-                                                className="px-2 py-1 bg-red-600 text-white text-[9px] font-bold rounded hover:bg-red-500"
-                                                title="Mark Failed"
+                                                className="px-2.5 py-1 bg-red-600 text-white text-[10px] font-bold rounded-lg hover:bg-red-500 transition-colors"
+                                                title="Mark as failed and revert if needed"
                                             >
-                                                Fail
+                                                Mark Failed
                                             </button>
                                         </div>
                                     </td>

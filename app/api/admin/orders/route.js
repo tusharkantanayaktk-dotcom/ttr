@@ -55,6 +55,8 @@ export async function GET(req) {
         { gameSlug: { $regex: search, $options: "i" } },
         { itemName: { $regex: search, $options: "i" } },
         { playerId: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
       ];
     }
 

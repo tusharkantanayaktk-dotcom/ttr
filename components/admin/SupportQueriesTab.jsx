@@ -30,6 +30,7 @@ export default function SupportQueriesTab() {
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   const [pagination, setPagination] = useState({
     total: 0,
@@ -39,7 +40,7 @@ export default function SupportQueriesTab() {
 
   useEffect(() => {
     fetchQueries();
-  }, [page, limit, search]);
+  }, [page, limit, search, statusFilter]);
 
   /* ================= FETCH QUERIES ================= */
   const fetchQueries = async () => {
@@ -47,8 +48,15 @@ export default function SupportQueriesTab() {
       setLoading(true);
       const token = localStorage.getItem("token");
 
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+        search,
+        ...(statusFilter && { status: statusFilter }),
+      });
+
       const res = await fetch(
-        `/api/admin/support-queries?page=${page}&limit=${limit}&search=${search}`,
+        `/api/admin/support-queries?${params.toString()}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -153,10 +161,23 @@ export default function SupportQueriesTab() {
             className="w-full h-11 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none placeholder:text-[var(--muted)]/40"
           />
         </div>
-        <button className="h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] flex items-center justify-center gap-2 hover:bg-[var(--foreground)]/[0.05] transition-all sm:w-max group">
-          <Filter size={14} className="text-[var(--accent)]" />
-          <span className="text-xs font-bold uppercase text-[var(--muted)] group-hover:text-[var(--foreground)]">Filter</span>
-        </button>
+        <div className="relative shrink-0">
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setPage(1);
+              setStatusFilter(e.target.value);
+            }}
+            className="h-11 pl-3.5 pr-8 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-xs font-bold text-[var(--foreground)] uppercase focus:border-[var(--accent)]/50 outline-none appearance-none cursor-pointer"
+          >
+            <option value="" className="bg-[var(--card)]">All Status</option>
+            <option value="open" className="bg-[var(--card)]">Open</option>
+            <option value="in_progress" className="bg-[var(--card)]">In Progress</option>
+            <option value="resolved" className="bg-[var(--card)]">Resolved</option>
+            <option value="closed" className="bg-[var(--card)]">Closed</option>
+          </select>
+          <Filter size={13} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--accent)] pointer-events-none" />
+        </div>
       </div>
 
       {/* ================= CONTENT ================= */}
@@ -229,22 +250,22 @@ export default function SupportQueriesTab() {
 
               {/* ================= PAGINATION ================= */}
               {pagination.totalPages > 1 && (
-                <div className="flex items-center justify-between pt-6">
-                  <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase">
-                    Page {pagination.page} / {pagination.totalPages}
+                <div className="flex items-center justify-between pt-6 border-t border-[var(--border)]">
+                  <p className="text-xs font-semibold text-[var(--muted)]">
+                    Page <b className="text-[var(--foreground)]">{pagination.page}</b> of {pagination.totalPages}
                   </p>
                   <div className="flex gap-2">
                     <button
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
                       disabled={page === 1}
-                      className="px-4 py-2 rounded-xl border border-[var(--border)] text-[10px] font-bold uppercase text-[var(--muted)] hover:text-[var(--foreground)] disabled:opacity-20 transition-all"
+                      className="px-4 py-2 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.04] disabled:opacity-20 transition-all outline-none"
                     >
-                      Prev
+                      Previous
                     </button>
                     <button
                       onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                       disabled={page === pagination.totalPages}
-                      className="px-4 py-2 rounded-xl border border-[var(--border)] text-[10px] font-bold uppercase text-[var(--muted)] hover:text-[var(--foreground)] disabled:opacity-20 transition-all"
+                      className="px-4 py-2 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.04] disabled:opacity-20 transition-all outline-none"
                     >
                       Next
                     </button>

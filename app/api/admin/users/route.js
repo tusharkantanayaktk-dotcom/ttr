@@ -39,6 +39,7 @@ export async function GET(req) {
         { name: { $regex: search, $options: "i" } },
         { email: { $regex: search, $options: "i" } },
         { phone: { $regex: search, $options: "i" } },
+        { userId: { $regex: search, $options: "i" } },
       ];
     }
 
