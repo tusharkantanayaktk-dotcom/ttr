@@ -1,8 +1,10 @@
-const CACHE_NAME = 'tronics-pwa-v1';
+const CACHE_NAME = 'tronics-pwa-v2';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
+  '/logo.svg',
   '/logo.png',
+  '/icon.svg',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/favicon.ico'
