@@ -216,12 +216,12 @@ export default function AdminPanalPage() {
       <section className="min-h-screen bg-[var(--background)] p-3 sm:p-4 md:p-6">
         <div className="w-full max-w-7xl mx-auto">
           {/* ================= TOP PANEL BAR ================= */}
-          <div className="mb-4 flex items-center justify-between px-1">
+          <div className="mb-3 flex items-center justify-between px-1">
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={toggleSidebarCollapse}
-                className="hidden md:flex items-center justify-center w-7 h-7 bg-[var(--card)] hover:bg-[var(--foreground)]/[0.05] border border-[var(--border)] hover:border-[var(--accent)]/50 rounded-lg text-[var(--foreground)] active:scale-95 transition-all"
+                className="hidden md:flex items-center justify-center w-7 h-7 bg-[var(--card)] hover:bg-[var(--foreground)]/[0.05] border border-[var(--border)] hover:border-[var(--accent)]/50 rounded-lg text-[var(--foreground)] active:scale-95 transition-all cursor-pointer"
                 title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                 aria-label="Toggle sidebar"
               >
@@ -235,7 +235,7 @@ export default function AdminPanalPage() {
 
             <div className="flex items-center gap-2">
               <button
-                className="md:hidden p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-[var(--foreground)] active:scale-95 transition-transform"
+                className="md:hidden p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-[var(--foreground)] active:scale-95 transition-transform cursor-pointer"
                 onClick={() => setIsSidebarOpen(true)}
                 aria-label="Open Menu"
               >
@@ -243,6 +243,9 @@ export default function AdminPanalPage() {
               </button>
             </div>
           </div>
+
+          {/* Horizontal Divider Line Below Owner Panel */}
+          <div className="w-full h-[1px] bg-[var(--border)] mb-4 opacity-60" />
 
           <div className="flex flex-col md:flex-row gap-6">
             

@@ -144,10 +144,10 @@ export default function BannersTab({ banners, onRefresh }) {
     <div className="space-y-10 pb-10">
 
       {/* ================= HEADER SECTION ================= */}
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Website Banners</h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">Website Banners</h2>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           <button
             onClick={() => {
               if (showAddForm && !editingId) {
@@ -157,24 +157,24 @@ export default function BannersTab({ banners, onRefresh }) {
                 setShowAddForm(true);
               }
             }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all active:scale-95 cursor-pointer ${
               showAddForm
                 ? "bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)]"
-                : "bg-[var(--accent)] text-black shadow-sm"
+                : "bg-[var(--accent)] text-white shadow-xs"
             }`}
           >
             {showAddForm ? <X size={14} /> : <Plus size={14} />}
             <span>{showAddForm ? "Close Form" : "Add Banner"}</span>
           </button>
 
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
+          <div className="flex items-center gap-1 text-xs font-semibold text-[var(--muted)]">
             <ImageIcon size={14} className="text-[var(--accent)]" />
             <span>{banners.length} Banners</span>
           </div>
 
           <button
             onClick={onRefresh}
-            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none"
+            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none cursor-pointer"
             title="Refresh Banners"
           >
             <RefreshCcw size={15} />
@@ -367,21 +367,9 @@ export default function BannersTab({ banners, onRefresh }) {
           <h3 className="text-sm font-bold ml-1 text-[var(--foreground)]">
             Banner List ({banners.length})
           </h3>
-          {!showAddForm && (
-            <button
-              onClick={() => {
-                resetForm();
-                setShowAddForm(true);
-              }}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:border-[var(--accent)]/50 text-[var(--muted)] hover:text-[var(--foreground)] text-xs font-medium transition-all"
-            >
-              <Plus size={13} />
-              <span>New Banner</span>
-            </button>
-          )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
           <AnimatePresence mode="popLayout">
             {banners.map((b, idx) => (
               <motion.div
@@ -391,42 +379,52 @@ export default function BannersTab({ banners, onRefresh }) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ delay: idx * 0.05 }}
-                className="group relative rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--card)] transition-all hover:shadow-xl hover:shadow-black/5"
+                className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--card)] transition-all hover:shadow-lg hover:border-[var(--accent)]/30"
               >
-                <div className="relative h-28 overflow-hidden">
+                <div className="relative h-24 sm:h-28 overflow-hidden bg-black/40">
                   <img
                     src={b.bannerImage}
                     alt={b.bannerTitle}
+                    onError={(e) => {
+                      e.currentTarget.classList.add("hidden");
+                    }}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                  <div className="absolute top-2.5 right-2.5">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                  
+                  {/* Status Badge */}
+                  <div className="absolute top-2 right-2 z-10">
                     {b.isShow ? (
-                      <span className="px-2 py-0.5 rounded-md bg-green-500/20 text-[8px] font-black text-green-500 uppercase border border-green-500/20 backdrop-blur-md">Visible</span>
+                      <span className="px-1.5 py-0.5 rounded-md bg-emerald-500/20 text-[7px] sm:text-[8px] font-black text-emerald-400 uppercase border border-emerald-500/30 backdrop-blur-md">Visible</span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded-md bg-red-500/20 text-[8px] font-black text-red-500 uppercase border border-red-500/20 backdrop-blur-md">Hidden</span>
+                      <span className="px-1.5 py-0.5 rounded-md bg-red-500/20 text-[7px] sm:text-[8px] font-black text-red-400 uppercase border border-red-500/30 backdrop-blur-md">Hidden</span>
                     )}
                   </div>
-                  <div className="absolute bottom-2.5 left-2.5 right-2.5">
-                    <p className="text-xs font-bold text-white truncate">{b.bannerTitle}</p>
+
+                  {/* Title on Image */}
+                  <div className="absolute bottom-1.5 left-2 right-2 z-10">
+                    <p className="text-[11px] sm:text-xs font-extrabold text-white truncate drop-shadow-sm">{b.bannerTitle}</p>
                   </div>
                 </div>
 
-                <div className="p-3 flex items-center justify-between gap-2 bg-[var(--card)]">
-                  <p className="text-[10px] font-black text-[var(--accent)] truncate uppercase italic">/{b.bannerSlug}</p>
+                {/* Footer details & action buttons */}
+                <div className="p-2 sm:p-2.5 flex items-center justify-between gap-1.5 bg-[var(--card)]">
+                  <p className="text-[9px] sm:text-[10px] font-black text-[var(--accent)] truncate uppercase italic">/{b.bannerSlug}</p>
 
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => toggleShow(b._id, b.isShow)}
-                      className="p-2 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                      title={b.isShow ? "Hide" : "Show"}
+                      className="p-1.5 rounded-md bg-[var(--foreground)]/[0.05] hover:bg-[var(--accent)]/15 text-[var(--muted)] hover:text-[var(--accent)] transition-colors cursor-pointer"
                     >
-                      {b.isShow ? <Eye size={14} /> : <EyeOff size={14} />}
+                      {b.isShow ? <Eye size={13} /> : <EyeOff size={13} />}
                     </button>
                     <button
                       onClick={() => startEdit(b)}
-                      className="p-2 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                      title="Edit"
+                      className="p-1.5 rounded-md bg-[var(--foreground)]/[0.05] hover:bg-[var(--accent)]/15 text-[var(--muted)] hover:text-[var(--accent)] transition-colors cursor-pointer"
                     >
-                      <Edit3 size={14} />
+                      <Edit3 size={13} />
                     </button>
                   </div>
                 </div>

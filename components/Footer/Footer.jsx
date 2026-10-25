@@ -98,19 +98,19 @@ export default function Footer() {
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-2">
-              {SOCIALS.map(({ label, href, icon: Icon, hoverClass }) => (
+            <div className="flex items-center gap-3 pt-1">
+              {SOCIALS.map(({ label, href, icon: Icon }) => (
                 <motion.a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ y: -2, scale: 1.05 }}
+                  whileHover={{ y: -1, scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`w-9 h-9 flex items-center justify-center rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] transition-all shadow-sm ${hoverClass}`}
+                  className="text-[var(--muted)] hover:text-[var(--accent)] transition-colors p-0.5"
                   title={label}
                 >
-                  <Icon size={16} />
+                  <Icon size={18} />
                 </motion.a>
               ))}
             </div>
@@ -133,11 +133,14 @@ export default function Footer() {
                       <li key={link.href}>
                         <Link
                           href={link.href}
-                          className="group inline-flex items-center gap-2 text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors py-0.5"
+                          className="group inline-flex items-center gap-2 text-xs font-medium text-[var(--muted)] hover:text-[var(--foreground)] transition-colors py-0.5"
                         >
-                          <div className="w-5 h-5 rounded-md bg-[var(--card)] border border-[var(--border)] group-hover:border-[var(--accent)]/50 group-hover:bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center transition-all shrink-0">
-                            {Icon && <Icon size={11} />}
-                          </div>
+                          {Icon && (
+                            <Icon
+                              size={13}
+                              className="text-[var(--accent)] group-hover:scale-110 transition-transform shrink-0"
+                            />
+                          )}
                           <span className="group-hover:translate-x-0.5 transition-transform">
                             {link.label}
                           </span>
