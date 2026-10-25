@@ -1,96 +1,71 @@
 "use client";
 
-import { JSX, useState } from "react";
-import {
-  FaPhoneAlt,
-  FaInstagram,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiSend, FiMessageSquare, FiInfo, FiCheckCircle, FiAlertCircle, FiZap, FiPhone } from "react-icons/fi";
+import {
+  ShoppingBag,
+  CreditCard,
+  Wallet,
+  MessageSquare,
+  Send,
+  CheckCircle2,
+  AlertCircle,
+  ChevronDown,
+  ArrowUpRight,
+  Zap,
+} from "lucide-react";
+import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 
-const QUERY_TYPES = [
-  { id: "Order Issue", label: "Order Issue", icon: "📦" },
-  { id: "Payment Issue", label: "Payment Issue", icon: "💳" },
-  { id: "Wallet Issue", label: "Wallet Issue", icon: "👛" },
-  { id: "General Inquiry", label: "General Inquiry", icon: "💬" },
-  { id: "Bug Report", label: "Bug Report", icon: "🐛" },
-  { id: "Feedback", label: "Feedback", icon: "⭐" },
+/* =========================================================================
+   COMPACT TOPIC CHIPS
+   ========================================================================= */
+const TOPIC_CHIPS = [
+  { id: "Order Issue", label: "Orders", icon: ShoppingBag, color: "text-emerald-500" },
+  { id: "Payment Issue", label: "Payment", icon: CreditCard, color: "text-amber-500" },
+  { id: "Wallet Issue", label: "Wallet", icon: Wallet, color: "text-purple-500" },
+  { id: "General Inquiry", label: "General", icon: MessageSquare, color: "text-sky-500" },
 ];
 
-/* ===================== ENV ===================== */
-
-const SUPPORT_CONFIG = {
-  header: {
-    title: process.env.NEXT_PUBLIC_SUPPORT_TITLE || "Support Center",
-    subtitle: process.env.NEXT_PUBLIC_SUPPORT_SUBTITLE || "Need help with an order or have questions? We are here to help 24/7.",
-  },
-
-  contacts: {
-    title: "Direct Channels",
-    items: [
-      {
-        id: "phone",
-        title: "Support Line",
-        value: process.env.NEXT_PUBLIC_SUPPORT_PHONE,
-        href: process.env.NEXT_PUBLIC_SUPPORT_PHONE_TEL,
-        icon: "phone",
-        color: "blue",
-      },
-      {
-        id: "instagram",
-        title: "Instagram",
-        value: process.env.NEXT_PUBLIC_SUPPORT_INSTAGRAM_LABEL,
-        href: process.env.NEXT_PUBLIC_SUPPORT_INSTAGRAM_URL,
-        icon: "instagram",
-        color: "pink",
-      },
-      {
-        id: "whatsapp",
-        title: "Community",
-        value: process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP_LABEL,
-        href: process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP_URL,
-        icon: "whatsapp",
-        color: "green",
-      },
-    ].filter((item) => item.value && item.href),
-  },
-
-  queryTypes: [
-    "Order Issue",
-    "Payment Issue",
-    "Wallet Issue",
-    "General Inquiry",
-    "Bug Report",
-    "Feedback",
-  ],
-};
-
-/* ===================== ICON MAP ===================== */
-
-const ICON_MAP: Record<string, JSX.Element> = {
-  phone: <FaPhoneAlt />,
-  instagram: <FaInstagram />,
-  whatsapp: <FaWhatsapp />,
-};
-
+/* =========================================================================
+   FREQUENTLY ASKED QUESTIONS
+   ========================================================================= */
 const FAQS = [
-  { question: "How long does delivery take?", answer: "Most orders arrive in 1 to 5 minutes. During busy hours, it may take up to 30 minutes." },
-  { question: "How do I add money to my wallet?", answer: "Go to your Wallet, enter the amount, select UPI, and complete the payment." },
-  { question: "Is my payment safe?", answer: "Yes, 100%. All payments are processed through secure, bank-grade payment gateways." },
+  {
+    q: "How fast is delivery?",
+    a: "Orders are processed automatically within 1 to 3 minutes via official server callbacks.",
+  },
+  {
+    q: "UPI debited but order is pending?",
+    a: "Banking servers sometimes take 2-5 minutes to confirm UPI callbacks. If not credited within 10 minutes, send your Order ID via WhatsApp for instant manual credit.",
+  },
+  {
+    q: "How to top up wallet balance?",
+    a: "Go to your Profile → Wallet → Top Up. Enter any amount (min ₹10) and scan the UPI QR. Wallet balance updates in seconds.",
+  },
+  {
+    q: "What if an order fails permanently?",
+    a: "If an order cannot be completed due to publisher maintenance, 100% of the funds are refunded instantly to your Tronics Wallet.",
+  },
 ];
-
-/* ===================== COMPONENT ===================== */
 
 export default function QueryTab() {
-  const [queryType, setQueryType] = useState("");
+  const [queryType, setQueryType] = useState("Order Issue");
   const [userPhone, setUserPhone] = useState("");
   const [queryMessage, setQueryMessage] = useState("");
   const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const storedPhone = localStorage.getItem("phone");
+    if (storedPhone && !userPhone) {
+      setUserPhone(storedPhone);
+    }
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!queryType || !userPhone.trim() || !queryMessage.trim()) return;
 
     setIsSubmitting(true);
@@ -104,261 +79,288 @@ export default function QueryTab() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token || ""}`,
         },
         body: JSON.stringify({
           email: storedEmail || null,
-          phone: userPhone,
+          phone: userPhone.trim(),
           type: queryType,
-          message: queryMessage,
+          message: queryMessage.trim(),
         }),
       });
 
       const data = await res.json();
 
       if (data.success) {
-        setStatus({ type: "success", message: "Your query has been submitted. We'll get back to you soon!" });
-        setQueryType("");
-        setUserPhone("");
+        setStatus({
+          type: "success",
+          message: "Ticket registered! Our team will contact you shortly.",
+        });
         setQueryMessage("");
       } else {
-        setStatus({ type: "error", message: data.message || "Something went wrong." });
+        setStatus({
+          type: "error",
+          message: data.message || "Failed to submit ticket. Please message us on WhatsApp.",
+        });
       }
     } catch {
-      setStatus({ type: "error", message: "Network error. Please try again later." });
+      setStatus({
+        type: "error",
+        message: "Network issue. Please message us directly on WhatsApp.",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="space-y-4 pb-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col gap-1"
-      >
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--foreground)]">
-          Help & <span className="text-[var(--accent)]">Support</span>
-        </h2>
-        <p className="text-[10px] sm:text-xs text-[var(--muted)] max-w-xl">
-          {SUPPORT_CONFIG.header.subtitle}
-        </p>
-      </motion.div>
+    <div className="max-w-2xl mx-auto space-y-6 pb-8">
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-
-        {/* LEFT: FORM & FAQS */}
-        <div className="lg:col-span-3 space-y-10 order-2 lg:order-1">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-6 relative overflow-hidden group"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <div className="h-8 w-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
-                <FiMessageSquare className="text-lg" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold">New Ticket</h3>
-              </div>
+      {/* ===================== COMPACT HEADER & QUICK ACTIONS ===================== */}
+      <div className="space-y-4">
+        {/* Title Row */}
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400">
+                Live Support Desk
+              </span>
             </div>
-
-            <AnimatePresence mode="wait">
-              {status && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className={`mb-6 p-4 rounded-2xl flex items-center gap-3 border ${status.type === "success"
-                    ? "bg-green-500/10 border-green-500/20 text-green-500"
-                    : "bg-red-500/10 border-red-500/20 text-red-500"
-                    }`}
-                >
-                  <div className={`p-2 rounded-xl ${status.type === "success" ? "bg-green-500/20" : "bg-red-500/20"}`}>
-                    <FiCheckCircle className="text-xl" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm">{status.type === "success" ? "Message Dispatched" : "Dispatch Failed"}</h4>
-                    <p className="text-xs opacity-80">{status.message}</p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <div className="space-y-4 relative z-10">
-              {/* Type Selector Grid */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Topic</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {QUERY_TYPES.map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => setQueryType(t.id)}
-                      className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all text-xs font-bold
-                                  ${queryType === t.id
-                          ? "border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)]"
-                          : "border-[var(--border)] bg-[var(--background)] hover:border-[var(--accent)]/30 text-[var(--foreground)]"
-                        }`}
-                    >
-                      <span className="text-sm">{t.icon}</span>
-                      <span className="truncate">{t.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Phone */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">WhatsApp Mobile Number</label>
-                <div className="relative group/input">
-                  <FiPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
-                  <input
-                    type="text"
-                    placeholder="10-digit number"
-                    value={userPhone}
-                    onChange={(e) => setUserPhone(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-[var(--border)] bg-[var(--background)] 
-                               focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all
-                               font-mono text-xs"
-                  />
-                </div>
-              </div>
-
-              {/* Message */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Message</label>
-                <textarea
-                  rows={4}
-                  placeholder="Tell us what happened (include your Order ID if you have one)..."
-                  value={queryMessage}
-                  onChange={(e) => setQueryMessage(e.target.value)}
-                  className="w-full p-4 rounded-xl border border-[var(--border)] bg-[var(--background)] 
-                             focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all
-                             resize-none font-medium text-xs"
-                />
-              </div>
-
-              <button
-                disabled={!queryType || !userPhone.trim() || !queryMessage.trim() || isSubmitting}
-                onClick={handleSubmit}
-                className="w-full py-4 rounded-xl bg-[var(--accent)] text-white font-bold uppercase tracking-wider text-xs
-                           flex items-center justify-center gap-2
-                           hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50 
-                           disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Sending...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Send Message</span>
-                    <FiSend size={14} />
-                  </>
-                )}
-              </button>
-            </div>
-          </motion.div>
-
-          {/* FAQ SECTION */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="h-7 w-7 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500">
-                <FiInfo className="text-base" />
-              </div>
-              <h3 className="text-lg font-bold italic tracking-tight uppercase">FAQs</h3>
-            </div>
-            <div className="space-y-2">
-              {FAQS.map((faq, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/30 overflow-hidden backdrop-blur-sm"
-                >
-                  <button
-                    onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                    className="w-full p-3.5 flex items-center justify-between text-left hover:bg-[var(--card)] transition-colors"
-                  >
-                    <span className="text-xs font-bold tracking-tight">{faq.question}</span>
-                    <FiCheckCircle className={`transition-transform duration-300 ${activeFaq === idx ? "rotate-180 text-[var(--accent)]" : "text-[var(--muted)]"}`} />
-                  </button>
-                  <AnimatePresence>
-                    {activeFaq === idx && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden"
-                      >
-                        <p className="p-4 pt-0 text-xs text-[var(--muted)] leading-relaxed border-t border-[var(--border)]/30 mt-2">
-                          {faq.answer}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </div>
+            <h1 className="text-xl sm:text-2xl font-black text-[var(--foreground)] tracking-tight mt-0.5">
+              Help & Support
+            </h1>
           </div>
+
+          {/* Instant WhatsApp Action Pill */}
+          <a
+            href="https://wa.me/919631777559?text=Hello%20Tronics%20Support%2C%20I%20need%20help%20with%20my%20order"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold transition-all shadow-xs group cursor-pointer"
+          >
+            <FaWhatsapp className="text-sm group-hover:scale-110 transition-transform" />
+            <span>Chat on WhatsApp</span>
+            <ArrowUpRight size={12} className="opacity-70 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </a>
         </div>
 
-        {/* RIGHT: CONTACT SECTIONS */}
-        <div className="lg:col-span-2 space-y-6 order-1 lg:order-2">
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="h-8 w-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]">
-                <FiInfo className="text-lg" />
-              </div>
-              <h3 className="text-base font-bold uppercase">{SUPPORT_CONFIG.contacts.title}</h3>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3">
-              {SUPPORT_CONFIG.contacts.items.map((item, idx) => (
-                <motion.a
-                  key={item.id}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className="group relative p-3.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/50 
-                             hover:bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all 
-                             flex items-center gap-3 shadow-sm"
-                >
-                  <div className={`p-2.5 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] text-lg transition-all duration-300`}>
-                    {ICON_MAP[item.icon]}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] mb-0.5">{item.title}</p>
-                    <p className="text-sm font-bold text-[var(--foreground)] truncate font-mono">
-                      {item.value}
-                    </p>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Tip */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="p-6 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 relative overflow-hidden group/tip"
+        {/* Quick Contact Channels Strip */}
+        <div className="grid grid-cols-3 gap-2">
+          <a
+            href="https://wa.me/919631777559?text=Hello%20Tronics%20Support"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.03] transition-all flex items-center justify-between group"
           >
-            <h4 className="flex items-center gap-2 text-indigo-400 font-bold text-[10px] uppercase tracking-wider mb-2">
-              <FiZap /> Tip
-            </h4>
-            <p className="text-xs font-bold text-[var(--foreground)] leading-relaxed mb-4">
-              Include your Order ID in the description for faster resolution.
-            </p>
-          </motion.div>
+            <div className="flex items-center gap-2 min-w-0">
+              <FaWhatsapp className="text-emerald-500 text-sm shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[11px] font-bold text-[var(--foreground)] truncate">WhatsApp</div>
+                <div className="text-[9px] text-[var(--muted)] font-mono truncate">Instant Reply</div>
+              </div>
+            </div>
+            <ArrowUpRight size={11} className="text-[var(--muted)] group-hover:text-[var(--foreground)] shrink-0" />
+          </a>
+
+          <a
+            href={process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP_URL || "https://whatsapp.com/channel/0029VbBZQiRFMqrUsOHKBU0T"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.03] transition-all flex items-center justify-between group"
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <FaWhatsapp className="text-emerald-400 text-sm shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[11px] font-bold text-[var(--foreground)] truncate">Channel</div>
+                <div className="text-[9px] text-[var(--muted)] font-mono truncate">Updates</div>
+              </div>
+            </div>
+            <ArrowUpRight size={11} className="text-[var(--muted)] group-hover:text-[var(--foreground)] shrink-0" />
+          </a>
+
+          <a
+            href={process.env.NEXT_PUBLIC_SUPPORT_INSTAGRAM_URL || "https://www.instagram.com/tronics_offficial"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.03] transition-all flex items-center justify-between group"
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <FaInstagram className="text-pink-500 text-sm shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[11px] font-bold text-[var(--foreground)] truncate">Instagram</div>
+                <div className="text-[9px] text-[var(--muted)] font-mono truncate">@tronics</div>
+              </div>
+            </div>
+            <ArrowUpRight size={11} className="text-[var(--muted)] group-hover:text-[var(--foreground)] shrink-0" />
+          </a>
         </div>
       </div>
+
+      {/* ===================== COMPACT TICKET FORM ===================== */}
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 sm:p-5 shadow-xs relative">
+
+        {/* Status Toast */}
+        <AnimatePresence>
+          {status && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, height: 0 }}
+              className={`p-3 mb-4 rounded-xl border flex items-center gap-2.5 text-xs ${
+                status.type === "success"
+                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
+                  : "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400"
+              }`}
+            >
+              {status.type === "success" ? <CheckCircle2 size={15} className="shrink-0" /> : <AlertCircle size={15} className="shrink-0" />}
+              <span className="font-medium">{status.message}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* TOPIC COMPACT CHIPS */}
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)]">
+              Issue Type
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+              {TOPIC_CHIPS.map((chip) => {
+                const active = queryType === chip.id;
+                const Icon = chip.icon;
+                return (
+                  <button
+                    key={chip.id}
+                    type="button"
+                    onClick={() => setQueryType(chip.id)}
+                    className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer border ${
+                      active
+                        ? "bg-[var(--accent)] text-black font-bold border-[var(--accent)] shadow-xs"
+                        : "bg-[var(--background)] text-[var(--foreground)] border-[var(--border)] hover:border-[var(--accent)]/40"
+                    }`}
+                  >
+                    <Icon size={13} className={active ? "text-black" : chip.color} />
+                    <span>{chip.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* CONTACT NUMBER */}
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)]">
+              WhatsApp Mobile Number
+            </span>
+            <div className="relative">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none text-xs font-mono text-[var(--muted)]">
+                <FaWhatsapp className="text-emerald-500 text-xs" />
+                <span>+91</span>
+              </div>
+              <input
+                type="tel"
+                maxLength={10}
+                placeholder="10-digit number"
+                value={userPhone}
+                onChange={(e) => setUserPhone(e.target.value.replace(/\D/g, ""))}
+                className="w-full pl-14 pr-3 py-2 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] font-mono text-xs focus:outline-none focus:ring-1 focus:ring-[var(--accent)] focus:border-[var(--accent)] transition-all"
+              />
+            </div>
+          </div>
+
+          {/* MESSAGE AREA */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)]">
+                Message / Order ID
+              </span>
+              <span className="text-[9px] font-mono text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                <Zap size={10} />
+                <span>Order ID = faster fix</span>
+              </span>
+            </div>
+            <textarea
+              rows={3}
+              placeholder="Describe your issue (include your Order ID or Transaction ID)..."
+              value={queryMessage}
+              onChange={(e) => setQueryMessage(e.target.value)}
+              className="w-full p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs leading-relaxed focus:outline-none focus:ring-1 focus:ring-[var(--accent)] focus:border-[var(--accent)] transition-all resize-none"
+            />
+          </div>
+
+          {/* SUBMIT BUTTON */}
+          <button
+            type="submit"
+            disabled={!queryType || !userPhone.trim() || !queryMessage.trim() || isSubmitting}
+            className="w-full py-2.5 rounded-xl bg-[var(--accent)] text-black font-extrabold uppercase tracking-wider text-xs flex items-center justify-center gap-1.5 hover:brightness-110 active:scale-[0.99] transition-all cursor-pointer shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? (
+              <>
+                <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                <span>Sending...</span>
+              </>
+            ) : (
+              <>
+                <span>Submit Ticket</span>
+                <Send size={12} />
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+
+      {/* ===================== COMPACT FAQS ACCORDION ===================== */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)]">
+            Quick Answers (FAQs)
+          </span>
+          <span className="text-[9.5px] font-mono text-[var(--muted)]">Automated Help</span>
+        </div>
+
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] divide-y divide-[var(--border)] overflow-hidden shadow-xs">
+          {FAQS.map((faq, idx) => {
+            const isOpen = openFaq === idx;
+            return (
+              <div key={idx}>
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(isOpen ? null : idx)}
+                  className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-[var(--foreground)]/[0.02] transition-colors cursor-pointer gap-2"
+                >
+                  <span className="text-xs font-semibold text-[var(--foreground)]">
+                    {faq.q}
+                  </span>
+                  <ChevronDown
+                    size={14}
+                    className={`text-[var(--muted)] shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 text-[var(--accent)]" : ""
+                    }`}
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.18 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-4 pb-3 pt-0 text-[11.5px] text-[var(--muted)] leading-relaxed">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
     </div>
   );
 }
