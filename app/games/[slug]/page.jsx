@@ -141,23 +141,23 @@ export default function GameDetailPage() {
         <div className="max-w-6xl mx-auto h-[1px] bg-[var(--border)] mb-4 opacity-50" />
 
         {/* ================= ITEM GRID SKELETON ================= */}
-        <div className="max-w-6xl mx-auto mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+        <div className="max-w-6xl mx-auto mb-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
             <div
               key={i}
-              className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/40 flex items-center gap-3.5 min-h-[76px] p-3"
+              className="relative overflow-hidden rounded-2xl sm:rounded-[1.25rem] border border-[var(--border)] bg-[var(--card)]/40 flex items-center gap-2 sm:gap-2.5 min-h-[68px] sm:min-h-[74px] p-2.5 sm:p-3"
             >
               {/* Diamond / Item Icon */}
-              <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 bg-[var(--foreground)]/[0.04]">
+              <div className="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-xl overflow-hidden shrink-0 bg-[var(--foreground)]/[0.04]">
                 <Skeleton className="w-full h-full border-none" />
               </div>
 
               {/* Details Column */}
-              <div className="flex flex-col flex-1 min-w-0 justify-center space-y-1.5">
-                <Skeleton width="80%" height={12} className="rounded" />
-                <Skeleton width="45%" height={9} className="rounded" />
+              <div className="flex flex-col flex-1 min-w-0 justify-center space-y-1">
+                <Skeleton width="80%" height={10} className="rounded" />
                 <div className="flex items-baseline gap-1 pt-0.5">
-                  <Skeleton width={48} height={14} className="rounded" />
+                  <Skeleton width={40} height={12} className="rounded" />
+                  <Skeleton width={28} height={9} className="rounded" />
                 </div>
               </div>
             </div>
@@ -276,17 +276,17 @@ export default function GameDetailPage() {
 
       {/* ================= HEADER ================= */}
       <div className="max-w-6xl mx-auto mb-3 flex items-center gap-3">
-        <div className="w-10 h-10 relative rounded-lg overflow-hidden shadow-md">
+        <div className="w-10 h-10 relative rounded-xl overflow-hidden shadow-sm shrink-0">
           <GameThumbnail src={game?.gameImageId?.image} name={game?.gameName} isLarge />
         </div>
 
         <div>
-          <h1 className="text-xl font-extrabold tracking-tight">
+          <h1 className="text-lg sm:text-xl font-extrabold tracking-tight">
             {isBGMI ? "BGMI" : game?.gameName}
           </h1>
         </div>
       </div>
-      
+
       <div className="max-w-6xl mx-auto h-[1px] bg-[var(--border)] mb-4 opacity-50" />
 
       {/* ================= ITEM GRID ================= */}
