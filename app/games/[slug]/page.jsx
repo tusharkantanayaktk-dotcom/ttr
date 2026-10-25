@@ -145,10 +145,10 @@ export default function GameDetailPage() {
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
             <div
               key={i}
-              className="relative overflow-hidden rounded-2xl sm:rounded-[1.25rem] border border-[var(--border)] bg-[var(--card)]/40 flex items-center gap-2 sm:gap-2.5 min-h-[68px] sm:min-h-[74px] p-2.5 sm:p-3"
+              className="relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)]/40 flex items-center gap-2 sm:gap-2.5 min-h-[66px] sm:min-h-[70px] p-2.5 sm:p-3"
             >
               {/* Diamond / Item Icon */}
-              <div className="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-xl overflow-hidden shrink-0 bg-[var(--foreground)]/[0.04]">
+              <div className="w-8 h-8 rounded-lg overflow-hidden shrink-0 bg-[var(--foreground)]/[0.04]">
                 <Skeleton className="w-full h-full border-none" />
               </div>
 
