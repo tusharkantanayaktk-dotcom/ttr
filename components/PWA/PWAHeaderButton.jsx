@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { FiDownload, FiCheck, FiShare, FiX } from "react-icons/fi";
+import { Download, Check, Share2, X, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 const logo = "/logo.svg";
 
@@ -17,7 +17,7 @@ function detectPlatform() {
   return "other";
 }
 
-export default function PWAHeaderButton() {
+export default function PWAHeaderButton({ variant = "header", onAction }) {
   const [canInstall, setCanInstall] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -101,22 +101,60 @@ export default function PWAHeaderButton() {
 
   return (
     <>
-      <button
-        onClick={handleClick}
-        className="relative flex items-center justify-center w-9 h-9 rounded-full bg-[var(--card)] hover:bg-[var(--accent)] hover:text-black border border-[var(--border)] hover:border-[var(--accent)] text-[var(--foreground)] transition-colors duration-200 cursor-pointer shadow-sm group"
-        title="Download / Install Tronics App"
-        aria-label="Install App"
-      >
-        {installed ? (
-          <FiCheck className="w-4 h-4 text-emerald-400" />
-        ) : (
-          <FiDownload className="w-4 h-4" />
-        )}
+      {variant === "sidebar" ? (
+        <button
+          type="button"
+          onClick={() => {
+            handleClick();
+            if (onAction) onAction();
+          }}
+          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/[0.05] transition-all group text-left cursor-pointer"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 group-hover:scale-105 flex items-center justify-center transition-all relative shrink-0">
+              {installed ? (
+                <Check size={16} className="text-emerald-400" />
+              ) : (
+                <Download size={16} />
+              )}
+              {canInstall && (
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+              )}
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-white leading-none group-hover:text-[var(--accent)] transition-colors flex items-center gap-1.5">
+                <span>{installed ? "App Installed" : "Download App"}</span>
+                {canInstall && (
+                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                    APP
+                  </span>
+                )}
+              </div>
+              <div className="text-[10px] text-zinc-400 font-medium mt-0.5">
+                {installed ? "Running on your device" : "Install for instant access"}
+              </div>
+            </div>
+          </div>
+          <ChevronRight size={14} className="text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+        </button>
+      ) : (
+        <button
+          onClick={handleClick}
+          className="relative flex items-center justify-center w-9 h-9 rounded-full bg-[var(--card)] hover:bg-[var(--accent)] hover:text-black border border-[var(--border)] hover:border-[var(--accent)] text-[var(--foreground)] transition-colors duration-200 cursor-pointer shadow-sm group"
+          title="Download / Install Tronics App"
+          aria-label="Install App"
+        >
+          {installed ? (
+            <Check className="w-4 h-4 text-emerald-400" />
+          ) : (
+            <Download className="w-4 h-4" />
+          )}
 
-        {canInstall && (
-          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
-        )}
-      </button>
+          {canInstall && (
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
+          )}
+        </button>
+      )}
 
       {/* iOS / Browser Install Instructions Modal */}
       <AnimatePresence>
@@ -132,7 +170,7 @@ export default function PWAHeaderButton() {
                 onClick={() => setShowIOSModal(false)}
                 className="absolute top-4 right-4 p-1 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--background)] transition-colors"
               >
-                <FiX className="w-5 h-5" />
+                <X className="w-5 h-5" />
               </button>
 
               <div className="flex items-center gap-3">
@@ -150,7 +188,7 @@ export default function PWAHeaderButton() {
                   <>
                     <div className="flex items-center gap-2">
                       <span className="w-5 h-5 rounded-full bg-[var(--accent)] text-black flex items-center justify-center font-black text-[10px]">1</span>
-                      <span>Tap the <strong>Share</strong> button <FiShare className="inline w-3.5 h-3.5 text-[var(--accent)]" /> in Safari</span>
+                      <span>Tap the <strong>Share</strong> button <Share2 className="inline w-3.5 h-3.5 text-[var(--accent)]" /> in Safari</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-5 h-5 rounded-full bg-[var(--accent)] text-black flex items-center justify-center font-black text-[10px]">2</span>

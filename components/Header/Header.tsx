@@ -4,7 +4,20 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX, FiChevronRight, FiSearch } from "react-icons/fi";
+import {
+  ShoppingBag,
+  Trophy,
+  Gamepad2,
+  Globe,
+  LayoutDashboard,
+  Headphones,
+  Crown,
+  LogOut,
+  X,
+  Plus,
+  User as UserIcon,
+  ChevronRight
+} from "lucide-react";
 import Image from "next/image";
 const logo = "/logo.svg";
 import Skeleton from "../Skeleton";
@@ -185,8 +198,8 @@ export default function Header() {
         {/* DESKTOP NAV - CENTERED */}
         <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
           {[
-            { name: "Games", href: "/games", icon: FiGrid },
-            { name: "Regions", href: "/region", icon: FiGlobe }
+            { name: "Games", href: "/games", icon: Gamepad2 },
+            { name: "Regions", href: "/region", icon: Globe }
           ].map((item) => (
             <Link
               key={item.name}
@@ -201,22 +214,6 @@ export default function Header() {
 
         {/* ACTIONS SECTION */}
         <div className="flex items-center gap-2 sm:gap-3" ref={dropdownRef}>
-          {/* Quick Search Button */}
-          <button
-            onClick={() => setSearchOpen(true)}
-            className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-[var(--foreground)] text-xs"
-            title="Search games & items (Ctrl+K)"
-          >
-            <FiSearch size={14} className="text-[var(--accent)]" />
-            <span className="hidden md:inline font-medium">Search</span>
-            <kbd className="hidden lg:inline-block px-1.5 py-0.2 text-[9px] font-mono rounded bg-[var(--foreground)]/[0.06] border border-[var(--border)] text-[var(--muted)]">
-              ⌘K
-            </kbd>
-          </button>
-
-          {/* PWA Download Button */}
-          <PWAHeaderButton />
-
           <ThemeToggle />
 
           <div className="h-6 w-[1px] bg-[var(--border)] mx-0.5 hidden sm:block" />
@@ -263,30 +260,30 @@ export default function Header() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={() => setUserMenuOpen(false)}
-                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1000]"
+                    className="fixed inset-0 bg-black/80 backdrop-blur-md z-[1000]"
                   />
 
-                  {/* Sidebar Slider */}
+                  {/* Sidebar Slider - Opaque / Non-transparent */}
                   <motion.div
                     initial={{ x: "100%" }}
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}
                     transition={{ type: "spring", damping: 28, stiffness: 280 }}
-                    className="fixed right-0 top-0 h-[100dvh] w-[88vw] max-w-[310px] bg-[var(--card)]/95 backdrop-blur-2xl border-l border-[var(--border)] z-[1001] flex flex-col"
+                    className="fixed right-0 top-0 h-[100dvh] w-[88vw] max-w-[315px] bg-[#0c0d12] text-white border-l border-white/10 z-[1001] flex flex-col shadow-2xl"
                   >
                     {/* Top Header Bar */}
-                    <div className="px-4 py-3 flex items-center justify-between border-b border-[var(--border)] shrink-0 bg-[var(--foreground)]/[0.01]">
+                    <div className="px-4 py-3 flex items-center justify-between border-b border-white/10 shrink-0 bg-[#0c0d12]">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[11px] font-black uppercase tracking-widest text-[var(--foreground)]/90">Account</span>
+                        <span className="text-[11px] font-black uppercase tracking-widest text-zinc-300">Account</span>
                       </div>
                       <motion.button
                         onClick={() => setUserMenuOpen(false)}
                         whileHover={{ rotate: 90, scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className="w-7 h-7 rounded-lg bg-[var(--foreground)]/[0.05] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)]/50 transition-all"
+                        className="w-7 h-7 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[var(--accent)]/50 transition-all cursor-pointer"
                       >
-                        <FiX size={14} />
+                        <X size={15} />
                       </motion.button>
                     </div>
 
@@ -295,37 +292,44 @@ export default function Header() {
                         <div className="flex flex-col items-center justify-center text-center py-6 my-auto">
                           {/* Guest Icon */}
                           <div className="relative mb-4 group">
-                            <div className="w-14 h-14 bg-gradient-to-br from-[var(--accent)]/20 via-[var(--card)] to-[var(--foreground)]/[0.04] text-[var(--accent)] rounded-2xl flex items-center justify-center border border-[var(--accent)]/30 relative z-10">
-                              <FiUser size={24} />
+                            <div className="w-14 h-14 bg-gradient-to-br from-[var(--accent)]/20 via-white/[0.04] to-transparent text-[var(--accent)] rounded-2xl flex items-center justify-center border border-[var(--accent)]/30 relative z-10">
+                              <UserIcon size={24} />
                             </div>
                           </div>
 
-                          <h3 className="text-[var(--foreground)] font-bold text-sm mb-1">
+                          <h3 className="text-white font-bold text-sm mb-1">
                             Welcome
                           </h3>
-                          <p className="text-[11px] text-[var(--muted)] mb-5 max-w-[210px] leading-relaxed">
+                          <p className="text-[11px] text-zinc-400 mb-5 max-w-[210px] leading-relaxed">
                             Sign in to access your wallet, orders, and special discounts.
                           </p>
 
                           {/* Quick Links Grid */}
-                          <div className="grid grid-cols-2 gap-2 w-full mb-4">
+                          <div className="grid grid-cols-2 gap-2 w-full mb-3">
                             {[
-                              { label: "Games", desc: "All Games", icon: FiGrid, href: "/games" },
-                              { label: "Regions", desc: "Select Region", icon: FiGlobe, href: "/region" }
+                              { label: "Games", desc: "All Games", icon: Gamepad2, color: "text-purple-400 bg-purple-500/10 border-purple-500/20", href: "/games" },
+                              { label: "Regions", desc: "Select Region", icon: Globe, color: "text-sky-400 bg-sky-500/10 border-sky-500/20", href: "/region" }
                             ].map((link) => (
                               <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                <div className="flex flex-col items-start p-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/[0.04] text-[var(--foreground)] transition-all group">
-                                  <link.icon size={15} className="text-[var(--accent)] mb-1.5 group-hover:scale-110 transition-transform" />
+                                <div className="flex flex-col items-start p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/[0.04] text-white transition-all group">
+                                  <div className={`w-7 h-7 rounded-lg border ${link.color} flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform`}>
+                                    <link.icon size={15} />
+                                  </div>
                                   <span className="text-[11px] font-bold tracking-tight leading-none">{link.label}</span>
-                                  <span className="text-[9px] text-[var(--muted)] font-mono mt-0.5">{link.desc}</span>
+                                  <span className="text-[9px] text-zinc-400 font-mono mt-0.5">{link.desc}</span>
                                 </div>
                               </Link>
                             ))}
                           </div>
 
+                          {/* Download / Install App */}
+                          <div className="w-full mb-3 border border-white/10 rounded-xl bg-white/[0.02]">
+                            <PWAHeaderButton variant="sidebar" onAction={() => setUserMenuOpen(false)} />
+                          </div>
+
                           <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full">
                             <motion.button
-                              className="w-full py-2.5 bg-[var(--accent)] text-black font-black uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+                              className="w-full py-2.5 bg-[var(--accent)] text-black font-black uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 hover:brightness-110 transition-all cursor-pointer"
                               whileHover={{ scale: 1.01 }}
                               whileTap={{ scale: 0.98 }}
                             >
@@ -340,7 +344,7 @@ export default function Header() {
                             {/* Avatar */}
                             <div className="relative shrink-0">
                               <div className="w-9 h-9 rounded-lg overflow-hidden p-[1.5px] bg-gradient-to-tr from-[var(--accent)] via-blue-500 to-indigo-500">
-                                <div className="w-full h-full rounded-[0.45rem] overflow-hidden bg-[var(--card)] flex items-center justify-center">
+                                <div className="w-full h-full rounded-[0.45rem] overflow-hidden bg-[#161720] flex items-center justify-center">
                                   {user?.avatar && !avatarError ? (
                                     <img
                                       src={user.avatar}
@@ -355,24 +359,24 @@ export default function Header() {
                                   )}
                                 </div>
                               </div>
-                              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[var(--card)] ring-1 ring-emerald-400/40" />
+                              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#0c0d12] ring-1 ring-emerald-400/40" />
                             </div>
 
                             {/* Identity Details */}
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-sm font-bold text-[var(--foreground)] tracking-tight truncate">
+                              <h4 className="text-sm font-bold text-white tracking-tight truncate">
                                 {user.name}
                               </h4>
-                              <p className="text-[10px] text-[var(--muted)] truncate font-medium mt-0.5 opacity-80">
+                              <p className="text-[10px] text-zinc-400 truncate font-medium mt-0.5 opacity-80">
                                 {user.email}
                               </p>
                               <div className="mt-1.5 flex items-center gap-1.5">
                                 <span className={`
                                   text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border inline-flex items-center gap-1
                                   ${user.userType === "owner" 
-                                    ? "bg-amber-500/10 text-amber-500 border-amber-500/20" 
+                                    ? "bg-amber-500/10 text-amber-400 border-amber-500/20" 
                                     : user.userType === "admin"
-                                    ? "bg-purple-500/10 text-purple-500 border-purple-500/20"
+                                    ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
                                     : "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20"}
                                 `}>
                                   {user.userType === "owner" ? "👑 OWNER" : user.userType === "admin" ? "⚡ RESELLER" : "MEMBER"}
@@ -383,21 +387,21 @@ export default function Header() {
                             {/* Logout Button */}
                             <button
                               onClick={handleLogout}
-                              className="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-rose-500/20 active:scale-95 shadow-sm"
+                              className="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-rose-500/20 active:scale-95 shadow-sm cursor-pointer"
                               title="Sign Out"
                             >
-                              <FiLogOut size={14} />
+                              <LogOut size={14} />
                             </button>
                           </div>
 
                           {/* WALLET SECTION - CLEAN FLOATING DESIGN */}
-                          <div className="py-2.5 px-3 rounded-2xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]/70 flex items-center justify-between">
+                          <div className="py-2.5 px-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-between">
                             <div>
                               <div className="flex items-center gap-1.5">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">Wallet</span>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Wallet</span>
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                               </div>
-                              <div className="text-xl font-black text-[var(--foreground)] tracking-tight mt-0.5">
+                              <div className="text-xl font-black text-white tracking-tight mt-0.5">
                                 ₹{user.wallet?.toFixed(1) || "0.0"}
                               </div>
                             </div>
@@ -406,40 +410,40 @@ export default function Header() {
                               onClick={() => setUserMenuOpen(false)}
                             >
                               <button
-                                className="px-3 py-1.5 rounded-xl bg-[var(--accent)] text-black font-extrabold text-[11px] tracking-wide flex items-center gap-1 hover:brightness-110 active:scale-95 transition-all shadow-sm"
+                                className="px-3 py-1.5 rounded-xl bg-[var(--accent)] text-black font-extrabold text-[11px] tracking-wide flex items-center gap-1 hover:brightness-110 active:scale-95 transition-all shadow-sm cursor-pointer"
                               >
-                                <FiPlus size={13} />
+                                <Plus size={13} />
                                 <span>Top Up</span>
                               </button>
                             </Link>
                           </div>
 
-                          {/* NAVIGATION LIST (CLEAN, BORDERLESS & PREMIUM) */}
-                          <div className="pt-1 flex flex-col divide-y divide-[var(--border)]/40">
+                          {/* NAVIGATION LIST (WITH MODERN SVGS & OPAQUE BACKGROUND) */}
+                          <div className="pt-1 flex flex-col divide-y divide-white/5">
                             {/* Primary Navigation */}
                             <div className="space-y-0.5 pb-2">
                               {[
-                                { label: "Orders", desc: "Purchase history", icon: FiSettings, href: "/dashboard/order" },
-                                { label: "Leaderboard", desc: "Top spenders", icon: FiBarChart2, href: "/leaderboard" },
-                                { label: "Games", desc: "Browse catalog", icon: FiGrid, href: "/games" },
-                                { label: "Regions", desc: "Server locations", icon: FiGlobe, href: "/region" },
+                                { label: "Orders", desc: "Purchase history", icon: ShoppingBag, color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20", href: "/dashboard/order" },
+                                { label: "Leaderboard", desc: "Top spenders", icon: Trophy, color: "text-amber-400 bg-amber-500/10 border-amber-500/20", href: "/leaderboard" },
+                                { label: "Games", desc: "Browse catalog", icon: Gamepad2, color: "text-purple-400 bg-purple-500/10 border-purple-500/20", href: "/games" },
+                                { label: "Regions", desc: "Server locations", icon: Globe, color: "text-sky-400 bg-sky-500/10 border-sky-500/20", href: "/region" },
                               ].map((item) => (
                                 <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)}>
-                                  <div className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[var(--foreground)]/[0.04] transition-all group">
+                                  <div className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/[0.05] transition-all group">
                                     <div className="flex items-center gap-3">
-                                      <div className="w-7 h-7 rounded-lg bg-[var(--foreground)]/[0.03] group-hover:bg-[var(--accent)]/10 text-[var(--muted)] group-hover:text-[var(--accent)] flex items-center justify-center transition-colors">
-                                        <item.icon size={14} />
+                                      <div className={`w-8 h-8 rounded-lg border ${item.color} flex items-center justify-center transition-transform group-hover:scale-105 shrink-0`}>
+                                        <item.icon size={16} />
                                       </div>
                                       <div>
-                                        <div className="text-xs font-semibold text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors">
+                                        <div className="text-xs font-semibold text-white leading-none group-hover:text-[var(--accent)] transition-colors">
                                           {item.label}
                                         </div>
-                                        <div className="text-[10px] text-[var(--muted)] font-medium mt-0.5">
+                                        <div className="text-[10px] text-zinc-400 font-medium mt-0.5">
                                           {item.desc}
                                         </div>
                                       </div>
                                     </div>
-                                    <FiChevronRight size={13} className="text-[var(--muted)]/50 group-hover:text-[var(--foreground)] group-hover:translate-x-0.5 transition-all" />
+                                    <ChevronRight size={14} className="text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
                                   </div>
                                 </Link>
                               ))}
@@ -448,23 +452,29 @@ export default function Header() {
                             {/* Secondary Navigation */}
                             <div className="space-y-0.5 pt-2">
                               {[
-                                { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
-                                { label: "Help & Support", icon: FiLifeBuoy, href: "/dashboard/query" },
+                                { label: "Dashboard", desc: "Account overview", icon: LayoutDashboard, color: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20", href: "/dashboard" },
+                                { label: "Help & Support", desc: "24/7 assistance", icon: Headphones, color: "text-rose-400 bg-rose-500/10 border-rose-500/20", href: "/dashboard/query" },
                               ].map((item) => (
                                 <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)}>
-                                  <div className="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-[var(--foreground)]/[0.04] transition-all group">
+                                  <div className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/[0.05] transition-all group">
                                     <div className="flex items-center gap-3">
-                                      <div className="w-7 h-7 rounded-lg bg-[var(--foreground)]/[0.03] group-hover:bg-[var(--accent)]/10 text-[var(--muted)] group-hover:text-[var(--accent)] flex items-center justify-center transition-colors">
-                                        <item.icon size={14} />
+                                      <div className={`w-8 h-8 rounded-lg border ${item.color} flex items-center justify-center transition-transform group-hover:scale-105 shrink-0`}>
+                                        <item.icon size={16} />
                                       </div>
-                                      <span className="text-xs font-semibold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
-                                        {item.label}
-                                      </span>
+                                      <div>
+                                        <div className="text-xs font-semibold text-white leading-none group-hover:text-[var(--accent)] transition-colors">
+                                          {item.label}
+                                        </div>
+                                        <div className="text-[10px] text-zinc-400 font-medium mt-0.5">
+                                          {item.desc}
+                                        </div>
+                                      </div>
                                     </div>
-                                    <FiChevronRight size={13} className="text-[var(--muted)]/50 group-hover:text-[var(--foreground)] group-hover:translate-x-0.5 transition-all" />
+                                    <ChevronRight size={14} className="text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
                                   </div>
                                 </Link>
                               ))}
+                              <PWAHeaderButton variant="sidebar" onAction={() => setUserMenuOpen(false)} />
                             </div>
                           </div>
 
@@ -472,15 +482,18 @@ export default function Header() {
                           {user.userType === "owner" && (
                             <Link href="/owner-panal" onClick={() => setUserMenuOpen(false)} className="mt-1">
                               <div
-                                className="w-full py-2.5 px-3 rounded-xl bg-amber-500/[0.06] hover:bg-amber-500/[0.12] border border-amber-500/20 text-[var(--foreground)] transition-all flex items-center justify-between group cursor-pointer"
+                                className="w-full py-2.5 px-3 rounded-xl bg-amber-500/[0.08] hover:bg-amber-500/[0.14] border border-amber-500/30 text-white transition-all flex items-center justify-between group cursor-pointer"
                               >
-                                <div className="flex items-center gap-2.5">
-                                  <div className="w-6 h-6 rounded-md bg-amber-500/15 text-amber-500 flex items-center justify-center group-hover:scale-105 transition-transform">
-                                    <FiSettings size={13} />
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+                                    <Crown size={16} />
                                   </div>
-                                  <span className="text-xs font-bold text-amber-400">Owner Panel</span>
+                                  <div>
+                                    <span className="text-xs font-bold text-amber-300 block">Owner Panel</span>
+                                    <span className="text-[10px] text-amber-400/70 font-medium">Manage platform</span>
+                                  </div>
                                 </div>
-                                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400">
+                                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
                                   ADMIN
                                 </span>
                               </div>
@@ -491,12 +504,12 @@ export default function Header() {
                     </div>
 
                     {/* Simple Footer */}
-                    <div className="py-2.5 px-4 border-t border-[var(--border)] shrink-0 flex items-center justify-between bg-[var(--foreground)]/[0.01]">
+                    <div className="py-2.5 px-4 border-t border-white/10 shrink-0 flex items-center justify-between bg-[#0c0d12]">
                       <div className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
-                        <span className="text-[9px] font-mono text-[var(--muted)] uppercase tracking-wider">TRONICS STORE</span>
+                        <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-wider">TRONICS STORE</span>
                       </div>
-                      <span className="text-[9px] font-mono text-[var(--muted)]/60">© 2026</span>
+                      <span className="text-[9px] font-mono text-zinc-500">© 2026</span>
                     </div>
                   </motion.div>
                 </>
