@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiUser, FiHash, FiSearch, FiArrowLeft, FiCheck, FiHelpCircle } from "react-icons/fi";
+import { FiUser, FiHash, FiSearch, FiArrowLeft, FiCheck, FiHelpCircle, FiChevronDown } from "react-icons/fi";
 import AuthGuard from "../../../../../components/AuthGuard";
 import Skeleton from "@/components/Skeleton";
 const logo = "/logo.svg";
@@ -23,6 +23,7 @@ export default function BuyFlowPage() {
   const [reviewData, setReviewData] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showMorePacks, setShowMorePacks] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -278,50 +279,76 @@ export default function BuyFlowPage() {
                   </div>
                 </motion.div>
 
-                {/* MORE PACKS SECTION */}
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between px-1">
+                {/* MORE PACKS SECTION (Collapsible, Default Hidden, Compact) */}
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowMorePacks(!showMorePacks)}
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-[var(--card)]/60 hover:bg-[var(--card)] border border-[var(--border)] transition-all duration-200 group text-left cursor-pointer shadow-2xs hover:border-[var(--accent)]/40"
+                  >
                     <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center">
+                      <div className="w-5 h-5 rounded-md bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center">
                         <svg className="w-3 h-3 fill-current" viewBox="0 0 16 16">
                           <path d="M8 1L1 4.5V11.5L8 15L15 11.5V4.5L8 1Z" fillOpacity="0.3" stroke="currentColor" strokeWidth="1.5"/>
                         </svg>
                       </div>
-                      <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-[var(--foreground)]">More Packs</h2>
+                      <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-[var(--foreground)]">
+                        More Packs
+                      </span>
+                      <span className="text-[9px] text-[var(--muted)] font-bold">({allItems.length})</span>
                     </div>
-                    <span className="text-[10px] text-[var(--muted)] font-medium">Select package</span>
-                  </div>
 
-                  <div className="flex overflow-x-auto no-scrollbar gap-2 pb-2 md:grid md:grid-cols-4 lg:grid-cols-3">
-                    {allItems.map((item) => {
-                      const isSelected = activeItem.itemSlug === item.itemSlug;
-                      return (
-                        <button
-                          key={item.itemSlug}
-                          onClick={() => {
-                            setActiveItem(item);
-                            router.replace(`/games/${slug}/buy/${item.itemSlug}`, { scroll: false });
-                          }}
-                          className={`
-                          relative p-2.5 rounded-xl border transition-all duration-200 text-left overflow-hidden group min-h-[56px] flex flex-col justify-between shrink-0 min-w-[110px] sm:min-w-[120px] md:w-full
-                          ${isSelected
-                              ? "bg-[var(--accent)]/[0.1] border-[var(--accent)] ring-1 ring-[var(--accent)] shadow-xs"
-                              : "bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/90"}
-                        `}
-                        >
-                          {isSelected && (
-                            <div className="absolute top-2 right-2 w-3.5 h-3.5 bg-[var(--accent)] text-white rounded-full flex items-center justify-center z-10 shadow-xs">
-                              <FiCheck size={9} strokeWidth={3.5} />
-                            </div>
-                          )}
-                          <p className={`text-[10.5px] sm:text-[11px] font-bold tracking-tight truncate leading-tight pr-4 ${isSelected ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
-                            {item.itemName}
-                          </p>
-                          <p className="text-xs sm:text-sm font-black tracking-tight mt-1 text-[var(--foreground)]">₹{item.sellingPrice}</p>
-                        </button>
-                      );
-                    })}
-                  </div>
+                    <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--accent)]">
+                      <span>{showMorePacks ? "Hide" : "Show"}</span>
+                      <motion.div animate={{ rotate: showMorePacks ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                        <FiChevronDown size={14} />
+                      </motion.div>
+                    </div>
+                  </button>
+
+                  {/* Collapsible Content */}
+                  <AnimatePresence>
+                    {showMorePacks && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="flex overflow-x-auto no-scrollbar gap-1.5 pb-1.5 pt-1 md:grid md:grid-cols-4 lg:grid-cols-3">
+                          {allItems.map((item) => {
+                            const isSelected = activeItem.itemSlug === item.itemSlug;
+                            return (
+                              <button
+                                key={item.itemSlug}
+                                onClick={() => {
+                                  setActiveItem(item);
+                                  router.replace(`/games/${slug}/buy/${item.itemSlug}`, { scroll: false });
+                                }}
+                                className={`
+                                relative p-2 rounded-xl border transition-all duration-200 text-left overflow-hidden group min-h-[46px] sm:min-h-[50px] flex flex-col justify-center shrink-0 min-w-[95px] sm:min-w-[105px] md:w-full cursor-pointer
+                                ${isSelected
+                                    ? "bg-[var(--accent)]/[0.1] border-[var(--accent)] ring-1 ring-[var(--accent)] shadow-xs"
+                                    : "bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/90"}
+                              `}
+                              >
+                                {isSelected && (
+                                  <div className="absolute top-1.5 right-1.5 w-3 h-3 bg-[var(--accent)] text-white rounded-full flex items-center justify-center z-10 shadow-xs">
+                                    <FiCheck size={8} strokeWidth={4} />
+                                  </div>
+                                )}
+                                <p className={`text-[9.5px] sm:text-[10px] font-bold tracking-tight truncate leading-tight pr-3 ${isSelected ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
+                                  {item.itemName}
+                                </p>
+                                <p className="text-[11px] sm:text-xs font-black tracking-tight mt-0.5 text-[var(--foreground)]">₹{item.sellingPrice}</p>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
 
