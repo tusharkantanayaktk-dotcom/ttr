@@ -111,11 +111,11 @@ export default function PWAHeaderButton({ variant = "header", onAction }) {
           className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[var(--foreground)]/[0.05] transition-all group text-left cursor-pointer"
         >
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 group-hover:scale-105 flex items-center justify-center transition-all relative shrink-0">
+            <div className="w-6 h-6 flex items-center justify-center text-cyan-500 shrink-0 relative">
               {installed ? (
-                <Check size={14} className="text-emerald-500" />
+                <Check size={17} className="text-emerald-500" />
               ) : (
-                <Download size={14} />
+                <Download size={17} className="group-hover:scale-110 transition-transform" />
               )}
               {canInstall && (
                 <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#22d3ee]" />

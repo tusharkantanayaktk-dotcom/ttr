@@ -94,6 +94,7 @@ export async function GET(req) {
                 name: 1,
                 email: 1,
                 phone: 1,
+                avatar: 1,
               },
             },
           ],

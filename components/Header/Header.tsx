@@ -311,13 +311,13 @@ export default function Header() {
                           {/* Quick Links Grid */}
                           <div className="grid grid-cols-2 gap-2 w-full mb-2.5">
                             {[
-                              { label: "Games", desc: "All Games", icon: Gamepad2, color: "text-purple-600 dark:text-purple-400 bg-purple-500/10", href: "/games" },
-                              { label: "Regions", desc: "Select Region", icon: Globe, color: "text-sky-600 dark:text-sky-400 bg-sky-500/10", href: "/region" }
+                              { label: "Games", desc: "All Games", icon: Gamepad2, color: "text-purple-500", href: "/games" },
+                              { label: "Regions", desc: "Select Region", icon: Globe, color: "text-sky-500", href: "/region" }
                             ].map((link) => (
                               <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
                                 <div className="flex flex-col items-start p-2 rounded-lg bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/[0.04] text-[var(--foreground)] transition-all group">
-                                  <div className={`w-6 h-6 rounded-md ${link.color} flex items-center justify-center mb-1 group-hover:scale-105 transition-transform`}>
-                                    <link.icon size={13} />
+                                  <div className="w-5 h-5 flex items-center justify-center mb-1 shrink-0">
+                                    <link.icon size={15} className={`${link.color} group-hover:scale-110 transition-transform`} />
                                   </div>
                                   <span className="text-[10.5px] font-bold tracking-tight leading-none">{link.label}</span>
                                   <span className="text-[8.5px] text-[var(--muted)] font-mono mt-0.5">{link.desc}</span>
@@ -422,21 +422,21 @@ export default function Header() {
                             </Link>
                           </div>
 
-                          {/* NAVIGATION LIST (NO ICON BORDERS & SLIGHT COMPACT) */}
+                          {/* NAVIGATION LIST (NO ICON BOX/BORDER & SLIGHT COMPACT) */}
                           <div className="pt-0.5 flex flex-col divide-y divide-[var(--border)]">
                             {/* Primary Navigation */}
                             <div className="space-y-0.5 pb-1.5">
                               {[
-                                { label: "Orders", desc: "Purchase history", icon: ShoppingBag, color: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10", href: "/dashboard/order" },
-                                { label: "Leaderboard", desc: "Top spenders", icon: Trophy, color: "text-amber-600 dark:text-amber-400 bg-amber-500/10", href: "/leaderboard" },
-                                { label: "Games", desc: "Browse catalog", icon: Gamepad2, color: "text-purple-600 dark:text-purple-400 bg-purple-500/10", href: "/games" },
-                                { label: "Regions", desc: "Server locations", icon: Globe, color: "text-sky-600 dark:text-sky-400 bg-sky-500/10", href: "/region" },
+                                { label: "Orders", desc: "Purchase history", icon: ShoppingBag, color: "text-emerald-500", href: "/dashboard/order" },
+                                { label: "Leaderboard", desc: "Top spenders", icon: Trophy, color: "text-amber-500", href: "/leaderboard" },
+                                { label: "Games", desc: "Browse catalog", icon: Gamepad2, color: "text-purple-500", href: "/games" },
+                                { label: "Regions", desc: "Server locations", icon: Globe, color: "text-sky-500", href: "/region" },
                               ].map((item) => (
                                 <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)}>
                                   <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[var(--foreground)]/[0.05] transition-all group">
                                     <div className="flex items-center gap-2.5">
-                                      <div className={`w-7 h-7 rounded-lg ${item.color} flex items-center justify-center transition-transform group-hover:scale-105 shrink-0`}>
-                                        <item.icon size={14} />
+                                      <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                                        <item.icon size={17} className={`${item.color} group-hover:scale-110 transition-transform`} />
                                       </div>
                                       <div>
                                         <div className="text-xs font-semibold text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors">
@@ -456,14 +456,14 @@ export default function Header() {
                             {/* Secondary Navigation */}
                             <div className="space-y-0.5 pt-1.5">
                               {[
-                                { label: "Dashboard", desc: "Account overview", icon: LayoutDashboard, color: "text-indigo-600 dark:text-indigo-400 bg-indigo-500/10", href: "/dashboard" },
-                                { label: "Help & Support", desc: "24/7 assistance", icon: Headphones, color: "text-rose-600 dark:text-rose-400 bg-rose-500/10", href: "/dashboard/query" },
+                                { label: "Dashboard", desc: "Account overview", icon: LayoutDashboard, color: "text-indigo-500", href: "/dashboard" },
+                                { label: "Help & Support", desc: "24/7 assistance", icon: Headphones, color: "text-rose-500", href: "/dashboard/query" },
                               ].map((item) => (
                                 <Link key={item.label} href={item.href} onClick={() => setUserMenuOpen(false)}>
                                   <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[var(--foreground)]/[0.05] transition-all group">
                                     <div className="flex items-center gap-2.5">
-                                      <div className={`w-7 h-7 rounded-lg ${item.color} flex items-center justify-center transition-transform group-hover:scale-105 shrink-0`}>
-                                        <item.icon size={14} />
+                                      <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                                        <item.icon size={17} className={`${item.color} group-hover:scale-110 transition-transform`} />
                                       </div>
                                       <div>
                                         <div className="text-xs font-semibold text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors">
@@ -489,8 +489,8 @@ export default function Header() {
                                 className="w-full py-2 px-2.5 rounded-lg bg-amber-500/[0.08] hover:bg-amber-500/[0.14] border border-amber-500/25 transition-all flex items-center justify-between group cursor-pointer"
                               >
                                 <div className="flex items-center gap-2.5">
-                                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-                                    <Crown size={14} />
+                                  <div className="w-6 h-6 flex items-center justify-center shrink-0 text-amber-500 group-hover:scale-110 transition-transform">
+                                    <Crown size={17} />
                                   </div>
                                   <div>
                                     <span className="text-xs font-bold text-amber-700 dark:text-amber-300 block">Owner Panel</span>
