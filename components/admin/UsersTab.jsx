@@ -32,7 +32,16 @@ export default function UsersTab() {
 
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearch(searchInput);
+      setPage(1);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchInput]);
 
   const [filters, setFilters] = useState({
     userType: "",
@@ -152,14 +161,14 @@ export default function UsersTab() {
   };
 
   return (
-    <div className="space-y-6 pb-10">
+    <div className="space-y-3.5 sm:space-y-4 pb-8">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Users</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">Users</h2>
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
-            <Users size={14} className="text-[var(--accent)]" />
+            <Users size={13} className="text-[var(--accent)]" />
             <span>{pagination.total} Users</span>
           </div>
           <button
@@ -167,7 +176,7 @@ export default function UsersTab() {
             className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none"
             title="Refresh"
           >
-            <RefreshCcw size={15} className={loading ? "animate-spin" : ""} />
+            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
       </div>
@@ -176,28 +185,49 @@ export default function UsersTab() {
       {/* ================= COMPACT STATS OVERVIEW ================= */}
       <StatsOverview stats={stats} loading={statsLoading} />
 
-      {/* ================= SEARCH & FILTERS ================= */}
-      <div className="flex flex-row items-center gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={14} />
-          <input
-            value={search}
-            onChange={(e) => {
+      {/* ================= COMBINED SEARCH & FILTERS CAPSULE ================= */}
+      <div className="relative flex items-center w-full rounded-2xl sm:rounded-full border border-[var(--border)] bg-[var(--card)]/80 focus-within:border-[var(--accent)]/50 focus-within:ring-2 focus-within:ring-[var(--accent)]/15 transition-all shadow-xs h-9 sm:h-9.5 px-3">
+        <Search className="text-[var(--muted)]/50 shrink-0 mr-2" size={14} />
+
+        <input
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search by name, email, or user ID..."
+          className="w-full bg-transparent text-[var(--foreground)] text-xs sm:text-sm placeholder:text-[var(--muted)]/40 outline-none"
+        />
+
+        {/* Clear 'X' button */}
+        {searchInput && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchInput("");
+              setSearch("");
               setPage(1);
-              setSearch(e.target.value);
             }}
-            placeholder="Search by name, email, or user ID..."
-            className="w-full h-10 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
-          />
-        </div>
+            className="p-1 rounded-md text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors cursor-pointer shrink-0 mr-1"
+            title="Clear search"
+          >
+            <X size={13} />
+          </button>
+        )}
+
+        <div className="h-4 w-[1px] bg-[var(--border)]/70 mx-1 shrink-0" />
+
+        {/* Combined Filter Button */}
         <button
+          type="button"
           onClick={() => setShowFilters(true)}
-          className="h-10 w-10 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center hover:bg-[var(--foreground)]/[0.05] hover:border-[var(--accent)]/50 transition-all outline-none shrink-0 relative"
+          className={`relative p-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer shrink-0 active:scale-95 ${
+            Object.values(filters).some(Boolean)
+              ? "bg-[var(--accent)] text-black font-extrabold shadow-xs"
+              : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06]"
+          }`}
           title="Filter Users"
         >
-          <Filter size={15} className="text-[var(--accent)]" />
+          <Filter size={14} className={Object.values(filters).some(Boolean) ? "text-black" : "text-[var(--accent)]"} />
           {Object.values(filters).some(Boolean) && (
-            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[var(--accent)]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-black" />
           )}
         </button>
       </div>
@@ -241,8 +271,8 @@ export default function UsersTab() {
                       onClick={() => setSelectedUser(u)}
                       className="group hover:bg-[var(--foreground)]/[0.02] transition-colors cursor-pointer"
                     >
-                      <td className="pl-8 pr-6 py-4">
-                        <div className="flex items-center gap-4">
+                      <td className="pl-6 pr-4 py-2.5 sm:py-3">
+                        <div className="flex items-center gap-3">
                           <Avatar user={u} />
                           <div className="flex flex-col gap-0.5">
                             <span className="text-[var(--foreground)] font-bold text-sm leading-none group-hover:text-[var(--accent)] transition-colors">{u.name}</span>
@@ -250,7 +280,7 @@ export default function UsersTab() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-2.5 sm:py-3">
                         <div className="flex flex-col gap-1 text-[var(--muted)]">
                           <div className="flex items-center gap-2">
                             <Mail size={12} className="opacity-40" />
@@ -264,7 +294,7 @@ export default function UsersTab() {
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-2.5 sm:py-3">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-2 text-[var(--muted)]">
                             <Calendar size={12} className="opacity-40" />
@@ -280,7 +310,7 @@ export default function UsersTab() {
                           </div>
                         </div>
                       </td>
-                      <td className="pl-6 pr-8 py-4 text-right" onClick={(e) => e.stopPropagation()}>
+                      <td className="pl-4 pr-6 py-2.5 sm:py-3 text-right" onClick={(e) => e.stopPropagation()}>
                         <div className="inline-block">
                           <RoleDropdown
                             value={u.userType}
@@ -296,7 +326,7 @@ export default function UsersTab() {
             </div>
 
             {/* MOBILE LIST */}
-            <div className="lg:hidden space-y-2.5">
+            <div className="lg:hidden space-y-2">
               {users.map((u, idx) => (
                 <motion.div
                   key={u._id}
@@ -304,19 +334,17 @@ export default function UsersTab() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.02 }}
                   onClick={() => setSelectedUser(u)}
-                  className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)] active:scale-[0.99] transition-all cursor-pointer"
+                  className="p-3 rounded-2xl border border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)] active:scale-[0.99] transition-all cursor-pointer shadow-xs space-y-2"
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2.5 min-w-0">
+                  {/* Top Row: User Avatar, Name, User ID & Role */}
+                  <div className="flex items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
                       <Avatar user={u} size="sm" />
                       <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <p className="font-bold text-[var(--foreground)] text-xs truncate">{u.name}</p>
-                          <span className="text-[9px] text-[var(--muted)] font-mono opacity-50 truncate">({u.userId})</span>
-                        </div>
-                        <p className="text-[10.5px] text-[var(--muted)] truncate">
-                          {u.email}{u.phone ? ` • ${u.phone}` : ""}
-                        </p>
+                        <p className="font-bold text-[var(--foreground)] text-xs truncate leading-tight">{u.name}</p>
+                        <span className="text-[9.5px] text-[var(--muted)] font-mono opacity-60 block leading-tight mt-0.5 truncate">
+                          #{u.userId}
+                        </span>
                       </div>
                     </div>
 
@@ -330,9 +358,32 @@ export default function UsersTab() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 mt-2 border-t border-[var(--border)]/30 text-[10px] text-[var(--muted)]">
-                    <span>Joined {new Date(u.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                    <span className="text-[var(--accent)] font-semibold flex items-center gap-1">
+                  {/* Middle Row: Contact Info (Email & Prominent Full Phone Number) */}
+                  <div className="pt-0.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs">
+                    {/* Email */}
+                    <div className="flex items-center gap-1.5 text-[var(--muted)] min-w-0 flex-1">
+                      <Mail size={12} className="opacity-50 shrink-0" />
+                      <span className="truncate text-[11px]">{u.email}</span>
+                    </div>
+
+                    {/* Prominent Phone Number (ALWAYS FULLY VISIBLE) */}
+                    {u.phone ? (
+                      <div className="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold text-[var(--foreground)] bg-[var(--foreground)]/[0.04] px-2 py-0.5 rounded-md border border-[var(--border)]/60 shrink-0 ml-auto">
+                        <Phone size={10.5} className="text-[var(--accent)] shrink-0" />
+                        <span>{u.phone}</span>
+                      </div>
+                    ) : (
+                      <span className="text-[10px] text-[var(--muted)]/40 italic ml-auto">No phone</span>
+                    )}
+                  </div>
+
+                  {/* Bottom Row: Metadata & Details link */}
+                  <div className="flex items-center justify-between pt-1.5 border-t border-[var(--border)]/40 text-[10px] text-[var(--muted)]">
+                    <div className="flex items-center gap-1">
+                      <Calendar size={11} className="opacity-50 shrink-0" />
+                      <span>Joined {new Date(u.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    </div>
+                    <span className="text-[var(--accent)] font-bold flex items-center gap-1 hover:underline text-[10.5px]">
                       Details →
                     </span>
                   </div>
@@ -390,73 +441,109 @@ export default function UsersTab() {
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-full max-w-lg bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
+              transition={{ type: "spring", damping: 28, stiffness: 240 }}
+              className="fixed right-0 top-0 h-full w-full max-w-md bg-[var(--card)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
             >
-              <div className="p-6 border-b border-[var(--border)]">
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-lg font-bold text-[var(--foreground)]">User Details</h3>
-                  <button
-                    onClick={() => setSelectedUser(null)}
-                    className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-red-500/10 transition-all outline-none"
-                  >
-                    <X size={18} />
-                  </button>
+              {/* Header */}
+              <div className="p-3.5 sm:p-4 border-b border-[var(--border)] flex items-center justify-between">
+                <div className="flex items-center gap-3 min-w-0">
+                  <Avatar user={selectedUser} size="md" />
+                  <div className="min-w-0">
+                    <h4 className="text-sm sm:text-base font-extrabold text-[var(--foreground)] truncate leading-tight">
+                      {selectedUser.name}
+                    </h4>
+                    <span className="text-[10px] text-[var(--muted)] font-mono block mt-0.5">
+                      #{selectedUser.userId}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <Avatar user={selectedUser} size="lg" />
-                  </div>
-                  <div className="min-w-0">
-                    <h4 className="text-base font-bold text-[var(--foreground)] truncate">{selectedUser.name}</h4>
-                    <div className="flex items-center gap-2 mt-1">
+                <button
+                  onClick={() => setSelectedUser(null)}
+                  className="w-7 h-7 rounded-full bg-[var(--foreground)]/[0.05] hover:bg-rose-500/10 hover:text-rose-500 flex items-center justify-center text-[var(--muted)] transition-all cursor-pointer shrink-0 ml-2"
+                  title="Close"
+                >
+                  <X size={15} />
+                </button>
+              </div>
 
-                      <span className="text-[11px] text-[var(--muted)] font-mono">{selectedUser.userId}</span>
+              {/* Body */}
+              <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3.5">
+                {/* Account Role Setting */}
+                <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/60 flex items-center justify-between gap-3">
+                  <div>
+                    <span className="text-[9.5px] font-extrabold text-[var(--muted)] uppercase tracking-wider block">Account Role</span>
+                    <span className="text-xs font-bold capitalize text-[var(--foreground)] mt-0.5 block">{selectedUser.userType}</span>
+                  </div>
+                  <RoleDropdown
+                    value={selectedUser.userType}
+                    compact
+                    disabled={updatingUserId === selectedUser.userId || selectedUser.userType === "owner"}
+                    onChange={(v) => {
+                      changeUserRole(selectedUser.userId, v);
+                      setSelectedUser(null);
+                    }}
+                  />
+                </div>
+                {selectedUser.userType === "owner" && (
+                  <p className="text-[10px] text-rose-500 font-medium px-1 italic -mt-2">Owner role is protected and cannot be modified.</p>
+                )}
+
+                {/* Profile & Contact Grid (Compact Cards) */}
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-extrabold text-[var(--muted)] uppercase tracking-wider px-0.5">
+                    User Information
+                  </span>
+                  <div className="grid grid-cols-2 gap-2">
+                    {/* User ID */}
+                    <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
+                      <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider block">User ID</span>
+                      <span className="text-xs font-mono font-bold text-[var(--foreground)] mt-0.5 block truncate">
+                        {selectedUser.userId}
+                      </span>
+                    </div>
+
+                    {/* Phone Number - PROMINENT & NEVER CUT OFF */}
+                    <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
+                      <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider block">Phone Number</span>
+                      <span className="text-xs font-mono font-bold text-[var(--accent)] mt-0.5 block truncate">
+                        {selectedUser.phone || "Not provided"}
+                      </span>
+                    </div>
+
+                    {/* Email */}
+                    <div className="col-span-2 p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
+                      <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider block">Email Address</span>
+                      <span className="text-xs font-semibold text-[var(--foreground)] mt-0.5 block truncate" title={selectedUser.email}>
+                        {selectedUser.email}
+                      </span>
+                    </div>
+
+                    {/* Joined Date */}
+                    <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
+                      <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider block">Joined Date</span>
+                      <span className="text-xs font-bold text-[var(--foreground)] mt-0.5 block truncate">
+                        {new Date(selectedUser.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                    </div>
+
+                    {/* Last Login */}
+                    <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50">
+                      <span className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-wider block">Last Login</span>
+                      <span className="text-xs font-bold text-[var(--foreground)] mt-0.5 block truncate">
+                        {selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "Never"}
+                      </span>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-8">
-                <DrawerSection icon={<Shield size={18} />} title="Account Settings">
-                  <div className="space-y-4 pt-2">
-                    <p className="text-xs font-semibold text-[var(--muted)] px-1">Change User Role</p>
-                    <RoleDropdown
-                      value={selectedUser.userType}
-                      disabled={updatingUserId === selectedUser.userId || selectedUser.userType === "owner"}
-                      onChange={(v) => {
-                        changeUserRole(selectedUser.userId, v);
-                        setSelectedUser(null);
-                      }}
-                    />
-                    {selectedUser.userType === "owner" && (
-                      <p className="text-[11px] text-rose-500 font-medium px-1 italic">Role is restricted and cannot be modified.</p>
-                    )}
-                  </div>
-                </DrawerSection>
-
-                <DrawerSection icon={<IdCard size={18} />} title="Profile Information">
-                  <DrawerDetail label="Name" value={selectedUser.name} />
-                  <DrawerDetail label="User ID" value={selectedUser.userId} />
-                  <DrawerDetail label="Joined On" value={new Date(selectedUser.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })} />
-                </DrawerSection>
-
-                <DrawerSection icon={<Mail size={18} />} title="Contact Information">
-                  <DrawerDetail label="Email" value={selectedUser.email} />
-                  <DrawerDetail label="Phone" value={selectedUser.phone || "Not provided"} />
-                </DrawerSection>
-
-                <DrawerSection icon={<Activity size={18} />} title="Activity">
-                  <DrawerDetail
-                    label="Last Login"
-                    value={selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleString(undefined, { dateStyle: 'long', timeStyle: 'short' }) : "Never"}
-                  />
-                  <DrawerDetail
-                    label="IP Address"
-                    value={selectedUser.lastIp || "Unknown"}
-                  />
-                </DrawerSection>
+                {/* Additional Security / IP Metadata */}
+                <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/50 flex items-center justify-between text-xs text-[var(--muted)]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Last IP Address</span>
+                  <span className="font-mono text-xs font-semibold text-[var(--foreground)]">
+                    {selectedUser.lastIp || "Unknown"}
+                  </span>
+                </div>
               </div>
             </motion.div>
           </>
@@ -592,19 +679,19 @@ function RoleDropdown({ value, onChange, disabled, compact }) {
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
         className={`
-          flex items-center justify-between gap-3 px-5
-          ${compact ? "h-9 min-w-[110px]" : "h-11 min-w-[130px] w-full"}
+          flex items-center justify-between
+          ${compact ? "h-8 min-w-[85px] sm:min-w-[95px] px-2.5 sm:px-3 text-[11px] gap-1.5" : "h-10 min-w-[125px] w-full px-4 text-xs gap-3"}
           rounded-full border border-[var(--border)] bg-[var(--foreground)]/[0.03]
-          text-xs font-semibold transition-all outline-none
+          font-semibold transition-all outline-none cursor-pointer
           ${disabled ? "opacity-40 cursor-not-allowed" : "hover:bg-[var(--foreground)]/[0.06]"}
           ${isOpen ? "border-[var(--accent)] ring-1 ring-[var(--accent)]/30" : "text-[var(--foreground)]"}
         `}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <span className="text-[var(--accent)]">{selectedRole?.icon}</span>
           <span className="capitalize">{selectedRole?.label}</span>
         </div>
-        <ChevronDown size={14} className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown size={compact ? 12 : 14} className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       <AnimatePresence>
@@ -705,30 +792,28 @@ function StatsOverview({ stats, loading }) {
 
   if (loading || !stats) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <Skeleton height={52} className="rounded-xl" />
-        <Skeleton height={52} className="rounded-xl" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <Skeleton height={42} className="rounded-xl" />
+        <Skeleton height={42} className="rounded-xl" />
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
       {/* NEW USERS */}
-      <div className="p-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
-            <UserPlus size={14} />
-          </div>
+      <div className="p-2 sm:p-2.5 px-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-2.5">
+        <div className="flex items-center gap-2">
+          <UserPlus size={15} className="text-blue-500 shrink-0" />
           <span className="text-xs font-bold text-[var(--foreground)]">New Users</span>
         </div>
-        <div className="flex items-center gap-3 text-xs">
+        <div className="flex items-center gap-2.5 text-xs">
           {periods.map((p, idx) => (
-            <div key={p.key} className="flex items-center gap-3">
-              {idx > 0 && <div className="h-4 w-[1px] bg-[var(--border)]" />}
+            <div key={p.key} className="flex items-center gap-2.5">
+              {idx > 0 && <div className="h-3.5 w-[1px] bg-[var(--border)]" />}
               <div className="text-right">
-                <span className="text-[8.5px] text-[var(--muted)] block font-semibold">{p.label}</span>
-                <span className="font-bold text-[var(--foreground)]">{stats[p.key]?.newUsers ?? 0}</span>
+                <span className="text-[8px] text-[var(--muted)] block font-semibold leading-none mb-0.5">{p.label}</span>
+                <span className="font-bold text-xs text-[var(--foreground)] leading-none">{stats[p.key]?.newUsers ?? 0}</span>
               </div>
             </div>
           ))}
@@ -736,20 +821,18 @@ function StatsOverview({ stats, loading }) {
       </div>
 
       {/* ACTIVE USERS */}
-      <div className="p-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
-            <Activity size={14} />
-          </div>
+      <div className="p-2 sm:p-2.5 px-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-2.5">
+        <div className="flex items-center gap-2">
+          <Activity size={15} className="text-emerald-500 shrink-0" />
           <span className="text-xs font-bold text-[var(--foreground)]">Active Users</span>
         </div>
-        <div className="flex items-center gap-3 text-xs">
+        <div className="flex items-center gap-2.5 text-xs">
           {periods.map((p, idx) => (
-            <div key={p.key} className="flex items-center gap-3">
-              {idx > 0 && <div className="h-4 w-[1px] bg-[var(--border)]" />}
+            <div key={p.key} className="flex items-center gap-2.5">
+              {idx > 0 && <div className="h-3.5 w-[1px] bg-[var(--border)]" />}
               <div className="text-right">
-                <span className="text-[8.5px] text-[var(--muted)] block font-semibold">{p.label}</span>
-                <span className="font-bold text-[var(--foreground)]">{stats[p.key]?.activeUsers ?? 0}</span>
+                <span className="text-[8px] text-[var(--muted)] block font-semibold leading-none mb-0.5">{p.label}</span>
+                <span className="font-bold text-xs text-[var(--foreground)] leading-none">{stats[p.key]?.activeUsers ?? 0}</span>
               </div>
             </div>
           ))}

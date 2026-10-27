@@ -213,10 +213,10 @@ export default function AdminPanalPage() {
 
   return (
     <AdminGuard>
-      <section className="min-h-screen bg-[var(--background)] p-3 sm:p-4 md:p-6">
+      <section className="min-h-screen bg-[var(--background)] p-2.5 sm:p-3.5 md:p-5">
         <div className="w-full max-w-7xl mx-auto">
           {/* ================= TOP PANEL BAR ================= */}
-          <div className="mb-3 flex items-center justify-between px-1">
+          <div className="mb-2.5 flex items-center justify-between px-1">
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -245,9 +245,9 @@ export default function AdminPanalPage() {
           </div>
 
           {/* Horizontal Divider Line Below Owner Panel */}
-          <div className="w-full h-[1px] bg-[var(--border)] mb-4 opacity-60" />
+          <div className="w-full h-[1px] bg-[var(--border)] mb-3.5 opacity-60" />
 
-          <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex flex-col md:flex-row gap-4 sm:gap-5">
             
             {/* Mobile Overlay Backdrop & Outside Close Button */}
             {isSidebarOpen && (
@@ -296,8 +296,8 @@ export default function AdminPanalPage() {
 
               <div className={`${isCollapsed ? "md:hidden" : "flex"} items-center justify-between p-2.5 px-3 rounded-xl border border-[var(--border)] bg-[var(--card)]/50 mb-3 shadow-sm`}>
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0 border border-[var(--accent)]/20">
-                    <FiCreditCard className="w-3.5 h-3.5" />
+                  <div className="text-[var(--accent)] flex items-center justify-center shrink-0">
+                    <FiCreditCard className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
                     <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] block leading-none">1Game Balance</span>

@@ -97,10 +97,10 @@ export default function AnalyticsTab() {
   const maxHourlyOrders = Math.max(...(peakHours.hourlyBreakdown?.map((h) => h.ordersCount) || [1]), 1);
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-3.5 sm:space-y-4">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Analytics</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">Analytics</h2>
 
         <div className="flex items-center gap-3">
           <div className="flex p-1 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]">

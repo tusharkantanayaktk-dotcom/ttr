@@ -104,14 +104,14 @@ export default function TransactionsTab() {
   };
 
   return (
-    <div className="space-y-6 pb-10">
+    <div className="space-y-3.5 sm:space-y-4 pb-8">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Transactions</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">Transactions</h2>
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
-            <CreditCard size={14} className="text-[var(--accent)]" />
+            <CreditCard size={13} className="text-[var(--accent)]" />
             <span>{pagination.total} Transactions</span>
           </div>
           <button
@@ -119,15 +119,15 @@ export default function TransactionsTab() {
             className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none"
             title="Refresh"
           >
-            <RefreshCcw size={15} className={loading ? "animate-spin" : ""} />
+            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
       </div>
 
       {/* ================= SEARCH & FILTER ================= */}
-      <div className="flex flex-row items-center gap-3">
+      <div className="flex flex-row items-center gap-2.5">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={16} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={14} />
           <input
             value={search}
             onChange={(e) => {
@@ -135,7 +135,7 @@ export default function TransactionsTab() {
               setSearch(e.target.value);
             }}
             placeholder="Search Order ID, Email, Player ID..."
-            className="w-full h-11 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
+            className="w-full h-9 sm:h-9.5 pl-10 pr-3.5 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-xs sm:text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
           />
         </div>
         <div className="relative shrink-0">
@@ -145,7 +145,7 @@ export default function TransactionsTab() {
               setPage(1);
               setStatusFilter(e.target.value);
             }}
-            className="h-11 pl-3.5 pr-8 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-xs font-bold text-[var(--foreground)] uppercase focus:border-[var(--accent)]/50 outline-none appearance-none cursor-pointer"
+            className="h-9 sm:h-9.5 pl-3 pr-7 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[11px] sm:text-xs font-bold text-[var(--foreground)] uppercase focus:border-[var(--accent)]/50 outline-none appearance-none cursor-pointer"
           >
             <option value="" className="bg-[var(--card)]">All Status</option>
             <option value="success" className="bg-[var(--card)]">Success</option>
@@ -153,7 +153,7 @@ export default function TransactionsTab() {
             <option value="failed" className="bg-[var(--card)]">Failed</option>
             <option value="refund" className="bg-[var(--card)]">Refund</option>
           </select>
-          <Filter size={13} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--accent)] pointer-events-none" />
+          <Filter size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--accent)] pointer-events-none" />
         </div>
       </div>
 

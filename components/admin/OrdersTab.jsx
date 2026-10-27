@@ -38,7 +38,16 @@ export default function OrdersTab() {
 
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearch(searchInput);
+      setPage(1);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchInput]);
   const [filters, setFilters] = useState({
     status: "",
     gameSlug: "",
@@ -170,14 +179,14 @@ export default function OrdersTab() {
   };
 
   return (
-    <div className="space-y-6 pb-10">
+    <div className="space-y-3.5 sm:space-y-4 pb-8">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Orders</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">Orders</h2>
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
-            <ShoppingBag size={14} className="text-[var(--accent)]" />
+            <ShoppingBag size={13} className="text-[var(--accent)]" />
             <span>{pagination.total} Orders</span>
           </div>
           <button
@@ -185,7 +194,7 @@ export default function OrdersTab() {
             className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none"
             title="Refresh"
           >
-            <RefreshCcw size={15} className={loading ? "animate-spin" : ""} />
+            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
       </div>
@@ -194,28 +203,49 @@ export default function OrdersTab() {
       {/* ================= COMPACT STATS OVERVIEW ================= */}
       <StatsOverview stats={stats} loading={statsLoading} />
 
-      {/* ================= SEARCH & FILTERS ================= */}
-      <div className="flex flex-row items-center gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={14} />
-          <input
-            value={search}
-            onChange={(e) => {
+      {/* ================= COMBINED SEARCH & FILTERS CAPSULE ================= */}
+      <div className="relative flex items-center w-full rounded-2xl sm:rounded-full border border-[var(--border)] bg-[var(--card)]/80 focus-within:border-[var(--accent)]/50 focus-within:ring-2 focus-within:ring-[var(--accent)]/15 transition-all shadow-xs h-9 sm:h-9.5 px-3">
+        <Search className="text-[var(--muted)]/50 shrink-0 mr-2" size={14} />
+
+        <input
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search by Order ID, Email, or Game Platform..."
+          className="w-full bg-transparent text-[var(--foreground)] text-xs sm:text-sm placeholder:text-[var(--muted)]/40 outline-none"
+        />
+
+        {/* Clear 'X' button */}
+        {searchInput && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchInput("");
+              setSearch("");
               setPage(1);
-              setSearch(e.target.value);
             }}
-            placeholder="Search by Order ID, Email, or Game Platform..."
-            className="w-full h-10 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
-          />
-        </div>
+            className="p-1 rounded-md text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors cursor-pointer shrink-0 mr-1"
+            title="Clear search"
+          >
+            <X size={13} />
+          </button>
+        )}
+
+        <div className="h-4 w-[1px] bg-[var(--border)]/70 mx-1 shrink-0" />
+
+        {/* Combined Filter Button */}
         <button
+          type="button"
           onClick={() => setShowFilters(true)}
-          className="h-10 w-10 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] flex items-center justify-center hover:bg-[var(--foreground)]/[0.05] hover:border-[var(--accent)]/50 transition-all outline-none shrink-0 relative"
+          className={`relative p-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer shrink-0 active:scale-95 ${
+            Object.values(filters).some(Boolean)
+              ? "bg-[var(--accent)] text-black font-extrabold shadow-xs"
+              : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06]"
+          }`}
           title="Filter Orders"
         >
-          <Filter size={15} className="text-[var(--accent)]" />
+          <Filter size={14} className={Object.values(filters).some(Boolean) ? "text-black" : "text-[var(--accent)]"} />
           {Object.values(filters).some(Boolean) && (
-            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[var(--accent)]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-black" />
           )}
         </button>
       </div>
@@ -707,30 +737,28 @@ function StatsOverview({ stats, loading }) {
 
   if (loading || !stats) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <Skeleton height={52} className="rounded-xl" />
-        <Skeleton height={52} className="rounded-xl" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <Skeleton height={42} className="rounded-xl" />
+        <Skeleton height={42} className="rounded-xl" />
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
       {/* ORDER VOLUME */}
-      <div className="p-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
-            <Package size={14} />
-          </div>
+      <div className="p-2 sm:p-2.5 px-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-2.5">
+        <div className="flex items-center gap-2">
+          <Package size={15} className="text-blue-500 shrink-0" />
           <span className="text-xs font-bold text-[var(--foreground)]">Order Volume</span>
         </div>
-        <div className="flex items-center gap-3 text-xs">
+        <div className="flex items-center gap-2.5 text-xs">
           {periods.map((p, idx) => (
-            <div key={p.key} className="flex items-center gap-3">
-              {idx > 0 && <div className="h-4 w-[1px] bg-[var(--border)]" />}
+            <div key={p.key} className="flex items-center gap-2.5">
+              {idx > 0 && <div className="h-3.5 w-[1px] bg-[var(--border)]" />}
               <div className="text-right">
-                <span className="text-[8.5px] text-[var(--muted)] block font-semibold">{p.label}</span>
-                <span className="font-bold text-[var(--foreground)]">{stats[p.key]?.count ?? 0}</span>
+                <span className="text-[8px] text-[var(--muted)] block font-semibold leading-none mb-0.5">{p.label}</span>
+                <span className="font-bold text-xs text-[var(--foreground)] leading-none">{stats[p.key]?.count ?? 0}</span>
               </div>
             </div>
           ))}
@@ -738,20 +766,18 @@ function StatsOverview({ stats, loading }) {
       </div>
 
       {/* TOTAL REVENUE */}
-      <div className="p-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
-            <IndianRupee size={14} />
-          </div>
+      <div className="p-2 sm:p-2.5 px-3 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] flex items-center justify-between gap-2.5">
+        <div className="flex items-center gap-2">
+          <IndianRupee size={15} className="text-emerald-500 shrink-0" />
           <span className="text-xs font-bold text-[var(--foreground)]">Total Revenue</span>
         </div>
-        <div className="flex items-center gap-3 text-xs">
+        <div className="flex items-center gap-2.5 text-xs">
           {periods.map((p, idx) => (
-            <div key={p.key} className="flex items-center gap-3">
-              {idx > 0 && <div className="h-4 w-[1px] bg-[var(--border)]" />}
+            <div key={p.key} className="flex items-center gap-2.5">
+              {idx > 0 && <div className="h-3.5 w-[1px] bg-[var(--border)]" />}
               <div className="text-right">
-                <span className="text-[8.5px] text-[var(--muted)] block font-semibold">{p.label}</span>
-                <span className="font-bold text-[var(--foreground)] whitespace-nowrap">₹{Number(stats[p.key]?.totalValue || 0).toLocaleString()}</span>
+                <span className="text-[8px] text-[var(--muted)] block font-semibold leading-none mb-0.5">{p.label}</span>
+                <span className="font-bold text-xs text-[var(--foreground)] leading-none whitespace-nowrap">₹{Number(stats[p.key]?.totalValue || 0).toLocaleString()}</span>
               </div>
             </div>
           ))}
