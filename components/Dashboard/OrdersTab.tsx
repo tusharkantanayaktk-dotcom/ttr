@@ -10,7 +10,6 @@ import {
   FiCheckCircle,
   FiActivity,
   FiZap,
-  FiSliders,
   FiX,
   FiCheck,
   FiRotateCcw,
@@ -23,6 +22,8 @@ export default function OrdersTab() {
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [paymentFilter, setPaymentFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -45,7 +46,14 @@ export default function OrdersTab() {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ page, limit, search, status: statusFilter }),
+      body: JSON.stringify({
+        page,
+        limit,
+        search,
+        status: statusFilter,
+        paymentMethod: paymentFilter,
+        dateRange: dateFilter,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -58,20 +66,17 @@ export default function OrdersTab() {
 
   useEffect(() => {
     fetchOrders();
-  }, [token, page, search, statusFilter, limit]);
+  }, [token, page, search, statusFilter, paymentFilter, dateFilter, limit]);
 
   /* ================= RESET PAGE ON SEARCH/FILTER ================= */
   useEffect(() => {
     setPage(1);
-  }, [search, statusFilter]);
+  }, [search, statusFilter, paymentFilter, dateFilter]);
 
-  const filterOptions = [
-    { id: "all", label: "All Orders", icon: FiPackage, color: "text-[var(--foreground)]", count: undefined },
-    { id: "pending", label: "Pending", icon: FiClock, color: "text-amber-500", desc: "Adding to your game" },
-    { id: "success", label: "Success", icon: FiCheckCircle, color: "text-emerald-500", desc: "Delivered successfully" },
-    { id: "failed", label: "Failed", icon: FiAlertCircle, color: "text-rose-500", desc: "Order failed" },
-    { id: "refund", label: "Refunded", icon: FiRotateCcw, color: "text-blue-500", desc: "Returned to wallet" },
-  ];
+  const activeFilterCount =
+    (statusFilter !== "all" ? 1 : 0) +
+    (paymentFilter !== "all" ? 1 : 0) +
+    (dateFilter !== "all" ? 1 : 0);
 
   /* ================= PAGE RANGE ================= */
   const getPageNumbers = () => {
@@ -112,49 +117,68 @@ export default function OrdersTab() {
         </div>
       </motion.div>
 
-      {/* SEARCH & FILTER BAR */}
+      {/* SEARCH & FILTER BAR (Combined Single Capsule) */}
       <motion.div
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-2"
+        className="relative flex items-center w-full rounded-xl border border-[var(--border)] bg-[var(--card)]/90 shadow-xs backdrop-blur-md focus-within:ring-2 focus-within:ring-[var(--accent)]/30 focus-within:border-[var(--accent)] transition-all overflow-hidden"
       >
-        <div className="relative flex-1 flex items-center">
-          <div className="absolute left-3.5 flex items-center pointer-events-none text-[var(--accent)] z-10">
-            <FiSearch size={16} />
-          </div>
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search orders..."
-            className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/80 backdrop-blur-md
-                       focus:ring-2 focus:ring-[var(--accent)]/30 focus:border-[var(--accent)] outline-none transition-all 
-                       text-xs font-medium text-[var(--foreground)] placeholder:text-[var(--muted)] tracking-tight shadow-sm"
-          />
-          {search && (
-            <button
-              onClick={() => setSearch("")}
-              className="absolute right-3.5 text-[10px] font-black uppercase tracking-widest text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
-            >
-              Clear
-            </button>
-          )}
+        {/* Search Icon */}
+        <div className="pl-3.5 pr-2 flex items-center pointer-events-none text-[var(--accent)] shrink-0">
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="7.5" />
+            <line x1="21" y1="21" x2="16.5" y2="16.5" />
+          </svg>
         </div>
 
-        {/* Filter Trigger Button - Icon Only */}
-        <button
-          onClick={() => setIsFilterOpen(true)}
-          className={`relative h-[42px] w-[42px] rounded-xl border flex items-center justify-center shrink-0 transition-all active:scale-95 shadow-sm ${
-            statusFilter !== "all"
-              ? "bg-[var(--accent)] text-black border-[var(--accent)]"
-              : "bg-[var(--card)]/80 border-[var(--border)] text-[var(--foreground)] hover:border-[var(--accent)]/50"
-          }`}
-          title={statusFilter === "all" ? "Filter Orders" : `Filtered: ${statusFilter}`}
-        >
-          <FiSliders size={16} className={statusFilter !== "all" ? "text-black" : "text-[var(--accent)]"} />
-          {statusFilter !== "all" && (
-            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-[var(--card)]" />
+        {/* Input Field */}
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search orders..."
+          className="w-full py-2.5 bg-transparent outline-none text-xs font-medium text-[var(--foreground)] placeholder:text-[var(--muted)] tracking-tight"
+        />
+
+        {/* Right Actions: Clear + Divider + Filter Button */}
+        <div className="flex items-center gap-1.5 pr-2 shrink-0">
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch("")}
+              className="p-1 rounded-md text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors cursor-pointer"
+              title="Clear search"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
           )}
-        </button>
+
+          <div className="h-4 w-[1px] bg-[var(--border)]/70" />
+
+          {/* Combined Filter Button */}
+          <button
+            type="button"
+            onClick={() => setIsFilterOpen(true)}
+            className={`relative p-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 ${
+              activeFilterCount > 0
+                ? "bg-[var(--accent)] text-black font-extrabold shadow-xs"
+                : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06]"
+            }`}
+            title={activeFilterCount === 0 ? "Filter Orders" : `${activeFilterCount} active filter(s)`}
+          >
+            {/* Modern Precision Filter Funnel SVG */}
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 6h16M7 12h10M10 18h4" />
+            </svg>
+            {activeFilterCount > 0 && (
+              <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-black text-white leading-none">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
+        </div>
       </motion.div>
 
       {/* FILTER BOTTOM SHEET */}
@@ -185,82 +209,150 @@ export default function OrdersTab() {
 
               {/* Sheet Header */}
               <div className="px-5 py-3 flex items-center justify-between border-b border-[var(--border)]">
-                <div>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-md bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center">
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 6h16M7 12h10M10 18h4" />
+                    </svg>
+                  </div>
                   <h3 className="text-sm font-bold text-[var(--foreground)]">Filter Orders</h3>
-                  <p className="text-[11px] text-[var(--muted)]">Filter your orders by current transaction status</p>
                 </div>
-                <button
-                  onClick={() => setIsFilterOpen(false)}
-                  className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] text-[var(--muted)] hover:text-[var(--foreground)] flex items-center justify-center transition-colors"
-                >
-                  <FiX size={15} />
-                </button>
+
+                <div className="flex items-center gap-2">
+                  {activeFilterCount > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setStatusFilter("all");
+                        setPaymentFilter("all");
+                        setDateFilter("all");
+                      }}
+                      className="text-[11px] font-bold text-[var(--accent)] hover:underline cursor-pointer"
+                    >
+                      Reset All
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setIsFilterOpen(false)}
+                    className="w-7 h-7 rounded-full bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] text-[var(--muted)] hover:text-[var(--foreground)] flex items-center justify-center transition-colors cursor-pointer"
+                  >
+                    <FiX size={14} />
+                  </button>
+                </div>
               </div>
 
-              {/* Status Filter Options */}
-              <div className="p-4 space-y-2">
-                {filterOptions.map((opt) => {
-                  const isSelected = statusFilter === opt.id;
-                  const Icon = opt.icon;
-                  return (
-                    <button
-                      key={opt.id}
-                      onClick={() => {
-                        setStatusFilter(opt.id);
-                        setIsFilterOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between p-3 rounded-2xl border transition-all text-left ${
-                        isSelected
-                          ? "bg-[var(--accent)]/[0.08] border-[var(--accent)] text-[var(--foreground)] shadow-sm"
-                          : "bg-[var(--foreground)]/[0.02] border-[var(--border)] hover:bg-[var(--foreground)]/[0.04] text-[var(--foreground)]"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+              {/* Filter Options Content (Categorized Compact Chips) */}
+              <div className="p-4 sm:p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+                {/* Category 1: Status */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">Status</span>
+                    {statusFilter !== "all" && (
+                      <span className="text-[9px] font-black uppercase text-[var(--accent)]">{statusFilter}</span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
+                    {[
+                      { id: "all", label: "All" },
+                      { id: "pending", label: "Pending" },
+                      { id: "success", label: "Success" },
+                      { id: "failed", label: "Failed" },
+                      { id: "refund", label: "Refunded" },
+                    ].map((item) => {
+                      const isSelected = statusFilter === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setStatusFilter(item.id)}
+                          className={`py-2 px-2 rounded-xl border text-[11px] font-bold transition-all text-center truncate cursor-pointer ${
                             isSelected
-                              ? "bg-[var(--accent)] text-black"
-                              : "bg-[var(--foreground)]/[0.05] " + opt.color
+                              ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-xs"
+                              : "bg-[var(--foreground)]/[0.02] border-[var(--border)] text-[var(--foreground)] hover:border-[var(--accent)]/40"
                           }`}
                         >
-                          <Icon size={15} />
-                        </div>
-                        <div>
-                          <div className="text-xs font-bold">{opt.label}</div>
-                          {opt.desc && (
-                            <div className="text-[10px] text-[var(--muted)]">{opt.desc}</div>
-                          )}
-                        </div>
-                      </div>
+                          {item.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-                      {isSelected && (
-                        <div className="w-5 h-5 rounded-full bg-[var(--accent)] text-black flex items-center justify-center">
-                          <FiCheck size={12} strokeWidth={3} />
-                        </div>
-                      )}
-                    </button>
-                  );
-                })}
+                {/* Category 2: Payment Method */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">Payment Method</span>
+                    {paymentFilter !== "all" && (
+                      <span className="text-[9px] font-black uppercase text-[var(--accent)]">{paymentFilter}</span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {[
+                      { id: "all", label: "All Methods" },
+                      { id: "upi", label: "UPI" },
+                      { id: "wallet", label: "Wallet" },
+                    ].map((item) => {
+                      const isSelected = paymentFilter === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setPaymentFilter(item.id)}
+                          className={`py-2 px-2.5 rounded-xl border text-[11px] font-bold transition-all text-center truncate cursor-pointer ${
+                            isSelected
+                              ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-xs"
+                              : "bg-[var(--foreground)]/[0.02] border-[var(--border)] text-[var(--foreground)] hover:border-[var(--accent)]/40"
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Category 3: Time Period */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">Time Period</span>
+                    {dateFilter !== "all" && (
+                      <span className="text-[9px] font-black uppercase text-[var(--accent)]">{dateFilter === "7d" ? "7 Days" : "30 Days"}</span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {[
+                      { id: "all", label: "All Time" },
+                      { id: "7d", label: "Last 7 Days" },
+                      { id: "30d", label: "Last 30 Days" },
+                    ].map((item) => {
+                      const isSelected = dateFilter === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setDateFilter(item.id)}
+                          className={`py-2 px-2.5 rounded-xl border text-[11px] font-bold transition-all text-center truncate cursor-pointer ${
+                            isSelected
+                              ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-xs"
+                              : "bg-[var(--foreground)]/[0.02] border-[var(--border)] text-[var(--foreground)] hover:border-[var(--accent)]/40"
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
 
               {/* Bottom Actions */}
-              <div className="p-4 pt-2 border-t border-[var(--border)] flex items-center gap-2">
-                {statusFilter !== "all" && (
-                  <button
-                    onClick={() => {
-                      setStatusFilter("all");
-                      setIsFilterOpen(false);
-                    }}
-                    className="flex-1 py-2.5 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors text-center"
-                  >
-                    Reset Filter
-                  </button>
-                )}
+              <div className="p-4 border-t border-[var(--border)] flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={() => setIsFilterOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-[var(--accent)] text-black text-xs font-bold uppercase tracking-wider text-center hover:brightness-110 transition-all"
+                  className="w-full py-2.5 rounded-xl bg-[var(--accent)] text-black text-xs font-black uppercase tracking-wider text-center hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer shadow-sm"
                 >
-                  Apply
+                  Apply Filters ({totalCount} {totalCount === 1 ? 'Order' : 'Orders'})
                 </button>
               </div>
             </motion.div>

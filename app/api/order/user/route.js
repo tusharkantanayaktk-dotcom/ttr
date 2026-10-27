@@ -46,6 +46,8 @@ export async function POST(req) {
     const limit = Math.max(1, Number(body.limit) || 10);
     const search = body.search?.trim();
     const status = body.status?.trim()?.toLowerCase();
+    const paymentMethod = body.paymentMethod?.trim()?.toLowerCase();
+    const dateRange = body.dateRange?.trim()?.toLowerCase();
 
     const skip = (page - 1) * limit;
 
@@ -75,6 +77,23 @@ export async function POST(req) {
         andConditions.push({
           $or: [{ status: status }, { topupStatus: status }],
         });
+      }
+    }
+
+    if (paymentMethod && paymentMethod !== "all") {
+      andConditions.push({
+        paymentMethod: { $regex: paymentMethod, $options: "i" },
+      });
+    }
+
+    if (dateRange && dateRange !== "all") {
+      const now = new Date();
+      if (dateRange === "7d") {
+        const d = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        andConditions.push({ createdAt: { $gte: d } });
+      } else if (dateRange === "30d") {
+        const d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        andConditions.push({ createdAt: { $gte: d } });
       }
     }
 

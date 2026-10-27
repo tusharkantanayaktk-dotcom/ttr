@@ -233,96 +233,90 @@ export default function ReviewAndPaymentStep({
         </>
       )}
 
-      {/* PAYMENT OPTIONS */}
-      <div className="space-y-2">
-        {/* UPI Button */}
+      {/* PAYMENT OPTIONS (Unified Segmented List - No nested cards) */}
+      <div className="rounded-xl border border-[var(--border)] overflow-hidden divide-y divide-[var(--border)]/50 bg-[var(--foreground)]/[0.015]">
+        {/* UPI Option */}
         <button
+          type="button"
           onClick={handleUPI}
-          className={`w-full p-3 rounded-xl border text-left flex justify-between items-center transition-all duration-300 group cursor-pointer ${paymentMethod === "upi"
-            ? "border-[var(--accent)] bg-[var(--accent)]/[0.05]"
-            : "border-[var(--border)] bg-[var(--foreground)]/[0.02] hover:border-[var(--accent)]/30"
+          className={`w-full p-3 sm:p-3.5 text-left flex justify-between items-center transition-all cursor-pointer ${
+            paymentMethod === "upi"
+              ? "bg-[var(--accent)]/[0.08]"
+              : "hover:bg-[var(--foreground)]/[0.02]"
           }`}
         >
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 shadow-xs ${paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.05] text-[var(--foreground)]'
+          <div className="flex items-center gap-3 min-w-0">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all shrink-0 ${
+              paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
             }`}>
-              {/* Modern UPI Dual Lightning / Chevron Vector */}
-              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
-                <path d="M14.2 3.5L8.5 13.5H13L10.5 20.5L18.5 9.5H13.8L16 3.5H14.2Z" fill={paymentMethod === 'upi' ? "#000000" : "url(#upiGradLight)"} />
-                <defs>
-                  <linearGradient id="upiGradLight" x1="8.5" y1="3.5" x2="18.5" y2="20.5" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#F97316" />
-                    <stop offset="0.5" stopColor="#EAB308" />
-                    <stop offset="1" stopColor="#22C55E" />
-                  </linearGradient>
-                </defs>
+              {/* UPI Dual Vector */}
+              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none">
+                <path d="M14.2 3.5L8.5 13.5H13L10.5 20.5L18.5 9.5H13.8L16 3.5H14.2Z" fill="currentColor" />
               </svg>
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <p className="font-black text-sm uppercase tracking-tight italic">Pay with UPI</p>
-                <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">Instant</span>
+                <span className="font-extrabold text-xs sm:text-sm tracking-tight text-[var(--foreground)]">Pay with UPI</span>
+                <span className="text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">Instant</span>
               </div>
-              <div className="flex items-center gap-1.5 mt-1">
-                {/* PhonePe mini brand pill */}
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-[#5F259F]/15 border border-[#5F259F]/30 text-[#a855f7] text-[8.5px] font-bold">
-                  PhonePe
-                </span>
-                {/* Paytm mini brand pill */}
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-[#002970]/20 border border-[#00BAF2]/30 text-[#00BAF2] text-[8.5px] font-bold">
-                  Paytm
-                </span>
-                {/* UPI pill */}
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-[var(--foreground)]/[0.05] border border-[var(--border)]/60 text-[8.5px] font-bold text-[var(--muted)]">
-                  BHIM / Any UPI
-                </span>
-              </div>
+              <p className="text-[10px] text-[var(--muted)] truncate mt-0.5">PhonePe, Paytm, BHIM & all UPI apps</p>
             </div>
           </div>
-          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${paymentMethod === 'upi' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
+
+          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ml-2 ${
+            paymentMethod === 'upi' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'
+          }`}>
             {paymentMethod === 'upi' && <FiCheck size={10} className="text-black" strokeWidth={4} />}
           </div>
         </button>
 
-        {/* Wallet Button */}
+        {/* Wallet Option */}
         <button
+          type="button"
           onClick={() => {
             if (walletBalance < totalPrice) return;
             setPaymentMethod("wallet");
           }}
-          className={`w-full p-3 rounded-xl border text-left flex justify-between items-center transition-all duration-300 group cursor-pointer ${paymentMethod === "wallet"
-            ? "border-[var(--accent)] bg-[var(--accent)]/[0.05]"
-            : "border-[var(--border)] bg-[var(--foreground)]/[0.02] hover:border-[var(--accent)]/30"
-          } ${walletBalance < totalPrice ? "opacity-40 cursor-not-allowed grayscale" : ""}`}
+          disabled={walletBalance < totalPrice}
+          className={`w-full p-3 sm:p-3.5 text-left flex justify-between items-center transition-all cursor-pointer ${
+            paymentMethod === "wallet"
+              ? "bg-[var(--accent)]/[0.08]"
+              : "hover:bg-[var(--foreground)]/[0.02]"
+          } ${walletBalance < totalPrice ? "opacity-40 cursor-not-allowed" : ""}`}
         >
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 shadow-xs ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
+          <div className="flex items-center gap-3 min-w-0">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all shrink-0 ${
+              paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
             }`}>
-              {/* Sleek Digital Wallet / Coin SVG Vector */}
-              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              {/* Wallet Vector */}
+              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="6" width="20" height="13" rx="2.5" />
-                <path d="M16 12h5v4h-5a2 2 0 0 1-2-2v0a2 2 0 0 1 2-2z" fill={paymentMethod === 'wallet' ? "currentColor" : "currentColor"} fillOpacity="0.25" />
+                <path d="M16 12h5v4h-5a2 2 0 0 1-2-2v0a2 2 0 0 1 2-2z" fill="currentColor" fillOpacity="0.25" />
                 <circle cx="18" cy="14" r="1" fill="currentColor" />
-                <path d="M5 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" strokeDasharray="1.5 2" />
               </svg>
             </div>
-            <div>
-              <p className="font-black text-sm uppercase tracking-tight italic">Pay with Wallet</p>
-              <p className="text-[8.5px] font-bold text-[var(--muted)] uppercase tracking-wider mt-0.5">Balance: ₹{walletBalance.toFixed(2)}</p>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold text-xs sm:text-sm tracking-tight text-[var(--foreground)]">Pay with Wallet</span>
+              </div>
+              <p className="text-[10px] text-[var(--muted)] truncate mt-0.5">Available Balance: ₹{walletBalance.toFixed(2)}</p>
             </div>
           </div>
-          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${paymentMethod === 'wallet' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
+
+          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ml-2 ${
+            paymentMethod === 'wallet' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'
+          }`}>
             {paymentMethod === 'wallet' && <FiCheck size={10} className="text-black" strokeWidth={4} />}
           </div>
         </button>
-
-        {walletBalance < totalPrice && (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-2 flex items-center gap-2">
-             <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-             <p className="text-[8px] font-black text-red-500 uppercase tracking-widest">Not enough wallet balance</p>
-          </div>
-        )}
       </div>
+
+      {walletBalance < totalPrice && paymentMethod === "wallet" && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-2 flex items-center gap-2 mt-2">
+           <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+           <p className="text-[8px] font-black text-red-500 uppercase tracking-widest">Not enough wallet balance</p>
+        </div>
+      )}
 
       {/* PRICE SUMMARY & ACTIONS */}
       <div className="pt-4 border-t border-[var(--border)]/40 space-y-4">

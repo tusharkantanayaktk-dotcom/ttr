@@ -347,52 +347,52 @@ export default function BuyFlowPage() {
                     <h2 className="text-sm sm:text-base font-extrabold tracking-tight text-[var(--foreground)]">Player Information</h2>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                      {/* PLAYER ID */}
-                      <div className="relative group">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors pointer-events-none">
-                          {/* Gaming Controller / Player ID SVG */}
-                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <rect x="2" y="6" width="20" height="12" rx="4" />
-                            <path d="M6 12h4m-2-2v4" />
-                            <circle cx="15.5" cy="10" r="1" fill="currentColor" />
-                            <circle cx="17.5" cy="13" r="1" fill="currentColor" />
-                          </svg>
-                        </div>
-                        <input
-                          value={playerId}
-                          onChange={(e) => setPlayerId(e.target.value)}
-                          placeholder="User ID"
-                          className="py-2.5 pl-9 pr-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)] w-full text-[var(--foreground)] focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30 transition-all outline-none placeholder:text-[var(--muted)]/50 font-bold text-xs"
-                          disabled={loading || reviewData}
-                        />
-                      </div>
-
-                      {/* ZONE ID */}
-                      {needsZoneId && (
+                  {!reviewData ? (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                        {/* PLAYER ID */}
                         <div className="relative group">
                           <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors pointer-events-none">
-                            {/* Server / Region Globe Grid SVG */}
+                            {/* Gaming Controller / Player ID SVG */}
                             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <circle cx="12" cy="12" r="9" />
-                              <line x1="3" y1="12" x2="21" y2="12" />
-                              <path d="M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z" />
+                              <rect x="2" y="6" width="20" height="12" rx="4" />
+                              <path d="M6 12h4m-2-2v4" />
+                              <circle cx="15.5" cy="10" r="1" fill="currentColor" />
+                              <circle cx="17.5" cy="13" r="1" fill="currentColor" />
                             </svg>
                           </div>
                           <input
-                            value={zoneId}
-                            onChange={(e) => setZoneId(e.target.value)}
-                            placeholder="Server ID"
+                            value={playerId}
+                            onChange={(e) => setPlayerId(e.target.value)}
+                            placeholder="User ID"
                             className="py-2.5 pl-9 pr-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)] w-full text-[var(--foreground)] focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30 transition-all outline-none placeholder:text-[var(--muted)]/50 font-bold text-xs"
-                            disabled={loading || reviewData}
+                            disabled={loading}
                           />
                         </div>
-                      )}
-                    </div>
 
-                    {/* VALIDATION BUTTON / STATUS */}
-                    {!reviewData ? (
+                        {/* ZONE ID */}
+                        {needsZoneId && (
+                          <div className="relative group">
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors pointer-events-none">
+                              {/* Server / Region Globe Grid SVG */}
+                              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="9" />
+                                <line x1="3" y1="12" x2="21" y2="12" />
+                                <path d="M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z" />
+                              </svg>
+                            </div>
+                            <input
+                              value={zoneId}
+                              onChange={(e) => setZoneId(e.target.value)}
+                              placeholder="Server ID"
+                              className="py-2.5 pl-9 pr-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)] w-full text-[var(--foreground)] focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30 transition-all outline-none placeholder:text-[var(--muted)]/50 font-bold text-xs"
+                              disabled={loading}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* VALIDATION BUTTON */}
                       <button
                         onClick={handleValidate}
                         disabled={loading}
@@ -413,47 +413,23 @@ export default function BuyFlowPage() {
                         )}
                         <span>{loading ? "Checking Player..." : "Check Name"}</span>
                       </button>
-                    ) : (
-                      <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-2.5 flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                          {/* Verified Starburst Badge SVG */}
-                          <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                              <path d="M12 2l2.4 2.8 3.7-.4 1.1 3.5 3.3 1.7-1 3.5 1.9 3.1-2.9 2.3-.2 3.7-3.6 1-1.9 3.2-3.4-1.5-3.4 1.5-1.9-3.2-3.6-1-.2-3.7-2.9-2.3 1.9-3.1-1-3.5 3.3-1.7 1.1-3.5 3.7.4L12 2z" fill="#10B981" />
-                              <path d="M8.5 12.5l2.5 2.5 4.5-5" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          </div>
-                          <div>
-                            <p className="text-[8px] font-black uppercase tracking-wider text-emerald-500/60">Verified Player</p>
-                            <p className="font-black text-emerald-500 uppercase text-xs">{reviewData.userName}</p>
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => setReviewData(null)}
-                          className="text-[9px] font-black uppercase tracking-wider text-[var(--muted)] hover:text-red-500 transition-colors cursor-pointer"
-                        >
-                          Change
-                        </button>
-                      </div>
-                    )}
 
-                    {/* ERROR */}
-                    <AnimatePresence>
-                      {error && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="bg-red-500/10 border border-red-500/20 rounded-xl p-2.5 flex items-center gap-2"
-                        >
-                          <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                          <p className="text-[9px] font-black text-red-500 uppercase tracking-widest">{error}</p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                      {/* ERROR */}
+                      <AnimatePresence>
+                        {error && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="bg-red-500/10 border border-red-500/20 rounded-xl p-2.5 flex items-center gap-2"
+                          >
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                            <p className="text-[9px] font-black text-red-500 uppercase tracking-widest">{error}</p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
 
-                    {/* RECENT PLAYERS */}
-                    {!reviewData && (
+                      {/* RECENT PLAYERS */}
                       <div className="pt-2 border-t border-[var(--border)]/40">
                         <RecentVerifiedPlayers
                           limit={3}
@@ -463,8 +439,37 @@ export default function BuyFlowPage() {
                           }}
                         />
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    /* COMPACT VERIFIED PLAYER IDENTITY STRIP (No redundant nested input boxes) */
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-500/[0.08] border border-emerald-500/20">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {/* Verified Starburst Badge SVG */}
+                        <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-500 flex items-center justify-center shrink-0">
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2l2.4 2.8 3.7-.4 1.1 3.5 3.3 1.7-1 3.5 1.9 3.1-2.9 2.3-.2 3.7-3.6 1-1.9 3.2-3.4-1.5-3.4 1.5-1.9-3.2-3.6-1-.2-3.7-2.9-2.3 1.9-3.1-1-3.5 3.3-1.7 1.1-3.5 3.7.4L12 2z" fill="#10B981" />
+                            <path d="M8.5 12.5l2.5 2.5 4.5-5" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-extrabold text-xs sm:text-sm text-[var(--foreground)] truncate">{reviewData.userName}</span>
+                            <span className="text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">Verified</span>
+                          </div>
+                          <p className="text-[10.5px] text-[var(--muted)] font-mono mt-0.5">
+                            User ID: <span className="text-[var(--foreground)] font-bold">{playerId}</span> {needsZoneId && zoneId ? `• Server: ${zoneId}` : ""}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setReviewData(null)}
+                        className="text-xs font-bold text-[var(--accent)] hover:underline shrink-0 pl-3 cursor-pointer"
+                      >
+                        Change
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* SECTION 2: PAYMENT */}
