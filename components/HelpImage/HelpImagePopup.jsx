@@ -9,15 +9,14 @@ export default function HelpImagePopup() {
 
   return (
     <>
-      {/* Question Mark Button (INLINE, not fixed) */}
+      {/* Question Mark Button */}
       <button
         onClick={() => setOpen(true)}
-        className="w-9 h-9 rounded-full bg-[var(--accent)]
-                   text-white flex items-center justify-center
-                   shadow hover:scale-105 transition"
-        aria-label="Help"
+        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-[var(--border)]/70 hover:border-[var(--accent)] text-[var(--muted)] hover:text-[var(--accent)] hover:bg-[var(--accent)]/10 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+        aria-label="Where to find Player and Zone ID"
+        title="Where to find Player & Zone ID"
       >
-        <FiHelpCircle size={18} />
+        <FiHelpCircle size={15} />
       </button>
 
       {/* Overlay */}

@@ -29,11 +29,25 @@ export default function WalletTab({
   const [loadingTransactions, setLoadingTransactions] = useState(false);
   const [amount, setAmount] = useState("");
   const [amountError, setAmountError] = useState("");
-  const [method, setMethod] = useState("");
+  const [method, setMethod] = useState("upi");
   const [loading, setLoading] = useState(false);
   const [storedPhone, setStoredPhone] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const handleAmountChange = (raw: string) => {
+    // Strip minus signs and non-numeric characters (allow only digits and single decimal)
+    const sanitized = raw.replace(/[^0-9.]/g, "");
+    const parts = sanitized.split(".");
+    const clean = parts.length > 2 ? `${parts[0]}.${parts.slice(1).join("")}` : sanitized;
+
+    setAmount(clean);
+    if (clean !== "" && Number(clean) < 1) {
+      setAmountError("Minimum amount is ₹1.");
+    } else {
+      setAmountError("");
+    }
+  };
 
   const fetchTransactions = useCallback(async (p = 1, quiet = false) => {
     const token = localStorage.getItem("token");
@@ -130,11 +144,26 @@ export default function WalletTab({
         {/* LEFT: BALANCE & RECHARGE (CLEAN, CARDLESS, PREMIUM) */}
         <div className="lg:col-span-7 space-y-6">
 
-          {/* BALANCE HERO (NO CARD BORDER) */}
-          <div className="pb-4 border-b border-[var(--border)]/50">
-            <div className="flex items-start justify-between">
+          {/* BALANCE HERO (NO CARD BORDER, AMBIENT BACKGROUND SVG) */}
+          <div className="relative pb-4 border-b border-[var(--border)]/50 overflow-hidden">
+            {/* Ambient Wallet Vector SVG Watermark */}
+            <svg
+              className="absolute -bottom-2 -right-2 w-28 h-28 opacity-[0.035] dark:opacity-[0.06] text-[var(--accent)] pointer-events-none select-none transition-transform duration-500 hover:scale-105"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+              <path d="M16 3H4a2 2 0 0 0-2 2v2h18V5a2 2 0 0 0-2-2z" />
+              <circle cx="16" cy="14" r="1.5" />
+            </svg>
+
+            <div className="flex items-start justify-between relative">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)]">
+                <span className="text-[11px] font-extrabold uppercase tracking-wider text-[var(--muted)]">
                   Available Balance
                 </span>
                 <div className="flex items-baseline gap-1 mt-1">
@@ -149,79 +178,119 @@ export default function WalletTab({
                 </div>
               </div>
 
-              <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0">
-                <FaWallet size={16} />
+              {/* Pure Floating Vector SVG Icon (No card-like box or border) */}
+              <div className="text-[var(--accent)] flex items-center justify-center shrink-0 pr-1">
+                <svg className="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+                  <path d="M16 3H4a2 2 0 0 0-2 2v2h18V5a2 2 0 0 0-2-2z" />
+                  <circle cx="16" cy="14" r="1.5" />
+                </svg>
               </div>
             </div>
           </div>
 
           {/* RECHARGE INPUT & CHIPS */}
-          <div className="space-y-5">
+          <div className="space-y-4">
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)] block mb-2">
+              <label className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[var(--muted)] block mb-1.5">
                 Enter Amount to Add
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-[var(--muted)]">₹</span>
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-lg font-bold text-[var(--accent)] pointer-events-none">₹</span>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="decimal"
                   value={amount}
                   placeholder="0.00"
-                  onChange={(e) => { setAmount(e.target.value); setAmountError(""); }}
-                  className="w-full pl-9 pr-4 py-3.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/40 
+                  onKeyDown={(e) => {
+                    if (["-", "+", "e", "E"].includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e) => handleAmountChange(e.target.value)}
+                  className={`w-full pl-8 pr-3.5 py-2.5 rounded-xl border bg-[var(--card)]/40 
                              focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] outline-none transition-all 
-                             text-2xl font-bold placeholder:opacity-20 shadow-sm"
+                             text-xl font-bold placeholder:opacity-20 shadow-xs ${
+                               amountError ? "border-rose-500/80 focus:border-rose-500" : "border-[var(--border)]"
+                             }`}
                 />
               </div>
-              {amountError && <p className="text-rose-500 text-[11px] font-medium mt-1.5">{amountError}</p>}
+              {amountError && (
+                <div className="flex items-center gap-1.5 text-rose-500 text-[11px] font-semibold mt-1.5">
+                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  <span>{amountError}</span>
+                </div>
+              )}
 
               {/* Quick Amount Chips */}
-              <div className="grid grid-cols-4 gap-2 mt-2.5">
-                {[100, 500, 1000, 2000].map((val) => (
-                  <button
-                    key={val}
-                    type="button"
-                    onClick={() => setAmount(val.toString())}
-                    className="py-2 rounded-lg border border-[var(--border)]/70 bg-[var(--card)]/30 text-xs font-bold
-                                hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all active:scale-95"
-                  >
-                    +₹{val}
-                  </button>
-                ))}
+              <div className="grid grid-cols-4 gap-1.5 sm:gap-2 mt-2">
+                {[100, 500, 1000, 2000].map((val) => {
+                  const isSelected = amount === val.toString();
+                  return (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => {
+                        setAmount(val.toString());
+                        setAmountError("");
+                      }}
+                      className={`py-1.5 sm:py-2 rounded-lg border text-[11px] sm:text-xs font-bold transition-all active:scale-95 cursor-pointer ${
+                        isSelected
+                          ? "border-[var(--accent)] bg-[var(--accent)]/15 text-[var(--accent)] font-extrabold shadow-xs"
+                          : "border-[var(--border)]/70 bg-[var(--card)]/30 text-[var(--foreground)]/80 hover:border-[var(--accent)]/50 hover:text-[var(--accent)]"
+                      }`}
+                    >
+                      +₹{val}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             {/* Payment Methods */}
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)] block mb-2">
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-[var(--muted)] block mb-2">
                 Payment Method
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <button
                   type="button"
                   onClick={() => setMethod("upi")}
-                  className={`p-3 rounded-xl border transition-all flex items-center gap-3 ${method === "upi"
-                    ? "border-[var(--accent)] bg-[var(--accent)]/[0.08]"
-                    : "border-[var(--border)]/70 bg-[var(--card)]/30 hover:border-[var(--border)]"
-                    }`}
+                  className={`p-3 rounded-xl border transition-all flex items-center gap-3 cursor-pointer ${
+                    method === "upi"
+                      ? "border-[var(--accent)] bg-[var(--accent)]/[0.08]"
+                      : "border-[var(--border)]/70 bg-[var(--card)]/30 hover:border-[var(--border)]"
+                  }`}
                 >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${method === "upi" ? "bg-[var(--accent)] text-black" : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]"}`}>
-                    <FiZap size={15} />
+                  <div className="w-7 h-7 flex items-center justify-center text-[var(--accent)] shrink-0">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M13 2L3 14h7v8l10-12h-7z" />
+                    </svg>
                   </div>
                   <div className="text-left flex-1 min-w-0">
                     <p className="text-xs font-bold leading-none">UPI Pay</p>
-                    <p className="text-[10px] text-[var(--muted)] mt-0.5">Instant recharge</p>
+                    <p className="text-[10px] text-[var(--muted)] mt-1">Instant recharge</p>
                   </div>
-                  {method === "upi" && <FiCheckCircle size={15} className="text-[var(--accent)] shrink-0" />}
+                  {method === "upi" && (
+                    <FiCheckCircle size={16} className="text-[var(--accent)] shrink-0" />
+                  )}
                 </button>
 
-                <button disabled className="p-3 rounded-xl border border-[var(--border)]/40 bg-[var(--card)]/10 opacity-40 cursor-not-allowed flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--muted)] flex items-center justify-center">
-                    <FiCreditCard size={15} />
+                <button
+                  disabled
+                  type="button"
+                  className="p-3 rounded-xl border border-[var(--border)]/40 bg-[var(--card)]/10 opacity-40 cursor-not-allowed flex items-center gap-3"
+                >
+                  <div className="w-7 h-7 flex items-center justify-center text-[var(--muted)] shrink-0">
+                    <FiCreditCard size={17} />
                   </div>
                   <div className="text-left flex-1 min-w-0">
                     <p className="text-xs font-bold leading-none">Crypto</p>
-                    <p className="text-[10px] text-[var(--muted)] mt-0.5">Offline</p>
+                    <p className="text-[10px] text-[var(--muted)] mt-1">Offline</p>
                   </div>
                 </button>
               </div>
@@ -230,13 +299,13 @@ export default function WalletTab({
             {/* Action Button */}
             <button
               onClick={handleProceed}
-              disabled={loading || !method}
-              className="w-full py-3.5 rounded-xl bg-[var(--accent)] text-black font-extrabold uppercase tracking-wider text-xs
-                         flex items-center justify-center gap-2
-                         hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-40 shadow-sm"
+              disabled={loading || !method || !amount || Number(amount) < 1}
+              className="w-full py-3.5 rounded-xl bg-[var(--accent)] text-white font-black uppercase tracking-wider text-xs
+                         flex items-center justify-center gap-2 shadow-md shadow-[var(--accent)]/20
+                         hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
             >
               {loading ? (
-                <div className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
                   <span>Add Money</span>
