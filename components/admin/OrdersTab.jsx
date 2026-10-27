@@ -25,7 +25,11 @@ import {
   Target,
   TrendingUp,
   Activity,
-  Package
+  Package,
+  Mail,
+  Copy,
+  Check,
+  Phone
 } from "lucide-react";
 import Skeleton from "../Skeleton";
 
@@ -35,6 +39,14 @@ export default function OrdersTab() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [copiedKey, setCopiedKey] = useState(null);
+
+  const copyToClipboard = (text, key) => {
+    if (!text) return;
+    navigator.clipboard.writeText(String(text));
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 1500);
+  };
 
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
@@ -294,10 +306,8 @@ export default function OrdersTab() {
                         className="group hover:bg-[var(--foreground)]/[0.03] transition-colors cursor-pointer"
                       >
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)] shrink-0">
-                              <Gamepad2 size={16} />
-                            </div>
+                          <div className="flex items-center gap-2.5">
+                            <Gamepad2 size={16} className="text-[var(--accent)] shrink-0" />
                             <div className="flex flex-col min-w-0">
                               <span className="text-[var(--foreground)] font-bold uppercase text-[10px] tracking-tight truncate">{o.gameSlug}</span>
                               <span className="text-[11px] text-[var(--foreground)] font-black truncate leading-tight font-mono">{o.email || "Guest User"}</span>
@@ -311,8 +321,13 @@ export default function OrdersTab() {
                           </div>
                         </td>
                         <td className="px-6 py-4 max-w-xs">
-                          <span className="text-[var(--foreground)]/60 font-medium truncate block">{o.itemName}</span>
-                          <span className="text-[10px] text-[var(--muted)]/40 font-mono uppercase">{o.orderId}</span>
+                          <span className="text-[var(--foreground)]/80 font-medium truncate block">{o.itemName}</span>
+                          {o.playerId && (
+                            <div className="text-[10.5px] font-mono text-[var(--accent)] font-bold truncate">
+                              ID: {o.playerId} {o.zoneId ? `(${o.zoneId})` : ""}
+                            </div>
+                          )}
+                          <span className="text-[10px] text-[var(--muted)]/40 font-mono uppercase block">{o.orderId}</span>
                         </td>
                         <td className="px-6 py-4">
                           <span className="text-[10px] font-black uppercase text-[var(--muted)] bg-[var(--foreground)]/[0.05] p-1.5 rounded-lg border border-[var(--border)] tracking-widest">{o.paymentMethod || "wallet"}</span>
@@ -343,7 +358,7 @@ export default function OrdersTab() {
             </div>
 
             {/* MOBILE LIST */}
-            <div className="lg:hidden space-y-3">
+            <div className="lg:hidden space-y-2.5">
               {orders.map((o, idx) => {
                 const meta = statusMeta[o.status] || statusMeta.pending;
                 return (
@@ -353,30 +368,61 @@ export default function OrdersTab() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.02 }}
                     onClick={() => setSelectedOrder(o)}
-                    className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)] active:scale-[0.99] transition-all cursor-pointer"
+                    className="p-3 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)] active:scale-[0.99] transition-all cursor-pointer space-y-2"
                   >
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] shrink-0">
-                          <Gamepad2 size={14} />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <p className="font-bold text-[var(--foreground)] text-xs truncate uppercase">{o.gameSlug}</p>
-                            <span className="text-[9px] text-[var(--muted)] truncate opacity-60">· {o.itemName}</span>
-                          </div>
-                          <p className="text-[10px] text-[var(--muted)] font-mono truncate">{o.orderId}</p>
-                        </div>
+                    {/* Top Row: Game Slug + Item & Price + Payment Badge */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                        <Gamepad2 size={14} className="text-[var(--accent)] shrink-0" />
+                        <span className="font-extrabold text-[var(--foreground)] text-xs uppercase tracking-tight truncate">
+                          {o.gameSlug}
+                        </span>
+                        <span className="text-[10px] text-[var(--muted)] truncate opacity-70">
+                          · {o.itemName}
+                        </span>
                       </div>
 
-                      <div className="text-right shrink-0">
-                        <span className="text-sm font-black text-emerald-500 block leading-none">₹{o.price}</span>
-                        <span className="text-[8.5px] uppercase font-bold text-[var(--muted)] tracking-wider">{o.paymentMethod || "wallet"}</span>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <span className="text-sm font-black text-emerald-500 leading-none">₹{o.price}</span>
+                        <span className="text-[8px] uppercase font-bold text-[var(--muted)] px-1.5 py-0.5 rounded bg-[var(--foreground)]/[0.04] border border-[var(--border)] leading-none">
+                          {o.paymentMethod || "wallet"}
+                        </span>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-[var(--border)]/30 text-[10px] text-[var(--muted)]">
-                      <span>{new Date(o.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} · {new Date(o.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    {/* Middle Row: Player ID & Server + Customer Gmail */}
+                    <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs">
+                      {o.playerId && (
+                        <div className="flex items-center gap-1 font-mono text-[10.5px] min-w-0">
+                          <span className="text-[var(--accent)] font-bold">ID: {o.playerId}</span>
+                          {o.zoneId && (
+                            <span className="text-[var(--muted)] opacity-80">
+                              ({o.zoneId})
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-1 text-[10.5px] text-[var(--muted)] min-w-0 ml-auto">
+                        <Mail size={11} className="text-[var(--accent)] opacity-70 shrink-0" />
+                        <span className="text-[var(--foreground)]/80 font-medium truncate max-w-[170px] sm:max-w-[220px]">
+                          {o.email || "Guest"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Bottom Row: Date & Order ID + Status Dropdown */}
+                    <div className="flex items-center justify-between pt-1.5 border-t border-[var(--border)]/30 text-[10px] text-[var(--muted)]">
+                      <div className="flex items-center gap-1.5 min-w-0 pr-2">
+                        <span className="shrink-0">
+                          {new Date(o.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} · {new Date(o.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        <span className="opacity-30 shrink-0">·</span>
+                        <span className="font-mono text-[9px] opacity-50 truncate" title={o.orderId}>
+                          #{o.orderId}
+                        </span>
+                      </div>
+
                       <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
                         <StatusDropdown
                           value={o.status}
@@ -447,34 +493,70 @@ export default function OrdersTab() {
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-full max-w-sm bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
+              transition={{ type: "spring", damping: 28, stiffness: 240 }}
+              className="fixed right-0 top-0 h-full w-full max-w-md bg-[var(--card)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
             >
-              <div className="p-4 border-b border-[var(--border)] bg-gradient-to-r from-[var(--foreground)]/[0.02] to-transparent">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="space-y-0.5">
-                    <p className="text-[8px] font-mono font-bold text-[var(--accent)] uppercase tracking-tight opacity-50 truncate max-w-[200px]">{selectedOrder.orderId}</p>
-                    <h3 className="text-base font-black uppercase italic tracking-tighter text-[var(--foreground)]">Order <span className="text-[var(--accent)]">Details</span></h3>
-                  </div>
+              {/* Header */}
+              <div className="p-3.5 sm:p-4 border-b border-[var(--border)] space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm sm:text-base font-extrabold uppercase tracking-tight text-[var(--foreground)]">
+                    Order <span className="text-[var(--accent)]">Details</span>
+                  </h3>
+
                   <button
                     onClick={() => setSelectedOrder(null)}
-                    className="w-7 h-7 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/10 transition-all"
+                    className="w-7 h-7 rounded-full bg-[var(--foreground)]/[0.05] hover:bg-rose-500/10 hover:text-rose-500 flex items-center justify-center text-[var(--muted)] transition-all cursor-pointer"
+                    title="Close"
                   >
-                    <X size={14} />
+                    <X size={15} />
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
-                  <div className="flex flex-col">
-                    <p className="text-[7.5px] font-black text-[var(--muted)]/50 uppercase tracking-widest mb-0.5">Price</p>
-                    <span className="text-lg font-black text-emerald-500 tabular-nums leading-none">₹{selectedOrder.price}</span>
+                {/* Order ID with 1-Tap Copy */}
+                <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg bg-[var(--foreground)]/[0.03] border border-[var(--border)]/60 text-xs">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <Hash size={12} className="text-[var(--accent)] shrink-0" />
+                    <span className="font-mono text-[11px] font-bold text-[var(--foreground)] truncate">
+                      {selectedOrder.orderId}
+                    </span>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(selectedOrder.orderId, "orderId")}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase transition-all bg-[var(--foreground)]/[0.05] hover:bg-[var(--accent)] hover:text-white shrink-0 cursor-pointer"
+                  >
+                    {copiedKey === "orderId" ? (
+                      <>
+                        <Check size={11} className="text-emerald-500" />
+                        <span className="text-emerald-500">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={11} />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Price & Status Row */}
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-emerald-500/10 via-[var(--foreground)]/[0.02] to-transparent border border-emerald-500/20">
+                  <div>
+                    <span className="text-[8.5px] font-extrabold uppercase tracking-wider text-[var(--muted)] block">Amount</span>
+                    <div className="flex items-baseline gap-1.5 mt-0.5">
+                      <span className="text-xl font-black text-emerald-500 leading-none">₹{selectedOrder.price}</span>
+                      <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[var(--foreground)]/[0.05] text-[var(--muted)] border border-[var(--border)]">
+                        {selectedOrder.paymentMethod || "wallet"}
+                      </span>
+                    </div>
+                  </div>
+
                   <StatusDropdown
                     value={selectedOrder.status}
                     compact
                     onChange={(v) => {
                       updateOrderStatus(selectedOrder.orderId, v);
-                      setSelectedOrder(null);
+                      setSelectedOrder((prev) => (prev ? { ...prev, status: v } : null));
                     }}
                     options={[
                       { value: "pending", label: "Pending" },
@@ -486,29 +568,139 @@ export default function OrdersTab() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-3 sm:p-3.5 space-y-2.5 custom-scrollbar">
-                <DrawerSection icon={<Gamepad2 size={13} />} title="Game Info">
-                  <DrawerDetail label="Game" value={selectedOrder.gameSlug} emphasize />
-                  <DrawerDetail label="Item Name" value={selectedOrder.itemName} />
-                  <DrawerDetail label="Item ID" value={selectedOrder.itemSlug} />
-                </DrawerSection>
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3 custom-scrollbar">
 
-                <DrawerSection icon={<Smartphone size={13} />} title="Player Details">
-                  <DrawerDetail label="Player ID" value={selectedOrder.playerId} emphasize />
-                  <DrawerDetail label="Zone ID" value={selectedOrder.zoneId || "GLOBAL"} />
-                </DrawerSection>
+                {/* HERO: PLAYER FULFILLMENT CREDENTIALS (1-TAP QUICK COPY) */}
+                <div className="p-3 rounded-xl bg-[var(--accent)]/[0.04] border border-[var(--accent)]/25 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5">
+                      <Smartphone size={13} />
+                      Player Credentials
+                    </span>
+                    <span className="text-[10px] font-bold text-[var(--foreground)] uppercase truncate max-w-[150px]">
+                      {selectedOrder.gameSlug}
+                    </span>
+                  </div>
 
-                <DrawerSection icon={<CreditCard size={13} />} title="Payment Info">
-                  <DrawerDetail label="Method" value={selectedOrder.paymentMethod} />
-                  <DrawerDetail label="Payment Status" value={selectedOrder.paymentStatus} emphasize />
-                  <DrawerDetail label="Topup Status" value={selectedOrder.topupStatus} />
-                </DrawerSection>
+                  <div className="grid grid-cols-2 gap-2">
+                    {/* Player ID */}
+                    <div className="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
+                      <span className="text-[8.5px] font-bold text-[var(--muted)] uppercase tracking-tight">Player ID</span>
+                      <div className="flex items-center justify-between gap-1 mt-1">
+                        <span className="text-xs font-mono font-black text-[var(--foreground)] truncate">
+                          {selectedOrder.playerId || "N/A"}
+                        </span>
+                        {selectedOrder.playerId && (
+                          <button
+                            type="button"
+                            onClick={() => copyToClipboard(selectedOrder.playerId, "playerId")}
+                            className="p-1 rounded hover:bg-[var(--foreground)]/[0.06] text-[var(--muted)] hover:text-[var(--accent)] transition-colors cursor-pointer shrink-0"
+                            title="Copy Player ID"
+                          >
+                            {copiedKey === "playerId" ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                          </button>
+                        )}
+                      </div>
+                    </div>
 
-                <DrawerSection icon={<User size={13} />} title="Customer Details">
-                  <DrawerDetail label="Email" value={selectedOrder.email || "Guest"} />
-                  <DrawerDetail label="Phone" value={selectedOrder.phone || "N/A"} />
-                  <DrawerDetail label="Order Date" value={new Date(selectedOrder.createdAt).toLocaleString()} />
-                </DrawerSection>
+                    {/* Zone ID / Server */}
+                    <div className="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
+                      <span className="text-[8.5px] font-bold text-[var(--muted)] uppercase tracking-tight">Server / Zone ID</span>
+                      <div className="flex items-center justify-between gap-1 mt-1">
+                        <span className="text-xs font-mono font-black text-[var(--foreground)] truncate">
+                          {selectedOrder.zoneId || "GLOBAL"}
+                        </span>
+                        {selectedOrder.zoneId && (
+                          <button
+                            type="button"
+                            onClick={() => copyToClipboard(selectedOrder.zoneId, "zoneId")}
+                            className="p-1 rounded hover:bg-[var(--foreground)]/[0.06] text-[var(--muted)] hover:text-[var(--accent)] transition-colors cursor-pointer shrink-0"
+                            title="Copy Zone ID"
+                          >
+                            {copiedKey === "zoneId" ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Item Ordered */}
+                  <div className="p-2 rounded-lg bg-[var(--card)]/70 border border-[var(--border)]/70 flex items-center justify-between gap-2 text-xs">
+                    <span className="text-[9px] font-bold text-[var(--muted)] uppercase">Item</span>
+                    <span className="font-extrabold text-[var(--foreground)] text-right truncate">
+                      {selectedOrder.itemName}
+                    </span>
+                  </div>
+                </div>
+
+                {/* CUSTOMER DETAILS */}
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-extrabold text-[var(--muted)] uppercase tracking-wider px-0.5 flex items-center gap-1.5">
+                    <User size={12} className="text-[var(--accent)]" />
+                    Customer Details
+                  </span>
+                  <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/60 space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[9px] font-bold text-[var(--muted)] uppercase">Email</span>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="text-xs font-semibold text-[var(--foreground)] truncate" title={selectedOrder.email}>
+                          {selectedOrder.email || "Guest"}
+                        </span>
+                        {selectedOrder.email && (
+                          <button
+                            type="button"
+                            onClick={() => copyToClipboard(selectedOrder.email, "email")}
+                            className="p-1 rounded hover:bg-[var(--foreground)]/[0.06] text-[var(--muted)] hover:text-[var(--accent)] transition-colors cursor-pointer shrink-0"
+                            title="Copy Email"
+                          >
+                            {copiedKey === "email" ? <Check size={11} className="text-emerald-500" /> : <Copy size={11} />}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-[var(--border)]/40">
+                      <span className="text-[9px] font-bold text-[var(--muted)] uppercase">Phone</span>
+                      <span className="text-xs font-mono font-bold text-[var(--accent)]">
+                        {selectedOrder.phone || "Not provided"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-[var(--border)]/40">
+                      <span className="text-[9px] font-bold text-[var(--muted)] uppercase">Order Time</span>
+                      <span className="text-[11px] font-medium text-[var(--foreground)]/80">
+                        {new Date(selectedOrder.createdAt).toLocaleString(undefined, {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* PAYMENT & SYSTEM STATUS */}
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-extrabold text-[var(--muted)] uppercase tracking-wider px-0.5 flex items-center gap-1.5">
+                    <CreditCard size={12} className="text-[var(--accent)]" />
+                    Payment & Topup
+                  </span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/60">
+                      <span className="text-[8.5px] font-bold text-[var(--muted)] uppercase tracking-tight block">Payment Status</span>
+                      <span className="text-xs font-bold uppercase text-[var(--accent)] mt-0.5 block truncate">
+                        {selectedOrder.paymentStatus || "PENDING"}
+                      </span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/60">
+                      <span className="text-[8.5px] font-bold text-[var(--muted)] uppercase tracking-tight block">Topup Status</span>
+                      <span className="text-xs font-bold uppercase text-[var(--foreground)] mt-0.5 block truncate">
+                        {selectedOrder.topupStatus || "PENDING"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </motion.div>
           </>

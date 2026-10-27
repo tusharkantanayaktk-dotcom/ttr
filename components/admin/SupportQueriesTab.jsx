@@ -29,8 +29,17 @@ export default function SupportQueriesTab() {
 
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearch(searchInput);
+      setPage(1);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchInput]);
 
   const [pagination, setPagination] = useState({
     total: 0,
@@ -127,14 +136,14 @@ export default function SupportQueriesTab() {
   const getStatus = (status) => status || "open";
 
   return (
-    <div className="space-y-6 pb-10 max-w-full overflow-x-hidden">
+    <div className="space-y-3.5 sm:space-y-4 pb-8 max-w-full overflow-x-hidden">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Support Queries</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">Support Queries</h2>
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
-            <MessageSquare size={14} className="text-[var(--accent)]" />
+            <MessageSquare size={13} className="text-[var(--accent)]" />
             <span>{pagination.total} Queries</span>
           </div>
           <button
@@ -142,41 +151,66 @@ export default function SupportQueriesTab() {
             className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none"
             title="Refresh"
           >
-            <RefreshCcw size={15} className={loading ? "animate-spin" : ""} />
+            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
       </div>
 
-      {/* ================= SEARCH & FILTER ================= */}
-      <div className="flex flex-row items-center gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={16} />
-          <input
-            value={search}
-            onChange={(e) => {
+      {/* ================= COMBINED SEARCH & FILTERS CAPSULE ================= */}
+      <div className="relative flex items-center w-full rounded-2xl sm:rounded-full border border-[var(--border)] bg-[var(--card)]/80 focus-within:border-[var(--accent)]/50 focus-within:ring-2 focus-within:ring-[var(--accent)]/15 transition-all shadow-xs h-9 sm:h-9.5 px-3">
+        <Search className="text-[var(--muted)]/50 shrink-0 mr-2" size={14} />
+
+        <input
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search queries by Email, Message, Order ID..."
+          className="w-full bg-transparent text-[var(--foreground)] text-xs sm:text-sm placeholder:text-[var(--muted)]/40 outline-none"
+        />
+
+        {/* Clear 'X' button */}
+        {searchInput && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchInput("");
+              setSearch("");
               setPage(1);
-              setSearch(e.target.value);
             }}
-            placeholder="Search queries..."
-            className="w-full h-11 pl-11 pr-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-sm focus:border-[var(--accent)]/50 outline-none placeholder:text-[var(--muted)]/40"
-          />
-        </div>
-        <div className="relative shrink-0">
+            className="p-1 rounded-md text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors cursor-pointer shrink-0 mr-1"
+            title="Clear search"
+          >
+            <X size={13} />
+          </button>
+        )}
+
+        <div className="h-4 w-[1px] bg-[var(--border)]/70 mx-1 shrink-0" />
+
+        {/* Combined Filter Dropdown */}
+        <div className="relative shrink-0 flex items-center">
           <select
             value={statusFilter}
             onChange={(e) => {
               setPage(1);
               setStatusFilter(e.target.value);
             }}
-            className="h-11 pl-3.5 pr-8 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-xs font-bold text-[var(--foreground)] uppercase focus:border-[var(--accent)]/50 outline-none appearance-none cursor-pointer"
+            className={`h-7 pl-2 pr-6 rounded-lg text-[10px] sm:text-[11px] font-bold uppercase tracking-wider outline-none appearance-none cursor-pointer transition-all ${
+              statusFilter
+                ? "bg-[var(--accent)] text-black font-extrabold shadow-xs"
+                : "bg-transparent text-[var(--foreground)]/70 hover:text-[var(--foreground)]"
+            }`}
           >
-            <option value="" className="bg-[var(--card)]">All Status</option>
-            <option value="open" className="bg-[var(--card)]">Open</option>
-            <option value="in_progress" className="bg-[var(--card)]">In Progress</option>
-            <option value="resolved" className="bg-[var(--card)]">Resolved</option>
-            <option value="closed" className="bg-[var(--card)]">Closed</option>
+            <option value="" className="bg-[var(--card)] text-[var(--foreground)]"></option>
+            <option value="open" className="bg-[var(--card)] text-[var(--foreground)]">Open</option>
+            <option value="in_progress" className="bg-[var(--card)] text-[var(--foreground)]">In Progress</option>
+            <option value="resolved" className="bg-[var(--card)] text-[var(--foreground)]">Resolved</option>
+            <option value="closed" className="bg-[var(--card)] text-[var(--foreground)]">Closed</option>
           </select>
-          <Filter size={13} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--accent)] pointer-events-none" />
+          <Filter
+            size={11}
+            className={`absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none ${
+              statusFilter ? "text-black" : "text-[var(--accent)]"
+            }`}
+          />
         </div>
       </div>
 
@@ -234,9 +268,7 @@ export default function SupportQueriesTab() {
                       </p>
                     </div>
 
-                    <div className="w-7 h-7 rounded-md bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 shrink-0">
-                      <ChevronRight size={14} />
-                    </div>
+                    <ChevronRight size={16} className="text-[var(--muted)]/40 group-hover:text-[var(--foreground)] transition-colors shrink-0" />
                   </motion.div>
                 );
               })}
@@ -277,56 +309,46 @@ export default function SupportQueriesTab() {
         </AnimatePresence>
       </div>
 
-      {/* ================= MODAL ================= */}
+      {/* ================= BOTTOM SHEET ================= */}
       <AnimatePresence>
         {activeQuery && (
-          <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[1100] flex items-end sm:items-center justify-center p-0 sm:p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveQuery(null)}
-              className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             />
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative w-full max-w-lg bg-[var(--background)] border border-[var(--border)] rounded-[2rem] shadow-2xl overflow-hidden"
+              initial={{ opacity: 0, y: "100%" }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: "100%" }}
+              transition={{ type: "spring", damping: 28, stiffness: 260 }}
+              className="relative w-full max-w-lg bg-[var(--card)] border-t sm:border border-[var(--border)] rounded-t-[2rem] sm:rounded-2xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col z-10"
             >
-              <div className="px-6 py-4 border-b border-[var(--border)] flex items-center justify-between">
-                <h3 className="text-base font-bold text-[var(--foreground)]">Query Details</h3>
-                <button
-                  onClick={() => setActiveQuery(null)}
-                  className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.08] flex items-center justify-center text-[var(--muted)] hover:text-rose-500 hover:bg-rose-500/10 transition-all"
-                >
-                  <X size={16} />
-                </button>
+              {/* Mobile Drag Handle */}
+              <div className="flex justify-center pt-3 pb-1 sm:hidden">
+                <div className="w-10 h-1 rounded-full bg-[var(--foreground)]/20" />
               </div>
 
-              <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <DetailBlock label="Email" value={activeQuery.email || "N/A"} icon={<Mail size={12} />} />
-                  <DetailBlock label="Phone" value={activeQuery.phone || "N/A"} icon={<Phone size={12} />} />
-                  <DetailBlock label="Type" value={activeQuery.type} emphasize icon={<MessageSquare size={12} />} />
-                  <DetailBlock label="Date" value={new Date(activeQuery.createdAt).toLocaleString()} icon={<Clock size={12} />} />
-                </div>
-
-                <div className="space-y-2 p-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]">
-                  <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase">Message</p>
-                  <p className="text-sm font-medium leading-relaxed text-[var(--foreground)]">
-                    {activeQuery.message}
+              {/* Header */}
+              <div className="px-5 py-3.5 border-b border-[var(--border)] flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className="text-base font-extrabold text-[var(--foreground)] truncate">Query Details</h3>
+                  <p className="text-[10px] text-[var(--muted)] font-mono truncate">
+                    #{String(activeQuery._id).slice(-8).toUpperCase()}
                   </p>
                 </div>
 
-                <div className="space-y-2 pt-4 border-t border-[var(--border)]">
-                  <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase ml-1">Status</p>
+                <div className="flex items-center gap-2 shrink-0">
                   <CustomDropdown
                     value={getStatus(activeQuery.status)}
+                    compact
                     onChange={(newStatus) => {
                       updateQueryStatus(activeQuery._id, newStatus);
-                      setActiveQuery(null);
+                      setActiveQuery((prev) => (prev ? { ...prev, status: newStatus } : null));
                     }}
                     disabled={updating}
                     options={[
@@ -336,6 +358,31 @@ export default function SupportQueriesTab() {
                       { value: "closed", label: "Closed" },
                     ]}
                   />
+
+                  <button
+                    onClick={() => setActiveQuery(null)}
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[var(--foreground)]/[0.06] hover:bg-rose-500/10 hover:text-rose-500 flex items-center justify-center text-[var(--muted)] transition-all cursor-pointer"
+                    title="Close"
+                  >
+                    <X size={15} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Body */}
+              <div className="p-5 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <DetailBlock label="Email" value={activeQuery.email || "N/A"} icon={<Mail size={12} />} />
+                  <DetailBlock label="Phone" value={activeQuery.phone || "N/A"} icon={<Phone size={12} />} />
+                  <DetailBlock label="Type" value={activeQuery.type} emphasize icon={<MessageSquare size={12} />} />
+                  <DetailBlock label="Date" value={new Date(activeQuery.createdAt).toLocaleString()} icon={<Clock size={12} />} />
+                </div>
+
+                <div className="space-y-1.5 p-3.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/70">
+                  <p className="text-[9.5px] font-black text-[var(--muted)]/60 uppercase tracking-wider">Message</p>
+                  <p className="text-xs sm:text-sm font-medium leading-relaxed text-[var(--foreground)] whitespace-pre-wrap">
+                    {activeQuery.message}
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -347,7 +394,7 @@ export default function SupportQueriesTab() {
 }
 
 /* ================= CUSTOM DROPDOWN ================= */
-function CustomDropdown({ value, onChange, options, disabled }) {
+function CustomDropdown({ value, onChange, options, disabled, compact }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -363,32 +410,44 @@ function CustomDropdown({ value, onChange, options, disabled }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const styles = {
+    open: "text-amber-500",
+    in_progress: "text-blue-500",
+    resolved: "text-emerald-500",
+    closed: "text-rose-500",
+  };
+
   return (
-    <div className="relative w-full" ref={containerRef}>
+    <div className="relative" ref={containerRef}>
       <button
+        type="button"
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
         className={`
-          flex items-center justify-between w-full h-11 px-4 
+          flex items-center justify-between gap-1.5 px-2.5 
+          ${compact ? "h-8 min-w-[105px]" : "h-11 w-full px-4"}
           rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.04] 
-          text-xs font-bold uppercase transition-all
+          text-[10px] font-black uppercase transition-all cursor-pointer
           ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-[var(--foreground)]/[0.08] active:scale-[0.98]"}
           ${isOpen ? "border-[var(--accent)] ring-1 ring-[var(--accent)]/30" : "text-[var(--foreground)]"}
         `}
       >
-        <span className={value === "resolved" ? "text-emerald-500" : value === "in_progress" ? "text-blue-500" : value === "open" ? "text-amber-500" : "text-[var(--foreground)]/40"}>
-          {selectedOption?.label}
-        </span>
-        <ChevronDown size={14} className={`transition-transform duration-300 text-[var(--muted)] ${isOpen ? "rotate-180" : ""}`} />
+        <div className="flex items-center gap-1.5">
+          <div className={`w-1.5 h-1.5 rounded-full bg-current ${styles[value] || "text-[var(--muted)]"}`} />
+          <span className={styles[value] || "text-[var(--foreground)]"}>
+            {selectedOption?.label}
+          </span>
+        </div>
+        <ChevronDown size={12} className={`transition-transform duration-300 text-[var(--muted)] ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 5, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="absolute z-[1110] w-full rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-2xl p-1 overflow-hidden backdrop-blur-xl"
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 4 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            className="absolute z-[1200] right-0 min-w-[130px] rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-2xl p-1 overflow-hidden backdrop-blur-xl"
           >
             {options.map((option) => (
               <button

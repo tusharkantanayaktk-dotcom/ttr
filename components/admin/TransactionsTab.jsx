@@ -28,8 +28,17 @@ export default function TransactionsTab() {
 
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearch(searchInput);
+      setPage(1);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchInput]);
 
   const [pagination, setPagination] = useState({
     total: 0,
@@ -124,36 +133,61 @@ export default function TransactionsTab() {
         </div>
       </div>
 
-      {/* ================= SEARCH & FILTER ================= */}
-      <div className="flex flex-row items-center gap-2.5">
-        <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]/40" size={14} />
-          <input
-            value={search}
-            onChange={(e) => {
+      {/* ================= COMBINED SEARCH & FILTERS CAPSULE ================= */}
+      <div className="relative flex items-center w-full rounded-2xl sm:rounded-full border border-[var(--border)] bg-[var(--card)]/80 focus-within:border-[var(--accent)]/50 focus-within:ring-2 focus-within:ring-[var(--accent)]/15 transition-all shadow-xs h-9 sm:h-9.5 px-3">
+        <Search className="text-[var(--muted)]/50 shrink-0 mr-2" size={14} />
+
+        <input
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search Order ID, Email, Player ID..."
+          className="w-full bg-transparent text-[var(--foreground)] text-xs sm:text-sm placeholder:text-[var(--muted)]/40 outline-none"
+        />
+
+        {/* Clear 'X' button */}
+        {searchInput && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchInput("");
+              setSearch("");
               setPage(1);
-              setSearch(e.target.value);
             }}
-            placeholder="Search Order ID, Email, Player ID..."
-            className="w-full h-9 sm:h-9.5 pl-10 pr-3.5 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[var(--foreground)] text-xs sm:text-sm focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40"
-          />
-        </div>
-        <div className="relative shrink-0">
+            className="p-1 rounded-md text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors cursor-pointer shrink-0 mr-1"
+            title="Clear search"
+          >
+            <X size={13} />
+          </button>
+        )}
+
+        <div className="h-4 w-[1px] bg-[var(--border)]/70 mx-1 shrink-0" />
+
+        {/* Combined Filter Dropdown */}
+        <div className="relative shrink-0 flex items-center">
           <select
             value={statusFilter}
             onChange={(e) => {
               setPage(1);
               setStatusFilter(e.target.value);
             }}
-            className="h-9 sm:h-9.5 pl-3 pr-7 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] text-[11px] sm:text-xs font-bold text-[var(--foreground)] uppercase focus:border-[var(--accent)]/50 outline-none appearance-none cursor-pointer"
+            className={`h-7 pl-2 pr-6 rounded-lg text-[10px] sm:text-[11px] font-bold uppercase tracking-wider outline-none appearance-none cursor-pointer transition-all ${
+              statusFilter
+                ? "bg-[var(--accent)] text-black font-extrabold shadow-xs"
+                : "bg-transparent text-[var(--foreground)]/70 hover:text-[var(--foreground)]"
+            }`}
           >
-            <option value="" className="bg-[var(--card)]">All Status</option>
-            <option value="success" className="bg-[var(--card)]">Success</option>
-            <option value="pending" className="bg-[var(--card)]">Pending</option>
-            <option value="failed" className="bg-[var(--card)]">Failed</option>
-            <option value="refund" className="bg-[var(--card)]">Refund</option>
+            <option value="" className="bg-[var(--card)] text-[var(--foreground)]">All Status</option>
+            <option value="success" className="bg-[var(--card)] text-[var(--foreground)]">Success</option>
+            <option value="pending" className="bg-[var(--card)] text-[var(--foreground)]">Pending</option>
+            <option value="failed" className="bg-[var(--card)] text-[var(--foreground)]">Failed</option>
+            <option value="refund" className="bg-[var(--card)] text-[var(--foreground)]">Refund</option>
           </select>
-          <Filter size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--accent)] pointer-events-none" />
+          <Filter
+            size={11}
+            className={`absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none ${
+              statusFilter ? "text-black" : "text-[var(--accent)]"
+            }`}
+          />
         </div>
       </div>
 
