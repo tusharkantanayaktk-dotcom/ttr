@@ -434,10 +434,10 @@ export default function OrdersTab() {
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
                   <div className="flex flex-col">
-                    <p className="text-[8px] font-black text-[var(--muted)]/40 uppercase tracking-[0.2em] mb-0.5">Price</p>
-                    <span className="text-xl font-black text-emerald-500 tabular-nums leading-none">₹{selectedOrder.price}</span>
+                    <p className="text-[7.5px] font-black text-[var(--muted)]/50 uppercase tracking-widest mb-0.5">Price</p>
+                    <span className="text-lg font-black text-emerald-500 tabular-nums leading-none">₹{selectedOrder.price}</span>
                   </div>
                   <StatusDropdown
                     value={selectedOrder.status}
@@ -456,25 +456,25 @@ export default function OrdersTab() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4 space-y-5 custom-scrollbar">
-                <DrawerSection icon={<Gamepad2 size={16} />} title="Game Info">
+              <div className="flex-1 overflow-y-auto p-3 sm:p-3.5 space-y-2.5 custom-scrollbar">
+                <DrawerSection icon={<Gamepad2 size={13} />} title="Game Info">
                   <DrawerDetail label="Game" value={selectedOrder.gameSlug} emphasize />
                   <DrawerDetail label="Item Name" value={selectedOrder.itemName} />
                   <DrawerDetail label="Item ID" value={selectedOrder.itemSlug} />
                 </DrawerSection>
 
-                <DrawerSection icon={<Smartphone size={16} />} title="Player Details">
+                <DrawerSection icon={<Smartphone size={13} />} title="Player Details">
                   <DrawerDetail label="Player ID" value={selectedOrder.playerId} emphasize />
                   <DrawerDetail label="Zone ID" value={selectedOrder.zoneId || "GLOBAL"} />
                 </DrawerSection>
 
-                <DrawerSection icon={<CreditCard size={16} />} title="Payment Info">
+                <DrawerSection icon={<CreditCard size={13} />} title="Payment Info">
                   <DrawerDetail label="Method" value={selectedOrder.paymentMethod} />
                   <DrawerDetail label="Payment Status" value={selectedOrder.paymentStatus} emphasize />
                   <DrawerDetail label="Topup Status" value={selectedOrder.topupStatus} />
                 </DrawerSection>
 
-                <DrawerSection icon={<User size={16} />} title="Customer Details">
+                <DrawerSection icon={<User size={13} />} title="Customer Details">
                   <DrawerDetail label="Email" value={selectedOrder.email || "Guest"} />
                   <DrawerDetail label="Phone" value={selectedOrder.phone || "N/A"} />
                   <DrawerDetail label="Order Date" value={new Date(selectedOrder.createdAt).toLocaleString()} />
@@ -670,22 +670,28 @@ function StatusDropdown({ value, onChange, options, disabled, compact }) {
 
 function DrawerSection({ icon, title, children }) {
   return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2 text-[var(--muted)]/40">
-        <div className="p-1.5 rounded-lg bg-[var(--foreground)]/[0.05] text-[var(--accent)]">{icon}</div>
-        <h4 className="text-[9px] font-black uppercase tracking-[0.2em]">{title}</h4>
-        <div className="h-px flex-1 bg-[var(--border)] opacity-50" />
+    <div className="space-y-1.5">
+      <div className="flex items-center gap-1.5 text-[var(--muted)]/60">
+        <span className="text-[var(--accent)] shrink-0">{icon}</span>
+        <h4 className="text-[9px] font-black uppercase tracking-wider">{title}</h4>
+        <div className="h-px flex-1 bg-[var(--border)] opacity-40" />
       </div>
-      <div className="grid grid-cols-1 gap-2.5 px-1">{children}</div>
+      <div className="rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]/60 px-3 py-1.5 space-y-1">
+        {children}
+      </div>
     </div>
   );
 }
 
 function DrawerDetail({ label, value, emphasize }) {
   return (
-    <div className="flex justify-between items-baseline gap-4 group">
-      <span className="text-[8px] font-black text-[var(--muted)]/30 uppercase tracking-tight group-hover:text-[var(--muted)]/50 transition-colors whitespace-nowrap">{label}</span>
-      <span className={`text-[11px] font-bold text-right truncate ${emphasize ? "text-[var(--accent)] italic uppercase" : "text-[var(--foreground)]/80"}`}>
+    <div className="flex justify-between items-center gap-3 py-0.5 group">
+      <span className="text-[8.5px] font-bold text-[var(--muted)]/60 uppercase tracking-tight group-hover:text-[var(--muted)]/80 transition-colors whitespace-nowrap">
+        {label}
+      </span>
+      <span className={`text-[11px] font-bold text-right truncate ${
+        emphasize ? "text-[var(--accent)] italic uppercase" : "text-[var(--foreground)]/80"
+      }`}>
         {value || "N/A"}
       </span>
     </div>
