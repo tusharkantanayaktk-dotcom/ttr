@@ -1,7 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiSave, FiAlertTriangle, FiCheckCircle, FiSliders, FiRefreshCw } from "react-icons/fi";
+import {
+  Sliders,
+  RefreshCcw,
+  Save,
+  CheckCircle2,
+  AlertCircle,
+  Sparkles,
+  Smartphone,
+  MessageCircle,
+  Loader2
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function UiSettingsTab() {
@@ -10,7 +20,7 @@ export default function UiSettingsTab() {
     showBottomNav: true,
     showWhatsAppPopup: true,
   });
-  
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -28,7 +38,6 @@ export default function UiSettingsTab() {
       });
       const data = await res.json();
       if (data.success && data.data.UI_SETTINGS_CONFIG) {
-        // Only set values that exist, otherwise fallback to defaults (true)
         setConfig({
           showStorySlider: data.data.UI_SETTINGS_CONFIG.showStorySlider ?? true,
           showBottomNav: data.data.UI_SETTINGS_CONFIG.showBottomNav ?? true,
@@ -48,7 +57,7 @@ export default function UiSettingsTab() {
       setMessage({ type: "", text: "" });
 
       const token = localStorage.getItem("token");
-      
+
       const res = await fetch("/api/admin/settings", {
         method: "PATCH",
         headers: {
@@ -71,105 +80,131 @@ export default function UiSettingsTab() {
     }
   };
 
+  const settingsList = [
+    {
+      key: "showStorySlider",
+      title: "Story Bubbles",
+      desc: "Show or hide the top story bubbles on the homepage.",
+      icon: <Sparkles size={16} className="text-[var(--accent)] shrink-0" />,
+    },
+    {
+      key: "showBottomNav",
+      title: "Mobile Bottom Bar",
+      desc: "Show or hide the bottom navigation menu on mobile phones.",
+      icon: <Smartphone size={16} className="text-[var(--accent)] shrink-0" />,
+    },
+    {
+      key: "showWhatsAppPopup",
+      title: "WhatsApp Chat Button",
+      desc: "Show or hide the floating WhatsApp chat icon at the bottom right.",
+      icon: <MessageCircle size={16} className="text-[var(--accent)] shrink-0" />,
+    },
+  ];
+
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <div className="w-10 h-10 border-4 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
-        <p className="text-[var(--muted)] text-sm font-medium animate-pulse">Loading UI Settings...</p>
+      <div className="flex flex-col items-center justify-center py-24 gap-3">
+        <Loader2 size={28} className="animate-spin text-[var(--accent)]" />
+        <p className="text-[var(--muted)] text-xs font-semibold animate-pulse">Loading UI Settings...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="max-w-2xl space-y-3.5 sm:space-y-4 pb-8">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--foreground)]">UI Settings</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">UI Settings</h2>
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
-            <FiSliders size={14} className="text-[var(--accent)]" />
-            <span>{Object.keys(config).length} Controls</span>
+            <Sliders size={13} className="text-[var(--accent)]" />
+            <span>{settingsList.length} Controls</span>
           </div>
           <button
             onClick={fetchSettings}
-            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none"
+            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none cursor-pointer"
             title="Refresh"
           >
-            <FiRefreshCw size={15} className={loading ? "animate-spin" : ""} />
+            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
       </div>
 
-      <div className="space-y-4">
-        {/* Story Slider Toggle */}
-        <div className="flex items-center justify-between p-4 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
-          <div>
-            <p className="font-bold text-sm text-[var(--foreground)]">Story Bubbles</p>
-            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Show or hide the top story bubbles on the homepage.</p>
-          </div>
-          <button
-            onClick={() => setConfig(prev => ({ ...prev, showStorySlider: !prev.showStorySlider }))}
-            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${config.showStorySlider ? "bg-[var(--accent)]" : "bg-[var(--foreground)]/20"}`}
-          >
-            <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-black transition-transform ${config.showStorySlider ? "translate-x-6" : "bg-white"}`} />
-          </button>
-        </div>
+      {/* ================= CONTROLS LIST ================= */}
+      <div className="space-y-2.5">
+        {settingsList.map((item) => {
+          const isActive = Boolean(config[item.key]);
+          return (
+            <div
+              key={item.key}
+              onClick={() => setConfig((prev) => ({ ...prev, [item.key]: !prev[item.key] }))}
+              className="flex items-center justify-between gap-3 p-3 sm:p-3.5 bg-[var(--card)]/60 hover:bg-[var(--card)] border border-[var(--border)] rounded-xl transition-all cursor-pointer group"
+            >
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                {item.icon}
+                <div className="min-w-0">
+                  <p className="font-bold text-xs sm:text-sm text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors truncate">
+                    {item.title}
+                  </p>
+                  <p className="text-[11px] text-[var(--muted)]/80 mt-0.5 leading-snug">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
 
-        {/* Bottom Nav Toggle */}
-        <div className="flex items-center justify-between p-4 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
-          <div>
-            <p className="font-bold text-sm text-[var(--foreground)]">Mobile Bottom Bar</p>
-            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Show or hide the bottom navigation menu on mobile phones.</p>
-          </div>
-          <button
-            onClick={() => setConfig(prev => ({ ...prev, showBottomNav: !prev.showBottomNav }))}
-            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${config.showBottomNav ? "bg-[var(--accent)]" : "bg-[var(--foreground)]/20"}`}
-          >
-            <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-black transition-transform ${config.showBottomNav ? "translate-x-6" : "bg-white"}`} />
-          </button>
-        </div>
+              {/* iOS-Style Toggle Switch */}
+              <button
+                type="button"
+                role="switch"
+                aria-checked={isActive}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setConfig((prev) => ({ ...prev, [item.key]: !prev[item.key] }));
+                }}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out outline-none ${
+                  isActive ? "bg-[var(--accent)]" : "bg-[var(--foreground)]/15"
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out my-auto ${
+                    isActive ? "translate-x-5.5 ml-0" : "translate-x-0.5"
+                  }`}
+                />
+              </button>
+            </div>
+          );
+        })}
 
-        {/* WhatsApp Popup Toggle */}
-        <div className="flex items-center justify-between p-4 bg-[var(--foreground)]/[0.02] border border-[var(--border)] rounded-xl">
-          <div>
-            <p className="font-bold text-sm text-[var(--foreground)]">WhatsApp Chat Button</p>
-            <p className="text-xs text-[var(--muted)] mt-0.5 max-w-[250px] sm:max-w-md">Show or hide the floating WhatsApp chat icon at the bottom right.</p>
-          </div>
-          <button
-            onClick={() => setConfig(prev => ({ ...prev, showWhatsAppPopup: !prev.showWhatsAppPopup }))}
-            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${config.showWhatsAppPopup ? "bg-[var(--accent)]" : "bg-[var(--foreground)]/20"}`}
-          >
-            <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-black transition-transform ${config.showWhatsAppPopup ? "translate-x-6" : "bg-white"}`} />
-          </button>
-        </div>
-
-        <button 
-          onClick={handleSave} 
+        {/* Save Button */}
+        <button
+          onClick={handleSave}
           disabled={saving}
-          className="w-full mt-4 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-black uppercase tracking-wider text-xs py-3.5 rounded-xl hover:brightness-105 active:scale-95 transition-all shadow-md shadow-[var(--accent)]/15"
+          className="w-full mt-3 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-extrabold uppercase tracking-wider text-xs py-3 rounded-xl hover:brightness-105 active:scale-[0.99] transition-all shadow-sm cursor-pointer disabled:opacity-50"
         >
-          {saving ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <FiSave size={15} />}
-          Save Design Settings
+          {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
+          <span>{saving ? "Saving Changes..." : "Save Design Settings"}</span>
         </button>
       </div>
 
       {/* Message Area */}
-      <div className="h-10 pt-4 border-t border-[var(--border)]">
-        <AnimatePresence>
-          {message.text && (
-            <motion.div
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
-              className={`flex items-center gap-2 text-sm font-medium ${message.type === "success" ? "text-green-500" : "text-red-500"}`}
-            >
-              {message.type === "success" ? <FiCheckCircle /> : <FiAlertTriangle />}
-              {message.text}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <AnimatePresence>
+        {message.text && (
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            className={`p-2.5 rounded-xl border flex items-center gap-2 text-xs font-semibold ${
+              message.type === "success"
+                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
+                : "bg-rose-500/10 border-rose-500/30 text-rose-500"
+            }`}
+          >
+            {message.type === "success" ? <CheckCircle2 size={14} /> : <AlertCircle size={14} />}
+            <span>{message.text}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
