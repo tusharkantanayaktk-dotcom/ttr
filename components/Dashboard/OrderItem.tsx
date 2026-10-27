@@ -2,21 +2,9 @@
 
 import { useState } from "react";
 import {
-  FiChevronDown,
-  FiCalendar,
-  FiUser,
-  FiGrid,
-  FiCreditCard,
-  FiPackage,
-  FiHash,
   FiShare2,
   FiCopy,
   FiX,
-  FiCpu,
-  FiClock,
-  FiExternalLink,
-  FiCheckCircle,
-  FiRotateCcw,
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -38,18 +26,35 @@ export type OrderType = {
 /* ================= GAME NAME ================= */
 
 const getGameName = (slug: string) => {
-  const s = slug.toLowerCase();
-  const mlbbSlugs = ["mobile-legends114", "mlbb-smallphp638", "mlbb-double332", "sgmy-mlbb893", "value-pass-ml948", "mlbb-russia953", "mlbb-indo42"];
-  if (mlbbSlugs.some((k) => s.includes(k))) return "Mobile Legends";
-  if (s.includes("pubg-mobile138")) return "BGMI";
-  return slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  const s = (slug || "").toLowerCase();
+  if (s.includes("mobile-legend") || s.includes("mlbb")) return "Mobile Legends";
+  if (s.includes("pubg") || s.includes("bgmi")) return "BGMI";
+  if (s.includes("free-fire") || s.includes("freefire")) return "Free Fire";
+  if (s.includes("genshin")) return "Genshin Impact";
+  if (s.includes("valorant")) return "Valorant";
+  return slug
+    .split("-")
+    .filter((w) => !/\d{2,}$/.test(w))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ") || slug;
 };
 
 /* ================= MAIN ================= */
 
 export default function OrderItem({ order }: { order: OrderType }) {
-  const [open, setOpen] = useState(false);
   const [showReceipt, setShowReceipt] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyOrderId = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(order.orderId);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy order ID", err);
+    }
+  };
 
   const getDisplayStatus = () => {
     const s = (order.status || "").toLowerCase();
@@ -60,104 +65,177 @@ export default function OrderItem({ order }: { order: OrderType }) {
 
   const currentStatus = getDisplayStatus();
 
-  const statusConfig = {
-    success: { label: "Success", color: "text-green-500", bg: "bg-green-500/10", border: "border-green-500/20", icon: <FiCheckCircle className="text-[10px]" /> },
-    failed: { label: "Failed", color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500/20", icon: <FiX className="text-[10px]" /> },
-    pending: { label: "Pending", color: "text-yellow-500", bg: "bg-yellow-500/10", border: "border-yellow-500/20", icon: <FiClock className="text-[10px] animate-pulse" /> },
-    refund: { label: "Refunded", color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/20", icon: <FiRotateCcw className="text-[10px]" /> },
-  }[currentStatus] || { label: currentStatus.toUpperCase(), color: "text-yellow-500", bg: "bg-yellow-500/10", border: "border-yellow-500/20", icon: <FiClock className="text-[10px]" /> };
-
   return (
     <>
-      <motion.div
-        layout
-        className="group relative rounded-xl border border-[var(--border)] bg-[var(--card)]/50 backdrop-blur-sm shadow-sm hover:border-[var(--accent)]/30 transition-all overflow-hidden"
-      >
+      <div className="group relative rounded-2xl border border-[var(--border)] bg-[var(--card)]/70 hover:border-[var(--accent)]/40 transition-all p-3 sm:p-3.5 shadow-xs overflow-hidden">
+        {/* Background Ambient Gaming Vector SVG Watermark */}
+        <svg
+          className="absolute -bottom-3 -right-3 w-28 h-28 opacity-[0.035] dark:opacity-[0.07] text-[var(--accent)] pointer-events-none select-none transition-transform duration-500 group-hover:scale-105"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polygon points="6 3 18 3 22 9 12 22 2 9" />
+          <line x1="2" y1="9" x2="22" y2="9" />
+          <line x1="12" y1="22" x2="7" y2="9" />
+          <line x1="12" y1="22" x2="17" y2="9" />
+        </svg>
+
         {/* Glow Element */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 blur-[50px] -mr-16 -mt-16 group-hover:bg-[var(--accent)]/10 transition-colors" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 blur-[50px] -mr-16 -mt-16 group-hover:bg-[var(--accent)]/10 transition-colors pointer-events-none" />
 
-        {/* COMPACT VIEW */}
-        <div className="px-3 py-2 sm:px-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-[var(--accent)]/5 border border-[var(--border)] flex items-center justify-center text-[var(--accent)] transition-all">
-                <FiPackage className="text-sm" />
-              </div>
-              <div>
-                <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 block mb-0.5">#{order.orderId}</span>
-                <h3 className="text-[11px] font-bold text-[var(--foreground)] leading-tight">
-                  {order.itemName}
-                </h3>
-              </div>
+        {/* ROW 1: Title + Price + Status + Receipt */}
+        <div className="flex items-center justify-between gap-2.5">
+          {/* Left: Pure Vector Gaming Icon (no card-like border) + Item Title */}
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--accent)] flex items-center justify-center shrink-0">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="6 3 18 3 22 9 12 22 2 9" />
+                <line x1="2" y1="9" x2="22" y2="9" />
+                <line x1="12" y1="22" x2="7" y2="9" />
+                <line x1="12" y1="22" x2="17" y2="9" />
+              </svg>
             </div>
 
-            <div className="flex items-center justify-between sm:justify-end gap-5 border-t sm:border-t-0 border-[var(--border)] pt-2.5 sm:pt-0">
-              <div className="text-right">
-                <div className="flex items-center justify-end gap-1 text-[8px] font-medium text-[var(--muted)] mb-0.5 uppercase">
-                  <FiCalendar /> {new Date(order.createdAt).toLocaleDateString()}
-                </div>
-                <div className="text-xs font-bold text-[var(--foreground)]">₹{order.price.toFixed(2)}</div>
-              </div>
+            <h3 className="text-xs sm:text-sm font-extrabold text-[var(--foreground)] tracking-tight truncate leading-tight">
+              {order.itemName}
+            </h3>
+          </div>
 
-              <div className="flex items-center gap-2">
-                <div className={`px-2 py-0.5 rounded-lg border ${statusConfig.bg} ${statusConfig.border} ${statusConfig.color} flex items-center gap-1.5`}>
-                  <div className="w-1 h-1 rounded-full bg-current" />
-                  <span className="text-[8px] font-bold uppercase tracking-wider">{statusConfig.label}</span>
-                </div>
+          {/* Right: Price + Status Badge + Receipt Button */}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xs sm:text-sm font-black text-[var(--foreground)] tracking-tight">
+              ₹{order.price.toFixed(2)}
+            </span>
 
-                <div className="flex gap-1.5">
-                  <button
-                    onClick={() => setShowReceipt(true)}
-                    className="h-7 w-7 rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white flex items-center justify-center transition-all"
-                  >
-                    <FiExternalLink size={12} />
-                  </button>
-
-                  <button
-                    onClick={() => setOpen(!open)}
-                    className={`h-7 w-7 rounded-lg border border-[var(--border)] flex items-center justify-center transition-all ${open ? "bg-[var(--accent)] text-white border-[var(--accent)]" : "hover:bg-[var(--card)]"}`}
-                  >
-                    <FiChevronDown
-                      size={13}
-                      className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`}
-                    />
-                  </button>
-                </div>
-              </div>
+            {/* Status Badge */}
+            <div className="flex items-center">
+              {currentStatus === "success" && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[8.5px] font-black uppercase tracking-wider leading-none">
+                  <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  Success
+                </span>
+              )}
+              {currentStatus === "pending" && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[8.5px] font-black uppercase tracking-wider leading-none">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  Pending
+                </span>
+              )}
+              {currentStatus === "failed" && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-rose-500/10 text-rose-500 border border-rose-500/20 text-[8.5px] font-black uppercase tracking-wider leading-none">
+                  <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                  Failed
+                </span>
+              )}
+              {currentStatus === "refund" && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-500/10 text-blue-500 border border-blue-500/20 text-[8.5px] font-black uppercase tracking-wider leading-none">
+                  Refunded
+                </span>
+              )}
             </div>
+
+            {/* Receipt Modal Trigger */}
+            <button
+              type="button"
+              onClick={() => setShowReceipt(true)}
+              className="w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-lg border border-[var(--border)]/80 hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black text-[var(--muted)] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95 ml-0.5"
+              title="View Receipt"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16l3-1.5 3 1.5 3-1.5 3 1.5 3-1.5 3 1.5V4a2 2 0 0 0-2-2z" />
+                <line x1="8" y1="7" x2="16" y2="7" />
+                <line x1="8" y1="11" x2="16" y2="11" />
+                <line x1="8" y1="15" x2="12" y2="15" />
+              </svg>
+            </button>
           </div>
         </div>
 
-        {/* EXPANDED CONTENT */}
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-              className="overflow-hidden"
-            >
-              <div className="px-5 pb-5 sm:px-6 border-t border-[var(--border)]/50 pt-4">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
-                  <DetailBox label="Game" value={getGameName(order.gameSlug)} icon={<FiPackage />} />
-                  <DetailBox label="Player ID" value={order.playerId} mono icon={<FiUser />} />
-                  <DetailBox label="Zone ID" value={order.zoneId} mono icon={<FiGrid />} />
-                  <DetailBox label="Payment" value={order.paymentMethod.toUpperCase()} icon={<FiCreditCard />} />
-                </div>
+        {/* ROW 2: Order ID (with 1-click copy) + Date spanning full width to avoid collision */}
+        <div className="flex items-center gap-2 text-[10px] text-[var(--muted)] font-mono mt-1.5 pl-7 sm:pl-8">
+          <button
+            type="button"
+            onClick={handleCopyOrderId}
+            className="inline-flex items-center gap-1 hover:text-[var(--foreground)] transition-colors cursor-pointer group/copy"
+            title="Click to copy full Order ID"
+          >
+            <span className="truncate max-w-[150px] sm:max-w-[260px]">
+              #{order.orderId}
+            </span>
+            {copied ? (
+              <span className="inline-flex items-center gap-0.5 text-emerald-500 font-bold text-[8.5px] uppercase">
+                <svg className="w-2.5 h-2.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Copied
+              </span>
+            ) : (
+              <svg className="w-3 h-3 opacity-40 group-hover/copy:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+            )}
+          </button>
 
-                {currentStatus === "pending" && (
-                  <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/5 border border-yellow-500/10">
-                    <FiClock size={11} className="text-yellow-500 animate-pulse" />
-                    <span className="text-[9px] font-black text-yellow-500 uppercase tracking-widest">Processing Transaction</span>
-                  </div>
+          <span>•</span>
+          <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+        </div>
+
+        {/* ROW 3: Clean metadata bar */}
+        <div className="mt-2.5 pt-2 border-t border-[var(--border)]/40 flex items-center justify-between gap-2 text-[10px] text-[var(--muted)] overflow-hidden">
+          {/* Game & Player ID */}
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="inline-flex items-center gap-1 font-bold text-[var(--foreground)]/90 truncate shrink-0">
+              <svg className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="6" width="20" height="12" rx="4" />
+                <path d="M6 12h4m-2-2v4" />
+                <circle cx="15.5" cy="10" r="1" fill="currentColor" />
+                <circle cx="17.5" cy="13" r="1" fill="currentColor" />
+              </svg>
+              <span className="truncate max-w-[95px] sm:max-w-none">{getGameName(order.gameSlug)}</span>
+            </div>
+
+            <span className="text-[var(--border)] shrink-0">•</span>
+
+            <div className="inline-flex items-center gap-1 font-mono truncate">
+              <svg className="w-3.5 h-3.5 text-[var(--muted)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              <span className="truncate">
+                ID: <strong className="text-[var(--foreground)] font-bold">{order.playerId}</strong>
+                {order.zoneId && order.zoneId !== "NA" && (
+                  <span className="text-[var(--muted)]"> ({order.zoneId})</span>
                 )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+              </span>
+            </div>
+          </div>
+
+          {/* Payment Method */}
+          <div className="inline-flex items-center gap-1 uppercase font-bold text-[var(--foreground)]/80 shrink-0">
+            {order.paymentMethod?.toLowerCase() === "wallet" ? (
+              <svg className="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="6" width="20" height="13" rx="2.5" />
+                <path d="M16 12h5v4h-5a2 2 0 0 1-2-2v0a2 2 0 0 1 2-2z" fill="currentColor" fillOpacity="0.25" />
+              </svg>
+            ) : (
+              <svg className="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none">
+                <path d="M14.2 3.5L8.5 13.5H13L10.5 20.5L18.5 9.5H13.8L16 3.5H14.2Z" fill="currentColor" />
+              </svg>
+            )}
+            <span>{order.paymentMethod}</span>
+          </div>
+        </div>
+      </div>
 
       <AnimatePresence>
         {showReceipt && (
@@ -165,22 +243,6 @@ export default function OrderItem({ order }: { order: OrderType }) {
         )}
       </AnimatePresence>
     </>
-  );
-}
-
-/* ================= HELPERS ================= */
-
-function DetailBox({ label, value, icon, mono }: { label: string, value: string, icon: any, mono?: boolean }) {
-  return (
-    <div className="p-2 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all">
-      <div className="flex items-center gap-2 mb-0.5 text-[var(--muted)]">
-        <div className="text-[10px]">{icon}</div>
-        <span className="text-[7px] font-black uppercase tracking-widest">{label}</span>
-      </div>
-      <p className={`text-[10px] font-bold ${mono ? "font-mono" : ""} text-[var(--foreground)]`}>
-        {value || "---"}
-      </p>
-    </div>
   );
 }
 
@@ -247,8 +309,13 @@ STATUS:    SUCCESS
         </button>
 
         <div className="flex flex-col items-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center mb-3">
-            <FiPackage className="text-[var(--accent)] text-xl" />
+          <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center mb-3 border border-[var(--accent)]/20 shadow-xs">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="6 3 18 3 22 9 12 22 2 9" />
+              <line x1="2" y1="9" x2="22" y2="9" />
+              <line x1="12" y1="22" x2="7" y2="9" />
+              <line x1="12" y1="22" x2="17" y2="9" />
+            </svg>
           </div>
           <h2 className="text-xl font-bold text-[var(--foreground)]">
             Order Receipt
