@@ -6,13 +6,16 @@ import Skeleton from "../Skeleton";
  * Matches the actual TopNoticeBanner pill layout with icon, text, and action
  */
 export const TopNoticeBannerSkeleton = () => (
-  <div className="w-full bg-[var(--card)]/60 border-b border-[var(--border)] py-2 px-4">
-    <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+  <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-12 pt-2 sm:pt-2.5 pb-1">
+    <div className="w-full rounded-2xl border border-[var(--border)] bg-[var(--card)]/60 px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between gap-3">
       <div className="flex items-center gap-2.5 flex-1 min-w-0">
-        <Skeleton width={18} height={18} className="rounded-md shrink-0" />
-        <Skeleton width="45%" height={12} className="rounded-full max-w-[280px]" />
+        <Skeleton width={32} height={32} className="rounded-xl shrink-0" />
+        <Skeleton width="40%" height={14} className="rounded-full max-w-[240px]" />
       </div>
-      <Skeleton width={16} height={16} variant="circle" className="shrink-0" />
+      <div className="flex items-center gap-2 shrink-0">
+        <Skeleton width={64} height={26} className="rounded-full" />
+        <Skeleton width={20} height={20} variant="circle" />
+      </div>
     </div>
   </div>
 );

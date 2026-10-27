@@ -114,13 +114,45 @@ export default function ReviewAndPaymentStep({
 
   if (step === 3 && paymentMethod === "upi") {
     return (
-      <div className="bg-[var(--card)] p-8 rounded-2xl border border-[var(--border)] text-center animate-in zoom-in duration-300">
-        <h3 className="text-xl font-bold mb-2">Scan & Pay</h3>
-        <p className="text-sm text-[var(--muted)] mb-6">Scan this QR code in any UPI app to pay.</p>
+      <div className="bg-[var(--card)] p-6 sm:p-8 rounded-2xl border border-[var(--border)] text-center animate-in zoom-in duration-300">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs font-black uppercase tracking-wider mb-2">
+          {/* UPI SVG Badge */}
+          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none">
+            <path d="M14.2 3.5L8.5 13.5H13L10.5 20.5L18.5 9.5H13.8L16 3.5H14.2Z" fill="url(#qrUpiGrad)" />
+            <defs>
+              <linearGradient id="qrUpiGrad" x1="8.5" y1="3.5" x2="18.5" y2="20.5" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#F97316" />
+                <stop offset="0.5" stopColor="#EAB308" />
+                <stop offset="1" stopColor="#22C55E" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>UPI Instant Payment</span>
+        </div>
+        <h3 className="text-xl font-bold mb-1">Scan & Pay</h3>
+        <p className="text-xs text-[var(--muted)] mb-5">Open PhonePe, Paytm, or any UPI app and scan to pay</p>
 
-        <div className="relative w-56 h-56 mx-auto bg-white p-4 rounded-2xl shadow-2xl border-4 border-[var(--accent)]">
+        {/* QR Code Container with High-Tech Corner Reticle SVGs */}
+        <div className="relative w-56 h-56 mx-auto bg-white p-3 rounded-2xl shadow-xl border-2 border-[var(--border)]">
+          {/* Reticle Top Left */}
+          <svg className="absolute -top-2.5 -left-2.5 w-6 h-6 text-[var(--accent)] pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 2H4a2 2 0 0 0-2 2v5" />
+          </svg>
+          {/* Reticle Top Right */}
+          <svg className="absolute -top-2.5 -right-2.5 w-6 h-6 text-[var(--accent)] pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 2h5a2 2 0 0 1 2 2v5" />
+          </svg>
+          {/* Reticle Bottom Left */}
+          <svg className="absolute -bottom-2.5 -left-2.5 w-6 h-6 text-[var(--accent)] pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 22H4a2 2 0 0 1-2-2v-5" />
+          </svg>
+          {/* Reticle Bottom Right */}
+          <svg className="absolute -bottom-2.5 -right-2.5 w-6 h-6 text-[var(--accent)] pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 22h5a2 2 0 0 0 2-2v-5" />
+          </svg>
+
           {upiQR ? (
-            <Image src={upiQR} alt="UPI QR" fill className="p-4" />
+            <Image src={upiQR} alt="UPI QR" fill className="p-3 object-contain" />
           ) : (
             <div className="h-full flex items-center justify-center animate-pulse text-[var(--muted)] text-xs">Creating QR...</div>
           )}
@@ -206,19 +238,45 @@ export default function ReviewAndPaymentStep({
         {/* UPI Button */}
         <button
           onClick={handleUPI}
-          className={`w-full p-3 rounded-xl border text-left flex justify-between items-center transition-all duration-300 group ${paymentMethod === "upi"
+          className={`w-full p-3 rounded-xl border text-left flex justify-between items-center transition-all duration-300 group cursor-pointer ${paymentMethod === "upi"
             ? "border-[var(--accent)] bg-[var(--accent)]/[0.05]"
             : "border-[var(--border)] bg-[var(--foreground)]/[0.02] hover:border-[var(--accent)]/30"
           }`}
         >
           <div className="flex items-center gap-3">
-            <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 ${paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 shadow-xs ${paymentMethod === 'upi' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.05] text-[var(--foreground)]'
             }`}>
-              <FiCreditCard size={18} />
+              {/* Modern UPI Dual Lightning / Chevron Vector */}
+              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
+                <path d="M14.2 3.5L8.5 13.5H13L10.5 20.5L18.5 9.5H13.8L16 3.5H14.2Z" fill={paymentMethod === 'upi' ? "#000000" : "url(#upiGradLight)"} />
+                <defs>
+                  <linearGradient id="upiGradLight" x1="8.5" y1="3.5" x2="18.5" y2="20.5" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#F97316" />
+                    <stop offset="0.5" stopColor="#EAB308" />
+                    <stop offset="1" stopColor="#22C55E" />
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
             <div>
-              <p className="font-black text-sm uppercase tracking-tight italic">Pay with UPI</p>
-              <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">Google Pay, PhonePe, Paytm</p>
+              <div className="flex items-center gap-1.5">
+                <p className="font-black text-sm uppercase tracking-tight italic">Pay with UPI</p>
+                <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">Instant</span>
+              </div>
+              <div className="flex items-center gap-1.5 mt-1">
+                {/* PhonePe mini brand pill */}
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-[#5F259F]/15 border border-[#5F259F]/30 text-[#a855f7] text-[8.5px] font-bold">
+                  PhonePe
+                </span>
+                {/* Paytm mini brand pill */}
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-[#002970]/20 border border-[#00BAF2]/30 text-[#00BAF2] text-[8.5px] font-bold">
+                  Paytm
+                </span>
+                {/* UPI pill */}
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-[var(--foreground)]/[0.05] border border-[var(--border)]/60 text-[8.5px] font-bold text-[var(--muted)]">
+                  BHIM / Any UPI
+                </span>
+              </div>
             </div>
           </div>
           <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${paymentMethod === 'upi' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
@@ -232,19 +290,25 @@ export default function ReviewAndPaymentStep({
             if (walletBalance < totalPrice) return;
             setPaymentMethod("wallet");
           }}
-          className={`w-full p-3 rounded-xl border text-left flex justify-between items-center transition-all duration-300 group ${paymentMethod === "wallet"
+          className={`w-full p-3 rounded-xl border text-left flex justify-between items-center transition-all duration-300 group cursor-pointer ${paymentMethod === "wallet"
             ? "border-[var(--accent)] bg-[var(--accent)]/[0.05]"
             : "border-[var(--border)] bg-[var(--foreground)]/[0.02] hover:border-[var(--accent)]/30"
           } ${walletBalance < totalPrice ? "opacity-40 cursor-not-allowed grayscale" : ""}`}
         >
           <div className="flex items-center gap-3">
-            <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 shadow-xs ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--foreground)]/[0.05] text-[var(--muted)]'
             }`}>
-              <FiActivity size={18} />
+              {/* Sleek Digital Wallet / Coin SVG Vector */}
+              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="6" width="20" height="13" rx="2.5" />
+                <path d="M16 12h5v4h-5a2 2 0 0 1-2-2v0a2 2 0 0 1 2-2z" fill={paymentMethod === 'wallet' ? "currentColor" : "currentColor"} fillOpacity="0.25" />
+                <circle cx="18" cy="14" r="1" fill="currentColor" />
+                <path d="M5 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" strokeDasharray="1.5 2" />
+              </svg>
             </div>
             <div>
               <p className="font-black text-sm uppercase tracking-tight italic">Pay with Wallet</p>
-              <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">Balance: ₹{walletBalance.toFixed(2)}</p>
+              <p className="text-[8.5px] font-bold text-[var(--muted)] uppercase tracking-wider mt-0.5">Balance: ₹{walletBalance.toFixed(2)}</p>
             </div>
           </div>
           <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${paymentMethod === 'wallet' ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-[var(--border)]'}`}>
@@ -282,7 +346,9 @@ export default function ReviewAndPaymentStep({
         {stopOrders && (
           <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex items-center justify-center text-center animate-in fade-in zoom-in duration-300">
             <p className="text-sm font-bold text-red-500 flex items-center gap-2">
-              <FiShield className="shrink-0" />
+              <svg className="w-4 h-4 shrink-0 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
               We are currently not accepting new orders.
             </p>
           </div>
@@ -291,12 +357,18 @@ export default function ReviewAndPaymentStep({
         <button
           onClick={handleProceed}
           disabled={stopOrders || isRedirecting || !paymentMethod || (paymentMethod === "wallet" && walletBalance < totalPrice)}
-          className="w-full py-3.5 rounded-xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] italic hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 text-sm"
+          className="w-full py-3.5 rounded-xl bg-[var(--accent)] text-black font-black uppercase tracking-[0.2em] italic hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 text-sm cursor-pointer shadow-md"
         >
           {isRedirecting ? (
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-5 h-5 border-3 border-black border-t-transparent rounded-full" />
           ) : (
-            <>Buy Now <FiZap /></>
+            <span className="flex items-center gap-2">
+              <span>Buy Now</span>
+              {/* Lightning Bolt SVG */}
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+            </span>
           )}
         </button>
       </div>

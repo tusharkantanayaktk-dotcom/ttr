@@ -23,7 +23,11 @@ export default function RecentVerifiedPlayers({
       {/* Header with Show / Hide Button */}
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-1.5">
-          <FiUser className="text-[var(--muted)]" size={11} />
+          {/* History / Clock SVG */}
+          <svg className="w-3 h-3 text-[var(--accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="9" />
+            <polyline points="12 7 12 12 15 15" />
+          </svg>
           <span className="text-[9px] font-black uppercase tracking-wider text-[var(--muted)]">
             Recent Players ({players.length})
           </span>
@@ -32,7 +36,7 @@ export default function RecentVerifiedPlayers({
         <button
           type="button"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-[9px] font-bold text-[var(--accent)] hover:underline flex items-center gap-1 uppercase tracking-tight py-0.5 px-1.5 rounded-md hover:bg-[var(--accent)]/10 transition-colors"
+          className="text-[9px] font-bold text-[var(--accent)] hover:underline flex items-center gap-1 uppercase tracking-tight py-0.5 px-1.5 rounded-md hover:bg-[var(--accent)]/10 transition-colors cursor-pointer"
         >
           <span>{isExpanded ? "Hide" : "Show"}</span>
           {isExpanded ? <FiChevronUp size={11} /> : <FiChevronDown size={11} />}
@@ -46,49 +50,39 @@ export default function RecentVerifiedPlayers({
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="space-y-2 overflow-hidden"
+            className="flex flex-wrap gap-1.5 overflow-hidden pt-0.5"
           >
             {players.map((p, index) => (
               <motion.button
                 key={`${p.playerId}-${p.zoneId}-${index}`}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.03 }}
                 onClick={() => onSelect(p)}
-                className="group w-full flex items-center justify-between p-3 rounded-xl bg-[var(--card)]/20 border border-[var(--border)]/20 hover:border-[var(--accent)]/50 hover:bg-[var(--card)]/40 transition-all duration-300 relative overflow-hidden"
+                className="group inline-flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[var(--foreground)]/[0.03] hover:bg-[var(--accent)]/15 border border-[var(--border)]/60 hover:border-[var(--accent)]/50 transition-all text-left cursor-pointer active:scale-95"
               >
-                <div className="flex items-center gap-3 relative z-10">
-                  <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-black transition-all">
-                    <FiUser size={14} />
-                  </div>
-                  <div className="text-left">
-                    <p className="font-black text-xs tracking-tight text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors uppercase italic leading-none mb-0.5">
+                <div className="w-5 h-5 rounded-md bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center shrink-0 group-hover:bg-[var(--accent)] group-hover:text-black transition-colors">
+                  {/* Gamer Headset / Avatar SVG */}
+                  <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 14a8 8 0 0 1 16 0v2a2 2 0 0 1-2 2h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h2a6 6 0 0 0-12 0h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-2z" />
+                    <path d="M12 18v3m-3 0h6" />
+                  </svg>
+                </div>
+                <div className="min-w-0 pr-0.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-extrabold text-[11px] text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-tight truncate max-w-[120px]">
                       {p.username}
-                    </p>
-
-                    <div className="flex items-center gap-1.5 text-[9px] font-bold text-[var(--foreground)]/50 uppercase tracking-tighter">
-                      <span>{p.playerId}</span>
-                      {p.zoneId && p.zoneId !== "NA" && (
-                        <>
-                          <span className="opacity-20">/</span>
-                          <span>{p.zoneId}</span>
-                        </>
-                      )}
-                    </div>
+                    </span>
+                    {p.region && (
+                      <span className="text-[8px] font-bold text-[var(--muted)] uppercase">
+                        {p.region}
+                      </span>
+                    )}
                   </div>
+                  <span className="text-[9.5px] text-[var(--muted)] font-mono block leading-none">
+                    {p.playerId}{p.zoneId && p.zoneId !== "NA" ? ` / ${p.zoneId}` : ""}
+                  </span>
                 </div>
-
-                <div className="flex items-center gap-3 relative z-10">
-                  <div className="hidden sm:flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--foreground)]/[0.05] border border-[var(--border)]/10">
-                    <FiGlobe size={10} className="text-[var(--accent)]" />
-                    <span className="text-[9px] font-black text-[var(--foreground)]/70 uppercase tracking-tighter">{p.region}</span>
-                  </div>
-
-                  <FiChevronRight className="text-[var(--foreground)]/20 group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" size={14} />
-                </div>
-
-                {/* HOVER GLOW */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--accent)]/3 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
               </motion.button>
             ))}
           </motion.div>

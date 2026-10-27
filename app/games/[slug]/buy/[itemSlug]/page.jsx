@@ -212,96 +212,79 @@ export default function BuyFlowPage() {
           {!showSuccess && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
 
-              {/* LEFT COLUMN: SELECTED ITEM & MORE PACKS */}
-              <div className="lg:col-span-5 space-y-4">
+              {/* LEFT COLUMN: SELECTED ITEM & MORE PACKS (Unified Left Panel) */}
+              <div className="lg:col-span-5 bg-[var(--card)] rounded-2xl border border-[var(--border)] p-3 sm:p-3.5 space-y-3 shadow-xs h-fit">
+                {/* Header inside Card: Back Button & Tag */}
+                <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]/40">
+                  <button
+                    onClick={() => router.back()}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors group cursor-pointer"
+                  >
+                    <FiArrowLeft size={13} className="text-[var(--accent)] group-hover:-translate-x-0.5 transition-transform" />
+                    <span>Back</span>
+                  </button>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]">Selected Pack</span>
+                </div>
 
-                {/* HERO CARD (Compact with Integrated Back Button) */}
-                <motion.div
-                  layoutId={`item-${activeItem.itemSlug}`}
-                  className="relative bg-[var(--card)] rounded-2xl p-2.5 sm:p-3 border border-[var(--border)] overflow-hidden group shadow-xs"
-                >
-                  {/* Subtle Background Glow */}
-                  <div className="absolute top-0 right-0 w-36 h-36 bg-[var(--accent)]/10 blur-[60px] -mr-16 -mt-16 pointer-events-none" />
-
-                  {/* Header inside Card: Back Button & Tag */}
-                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[var(--border)]/30 relative z-10">
-                    <button
-                      onClick={() => router.back()}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors group"
-                    >
-                      <FiArrowLeft size={13} className="text-[var(--accent)] group-hover:-translate-x-0.5 transition-transform" />
-                      <span>Back</span>
-                    </button>
-                    <span className="text-[9px] font-black uppercase tracking-widest text-[var(--muted)]">Selected Pack</span>
+                <div className="flex items-center gap-2.5 sm:gap-3 relative">
+                  {/* Compact Icon Pod */}
+                  <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-black/20 border border-[var(--border)] shrink-0 flex items-center justify-center p-0.5">
+                    <Image
+                      src={activeItem.itemImageId?.image || fallbackImage || logo}
+                      alt={activeItem.itemName}
+                      fill
+                      className="object-contain p-0.5"
+                    />
+                    {discountPerc > 0 && (
+                      <div className="absolute top-0 left-0 bg-red-600 text-white text-[7.5px] font-black px-1.5 py-0.5 rounded-br-md leading-none shadow-xs z-10">
+                        {discountPerc}%
+                      </div>
+                    )}
                   </div>
 
-                  <div className="flex items-center gap-2.5 sm:gap-3 relative z-10">
-                    {/* Compact Icon Pod */}
-                    <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-black/20 border border-[var(--border)] shrink-0 transition-transform duration-300 group-hover:scale-105 flex items-center justify-center p-0.5">
-                      <Image
-                        src={activeItem.itemImageId?.image || fallbackImage || logo}
-                        alt={activeItem.itemName}
-                        fill
-                        className="object-contain p-0.5"
-                      />
-                      {discountPerc > 0 && (
-                        <div className="absolute top-0 left-0 bg-red-600 text-white text-[7.5px] font-black px-1.5 py-0.5 rounded-br-md leading-none shadow-xs z-10">
-                          {discountPerc}%
-                        </div>
+                  {/* Content: Title & Price */}
+                  <div className="flex flex-col justify-center min-w-0 pr-2">
+                    <h1 className="text-xs sm:text-[13px] font-extrabold tracking-tight leading-snug text-[var(--foreground)]">
+                      {activeItem.itemName}
+                    </h1>
+
+                    <div className="flex items-baseline gap-1.5 mt-0.5">
+                      <span className="text-sm sm:text-base font-black text-[var(--accent)] tracking-tight">₹{activeItem.sellingPrice}</span>
+                      {activeItem.dummyPrice > activeItem.sellingPrice && (
+                        <span className="text-[10px] text-[var(--muted)] line-through font-semibold">₹{activeItem.dummyPrice}</span>
                       )}
-                    </div>
-
-                    {/* Content: Title & Price (no instant delivery) */}
-                    <div className="flex flex-col justify-center min-w-0 pr-10">
-                      <h1 className="text-xs sm:text-[13px] font-extrabold tracking-tight truncate leading-tight text-[var(--foreground)]">
-                        {activeItem.itemName}
-                      </h1>
-
-                      <div className="flex items-baseline gap-1 mt-0.5">
-                        <span className="text-sm sm:text-base font-black text-[var(--accent)] tracking-tight">₹{activeItem.sellingPrice}</span>
-                        {activeItem.dummyPrice > activeItem.sellingPrice && (
-                          <span className="text-[10px] text-[var(--muted)] line-through font-semibold">₹{activeItem.dummyPrice}</span>
-                        )}
-                      </div>
                     </div>
                   </div>
 
                   {/* Modern Faceted Gaming Diamond SVG Watermark */}
-                  <div className="absolute bottom-2.5 right-2.5 pointer-events-none opacity-[0.09] group-hover:opacity-[0.16] transition-opacity text-[var(--accent)]">
-                    <svg className="w-8 h-8 sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <div className="absolute -bottom-1 -right-1 pointer-events-none opacity-[0.10] text-[var(--accent)]">
+                    <svg className="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                       <polygon points="6 3 18 3 22 9 12 22 2 9" />
                       <line x1="2" y1="9" x2="22" y2="9" />
                       <line x1="12" y1="22" x2="7" y2="9" />
                       <line x1="12" y1="22" x2="17" y2="9" />
-                      <line x1="7" y1="9" x2="10" y2="3" />
-                      <line x1="17" y1="9" x2="14" y2="3" />
                     </svg>
                   </div>
-                </motion.div>
+                </div>
 
-                {/* MORE PACKS SECTION (Collapsible, Default Hidden, Compact) */}
-                <div className="space-y-2">
+                {/* Integrated More Packs Toggle */}
+                <div className="pt-2 border-t border-[var(--border)]/40">
                   <button
                     type="button"
                     onClick={() => setShowMorePacks(!showMorePacks)}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-[var(--card)]/60 hover:bg-[var(--card)] border border-[var(--border)] transition-all duration-200 group text-left cursor-pointer shadow-2xs hover:border-[var(--accent)]/40"
+                    className="w-full flex items-center justify-between py-1 text-left cursor-pointer group"
                   >
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center">
-                        <svg className="w-3 h-3 fill-current" viewBox="0 0 16 16">
-                          <path d="M8 1L1 4.5V11.5L8 15L15 11.5V4.5L8 1Z" fillOpacity="0.3" stroke="currentColor" strokeWidth="1.5"/>
-                        </svg>
-                      </div>
-                      <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-[var(--foreground)]">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10.5px] font-extrabold uppercase tracking-wider text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
                         More Packs
                       </span>
-                      <span className="text-[9px] text-[var(--muted)] font-bold">({allItems.length})</span>
+                      <span className="text-[9.5px] text-[var(--muted)] font-bold">({allItems.length})</span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--accent)]">
+                    <div className="flex items-center gap-1 text-[10px] font-bold text-[var(--accent)]">
                       <span>{showMorePacks ? "Hide" : "Show"}</span>
                       <motion.div animate={{ rotate: showMorePacks ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                        <FiChevronDown size={14} />
+                        <FiChevronDown size={13} />
                       </motion.div>
                     </div>
                   </button>
@@ -314,9 +297,9 @@ export default function BuyFlowPage() {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
+                        className="overflow-hidden pt-2"
                       >
-                        <div className="flex overflow-x-auto no-scrollbar gap-1.5 pb-1.5 pt-1 md:grid md:grid-cols-4 lg:grid-cols-3">
+                        <div className="flex overflow-x-auto no-scrollbar gap-1.5 pb-1 md:grid md:grid-cols-3">
                           {allItems.map((item) => {
                             const isSelected = activeItem.itemSlug === item.itemSlug;
                             return (
@@ -327,21 +310,21 @@ export default function BuyFlowPage() {
                                   router.replace(`/games/${slug}/buy/${item.itemSlug}`, { scroll: false });
                                 }}
                                 className={`
-                                relative p-2 rounded-xl border transition-all duration-200 text-left overflow-hidden group min-h-[46px] sm:min-h-[50px] flex flex-col justify-center shrink-0 min-w-[95px] sm:min-w-[105px] md:w-full cursor-pointer
+                                relative p-2 rounded-lg border transition-all duration-200 text-left overflow-hidden group min-h-[44px] flex flex-col justify-center shrink-0 min-w-[95px] md:w-full cursor-pointer
                                 ${isSelected
-                                    ? "bg-[var(--accent)]/[0.1] border-[var(--accent)] ring-1 ring-[var(--accent)] shadow-xs"
-                                    : "bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/90"}
+                                    ? "bg-[var(--accent)]/[0.1] border-[var(--accent)] ring-1 ring-[var(--accent)]"
+                                    : "bg-[var(--foreground)]/[0.02] border-[var(--border)]/70 hover:border-[var(--accent)]/40"}
                               `}
                               >
                                 {isSelected && (
-                                  <div className="absolute top-1.5 right-1.5 w-3 h-3 bg-[var(--accent)] text-white rounded-full flex items-center justify-center z-10 shadow-xs">
+                                  <div className="absolute top-1 right-1 w-3 h-3 bg-[var(--accent)] text-white rounded-full flex items-center justify-center z-10 shadow-xs">
                                     <FiCheck size={8} strokeWidth={4} />
                                   </div>
                                 )}
-                                <p className={`text-[9.5px] sm:text-[10px] font-bold tracking-tight truncate leading-tight pr-3 ${isSelected ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
+                                <p className={`text-[9.5px] font-bold tracking-tight truncate leading-tight pr-3 ${isSelected ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
                                   {item.itemName}
                                 </p>
-                                <p className="text-[11px] sm:text-xs font-black tracking-tight mt-0.5 text-[var(--foreground)]">₹{item.sellingPrice}</p>
+                                <p className="text-[11px] font-black tracking-tight mt-0.5 text-[var(--foreground)]">₹{item.sellingPrice}</p>
                               </button>
                             );
                           })}
@@ -352,30 +335,36 @@ export default function BuyFlowPage() {
                 </div>
               </div>
 
-              {/* RIGHT COLUMN: PLAYER INFO & PAYMENT */}
-              <div className="lg:col-span-7 space-y-4">
+              {/* RIGHT COLUMN: PLAYER INFO & PAYMENT (Unified Single Checkout Panel) */}
+              <div className="lg:col-span-7 bg-[var(--card)] rounded-2xl border border-[var(--border)] divide-y divide-[var(--border)]/50 shadow-xs overflow-hidden h-fit">
 
                 {/* SECTION 1: PLAYER INFO */}
-                <div className="bg-[var(--card)]/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-[var(--border)] space-y-4 shadow-sm backdrop-blur-xs">
+                <div className="p-4 sm:p-5 space-y-3.5">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-6 h-6 rounded-lg bg-[var(--accent)] text-white font-black text-xs flex items-center justify-center shadow-xs">
+                    <div className="w-5 h-5 rounded-md bg-[var(--accent)] text-white font-extrabold text-[11px] flex items-center justify-center">
                       1
                     </div>
-                    <h2 className="text-base sm:text-lg font-black tracking-tight text-[var(--foreground)]">Player Information</h2>
+                    <h2 className="text-sm sm:text-base font-extrabold tracking-tight text-[var(--foreground)]">Player Information</h2>
                   </div>
 
-                  <div className="space-y-3.5">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                       {/* PLAYER ID */}
                       <div className="relative group">
-                        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors">
-                          <FiUser size={15} />
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors pointer-events-none">
+                          {/* Gaming Controller / Player ID SVG */}
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="2" y="6" width="20" height="12" rx="4" />
+                            <path d="M6 12h4m-2-2v4" />
+                            <circle cx="15.5" cy="10" r="1" fill="currentColor" />
+                            <circle cx="17.5" cy="13" r="1" fill="currentColor" />
+                          </svg>
                         </div>
                         <input
                           value={playerId}
                           onChange={(e) => setPlayerId(e.target.value)}
                           placeholder="User ID"
-                          className="p-3 pl-10 rounded-xl bg-[var(--background)]/60 border border-[var(--border)] w-full text-[var(--foreground)] focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30 transition-all outline-none placeholder:text-[var(--muted)]/50 font-bold text-xs sm:text-sm"
+                          className="py-2.5 pl-9 pr-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)] w-full text-[var(--foreground)] focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30 transition-all outline-none placeholder:text-[var(--muted)]/50 font-bold text-xs"
                           disabled={loading || reviewData}
                         />
                       </div>
@@ -383,14 +372,19 @@ export default function BuyFlowPage() {
                       {/* ZONE ID */}
                       {needsZoneId && (
                         <div className="relative group">
-                          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors">
-                            <FiHash size={15} />
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-[var(--accent)] transition-colors pointer-events-none">
+                            {/* Server / Region Globe Grid SVG */}
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <circle cx="12" cy="12" r="9" />
+                              <line x1="3" y1="12" x2="21" y2="12" />
+                              <path d="M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z" />
+                            </svg>
                           </div>
                           <input
                             value={zoneId}
                             onChange={(e) => setZoneId(e.target.value)}
                             placeholder="Server ID"
-                            className="p-3 pl-10 rounded-xl bg-[var(--background)]/60 border border-[var(--border)] w-full text-[var(--foreground)] focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30 transition-all outline-none placeholder:text-[var(--muted)]/50 font-bold text-xs sm:text-sm"
+                            className="py-2.5 pl-9 pr-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)] w-full text-[var(--foreground)] focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30 transition-all outline-none placeholder:text-[var(--muted)]/50 font-bold text-xs"
                             disabled={loading || reviewData}
                           />
                         </div>
@@ -402,20 +396,32 @@ export default function BuyFlowPage() {
                       <button
                         onClick={handleValidate}
                         disabled={loading}
-                        className="w-full py-3 sm:py-3.5 rounded-xl bg-[var(--accent)] text-white font-extrabold text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.98] shadow-md shadow-[var(--accent)]/20"
+                        className="w-full py-2.5 sm:py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-black font-black text-xs tracking-wide transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-sm cursor-pointer"
                       >
                         {loading ? (
                           <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
-                            <FiSearch size={15} />
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                              <path d="M21 12a9 9 0 1 1-6.2-8.5" />
+                            </svg>
                           </motion.div>
-                        ) : <FiSearch size={15} />}
+                        ) : (
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            <circle cx="11" cy="11" r="3" strokeDasharray="2 2" />
+                          </svg>
+                        )}
                         <span>{loading ? "Checking Player..." : "Check Name"}</span>
                       </button>
                     ) : (
-                      <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 flex items-center justify-between">
+                      <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-2.5 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-emerald-500 text-black flex items-center justify-center">
-                            <FiCheck size={16} />
+                          {/* Verified Starburst Badge SVG */}
+                          <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                              <path d="M12 2l2.4 2.8 3.7-.4 1.1 3.5 3.3 1.7-1 3.5 1.9 3.1-2.9 2.3-.2 3.7-3.6 1-1.9 3.2-3.4-1.5-3.4 1.5-1.9-3.2-3.6-1-.2-3.7-2.9-2.3 1.9-3.1-1-3.5 3.3-1.7 1.1-3.5 3.7.4L12 2z" fill="#10B981" />
+                              <path d="M8.5 12.5l2.5 2.5 4.5-5" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
                           </div>
                           <div>
                             <p className="text-[8px] font-black uppercase tracking-wider text-emerald-500/60">Verified Player</p>
@@ -424,7 +430,7 @@ export default function BuyFlowPage() {
                         </div>
                         <button
                           onClick={() => setReviewData(null)}
-                          className="text-[9px] font-black uppercase tracking-wider text-[var(--muted)] hover:text-red-500 transition-colors"
+                          className="text-[9px] font-black uppercase tracking-wider text-[var(--muted)] hover:text-red-500 transition-colors cursor-pointer"
                         >
                           Change
                         </button>
@@ -438,7 +444,7 @@ export default function BuyFlowPage() {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 flex items-center gap-2.5"
+                          className="bg-red-500/10 border border-red-500/20 rounded-xl p-2.5 flex items-center gap-2"
                         >
                           <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                           <p className="text-[9px] font-black text-red-500 uppercase tracking-widest">{error}</p>
@@ -448,7 +454,7 @@ export default function BuyFlowPage() {
 
                     {/* RECENT PLAYERS */}
                     {!reviewData && (
-                      <div className="pt-3 border-t border-[var(--border)]/40">
+                      <div className="pt-2 border-t border-[var(--border)]/40">
                         <RecentVerifiedPlayers
                           limit={3}
                           onSelect={(player) => {
@@ -462,12 +468,12 @@ export default function BuyFlowPage() {
                 </div>
 
                 {/* SECTION 2: PAYMENT */}
-                <div className={`bg-[var(--card)]/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-[var(--border)] space-y-4 transition-all duration-300 shadow-sm backdrop-blur-xs ${!reviewData ? "opacity-40 grayscale pointer-events-none" : ""}`}>
+                <div className={`p-4 sm:p-5 space-y-3.5 transition-all duration-300 ${!reviewData ? "opacity-40 grayscale pointer-events-none bg-[var(--background)]/20" : ""}`}>
                   <div className="flex items-center gap-2.5">
-                    <div className="w-6 h-6 rounded-lg bg-[var(--accent)] text-white font-black text-xs flex items-center justify-center shadow-xs">
+                    <div className={`w-5 h-5 rounded-md font-extrabold text-[11px] flex items-center justify-center ${reviewData ? "bg-[var(--accent)] text-white" : "bg-[var(--border)] text-[var(--muted)]"}`}>
                       2
                     </div>
-                    <h2 className="text-base sm:text-lg font-black tracking-tight text-[var(--foreground)]">Payment Method</h2>
+                    <h2 className="text-sm sm:text-base font-extrabold tracking-tight text-[var(--foreground)]">Payment Method</h2>
                   </div>
 
                   <ReviewAndPaymentStep

@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { RiShieldKeyholeFill, RiLockPasswordLine, RiPhoneFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { FiArrowLeft } from "react-icons/fi";
+import Link from "next/link";
 
 interface GoogleAuthResponse {
   success: boolean;
@@ -264,6 +265,29 @@ export default function AuthPage() {
                     </button>
                   </motion.div>
 
+                  {/* Terms & Conditions Notice */}
+                  <p className="text-[11px] text-[var(--muted)]/70 text-center leading-relaxed max-w-[290px] mx-auto pt-1">
+                    By logging in, you agree to our{" "}
+                    <Link
+                      href="/terms-and-conditions"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--accent)] hover:underline font-semibold"
+                    >
+                      Terms &amp; Conditions
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      href="/privacy-policy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--accent)] hover:underline font-semibold"
+                    >
+                      Privacy Policy
+                    </Link>
+                    .
+                  </p>
+
                   {/* Loading Indicator */}
                   {loading && (
                     <div className="flex items-center justify-center gap-2 py-2">
@@ -405,6 +429,29 @@ export default function AuthPage() {
                       <span>Use a different account</span>
                     </button>
                   </div>
+
+                  {/* Terms & Conditions Notice */}
+                  <p className="text-[11px] text-[var(--muted)]/70 text-center leading-relaxed max-w-[290px] mx-auto pt-1">
+                    By continuing, you agree to our{" "}
+                    <Link
+                      href="/terms-and-conditions"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--accent)] hover:underline font-semibold"
+                    >
+                      Terms &amp; Conditions
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      href="/privacy-policy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--accent)] hover:underline font-semibold"
+                    >
+                      Privacy Policy
+                    </Link>
+                    .
+                  </p>
 
                   <div className="relative pt-4">
                     <div className="absolute inset-0 flex items-center">
