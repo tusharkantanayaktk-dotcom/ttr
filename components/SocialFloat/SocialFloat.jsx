@@ -10,19 +10,20 @@ import {
   FaShareNodes,
 } from "react-icons/fa6";
 import { RiChatSmile3Fill, RiCloseFill } from "react-icons/ri";
+import { SUPPORT_CONFIG } from "@/lib/config";
 
 const socialLinks = [
   {
     name: "WhatsApp",
     icon: FaWhatsapp,
-    url: "https://wa.me/918415836989",
+    url: SUPPORT_CONFIG.whatsappUrl,
     color: "hover:bg-green-500 hover:text-white",
     bgGradient: "from-green-400 to-green-600",
   },
   {
     name: "Instagram",
     icon: FaInstagram,
-    url: "https://www.instagram.com/tronics_offficial",
+    url: SUPPORT_CONFIG.instagramUrl,
     color: "hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:text-white",
     bgGradient: "from-purple-500 to-pink-500",
   },

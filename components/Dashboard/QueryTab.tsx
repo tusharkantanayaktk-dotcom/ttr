@@ -15,6 +15,7 @@ import {
   Zap,
 } from "lucide-react";
 import { FaWhatsapp, FaInstagram } from "react-icons/fa";
+import { SUPPORT_CONFIG } from "@/lib/config";
 
 /* =========================================================================
    COMPACT TOPIC CHIPS
@@ -134,7 +135,7 @@ export default function QueryTab() {
 
           {/* Instant WhatsApp Action Pill */}
           <a
-            href="https://wa.me/919631777559?text=Hello%20Tronics%20Support%2C%20I%20need%20help%20with%20my%20order"
+            href={SUPPORT_CONFIG.getWhatsAppChatUrl("Hello Tronics Support, I need help with my order")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold transition-all shadow-xs group cursor-pointer"
@@ -148,7 +149,7 @@ export default function QueryTab() {
         {/* Quick Contact Channels Strip */}
         <div className="grid grid-cols-3 gap-2">
           <a
-            href="https://wa.me/919631777559?text=Hello%20Tronics%20Support"
+            href={SUPPORT_CONFIG.getWhatsAppChatUrl("Hello Tronics Support")}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.03] transition-all flex items-center justify-between group"
@@ -164,7 +165,7 @@ export default function QueryTab() {
           </a>
 
           <a
-            href={process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP_URL || "https://whatsapp.com/channel/0029VbBZQiRFMqrUsOHKBU0T"}
+            href={SUPPORT_CONFIG.whatsappChannelUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.03] transition-all flex items-center justify-between group"
@@ -180,7 +181,7 @@ export default function QueryTab() {
           </a>
 
           <a
-            href={process.env.NEXT_PUBLIC_SUPPORT_INSTAGRAM_URL || "https://www.instagram.com/tronics_offficial"}
+            href={SUPPORT_CONFIG.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.03] transition-all flex items-center justify-between group"
@@ -189,7 +190,7 @@ export default function QueryTab() {
               <FaInstagram className="text-pink-500 text-sm shrink-0" />
               <div className="min-w-0">
                 <div className="text-[11px] font-bold text-[var(--foreground)] truncate">Instagram</div>
-                <div className="text-[9px] text-[var(--muted)] font-mono truncate">@tronics</div>
+                <div className="text-[9px] text-[var(--muted)] font-mono truncate">{`@${SUPPORT_CONFIG.instagramLabel}`}</div>
               </div>
             </div>
             <ArrowUpRight size={11} className="text-[var(--muted)] group-hover:text-[var(--foreground)] shrink-0" />

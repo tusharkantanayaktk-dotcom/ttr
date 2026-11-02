@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
+import { SUPPORT_CONFIG } from "@/lib/config";
 
 export default function HomeServices() {
+  const contactLink = SUPPORT_CONFIG.developerWhatsappUrl || SUPPORT_CONFIG.whatsappUrl;
+
   return (
     <section className="px-4 bg-[var(--background)] pt-1 pb-4 sm:pb-6">
       <motion.div 
@@ -25,7 +28,7 @@ export default function HomeServices() {
         </div>
 
         <a
-          href="https://wa.me/919178521537"
+          href={contactLink}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[var(--card)] hover:bg-[var(--foreground)]/[0.04] border border-[var(--border)] text-[var(--foreground)] font-black text-[11px] uppercase tracking-wider transition-all active:scale-95 shrink-0"

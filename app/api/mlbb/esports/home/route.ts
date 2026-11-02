@@ -1,4 +1,8 @@
+import { SUPPORT_CONFIG } from "@/lib/config";
+
 export async function GET() {
+  const tournamentLink = SUPPORT_CONFIG.whatsappChannelUrl || SUPPORT_CONFIG.whatsappUrl;
+
   const data = {
     liveMatches: [
       {
@@ -42,21 +46,21 @@ export async function GET() {
         reward: "Elite Skin + Diamonds",
         date: "Every Weekend",
         image: "",
-        link: "https://wa.me/919178521537",
+        link: tournamentLink,
       },
       {
         name: "MLBB Ranked Rush Tournament",
         reward: "Starlight Pass Giveaway",
         date: "Monthly Event",
         image: "",
-        link: "https://wa.me/919178521537",
+        link: tournamentLink,
       },
       {
         name: "5v5 Squad Battle Arena",
         reward: "Cash Prize + Hero Fragments",
         date: "Seasonal",
         image: "",
-        link: "https://wa.me/919178521537",
+        link: tournamentLink,
       }
     ],
 

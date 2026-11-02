@@ -10,9 +10,10 @@ import {
   FiShield,
   FiTrendingUp
 } from "react-icons/fi";
+import { SUPPORT_CONFIG } from "@/lib/config";
 
 export default function ServicesPage() {
-  const whatsappLink = "https://wa.me/919178521537";
+  const whatsappLink = SUPPORT_CONFIG.developerWhatsappUrl || SUPPORT_CONFIG.whatsappUrl;
 
   const services = [
     {

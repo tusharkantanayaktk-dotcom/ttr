@@ -16,14 +16,15 @@ import {
   FiZap,
   FiClock,
 } from "react-icons/fi";
+import { SUPPORT_CONFIG } from "@/lib/config";
 
 /* ===================== ENV & CONSTANTS ===================== */
 
 const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || "Tronics Store";
 const BRAND_DESCRIPTION = process.env.NEXT_PUBLIC_BRAND_DESCRIPTION || "Fast, secure MLBB top-ups with instant delivery and 24×7 support — recharge diamonds in seconds.";
 
-const INSTAGRAM_URL = process.env.NEXT_PUBLIC_INSTAGRAM_URL;
-const WHATSAPP_URL = process.env.NEXT_PUBLIC_WHATSAPP_URL;
+const INSTAGRAM_URL = SUPPORT_CONFIG.instagramUrl;
+const WHATSAPP_URL = SUPPORT_CONFIG.whatsappUrl;
 
 const COPYRIGHT_NAME = "TRONICS STORE";
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { FaInstagram, FaTwitter, FaDiscord, FaEnvelope } from "react-icons/fa";
+import { FaInstagram, FaTwitter, FaDiscord, FaEnvelope, FaWhatsapp, FaPhoneAlt } from "react-icons/fa";
+import { SUPPORT_CONFIG } from "@/lib/config";
 
 export default function ContactPage() {
   return (
@@ -13,7 +14,7 @@ export default function ContactPage() {
           </h1>
           <p className="text-[var(--muted)] leading-relaxed text-base sm:text-lg">
             Have a question or need help with an order?
-            Reach out to us by email or social media. We're here to help!
+            Reach out to us by email, phone, or social media. We're here to help!
           </p>
 
           {/* ✉️ Email Highlight Box */}
@@ -22,41 +23,88 @@ export default function ContactPage() {
               Email us at:
             </p>
             <a
-              href="mailto:zynx.anime@gmail.com"
+              href={`mailto:${SUPPORT_CONFIG.email}`}
               className="text-xl font-semibold text-[var(--accent)] hover:underline break-all"
             >
-              zynx.anime@gmail.com
+              {SUPPORT_CONFIG.email}
             </a>
           </div>
 
+          {/* 📞 Phone & WhatsApp Box */}
+          <div className="p-6 border border-[var(--border)] rounded-2xl bg-[var(--card)]">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[var(--muted)] mb-2">
+              Call or WhatsApp us at:
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <a
+                href={SUPPORT_CONFIG.phoneTel}
+                className="text-xl font-semibold text-[var(--accent)] hover:underline"
+              >
+                {SUPPORT_CONFIG.phone}
+              </a>
+              <a
+                href={SUPPORT_CONFIG.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
+              >
+                <FaWhatsapp size={14} />
+                <span>Chat on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+
           {/* 🌐 Social Links */}
-          <div className="flex gap-5 mt-6">
+          <div className="flex flex-wrap gap-4 mt-6">
             <a
-              href="https://instagram.com"
+              href={SUPPORT_CONFIG.whatsappUrl}
               target="_blank"
-              className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp Support"
+              className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-emerald-500 hover:text-white transition-all"
             >
-              <FaInstagram size={24} />
+              <FaWhatsapp size={22} />
             </a>
             <a
-              href="https://twitter.com"
-              target="_blank"
+              href={SUPPORT_CONFIG.phoneTel}
+              aria-label="Phone Support"
               className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all"
             >
-              <FaTwitter size={24} />
+              <FaPhoneAlt size={20} />
             </a>
             <a
-              href="https://discord.gg"
+              href={SUPPORT_CONFIG.instagramUrl}
               target="_blank"
-              className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-pink-600 hover:text-white transition-all"
             >
-              <FaDiscord size={24} />
+              <FaInstagram size={22} />
             </a>
             <a
-              href="mailto:zynx.anime@gmail.com"
+              href={SUPPORT_CONFIG.twitterUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter"
               className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all"
             >
-              <FaEnvelope size={24} />
+              <FaTwitter size={22} />
+            </a>
+            <a
+              href={SUPPORT_CONFIG.discordUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Discord"
+              className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all"
+            >
+              <FaDiscord size={22} />
+            </a>
+            <a
+              href={`mailto:${SUPPORT_CONFIG.email}`}
+              aria-label="Email Support"
+              className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all"
+            >
+              <FaEnvelope size={22} />
             </a>
           </div>
         </div>
