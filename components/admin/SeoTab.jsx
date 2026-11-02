@@ -199,15 +199,17 @@ export default function SeoTab() {
         )}
       </AnimatePresence>
 
-      <form onSubmit={handleSave} className="space-y-5">
-        {/* ================= 2-COLUMN SECTION: METAS + LIVE SERP PREVIEW ================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Left Column: Form Controls (7 cols) */}
-          <div className="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
-            <div className="flex items-center gap-2 pb-2 border-b border-[var(--border)]">
-              <Search size={18} className="text-[var(--accent)]" />
-              <h3 className="text-sm font-bold text-[var(--foreground)]">Meta Tags &amp; Descriptions</h3>
-            </div>
+      <form onSubmit={handleSave}>
+        {/* ================= UNIFIED MAIN SURFACE ================= */}
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-7 space-y-7 shadow-sm">
+          {/* SECTION 1: METAS + LIVE SERP PREVIEW */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left Column: Form Controls (7 cols) */}
+            <div className="lg:col-span-7 space-y-4">
+              <div className="flex items-center gap-2 pb-1 border-b border-[var(--border)]">
+                <Search size={18} className="text-[var(--accent)]" />
+                <h3 className="text-sm font-bold text-[var(--foreground)]">Meta Tags &amp; Descriptions</h3>
+              </div>
 
             {/* Title */}
             <div className="space-y-1.5">
@@ -281,18 +283,20 @@ export default function SeoTab() {
           </div>
 
           {/* Right Column: Real-time Google SERP Preview Card (5 cols) */}
-          <div className="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm flex flex-col justify-between">
+          <div className="lg:col-span-5 p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-3 flex flex-col justify-between">
             <div className="space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+              <div className="flex items-center justify-between pb-1.5 border-b border-[var(--border)]">
                 <div className="flex items-center gap-2">
-                  <Sparkles size={16} className="text-amber-400" />
-                  <h3 className="text-sm font-bold text-[var(--foreground)]">Google SERP Live Preview</h3>
+                  <Sparkles size={15} className="text-amber-400" />
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)]">
+                    Google Search Live Preview
+                  </h3>
                 </div>
                 <span className="text-[10px] text-[var(--muted)] font-medium">Desktop &amp; Mobile</span>
               </div>
 
               {/* Realistic Search Box */}
-              <div className="p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-2">
+              <div className="p-3.5 rounded-xl bg-[var(--card)] border border-[var(--border)] space-y-1.5">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded-full bg-[var(--accent)]/20 border border-[var(--accent)]/30 flex items-center justify-center text-[10px] font-black text-[var(--accent)]">
                     T
@@ -329,9 +333,12 @@ export default function SeoTab() {
           </div>
         </div>
 
-        {/* ================= CARD 2: SEARCH KEYWORDS ================= */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+        {/* DIVIDER */}
+        <div className="w-full h-[1px] bg-[var(--border)] opacity-60" />
+
+        {/* SECTION 2: SEARCH KEYWORDS */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between pb-1 border-b border-[var(--border)]">
             <div className="flex items-center gap-2">
               <Tag size={18} className="text-pink-400" />
               <h3 className="text-sm font-bold text-[var(--foreground)]">Meta Keywords Index</h3>
@@ -393,7 +400,8 @@ export default function SeoTab() {
             )}
           </div>
         </div>
-      </form>
+      </div>
+    </form>
     </div>
   );
 }

@@ -281,18 +281,20 @@ export default function SupportConfigTab() {
         )}
       </AnimatePresence>
 
-      <form onSubmit={handleSave} className="space-y-5">
-        {/* ================= CARD 1: PRIMARY CUSTOMER CONTACTS ================= */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
-          <div className="flex items-center gap-2 pb-2 border-b border-[var(--border)]">
-            <ShieldCheck size={18} className="text-[var(--accent)]" />
-            <h3 className="text-sm font-bold text-[var(--foreground)]">Direct Customer Support</h3>
-            <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)]">
-              Core
-            </span>
-          </div>
+      <form onSubmit={handleSave}>
+        {/* ================= UNIFIED MAIN SURFACE ================= */}
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-7 space-y-7 shadow-sm">
+          {/* SECTION 1: PRIMARY CUSTOMER CONTACTS */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <ShieldCheck size={18} className="text-[var(--accent)]" />
+              <h3 className="text-sm font-bold text-[var(--foreground)]">Direct Customer Support</h3>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)]">
+                Core
+              </span>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
             {/* Support Email */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
@@ -379,84 +381,89 @@ export default function SupportConfigTab() {
               <p className="text-[11px] text-[var(--muted)]">Direct chat link used by floating WhatsApp icon and query tab.</p>
             </div>
           </div>
-        </div>
 
-        {/* ================= CARD 2: COMMUNITY & SERVICES ================= */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
-          <div className="flex items-center gap-2 pb-2 border-b border-[var(--border)]">
-            <Share2 size={18} className="text-sky-400" />
-            <h3 className="text-sm font-bold text-[var(--foreground)]">Community & Custom Services</h3>
-          </div>
+          {/* DIVIDER */}
+          <div className="w-full h-[1px] bg-[var(--border)] opacity-60" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* WhatsApp Channel */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                  <FaWhatsapp size={14} className="text-emerald-400" />
-                  <span>WhatsApp Channel / Community URL</span>
-                </label>
-                {formData.whatsappChannelUrl && (
-                  <a
-                    href={formData.whatsappChannelUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-emerald-400 hover:underline"
-                  >
-                    <span>Test</span>
-                    <ExternalLink size={11} />
-                  </a>
-                )}
-              </div>
-              <input
-                type="url"
-                value={formData.whatsappChannelUrl}
-                onChange={(e) => handleChange("whatsappChannelUrl", e.target.value)}
-                placeholder="https://whatsapp.com/channel/0029VbBZQiRFMqrUsOHKBU0T"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
-              <p className="text-[11px] text-[var(--muted)]">Used in Community Popups and Esports tournament registrations.</p>
+          {/* SECTION 2: COMMUNITY & SERVICES */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Share2 size={18} className="text-sky-400" />
+              <h3 className="text-sm font-bold text-[var(--foreground)]">Community &amp; Custom Services</h3>
             </div>
 
-            {/* Developer / Store Software WhatsApp */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                  <Sparkles size={14} className="text-amber-400" />
-                  <span>Software Services / Made By WhatsApp</span>
-                </label>
-                {formData.developerWhatsappUrl && (
-                  <a
-                    href={formData.developerWhatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-amber-400 hover:underline"
-                  >
-                    <span>Test</span>
-                    <ExternalLink size={11} />
-                  </a>
-                )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+              {/* WhatsApp Channel */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
+                    <FaWhatsapp size={14} className="text-emerald-400" />
+                    <span>WhatsApp Channel / Community URL</span>
+                  </label>
+                  {formData.whatsappChannelUrl && (
+                    <a
+                      href={formData.whatsappChannelUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] text-emerald-400 hover:underline"
+                    >
+                      <span>Test</span>
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
+                </div>
+                <input
+                  type="url"
+                  value={formData.whatsappChannelUrl}
+                  onChange={(e) => handleChange("whatsappChannelUrl", e.target.value)}
+                  placeholder="https://whatsapp.com/channel/0029VbBZQiRFMqrUsOHKBU0T"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
+                />
+                <p className="text-[11px] text-[var(--muted)]">Used in Community Popups and Esports tournament registrations.</p>
               </div>
-              <input
-                type="url"
-                value={formData.developerWhatsappUrl}
-                onChange={(e) => handleChange("developerWhatsappUrl", e.target.value)}
-                placeholder="https://wa.me/919178521537"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
-              <p className="text-[11px] text-[var(--muted)]">Target link for "Need Your Own Website?" banners and services page.</p>
+
+              {/* Developer / Store Software WhatsApp */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
+                    <Sparkles size={14} className="text-amber-400" />
+                    <span>Software Services / Made By WhatsApp</span>
+                  </label>
+                  {formData.developerWhatsappUrl && (
+                    <a
+                      href={formData.developerWhatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] text-amber-400 hover:underline"
+                    >
+                      <span>Test</span>
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
+                </div>
+                <input
+                  type="url"
+                  value={formData.developerWhatsappUrl}
+                  onChange={(e) => handleChange("developerWhatsappUrl", e.target.value)}
+                  placeholder="https://wa.me/919178521537"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
+                />
+                <p className="text-[11px] text-[var(--muted)]">Target link for "Need Your Own Website?" banners and services page.</p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* ================= CARD 3: SOCIAL MEDIA HANDLES ================= */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
-          <div className="flex items-center gap-2 pb-2 border-b border-[var(--border)]">
-            <FaInstagram size={18} className="text-pink-400" />
-            <h3 className="text-sm font-bold text-[var(--foreground)]">Social Media Profiles</h3>
-          </div>
+          {/* DIVIDER */}
+          <div className="w-full h-[1px] bg-[var(--border)] opacity-60" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* SECTION 3: SOCIAL MEDIA HANDLES */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <FaInstagram size={18} className="text-pink-400" />
+              <h3 className="text-sm font-bold text-[var(--foreground)]">Social Media Profiles</h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
             {/* Instagram URL */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
@@ -604,7 +611,9 @@ export default function SupportConfigTab() {
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
+  </form>
+</div>
   );
 }
