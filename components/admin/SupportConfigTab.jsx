@@ -381,9 +381,10 @@ export default function SupportConfigTab() {
               <p className="text-[11px] text-[var(--muted)]">Direct chat link used by floating WhatsApp icon and query tab.</p>
             </div>
           </div>
+        </div>
 
-          {/* DIVIDER */}
-          <div className="w-full h-[1px] bg-[var(--border)] opacity-60" />
+        {/* DIVIDER */}
+        <div className="w-full h-[1px] bg-[var(--border)] opacity-60" />
 
           {/* SECTION 2: COMMUNITY & SERVICES */}
           <div className="space-y-4">
@@ -612,8 +613,7 @@ export default function SupportConfigTab() {
           </div>
         </div>
       </div>
-    </div>
-  </form>
-</div>
-  );
+    </form>
+  </div>
+);
 }
