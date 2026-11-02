@@ -253,7 +253,7 @@ export default function PricingTab({
       (pricingMode === "fixed" && overrides.length > 0));
 
   return (
-    <div className={`space-y-3.5 sm:space-y-4 pb-16 ${pricingMode === "percent" ? "max-w-2xl sm:max-w-3xl" : "max-w-full"}`}>
+    <div className="w-full space-y-3.5 sm:space-y-4 pb-16">
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">

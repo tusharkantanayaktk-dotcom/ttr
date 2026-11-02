@@ -191,7 +191,7 @@ export default function NoticeBannerTab() {
   }
 
   return (
-    <div className="max-w-2xl space-y-3.5 sm:space-y-4 pb-8">
+    <div className="w-full space-y-3.5 sm:space-y-4 pb-8">
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)] truncate">

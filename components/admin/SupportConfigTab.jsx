@@ -200,7 +200,7 @@ export default function SupportConfigTab() {
   }
 
   return (
-    <div className="max-w-4xl space-y-5 pb-12">
+    <div className="w-full space-y-5 pb-12">
       {/* ================= HEADER ================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
         <div>

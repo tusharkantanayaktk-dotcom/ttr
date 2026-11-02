@@ -217,7 +217,7 @@ export default function AdminPanalPage() {
   return (
     <AdminGuard>
       <section className="min-h-screen bg-[var(--background)] p-2.5 sm:p-3.5 md:p-5">
-        <div className="w-full max-w-7xl mx-auto">
+        <div className="w-full mx-auto">
           {/* ================= TOP PANEL BAR ================= */}
           <div className="mb-2.5 flex items-center justify-between px-1">
             <div className="flex items-center gap-2">

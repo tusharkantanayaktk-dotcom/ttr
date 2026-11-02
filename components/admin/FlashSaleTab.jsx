@@ -207,7 +207,7 @@ export default function FlashSaleTab() {
   }
 
   return (
-    <div className="max-w-2xl space-y-3.5 sm:space-y-4 pb-8">
+    <div className="w-full space-y-3.5 sm:space-y-4 pb-8">
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
