@@ -16,15 +16,12 @@ import {
   FiZap,
   FiClock,
 } from "react-icons/fi";
-import { SUPPORT_CONFIG } from "@/lib/config";
+import { useSupportConfig } from "@/lib/useSupportConfig";
 
 /* ===================== ENV & CONSTANTS ===================== */
 
 const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || "Tronics Store";
 const BRAND_DESCRIPTION = process.env.NEXT_PUBLIC_BRAND_DESCRIPTION || "Fast, secure MLBB top-ups with instant delivery and 24×7 support — recharge diamonds in seconds.";
-
-const INSTAGRAM_URL = SUPPORT_CONFIG.instagramUrl;
-const WHATSAPP_URL = SUPPORT_CONFIG.whatsappUrl;
 
 const COPYRIGHT_NAME = "TRONICS STORE";
 
@@ -49,21 +46,6 @@ const FOOTER_LINKS = [
   },
 ];
 
-const SOCIALS = [
-  {
-    label: "Instagram",
-    href: INSTAGRAM_URL,
-    icon: FaInstagram,
-    hoverClass: "hover:text-pink-400 hover:border-pink-500/40 hover:bg-pink-500/10",
-  },
-  {
-    label: "WhatsApp",
-    href: WHATSAPP_URL,
-    icon: FaWhatsapp,
-    hoverClass: "hover:text-emerald-400 hover:border-emerald-500/40 hover:bg-emerald-500/10",
-  },
-];
-
 const TRUST_BADGES = [
   { icon: FiShield, label: "SECURE", desc: "Military Grade" },
   { icon: FiZap, label: "INSTANT", desc: "Auto-Delivery" },
@@ -73,6 +55,22 @@ const TRUST_BADGES = [
 /* ===================== COMPONENT ===================== */
 
 export default function Footer() {
+  const supportConfig = useSupportConfig();
+
+  const socials = [
+    {
+      label: "Instagram",
+      href: supportConfig.instagramUrl,
+      icon: FaInstagram,
+      hoverClass: "hover:text-pink-400 hover:border-pink-500/40 hover:bg-pink-500/10",
+    },
+    {
+      label: "WhatsApp",
+      href: supportConfig.whatsappUrl,
+      icon: FaWhatsapp,
+      hoverClass: "hover:text-emerald-400 hover:border-emerald-500/40 hover:bg-emerald-500/10",
+    },
+  ];
   return (
     <footer className="relative bg-[var(--background)] border-t border-[var(--border)] pt-6 pb-20 lg:pb-8 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
@@ -100,7 +98,7 @@ export default function Footer() {
             </div>
 
             <div className="flex items-center gap-3 pt-1">
-              {SOCIALS.map(({ label, href, icon: Icon }) => (
+              {socials.map(({ label, href, icon: Icon }) => (
                 <motion.a
                   key={label}
                   href={href}

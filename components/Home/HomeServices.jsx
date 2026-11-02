@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
-import { SUPPORT_CONFIG } from "@/lib/config";
+import { useSupportConfig } from "@/lib/useSupportConfig";
 
 export default function HomeServices() {
-  const contactLink = SUPPORT_CONFIG.developerWhatsappUrl || SUPPORT_CONFIG.whatsappUrl;
+  const supportConfig = useSupportConfig();
+  const contactLink = supportConfig.developerWhatsappUrl || supportConfig.whatsappUrl;
 
   return (
     <section className="px-4 bg-[var(--background)] pt-1 pb-4 sm:pb-6">

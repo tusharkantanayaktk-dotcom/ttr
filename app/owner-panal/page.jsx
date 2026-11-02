@@ -23,7 +23,8 @@ import {
   FiExternalLink,
   FiChevronRight,
   FiChevronLeft,
-  FiCheck
+  FiCheck,
+  FiHeadphones
 } from "react-icons/fi";
 
 const logo = "/logo.svg";
@@ -42,6 +43,7 @@ import SeoTab from "@/components/admin/SeoTab";
 import NoticeBannerTab from "@/components/admin/NoticeBannerTab";
 import FlashSaleTab from "@/components/admin/FlashSaleTab";
 import UiSettingsTab from "@/components/admin/UiSettingsTab";
+import SupportConfigTab from "@/components/admin/SupportConfigTab";
 
 const SIDEBAR_GROUPS = [
   {
@@ -73,6 +75,7 @@ const SIDEBAR_GROUPS = [
   {
     title: "Settings",
     items: [
+      { id: "support_config", label: "Contact & Support", icon: FiHeadphones },
       { id: "ui_settings", label: "Themes & Design", icon: FiSliders },
       { id: "settings", label: "Store Settings", icon: FiSettings },
       { id: "seo", label: "SEO & Google", icon: FiGlobe },
@@ -451,6 +454,10 @@ export default function AdminPanalPage() {
 
                 {activeTab === "announcement" && (
                   <NoticeBannerTab />
+                )}
+
+                {activeTab === "support_config" && (
+                  <SupportConfigTab />
                 )}
 
                 {activeTab === "ui_settings" && (

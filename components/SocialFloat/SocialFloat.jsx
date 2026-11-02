@@ -10,26 +10,27 @@ import {
   FaShareNodes,
 } from "react-icons/fa6";
 import { RiChatSmile3Fill, RiCloseFill } from "react-icons/ri";
-import { SUPPORT_CONFIG } from "@/lib/config";
-
-const socialLinks = [
-  {
-    name: "WhatsApp",
-    icon: FaWhatsapp,
-    url: SUPPORT_CONFIG.whatsappUrl,
-    color: "hover:bg-green-500 hover:text-white",
-    bgGradient: "from-green-400 to-green-600",
-  },
-  {
-    name: "Instagram",
-    icon: FaInstagram,
-    url: SUPPORT_CONFIG.instagramUrl,
-    color: "hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:text-white",
-    bgGradient: "from-purple-500 to-pink-500",
-  },
-];
+import { useSupportConfig } from "@/lib/useSupportConfig";
 
 export default function SocialFloat() {
+  const supportConfig = useSupportConfig();
+
+  const socialLinks = [
+    {
+      name: "WhatsApp",
+      icon: FaWhatsapp,
+      url: supportConfig.whatsappUrl,
+      color: "hover:bg-green-500 hover:text-white",
+      bgGradient: "from-green-400 to-green-600",
+    },
+    {
+      name: "Instagram",
+      icon: FaInstagram,
+      url: supportConfig.instagramUrl,
+      color: "hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:text-white",
+      bgGradient: "from-purple-500 to-pink-500",
+    },
+  ];
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);

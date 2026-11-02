@@ -1,9 +1,11 @@
 "use client";
 
 import { FaInstagram, FaTwitter, FaDiscord, FaEnvelope, FaWhatsapp, FaPhoneAlt } from "react-icons/fa";
-import { SUPPORT_CONFIG } from "@/lib/config";
+import { useSupportConfig } from "@/lib/useSupportConfig";
 
 export default function ContactPage() {
+  const supportConfig = useSupportConfig();
+
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-6 py-15">
       <div className="max-w-5xl mx-auto flex flex-col lg:flex-row gap-12">
@@ -23,10 +25,10 @@ export default function ContactPage() {
               Email us at:
             </p>
             <a
-              href={`mailto:${SUPPORT_CONFIG.email}`}
+              href={`mailto:${supportConfig.email}`}
               className="text-xl font-semibold text-[var(--accent)] hover:underline break-all"
             >
-              {SUPPORT_CONFIG.email}
+              {supportConfig.email}
             </a>
           </div>
 
@@ -37,13 +39,13 @@ export default function ContactPage() {
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <a
-                href={SUPPORT_CONFIG.phoneTel}
+                href={supportConfig.phoneTel}
                 className="text-xl font-semibold text-[var(--accent)] hover:underline"
               >
-                {SUPPORT_CONFIG.phone}
+                {supportConfig.phone}
               </a>
               <a
-                href={SUPPORT_CONFIG.whatsappUrl}
+                href={supportConfig.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
@@ -57,7 +59,7 @@ export default function ContactPage() {
           {/* 🌐 Social Links */}
           <div className="flex flex-wrap gap-4 mt-6">
             <a
-              href={SUPPORT_CONFIG.whatsappUrl}
+              href={supportConfig.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp Support"
@@ -66,14 +68,14 @@ export default function ContactPage() {
               <FaWhatsapp size={22} />
             </a>
             <a
-              href={SUPPORT_CONFIG.phoneTel}
+              href={supportConfig.phoneTel}
               aria-label="Phone Support"
               className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all"
             >
               <FaPhoneAlt size={20} />
             </a>
             <a
-              href={SUPPORT_CONFIG.instagramUrl}
+              href={supportConfig.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
@@ -82,7 +84,7 @@ export default function ContactPage() {
               <FaInstagram size={22} />
             </a>
             <a
-              href={SUPPORT_CONFIG.twitterUrl}
+              href={supportConfig.twitterUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Twitter"
@@ -91,7 +93,7 @@ export default function ContactPage() {
               <FaTwitter size={22} />
             </a>
             <a
-              href={SUPPORT_CONFIG.discordUrl}
+              href={supportConfig.discordUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Discord"
@@ -100,7 +102,7 @@ export default function ContactPage() {
               <FaDiscord size={22} />
             </a>
             <a
-              href={`mailto:${SUPPORT_CONFIG.email}`}
+              href={`mailto:${supportConfig.email}`}
               aria-label="Email Support"
               className="p-3 rounded-full bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all"
             >

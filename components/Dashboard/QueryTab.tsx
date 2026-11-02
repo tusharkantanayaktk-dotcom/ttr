@@ -15,7 +15,7 @@ import {
   Zap,
 } from "lucide-react";
 import { FaWhatsapp, FaInstagram } from "react-icons/fa";
-import { SUPPORT_CONFIG } from "@/lib/config";
+import { useSupportConfig } from "@/lib/useSupportConfig";
 
 /* =========================================================================
    COMPACT TOPIC CHIPS
@@ -50,6 +50,7 @@ const FAQS = [
 ];
 
 export default function QueryTab() {
+  const supportConfig = useSupportConfig();
   const [queryType, setQueryType] = useState("Order Issue");
   const [userPhone, setUserPhone] = useState("");
   const [queryMessage, setQueryMessage] = useState("");
@@ -135,7 +136,7 @@ export default function QueryTab() {
 
           {/* Instant WhatsApp Action Pill */}
           <a
-            href={SUPPORT_CONFIG.getWhatsAppChatUrl("Hello Tronics Support, I need help with my order")}
+            href={supportConfig.getWhatsAppChatUrl("Hello Tronics Support, I need help with my order")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold transition-all shadow-xs group cursor-pointer"
@@ -149,7 +150,7 @@ export default function QueryTab() {
         {/* Quick Contact Channels Strip */}
         <div className="grid grid-cols-3 gap-2">
           <a
-            href={SUPPORT_CONFIG.getWhatsAppChatUrl("Hello Tronics Support")}
+            href={supportConfig.getWhatsAppChatUrl("Hello Tronics Support")}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.03] transition-all flex items-center justify-between group"
@@ -165,7 +166,7 @@ export default function QueryTab() {
           </a>
 
           <a
-            href={SUPPORT_CONFIG.whatsappChannelUrl}
+            href={supportConfig.whatsappChannelUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.03] transition-all flex items-center justify-between group"
@@ -181,7 +182,7 @@ export default function QueryTab() {
           </a>
 
           <a
-            href={SUPPORT_CONFIG.instagramUrl}
+            href={supportConfig.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.03] transition-all flex items-center justify-between group"
@@ -190,7 +191,7 @@ export default function QueryTab() {
               <FaInstagram className="text-pink-500 text-sm shrink-0" />
               <div className="min-w-0">
                 <div className="text-[11px] font-bold text-[var(--foreground)] truncate">Instagram</div>
-                <div className="text-[9px] text-[var(--muted)] font-mono truncate">{`@${SUPPORT_CONFIG.instagramLabel}`}</div>
+                <div className="text-[9px] text-[var(--muted)] font-mono truncate">{`@${supportConfig.instagramLabel}`}</div>
               </div>
             </div>
             <ArrowUpRight size={11} className="text-[var(--muted)] group-hover:text-[var(--foreground)] shrink-0" />

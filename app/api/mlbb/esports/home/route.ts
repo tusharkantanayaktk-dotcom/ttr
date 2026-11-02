@@ -1,7 +1,8 @@
-import { SUPPORT_CONFIG } from "@/lib/config";
+import { getDbSupportConfig } from "@/lib/serverSupportConfig";
 
 export async function GET() {
-  const tournamentLink = SUPPORT_CONFIG.whatsappChannelUrl || SUPPORT_CONFIG.whatsappUrl;
+  const supportConfig = await getDbSupportConfig();
+  const tournamentLink = supportConfig.whatsappChannelUrl || supportConfig.whatsappUrl;
 
   const data = {
     liveMatches: [

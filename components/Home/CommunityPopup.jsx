@@ -5,12 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import Image from "next/image";
-import { SUPPORT_CONFIG } from "@/lib/config";
+import { useSupportConfig } from "@/lib/useSupportConfig";
 
-const COMMUNITY_URL = SUPPORT_CONFIG.whatsappChannelUrl;
 const STORAGE_KEY = "community_popup_dismissed_v14";
 
 export default function CommunityPopup() {
+  const supportConfig = useSupportConfig();
+  const communityUrl = supportConfig.whatsappChannelUrl;
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function CommunityPopup() {
 
             {/* Clickable Wide Banner Image with SVG Badge */}
             <a
-              href={COMMUNITY_URL}
+              href={communityUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="relative w-full aspect-[16/9] block overflow-hidden group bg-black cursor-pointer"
@@ -107,7 +108,7 @@ export default function CommunityPopup() {
               </button>
 
               <a
-                href={COMMUNITY_URL}
+                href={communityUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group px-4 py-2 rounded-full bg-[var(--accent)] hover:bg-[var(--accent-hover)] !text-black font-extrabold text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-lg shadow-[var(--accent)]/20 hover:shadow-[0_0_20px_var(--accent)]/30 active:scale-[0.97] transition-all"
