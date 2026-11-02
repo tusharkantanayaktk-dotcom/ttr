@@ -7,7 +7,11 @@ import {
   RefreshCcw,
   CheckCircle2,
   Sliders,
-  Loader2
+  Loader2,
+  ShieldAlert,
+  Power,
+  Store,
+  Check
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -63,15 +67,18 @@ export default function SettingsTab() {
       });
       const data = await res.json();
       if (data.success) {
-        setMessage({ type: "success", text: `${key.replace(/_/g, " ")} updated successfully!` });
-        setTimeout(() => setMessage({ type: "", text: "" }), 3000);
+        setMessage({
+          type: "success",
+          text: `${key.replace(/_/g, " ")} is now ${newValue ? "ENABLED" : "DISABLED"}!`,
+        });
+        setTimeout(() => setMessage({ type: "", text: "" }), 3500);
       } else {
         setSettings(settings);
         setMessage({ type: "error", text: data.message || "Failed to update settings" });
       }
     } catch (err) {
       setSettings(settings);
-      setMessage({ type: "error", text: "Something went wrong" });
+      setMessage({ type: "error", text: "Something went wrong while updating setting" });
     } finally {
       setSaving(false);
     }
@@ -86,43 +93,116 @@ export default function SettingsTab() {
     );
   }
 
+  const isAllNormal = !settings.MAINTENANCE_MODE && !settings.STOP_ACCEPTING_ORDERS;
+
   return (
-    <div className="w-full space-y-3.5 sm:space-y-4 pb-8">
+    <div className="w-full space-y-5 pb-12">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
         <div>
-          <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">Store Settings</h2>
-          <p className="text-xs text-[var(--muted)] mt-0.5">Manage store availability and order acceptance</p>
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
+              <Store size={20} />
+            </div>
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">
+              Store Availability &amp; Emergency Controls
+            </h2>
+          </div>
+          <p className="text-xs text-[var(--muted)] mt-1">
+            Manage store availability, emergency maintenance lockdown, and instant order pause controls.
+          </p>
         </div>
 
-        <button
-          onClick={fetchSettings}
-          className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none cursor-pointer"
-          title="Refresh Settings"
-        >
-          <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Status Badge */}
+          <div
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold ${
+              isAllNormal
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                : "bg-amber-500/10 border-amber-500/20 text-amber-400"
+            }`}
+          >
+            <span className="relative flex h-2 w-2">
+              <span
+                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                  isAllNormal ? "bg-emerald-400" : "bg-amber-400"
+                }`}
+              />
+              <span
+                className={`relative inline-flex rounded-full h-2 w-2 ${
+                  isAllNormal ? "bg-emerald-500" : "bg-amber-500"
+                }`}
+              />
+            </span>
+            <span>{isAllNormal ? "Store Open (Normal)" : "Alerts Active"}</span>
+          </div>
+
+          <button
+            onClick={fetchSettings}
+            className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.04] transition-all cursor-pointer"
+            title="Refresh Settings"
+          >
+            <RefreshCcw size={15} className={loading ? "animate-spin" : ""} />
+          </button>
+        </div>
       </div>
 
-      {/* ================= CONTROLS ================= */}
-      <div className="space-y-2.5">
+      {/* ================= ALERTS ================= */}
+      <AnimatePresence>
+        {message.text && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className={`flex items-center gap-2.5 p-3.5 rounded-xl border text-xs font-medium ${
+              message.type === "success"
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                : "bg-red-500/10 border-red-500/20 text-red-400"
+            }`}
+          >
+            {message.type === "success" ? (
+              <CheckCircle2 size={16} className="shrink-0" />
+            ) : (
+              <AlertTriangle size={16} className="shrink-0" />
+            )}
+            <span className="flex-1">{message.text}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ================= 2-COLUMN CONTROLS GRID ================= */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Maintenance Mode */}
         <div
           onClick={() => handleToggle("MAINTENANCE_MODE")}
-          className={`p-3 sm:p-3.5 bg-[var(--card)]/60 hover:bg-[var(--card)] border rounded-xl transition-all cursor-pointer group ${
-            settings.MAINTENANCE_MODE ? "border-amber-500/40 bg-amber-500/[0.04]" : "border-[var(--border)]"
+          className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-4 group shadow-sm ${
+            settings.MAINTENANCE_MODE
+              ? "bg-amber-500/[0.06] border-amber-500/40 shadow-amber-500/5"
+              : "bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/50"
           }`}
         >
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <Activity size={18} className={`shrink-0 transition-colors ${settings.MAINTENANCE_MODE ? "text-amber-500" : "text-[var(--accent)]"}`} />
-              <div className="min-w-0">
-                <p className="font-bold text-xs sm:text-sm text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors truncate">
-                  Maintenance Mode
-                </p>
-                <p className="text-[11px] text-[var(--muted)]/80 mt-0.5 leading-snug">
-                  Close website for visitors. Only administrators can access.
-                </p>
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div
+                className={`p-2.5 rounded-xl border transition-colors ${
+                  settings.MAINTENANCE_MODE
+                    ? "bg-amber-500/20 border-amber-500/30 text-amber-400"
+                    : "bg-[var(--background)] border-[var(--border)] text-[var(--accent)] group-hover:scale-105"
+                }`}
+              >
+                <Power size={20} />
+              </div>
+              <div>
+                <h3 className="font-bold text-sm text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+                  Maintenance Downtime
+                </h3>
+                <span
+                  className={`text-[10px] font-bold uppercase tracking-wider ${
+                    settings.MAINTENANCE_MODE ? "text-amber-400" : "text-[var(--muted)]"
+                  }`}
+                >
+                  {settings.MAINTENANCE_MODE ? "SITE CLOSED" : "SITE ONLINE"}
+                </span>
               </div>
             </div>
 
@@ -141,16 +221,20 @@ export default function SettingsTab() {
             >
               <span
                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out my-auto ${
-                  settings.MAINTENANCE_MODE ? "translate-x-5.5" : "translate-x-0.5"
+                  settings.MAINTENANCE_MODE ? "translate-x-5.5 ml-0" : "translate-x-0.5"
                 }`}
               />
             </button>
           </div>
 
+          <p className="text-xs text-[var(--muted)] leading-relaxed">
+            Close the storefront for visitors with a maintenance splash screen. Logged-in owners can still view and manage the panel.
+          </p>
+
           {settings.MAINTENANCE_MODE && (
-            <div className="mt-2.5 pt-2.5 border-t border-amber-500/20 flex items-center gap-2 text-[11px] font-medium text-amber-500">
-              <AlertTriangle className="shrink-0" size={13} />
-              <span>Active: Visitors cannot view products or place orders.</span>
+            <div className="pt-2 border-t border-amber-500/20 flex items-center gap-2 text-xs font-semibold text-amber-400">
+              <AlertTriangle size={14} className="shrink-0" />
+              <span>Public access is blocked. Only admins can bypass.</span>
             </div>
           )}
         </div>
@@ -158,20 +242,34 @@ export default function SettingsTab() {
         {/* Pause Orders */}
         <div
           onClick={() => handleToggle("STOP_ACCEPTING_ORDERS")}
-          className={`p-3 sm:p-3.5 bg-[var(--card)]/60 hover:bg-[var(--card)] border rounded-xl transition-all cursor-pointer group ${
-            settings.STOP_ACCEPTING_ORDERS ? "border-amber-500/40 bg-amber-500/[0.04]" : "border-[var(--border)]"
+          className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-4 group shadow-sm ${
+            settings.STOP_ACCEPTING_ORDERS
+              ? "bg-rose-500/[0.06] border-rose-500/40 shadow-rose-500/5"
+              : "bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/50"
           }`}
         >
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <AlertTriangle size={18} className={`shrink-0 transition-colors ${settings.STOP_ACCEPTING_ORDERS ? "text-amber-500" : "text-[var(--accent)]"}`} />
-              <div className="min-w-0">
-                <p className="font-bold text-xs sm:text-sm text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors truncate">
-                  Pause New Orders
-                </p>
-                <p className="text-[11px] text-[var(--muted)]/80 mt-0.5 leading-snug">
-                  Temporarily stop accepting checkout orders if servers or providers are busy.
-                </p>
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div
+                className={`p-2.5 rounded-xl border transition-colors ${
+                  settings.STOP_ACCEPTING_ORDERS
+                    ? "bg-rose-500/20 border-rose-500/30 text-rose-400"
+                    : "bg-[var(--background)] border-[var(--border)] text-[var(--accent)] group-hover:scale-105"
+                }`}
+              >
+                <ShieldAlert size={20} />
+              </div>
+              <div>
+                <h3 className="font-bold text-sm text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+                  Pause Checkout &amp; Orders
+                </h3>
+                <span
+                  className={`text-[10px] font-bold uppercase tracking-wider ${
+                    settings.STOP_ACCEPTING_ORDERS ? "text-rose-400" : "text-[var(--muted)]"
+                  }`}
+                >
+                  {settings.STOP_ACCEPTING_ORDERS ? "CHECKOUTS PAUSED" : "ACCEPTING ORDERS"}
+                </span>
               </div>
             </div>
 
@@ -185,44 +283,29 @@ export default function SettingsTab() {
               }}
               disabled={saving}
               className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out outline-none ${
-                settings.STOP_ACCEPTING_ORDERS ? "bg-amber-500" : "bg-[var(--foreground)]/15"
+                settings.STOP_ACCEPTING_ORDERS ? "bg-rose-500" : "bg-[var(--foreground)]/15"
               } ${saving ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               <span
                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out my-auto ${
-                  settings.STOP_ACCEPTING_ORDERS ? "translate-x-5.5" : "translate-x-0.5"
+                  settings.STOP_ACCEPTING_ORDERS ? "translate-x-5.5 ml-0" : "translate-x-0.5"
                 }`}
               />
             </button>
           </div>
 
+          <p className="text-xs text-[var(--muted)] leading-relaxed">
+            Temporarily pause customer checkouts if publisher APIs or payment gateways are undergoing maintenance. Browsing stays enabled.
+          </p>
+
           {settings.STOP_ACCEPTING_ORDERS && (
-            <div className="mt-2.5 pt-2.5 border-t border-amber-500/20 flex items-center gap-2 text-[11px] font-medium text-amber-500">
-              <AlertTriangle className="shrink-0" size={13} />
-              <span>Active: Customer checkouts and order placements are currently paused.</span>
+            <div className="pt-2 border-t border-rose-500/20 flex items-center gap-2 text-xs font-semibold text-rose-400">
+              <AlertTriangle size={14} className="shrink-0" />
+              <span>Checkout button displays "Orders temporarily paused".</span>
             </div>
           )}
         </div>
       </div>
-
-      {/* Message Feedback */}
-      <AnimatePresence>
-        {message.text && (
-          <motion.div
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4 }}
-            className={`p-2.5 rounded-xl border flex items-center gap-2 text-xs font-semibold ${
-              message.type === "success"
-                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
-                : "bg-rose-500/10 border-rose-500/30 text-rose-500"
-            }`}
-          >
-            {message.type === "success" ? <CheckCircle2 size={14} /> : <AlertTriangle size={14} />}
-            <span>{message.text}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

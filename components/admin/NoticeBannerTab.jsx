@@ -193,23 +193,53 @@ export default function NoticeBannerTab() {
   return (
     <div className="w-full space-y-3.5 sm:space-y-4 pb-8">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)] truncate">
-          Notice Banner
-        </h2>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
+              <Bell size={20} />
+            </div>
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">
+              Top Notice Bar
+            </h2>
+          </div>
+          <p className="text-xs text-[var(--muted)] mt-1">
+            Display important announcements, server alerts, or event tickers across the top of every page.
+          </p>
+        </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-xs font-semibold text-[var(--muted)]">
             <Bell size={13} className="text-[var(--accent)]" />
             <span>{config.notices?.length || 0} Notices</span>
           </div>
 
           <button
+            type="button"
             onClick={fetchSettings}
-            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none cursor-pointer"
+            className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.04] transition-all cursor-pointer"
             title="Refresh Notice Banner"
           >
-            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
+            <RefreshCcw size={15} className={loading ? "animate-spin" : ""} />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[var(--accent)] hover:brightness-110 active:scale-95 disabled:opacity-50 transition-all shadow-md shadow-[var(--accent)]/20 cursor-pointer"
+          >
+            {saving ? (
+              <>
+                <Loader2 size={15} className="animate-spin" />
+                <span>Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save size={15} />
+                <span>Save Changes</span>
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -381,16 +411,6 @@ export default function NoticeBannerTab() {
             <p className="text-xs text-[var(--muted)] text-center py-6 bg-[var(--card)]/30 rounded-xl border border-[var(--border)] border-dashed">No notices added yet.</p>
           )}
         </div>
-        
-        {/* Save Button */}
-        <button 
-          onClick={handleSave} 
-          disabled={saving}
-          className="w-full mt-3 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-extrabold uppercase tracking-wider text-xs py-3 rounded-xl hover:brightness-105 active:scale-[0.99] transition-all shadow-sm cursor-pointer disabled:opacity-50"
-        >
-          {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
-          <span>{saving ? "Saving Changes..." : "Save Notice Banner Config"}</span>
-        </button>
       </div>
 
       {/* Message Area */}

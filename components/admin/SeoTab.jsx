@@ -11,7 +11,10 @@ import {
   X,
   Loader2,
   Search,
-  Tag
+  Tag,
+  Sparkles,
+  BarChart2,
+  ExternalLink
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -20,6 +23,7 @@ export default function SeoTab() {
     SEO_TITLE: "",
     SEO_DESCRIPTION: "",
     SEO_KEYWORDS: [],
+    GOOGLE_ANALYTICS_ID: "",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -43,6 +47,7 @@ export default function SeoTab() {
           SEO_TITLE: data.data.SEO_TITLE || "",
           SEO_DESCRIPTION: data.data.SEO_DESCRIPTION || "",
           SEO_KEYWORDS: Array.isArray(data.data.SEO_KEYWORDS) ? data.data.SEO_KEYWORDS : [],
+          GOOGLE_ANALYTICS_ID: data.data.GOOGLE_ANALYTICS_ID || "",
         });
       }
     } catch (err) {
@@ -52,12 +57,15 @@ export default function SeoTab() {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    if (e) e.preventDefault();
+    if (saving) return;
+
     try {
       setSaving(true);
       setMessage({ type: "", text: "" });
       const token = localStorage.getItem("token");
-      
+
       const res = await fetch("/api/admin/settings", {
         method: "PATCH",
         headers: {
@@ -68,13 +76,14 @@ export default function SeoTab() {
       });
       const data = await res.json();
       if (data.success) {
-        setMessage({ type: "success", text: "SEO Settings updated successfully!" });
-        setTimeout(() => setMessage({ type: "", text: "" }), 3000);
+        setMessage({ type: "success", text: "SEO and Search settings saved successfully!" });
+        setTimeout(() => setMessage({ type: "", text: "" }), 3500);
       } else {
         setMessage({ type: "error", text: data.message || "Failed to update settings" });
       }
     } catch (err) {
-      setMessage({ type: "error", text: "Something went wrong" });
+      console.error("SEO save error:", err);
+      setMessage({ type: "error", text: "Something went wrong while saving" });
     } finally {
       setSaving(false);
     }
@@ -85,9 +94,9 @@ export default function SeoTab() {
       e.preventDefault();
       const kw = keywordInput.trim();
       if (kw && settings.SEO_KEYWORDS.length < 20 && !settings.SEO_KEYWORDS.includes(kw)) {
-        setSettings(prev => ({
+        setSettings((prev) => ({
           ...prev,
-          SEO_KEYWORDS: [...prev.SEO_KEYWORDS, kw]
+          SEO_KEYWORDS: [...prev.SEO_KEYWORDS, kw],
         }));
         setKeywordInput("");
       }
@@ -95,9 +104,9 @@ export default function SeoTab() {
   };
 
   const removeKeyword = (kw) => {
-    setSettings(prev => ({
+    setSettings((prev) => ({
       ...prev,
-      SEO_KEYWORDS: prev.SEO_KEYWORDS.filter(k => k !== kw)
+      SEO_KEYWORDS: prev.SEO_KEYWORDS.filter((k) => k !== kw),
     }));
   };
 
@@ -110,168 +119,281 @@ export default function SeoTab() {
     );
   }
 
+  const titleLength = settings.SEO_TITLE?.length || 0;
+  const descLength = settings.SEO_DESCRIPTION?.length || 0;
+
   return (
-    <div className="w-full space-y-3.5 sm:space-y-4 pb-8">
+    <div className="w-full space-y-5 pb-12">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">SEO & Google</h2>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
+              <Globe size={20} />
+            </div>
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">
+              SEO &amp; Search Indexing
+            </h2>
+          </div>
+          <p className="text-xs text-[var(--muted)] mt-1">
+            Customize how your gaming storefront appears on Google, social media search cards, and meta tags.
+          </p>
+        </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
-            <Globe size={13} className="text-[var(--accent)]" />
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-xs font-semibold text-[var(--muted)]">
+            <Tag size={13} className="text-[var(--accent)]" />
             <span>{settings.SEO_KEYWORDS?.length || 0}/20 Keywords</span>
           </div>
+
           <button
+            type="button"
             onClick={fetchSettings}
-            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none cursor-pointer"
-            title="Refresh"
+            className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.04] transition-all cursor-pointer"
+            title="Refresh settings"
           >
-            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
+            <RefreshCcw size={15} className={loading ? "animate-spin" : ""} />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[var(--accent)] hover:brightness-110 active:scale-95 disabled:opacity-50 transition-all shadow-md shadow-[var(--accent)]/20 cursor-pointer"
+          >
+            {saving ? (
+              <>
+                <Loader2 size={15} className="animate-spin" />
+                <span>Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save size={15} />
+                <span>Save Changes</span>
+              </>
+            )}
           </button>
         </div>
       </div>
 
-      {/* ================= GOOGLE SEARCH PREVIEW ================= */}
-      <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--card)]/60 border border-[var(--border)] space-y-1">
-        <div className="flex items-center gap-1.5 text-[9.5px] font-black uppercase tracking-wider text-[var(--muted)] mb-1">
-          <Search size={11} className="text-[var(--accent)]" />
-          <span>Google Search Preview</span>
-        </div>
-        <div className="min-w-0">
-          <p className="text-[11px] text-[var(--muted)] font-mono truncate">
-            https://yourdomain.com
-          </p>
-          <h4 className="text-sm font-bold text-blue-500 hover:underline truncate cursor-pointer mt-0.5">
-            {settings.SEO_TITLE || "Website Title - Instant Game Top Up"}
-          </h4>
-          <p className="text-xs text-[var(--muted)] line-clamp-2 mt-0.5 leading-relaxed">
-            {settings.SEO_DESCRIPTION || "Add your website description below to customize how your store appears in Google and search engines."}
-          </p>
-        </div>
-      </div>
-
-      {/* ================= FORM CONTROLS ================= */}
-      <div className="space-y-3">
-        {/* Title */}
-        <div className="space-y-1">
-          <div className="flex justify-between items-center px-0.5">
-            <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">
-              Website Title (Google Title)
-            </label>
-            <span className="text-[10px] font-mono text-[var(--muted)]/60">
-              {settings.SEO_TITLE?.length || 0} chars
-            </span>
-          </div>
-          <input 
-            type="text" 
-            value={settings.SEO_TITLE}
-            onChange={(e) => setSettings(prev => ({...prev, SEO_TITLE: e.target.value}))}
-            className="w-full bg-[var(--card)]/60 border border-[var(--border)] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-[var(--foreground)] placeholder:text-[var(--muted)]/40 focus:outline-none focus:border-[var(--accent)]/50 focus:ring-2 focus:ring-[var(--accent)]/15 transition-all"
-            placeholder="e.g. Tronics Store - Instant Game Top Up"
-          />
-        </div>
-
-        {/* Description */}
-        <div className="space-y-1">
-          <div className="flex justify-between items-center px-0.5">
-            <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">
-              Website Description (Google Description)
-            </label>
-            <span className="text-[10px] font-mono text-[var(--muted)]/60">
-              {settings.SEO_DESCRIPTION?.length || 0} chars
-            </span>
-          </div>
-          <textarea 
-            value={settings.SEO_DESCRIPTION}
-            onChange={(e) => setSettings(prev => ({...prev, SEO_DESCRIPTION: e.target.value}))}
-            rows={3}
-            className="w-full bg-[var(--card)]/60 border border-[var(--border)] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-[var(--foreground)] placeholder:text-[var(--muted)]/40 focus:outline-none focus:border-[var(--accent)]/50 focus:ring-2 focus:ring-[var(--accent)]/15 transition-all resize-y"
-            placeholder="e.g. Fast, cheap and safe top-up service for mobile games..."
-          />
-        </div>
-
-        {/* Keywords */}
-        <div className="space-y-1">
-          <div className="flex justify-between items-center px-0.5">
-            <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)] flex items-center gap-1.5">
-              <Tag size={11} className="text-[var(--accent)]" />
-              <span>Search Keywords</span>
-            </label>
-            <span className="text-[10px] font-mono font-bold text-[var(--accent)]">
-              {settings.SEO_KEYWORDS.length}/20
-            </span>
-          </div>
-          
-          <div className="flex gap-2">
-            <input 
-              type="text" 
-              value={keywordInput}
-              onChange={(e) => setKeywordInput(e.target.value)}
-              onKeyDown={addKeyword}
-              disabled={settings.SEO_KEYWORDS.length >= 20}
-              className="flex-1 bg-[var(--card)]/60 border border-[var(--border)] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-[var(--foreground)] placeholder:text-[var(--muted)]/40 focus:outline-none focus:border-[var(--accent)]/50 focus:ring-2 focus:ring-[var(--accent)]/15 disabled:opacity-50 transition-all"
-              placeholder="Type keyword and press Enter..."
-            />
-            <button 
-              type="button"
-              onClick={addKeyword}
-              disabled={settings.SEO_KEYWORDS.length >= 20 || !keywordInput.trim()}
-              className="px-3.5 py-2.5 bg-[var(--accent)] text-black font-extrabold uppercase text-xs rounded-xl disabled:opacity-40 hover:brightness-105 active:scale-95 transition-all cursor-pointer shrink-0 flex items-center gap-1.5"
-            >
-              <Plus size={13} strokeWidth={3} />
-              <span>Add</span>
-            </button>
-          </div>
-          
-          {/* Keyword tags */}
-          {settings.SEO_KEYWORDS.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1.5">
-              {settings.SEO_KEYWORDS.map(kw => (
-                <span key={kw} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs font-medium text-[var(--foreground)]">
-                  <span>{kw}</span>
-                  <button 
-                    type="button"
-                    onClick={() => removeKeyword(kw)} 
-                    className="text-[var(--muted)] hover:text-rose-500 transition-colors cursor-pointer"
-                    title="Remove"
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-        
-        {/* Save button */}
-        <button 
-          onClick={handleSave} 
-          disabled={saving}
-          className="w-full mt-3 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-extrabold uppercase tracking-wider text-xs py-3 rounded-xl hover:brightness-105 active:scale-[0.99] transition-all shadow-sm cursor-pointer disabled:opacity-50"
-        >
-          {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
-          <span>{saving ? "Saving Changes..." : "Save SEO Settings"}</span>
-        </button>
-      </div>
-
-      {/* Message Area */}
+      {/* ================= ALERTS ================= */}
       <AnimatePresence>
         {message.text && (
           <motion.div
-            initial={{ opacity: 0, y: 4 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4 }}
-            className={`p-2.5 rounded-xl border flex items-center gap-2 text-xs font-semibold ${
+            exit={{ opacity: 0, y: -8 }}
+            className={`flex items-center gap-2.5 p-3.5 rounded-xl border text-xs font-medium ${
               message.type === "success"
-                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
-                : "bg-rose-500/10 border-rose-500/30 text-rose-500"
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                : "bg-red-500/10 border-red-500/20 text-red-400"
             }`}
           >
-            {message.type === "success" ? <CheckCircle2 size={14} /> : <AlertCircle size={14} />}
-            <span>{message.text}</span>
+            {message.type === "success" ? (
+              <CheckCircle2 size={16} className="shrink-0" />
+            ) : (
+              <AlertCircle size={16} className="shrink-0" />
+            )}
+            <span className="flex-1">{message.text}</span>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <form onSubmit={handleSave} className="space-y-5">
+        {/* ================= 2-COLUMN SECTION: METAS + LIVE SERP PREVIEW ================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {/* Left Column: Form Controls (7 cols) */}
+          <div className="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
+            <div className="flex items-center gap-2 pb-2 border-b border-[var(--border)]">
+              <Search size={18} className="text-[var(--accent)]" />
+              <h3 className="text-sm font-bold text-[var(--foreground)]">Meta Tags &amp; Descriptions</h3>
+            </div>
+
+            {/* Title */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-semibold text-[var(--foreground)]">
+                  Website Meta Title (Google Title)
+                </label>
+                <span
+                  className={`text-[11px] font-mono font-medium ${
+                    titleLength > 60 ? "text-amber-400" : "text-[var(--muted)]"
+                  }`}
+                >
+                  {titleLength}/60 chars
+                </span>
+              </div>
+              <input
+                type="text"
+                value={settings.SEO_TITLE}
+                onChange={(e) => setSettings((prev) => ({ ...prev, SEO_TITLE: e.target.value }))}
+                placeholder="e.g. Tronics Store – MLBB Diamond Top Up | Instant & Secure"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs sm:text-sm text-[var(--foreground)] outline-none transition-colors"
+              />
+              <p className="text-[11px] text-[var(--muted)]">
+                Keep between 50-60 characters for best display on mobile search results.
+              </p>
+            </div>
+
+            {/* Description */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-semibold text-[var(--foreground)]">
+                  Search Snippet Description
+                </label>
+                <span
+                  className={`text-[11px] font-mono font-medium ${
+                    descLength > 160 ? "text-amber-400" : "text-[var(--muted)]"
+                  }`}
+                >
+                  {descLength}/160 chars
+                </span>
+              </div>
+              <textarea
+                rows={3}
+                value={settings.SEO_DESCRIPTION}
+                onChange={(e) => setSettings((prev) => ({ ...prev, SEO_DESCRIPTION: e.target.value }))}
+                placeholder="e.g. Fast, secure Mobile Legends top-ups with instant automated delivery, 24/7 customer support, and safe payments."
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs sm:text-sm text-[var(--foreground)] outline-none transition-colors resize-none leading-relaxed"
+              />
+              <p className="text-[11px] text-[var(--muted)]">
+                Summary displayed under your page link in search results (aim for 120-160 characters).
+              </p>
+            </div>
+
+            {/* Google Analytics ID */}
+            <div className="space-y-1.5 pt-1">
+              <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
+                <BarChart2 size={14} className="text-[var(--accent)]" />
+                <span>Google Analytics Measurement ID (Optional)</span>
+              </label>
+              <input
+                type="text"
+                value={settings.GOOGLE_ANALYTICS_ID}
+                onChange={(e) => setSettings((prev) => ({ ...prev, GOOGLE_ANALYTICS_ID: e.target.value }))}
+                placeholder="e.g. G-RBPY9YC6V6"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] font-mono outline-none transition-colors"
+              />
+              <p className="text-[11px] text-[var(--muted)]">
+                Connect your Google Analytics 4 stream to track visitors and order conversion live.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column: Real-time Google SERP Preview Card (5 cols) */}
+          <div className="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-amber-400" />
+                  <h3 className="text-sm font-bold text-[var(--foreground)]">Google SERP Live Preview</h3>
+                </div>
+                <span className="text-[10px] text-[var(--muted)] font-medium">Desktop &amp; Mobile</span>
+              </div>
+
+              {/* Realistic Search Box */}
+              <div className="p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full bg-[var(--accent)]/20 border border-[var(--accent)]/30 flex items-center justify-center text-[10px] font-black text-[var(--accent)]">
+                    T
+                  </div>
+                  <div className="min-w-0 flex flex-col">
+                    <span className="text-[11px] font-bold text-[var(--foreground)] truncate">Tronics Store</span>
+                    <span className="text-[10px] text-[var(--muted)] font-mono truncate">
+                      https://tronics.store &rsaquo; mlbb
+                    </span>
+                  </div>
+                </div>
+
+                <div className="min-w-0 pt-1">
+                  <h4 className="text-sm sm:text-base font-bold text-sky-400 hover:underline cursor-pointer truncate">
+                    {settings.SEO_TITLE || "Website Title - Instant Game Top Up"}
+                  </h4>
+                  <p className="text-xs text-[var(--muted)] line-clamp-3 mt-1 leading-relaxed">
+                    {settings.SEO_DESCRIPTION ||
+                      "Add your website description to see how search engines display your gaming top-up store to organic search customers."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[var(--accent)]/5 border border-[var(--accent)]/15 text-[11px] text-[var(--muted)] leading-relaxed space-y-1">
+                <div className="font-bold text-[var(--foreground)] flex items-center gap-1.5">
+                  <Sparkles size={12} className="text-[var(--accent)]" />
+                  <span>Pro Tip for Rankings</span>
+                </div>
+                <p>
+                  Include your primary game title (*e.g. MLBB Diamonds, BGMI UC*) near the beginning of the title for maximum search click-through rate.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ================= CARD 2: SEARCH KEYWORDS ================= */}
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
+          <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+            <div className="flex items-center gap-2">
+              <Tag size={18} className="text-pink-400" />
+              <h3 className="text-sm font-bold text-[var(--foreground)]">Meta Keywords Index</h3>
+            </div>
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20">
+              {settings.SEO_KEYWORDS.length} / 20 Tags
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
+                <input
+                  type="text"
+                  value={keywordInput}
+                  onChange={(e) => setKeywordInput(e.target.value)}
+                  onKeyDown={addKeyword}
+                  placeholder="Type a search keyword (e.g. mlbb cheap recharge, weekly diamond pass) and press Enter"
+                  className="w-full pl-9 pr-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={addKeyword}
+                disabled={!keywordInput.trim() || settings.SEO_KEYWORDS.length >= 20}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-[var(--accent)]/15 text-[var(--accent)] hover:bg-[var(--accent)] hover:text-white disabled:opacity-40 transition-all cursor-pointer shrink-0"
+              >
+                <Plus size={14} />
+                <span>Add Tag</span>
+              </button>
+            </div>
+
+            {/* Keyword Chips */}
+            {settings.SEO_KEYWORDS.length === 0 ? (
+              <div className="py-6 text-center rounded-xl border border-dashed border-[var(--border)] text-xs text-[var(--muted)]">
+                No search keywords added yet. Add tags above to target search queries.
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2 pt-1">
+                {settings.SEO_KEYWORDS.map((kw, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs font-semibold text-[var(--foreground)] hover:border-[var(--accent)]/50 transition-colors group"
+                  >
+                    <span>{kw}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeKeyword(kw)}
+                      className="text-[var(--muted)] hover:text-red-400 transition-colors cursor-pointer"
+                      title="Remove keyword"
+                    >
+                      <X size={12} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </form>
     </div>
   );
 }

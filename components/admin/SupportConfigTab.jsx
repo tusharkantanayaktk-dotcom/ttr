@@ -604,35 +604,6 @@ export default function SupportConfigTab() {
             </div>
           </div>
         </div>
-
-        {/* Bottom Save Bar */}
-        <div className="flex items-center justify-end gap-3 pt-2">
-          <button
-            type="button"
-            onClick={handleResetDefaults}
-            className="px-4 py-2.5 rounded-xl text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] bg-[var(--card)] border border-[var(--border)] transition-all cursor-pointer"
-          >
-            Reset Defaults
-          </button>
-
-          <button
-            type="submit"
-            disabled={saving}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-[var(--accent)] hover:brightness-110 active:scale-95 disabled:opacity-50 transition-all shadow-lg shadow-[var(--accent)]/20 cursor-pointer"
-          >
-            {saving ? (
-              <>
-                <Loader2 size={16} className="animate-spin" />
-                <span>Saving Configurations...</span>
-              </>
-            ) : (
-              <>
-                <Save size={16} />
-                <span>Save All Changes</span>
-              </>
-            )}
-          </button>
-        </div>
       </form>
     </div>
   );

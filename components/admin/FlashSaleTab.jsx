@@ -209,28 +209,53 @@ export default function FlashSaleTab() {
   return (
     <div className="w-full space-y-3.5 sm:space-y-4 pb-8">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)] truncate">
-            Flash Sale
-          </h2>
-          <p className="text-xs text-[var(--muted)] mt-0.5">
-            Limited-time deals with live countdown timer
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
+              <Zap size={20} className="fill-[var(--accent)]" />
+            </div>
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">
+              Flash Sale &amp; Timed Offers
+            </h2>
+          </div>
+          <p className="text-xs text-[var(--muted)] mt-1">
+            Configure limited-time flash discount deals with real-time countdown clocks.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          <div className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">
-            <Zap size={13} className="fill-[var(--accent)]" />
+        <div className="flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-xs font-semibold text-[var(--muted)]">
+            <Zap size={13} className="fill-[var(--accent)] text-[var(--accent)]" />
             <span>{config.items?.length || 0} Deals</span>
           </div>
 
           <button
+            type="button"
             onClick={fetchSettings}
-            className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] active:scale-95 transition-all outline-none cursor-pointer"
+            className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.04] transition-all cursor-pointer"
             title="Refresh Flash Sale"
           >
-            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
+            <RefreshCcw size={15} className={loading ? "animate-spin" : ""} />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[var(--accent)] hover:brightness-110 active:scale-95 disabled:opacity-50 transition-all shadow-md shadow-[var(--accent)]/20 cursor-pointer"
+          >
+            {saving ? (
+              <>
+                <Loader2 size={15} className="animate-spin" />
+                <span>Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save size={15} />
+                <span>Save Changes</span>
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -517,16 +542,6 @@ export default function FlashSaleTab() {
             </p>
           )}
         </div>
-
-        {/* ================= SAVE BUTTON ================= */}
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="w-full mt-3 flex items-center justify-center gap-2 bg-[var(--accent)] text-black font-extrabold uppercase tracking-wider text-xs py-3 rounded-xl hover:brightness-105 active:scale-[0.99] transition-all shadow-sm cursor-pointer disabled:opacity-50"
-        >
-          {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
-          <span>{saving ? "Saving Changes..." : "Save Flash Sale Config"}</span>
-        </button>
       </div>
 
       {/* ================= NOTIFICATION MESSAGE ================= */}

@@ -255,14 +255,18 @@ export default function PricingTab({
   return (
     <div className="w-full space-y-3.5 sm:space-y-4 pb-16">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)] truncate flex items-center gap-2">
-            <Coins size={18} className="text-[var(--accent)] shrink-0" />
-            Pricing &amp; Profit Rules
-          </h2>
-          <p className="text-xs text-[var(--muted)] mt-0.5 truncate">
-            Set percentage profit margins or set custom fixed prices for specific game items
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
+              <Coins size={20} />
+            </div>
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">
+              Pricing &amp; Profit Rules
+            </h2>
+          </div>
+          <p className="text-xs text-[var(--muted)] mt-1">
+            Set percentage profit margins or set custom fixed prices for specific game items.
           </p>
         </div>
 
@@ -271,16 +275,16 @@ export default function PricingTab({
           type="button"
           onClick={onSave}
           disabled={!canSave}
-          className={`h-9 px-4 rounded-xl flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-wider transition-all outline-none shrink-0 cursor-pointer ${
+          className={`px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold transition-all outline-none shrink-0 cursor-pointer ${
             canSave
-              ? "bg-[var(--accent)] text-black shadow-sm hover:brightness-105 active:scale-95"
+              ? "bg-[var(--accent)] text-white shadow-md shadow-[var(--accent)]/20 hover:brightness-110 active:scale-95"
               : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]/40 cursor-not-allowed border border-[var(--border)]"
           }`}
         >
           {savingPricing ? (
-            <Loader2 size={13} className="animate-spin" />
+            <Loader2 size={15} className="animate-spin" />
           ) : (
-            <Save size={13} />
+            <Save size={15} />
           )}
           <span>{savingPricing ? "Saving..." : "Save Pricing"}</span>
         </button>
