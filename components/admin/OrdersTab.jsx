@@ -706,101 +706,120 @@ export default function OrdersTab() {
           </>
         )}
       </AnimatePresence>
-      {/* ================= FILTER MODAL ================= */}
+      {/* ================= FILTER BOTTOMSHEET ================= */}
       <AnimatePresence>
         {showFilters && (
-          <div className="fixed inset-0 z-[1200] flex items-center justify-end">
+          <div className="fixed inset-0 z-[1200] flex items-end sm:items-center justify-center p-0 sm:p-4">
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowFilters(false)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
             />
 
+            {/* Bottomsheet Drawer */}
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 200 }}
-              className="relative w-full max-w-sm h-full bg-[var(--background)] border-l border-[var(--border)] p-8 space-y-8 shadow-2xl"
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 28, stiffness: 320 }}
+              className="relative w-full max-w-lg bg-[var(--card)] rounded-t-3xl sm:rounded-2xl border border-[var(--border)] p-4 sm:p-6 shadow-2xl overflow-hidden max-h-[90dvh] flex flex-col z-10 pb-6 sm:pb-5"
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-[var(--foreground)]">Filters</h3>
+              {/* Mobile Drag Indicator Handle */}
+              <div className="w-10 h-1 rounded-full bg-[var(--foreground)]/20 mx-auto mb-3 sm:hidden" />
+
+              {/* Header */}
+              <div className="flex justify-between items-center pb-3 border-b border-[var(--border)]">
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-[var(--foreground)]">Filters</h3>
+                  <p className="text-[11px] text-[var(--muted)]">Filter orders by status, game, and date range</p>
+                </div>
                 <button
+                  type="button"
                   onClick={() => setShowFilters(false)}
-                  className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-all outline-none"
+                  className="w-8 h-8 rounded-xl bg-[var(--foreground)]/[0.05] hover:bg-[var(--foreground)]/[0.1] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-all outline-none cursor-pointer"
                 >
-                  <X size={20} />
+                  <X size={16} />
                 </button>
               </div>
 
-              <div className="space-y-6">
-                <div className="space-y-3">
-                  <label className="text-xs font-semibold text-[var(--muted)] ml-1">Status</label>
-                  <div className="relative">
-                    <select
-                      value={filters.status}
-                      onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                      className="w-full h-11 pl-4 pr-10 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-sm font-bold uppercase focus:border-[var(--accent)]/50 outline-none appearance-none cursor-pointer"
-                    >
-                      <option value="" className="bg-[var(--card)]">All Status</option>
-                      <option value="pending" className="bg-[var(--card)]">Pending</option>
-                      <option value="success" className="bg-[var(--card)]">Success</option>
-                      <option value="failed" className="bg-[var(--card)]">Failed</option>
-                      <option value="refund" className="bg-[var(--card)]">Refund</option>
-                    </select>
-                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)]/50 pointer-events-none" size={14} />
+              {/* Body (Scrollable) */}
+              <div className="py-4 space-y-4 overflow-y-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">Status</label>
+                    <div className="relative">
+                      <select
+                        value={filters.status}
+                        onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                        className="w-full h-10 pl-3 pr-8 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs font-bold uppercase focus:border-[var(--accent)] outline-none appearance-none cursor-pointer"
+                      >
+                        <option value="" className="bg-[var(--card)]">All Status</option>
+                        <option value="pending" className="bg-[var(--card)]">Pending</option>
+                        <option value="success" className="bg-[var(--card)]">Success</option>
+                        <option value="failed" className="bg-[var(--card)]">Failed</option>
+                        <option value="refund" className="bg-[var(--card)]">Refund</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] pointer-events-none" size={14} />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">Game Slug</label>
+                    <input
+                      placeholder="e.g. mobile-legends"
+                      value={filters.gameSlug}
+                      onChange={(e) => setFilters({ ...filters, gameSlug: e.target.value })}
+                      className="w-full h-10 px-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs font-bold uppercase focus:border-[var(--accent)] outline-none placeholder:text-[var(--muted)]/40"
+                    />
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <label className="text-xs font-semibold text-[var(--muted)] ml-1">Game Slug</label>
-                  <input
-                    placeholder="e.g. mobile-legends"
-                    value={filters.gameSlug}
-                    onChange={(e) => setFilters({ ...filters, gameSlug: e.target.value })}
-                    className="w-full h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-sm font-bold uppercase focus:border-[var(--accent)]/50 outline-none placeholder:text-[var(--muted)]/40"
-                  />
-                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">Date From</label>
+                    <input
+                      type="date"
+                      value={filters.from}
+                      onChange={(e) => setFilters({ ...filters, from: e.target.value })}
+                      className="w-full h-10 px-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs font-semibold focus:border-[var(--accent)] outline-none transition-all [color-scheme:dark]"
+                    />
+                  </div>
 
-                <div className="space-y-3">
-                  <label className="text-xs font-semibold text-[var(--muted)] ml-1">Date From</label>
-                  <input
-                    type="date"
-                    value={filters.from}
-                    onChange={(e) => setFilters({ ...filters, from: e.target.value })}
-                    className="w-full h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-sm font-bold uppercase focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40 [color-scheme:dark]"
-                  />
-                </div>
-
-                <div className="space-y-3">
-                  <label className="text-xs font-semibold text-[var(--muted)] ml-1">Date To</label>
-                  <input
-                    type="date"
-                    value={filters.to}
-                    onChange={(e) => setFilters({ ...filters, to: e.target.value })}
-                    className="w-full h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.03] text-[var(--foreground)] text-sm font-bold uppercase focus:border-[var(--accent)]/50 outline-none transition-all placeholder:text-[var(--muted)]/40 [color-scheme:dark]"
-                  />
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">Date To</label>
+                    <input
+                      type="date"
+                      value={filters.to}
+                      onChange={(e) => setFilters({ ...filters, to: e.target.value })}
+                      className="w-full h-10 px-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs font-semibold focus:border-[var(--accent)] outline-none transition-all [color-scheme:dark]"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="flex gap-4 pt-4">
+              {/* Footer Actions */}
+              <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between gap-3">
                 <button
+                  type="button"
                   onClick={() => {
                     setFilters({ status: "", gameSlug: "", from: "", to: "" });
                     setPage(1);
                   }}
-                  className="flex-1 h-11 rounded-xl border border-[var(--border)] text-xs font-semibold text-[var(--muted)] hover:bg-[var(--foreground)]/[0.05] hover:text-[var(--foreground)] transition-all outline-none"
+                  className="px-4 py-2 rounded-xl border border-[var(--border)] text-xs font-bold text-[var(--muted)] hover:bg-[var(--foreground)]/[0.05] hover:text-[var(--foreground)] transition-all cursor-pointer"
                 >
                   Clear All
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => setShowFilters(false)}
-                  className="flex-1 h-11 rounded-xl bg-[var(--accent)] text-white text-xs font-semibold shadow-lg shadow-[var(--accent)]/20 hover:brightness-110 active:scale-95 transition-all outline-none"
+                  className="px-5 py-2 rounded-xl bg-[var(--accent)] text-black text-xs font-extrabold shadow-md hover:brightness-110 active:scale-95 transition-all cursor-pointer"
                 >
-                  Apply
+                  Apply Filters
                 </button>
               </div>
             </motion.div>
