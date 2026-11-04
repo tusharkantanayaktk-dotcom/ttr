@@ -239,27 +239,44 @@ export default function PricingTab({
   return (
     <div className="w-full space-y-3.5 sm:space-y-4 pb-16">
       {/* ================= HEADER ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
-              <Coins size={20} />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border)] pb-3.5">
+        <div className="space-y-1">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="p-1.5 sm:p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
+                <Coins size={18} />
+              </div>
+              <h2 className="text-base sm:text-xl font-bold tracking-tight text-[var(--foreground)] truncate">
+                Pricing &amp; Profit Rules
+              </h2>
             </div>
-            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">
-              Pricing &amp; Profit Rules
-            </h2>
+
+            {/* Mobile Save Button */}
+            <button
+              type="button"
+              onClick={onSave}
+              disabled={!canSave}
+              className={`sm:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm shrink-0 cursor-pointer ${
+                canSave
+                  ? "bg-[var(--accent)] text-white hover:brightness-110 active:scale-95"
+                  : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]/40 cursor-not-allowed border border-[var(--border)]"
+              }`}
+            >
+              {savingPricing ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
+              <span>{savingPricing ? "Saving..." : "Save"}</span>
+            </button>
           </div>
-          <p className="text-xs text-[var(--muted)] mt-1">
-            Set percentage profit margins or set custom fixed prices for specific game items.
+          <p className="text-[11px] sm:text-xs text-[var(--muted)]">
+            Set percentage profit margins or custom fixed prices for game packages.
           </p>
         </div>
 
-        {/* SAVE BUTTON */}
+        {/* Desktop Save Button */}
         <button
           type="button"
           onClick={onSave}
           disabled={!canSave}
-          className={`px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold transition-all outline-none shrink-0 cursor-pointer ${
+          className={`hidden sm:flex px-4 py-2 rounded-xl items-center justify-center gap-1.5 text-xs font-bold transition-all outline-none shrink-0 cursor-pointer ${
             canSave
               ? "bg-[var(--accent)] text-white shadow-md shadow-[var(--accent)]/20 hover:brightness-110 active:scale-95"
               : "bg-[var(--foreground)]/[0.05] text-[var(--muted)]/40 cursor-not-allowed border border-[var(--border)]"
@@ -275,33 +292,44 @@ export default function PricingTab({
       </div>
 
       {/* ================= CONTROLS ROW ================= */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 p-2 rounded-xl border border-[var(--border)] bg-[var(--card)]/60">
+      <div className="flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center justify-between gap-2 p-1.5 sm:p-2 rounded-xl border border-[var(--border)] bg-[var(--card)]/60">
         {/* MODE SWITCHER */}
-        <div className="flex p-0.5 rounded-lg bg-[var(--foreground)]/[0.04] border border-[var(--border)]/60">
+        <div className="grid grid-cols-2 p-0.5 rounded-lg bg-[var(--foreground)]/[0.04] border border-[var(--border)]/60 flex-1 min-[480px]:flex-none">
           {[
-            { id: "percent", label: "% Percentage Markup", icon: <Percent size={12} /> },
-            { id: "fixed", label: "Custom Fixed Prices", icon: <Coins size={12} /> },
+            {
+              id: "percent",
+              icon: <Percent size={12} />,
+              shortLabel: "Markup %",
+              fullLabel: "Percentage Markup",
+            },
+            {
+              id: "fixed",
+              icon: <Coins size={12} />,
+              shortLabel: "Fixed Prices",
+              fullLabel: "Custom Fixed Prices",
+            },
           ].map((m) => (
             <button
               key={m.id}
               type="button"
               onClick={() => setPricingMode(m.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
                 pricingMode === m.id
                   ? "bg-[var(--accent)] text-black shadow-sm font-extrabold"
                   : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
             >
               {m.icon}
-              <span>{m.label}</span>
+              <span className="sm:hidden">{m.shortLabel}</span>
+              <span className="hidden sm:inline">{m.fullLabel}</span>
             </button>
           ))}
         </div>
 
         {/* ROLE SELECTOR */}
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-semibold text-[var(--muted)] hidden sm:inline">Prices For:</span>
-          <div className="flex p-0.5 rounded-lg bg-[var(--foreground)]/[0.04] border border-[var(--border)]/60">
+        <div className="flex items-center gap-2 flex-1 min-[480px]:flex-none justify-end">
+          <span className="text-[11px] font-semibold text-[var(--muted)] hidden md:inline">Prices For:</span>
+          <div className="grid grid-cols-2 p-0.5 rounded-lg bg-[var(--foreground)]/[0.04] border border-[var(--border)]/60 w-full min-[480px]:w-auto">
             {[
               { id: "user", label: "Regular Users" },
               { id: "admin", label: "Admins" },
@@ -310,7 +338,7 @@ export default function PricingTab({
                 key={role.id}
                 type="button"
                 onClick={() => setPricingType(role.id)}
-                className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer text-center ${
                   pricingType === role.id
                     ? "bg-[var(--foreground)]/[0.12] text-[var(--foreground)] font-extrabold border border-[var(--border)]/80 shadow-xs"
                     : "text-[var(--muted)] hover:text-[var(--foreground)]"
@@ -335,24 +363,28 @@ export default function PricingTab({
             className="space-y-2.5"
           >
             {/* Section Header with Add Button */}
-            <div className="flex items-center justify-between px-0.5">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[var(--foreground)] flex items-center gap-1.5">
-                  <Percent size={13} className="text-[var(--accent)]" />
-                  Profit Margin Ranges ({slabs.length})
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 uppercase">
-                  {pricingType === "user" ? "Regular Users" : "Admins"}
+            <div className="flex items-center justify-between gap-2 px-0.5">
+              <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                <div className="flex items-center gap-1 min-w-0">
+                  <Percent size={13} className="text-[var(--accent)] shrink-0" />
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-[var(--foreground)] truncate">
+                    <span className="sm:hidden">Profit Ranges</span>
+                    <span className="hidden sm:inline">Profit Margin Ranges</span>
+                    {" "}({slabs.length})
+                  </span>
+                </div>
+                <span className="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 uppercase shrink-0">
+                  {pricingType === "user" ? "Users" : "Admins"}
                 </span>
               </div>
 
               <button
                 type="button"
                 onClick={addSlab}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--accent)] text-black text-xs font-extrabold hover:brightness-105 active:scale-95 transition-all shadow-sm cursor-pointer"
+                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--accent)] text-black text-xs font-extrabold hover:brightness-105 active:scale-95 transition-all shadow-sm cursor-pointer shrink-0 whitespace-nowrap"
               >
                 <Plus size={13} strokeWidth={2.5} />
-                <span>Add Price Range</span>
+                <span><span className="hidden min-[380px]:inline">Add </span>Range</span>
               </button>
             </div>
 
@@ -368,9 +400,9 @@ export default function PricingTab({
             <div className="p-2.5 sm:p-3 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 space-y-2">
               {/* Table Column Headers */}
               <div className="grid grid-cols-12 gap-1.5 sm:gap-2.5 px-2 text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
-                <div className="col-span-4">From Price (₹)</div>
-                <div className="col-span-4">To Price (₹)</div>
-                <div className="col-span-3">Profit Markup (%)</div>
+                <div className="col-span-4 truncate">From (₹)</div>
+                <div className="col-span-4 truncate">To (₹)</div>
+                <div className="col-span-3 truncate">Profit (%)</div>
                 <div className="col-span-1 text-center"></div>
               </div>
 
