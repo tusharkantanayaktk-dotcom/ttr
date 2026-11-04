@@ -313,29 +313,60 @@ export default function ProductCatalogTab() {
   return (
     <div className="w-full space-y-4 pb-16">
       {/* ================= HEADER ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
-              <Package size={20} />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border)] pb-3.5">
+        <div className="space-y-1">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="p-1.5 sm:p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
+                <Package size={18} />
+              </div>
+              <h2 className="text-base sm:text-lg font-bold tracking-tight text-[var(--foreground)] truncate">
+                Product Catalog &amp; Stock
+              </h2>
+              {hasChanges && (
+                <span className="px-2 py-0.5 text-[9px] font-bold rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 animate-pulse shrink-0">
+                  Unsaved
+                </span>
+              )}
             </div>
-            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">
-              Product Catalog &amp; Stock
-            </h2>
-            {hasChanges && (
-              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 animate-pulse">
-                Unsaved Changes
-              </span>
-            )}
+
+            {/* Mobile Actions in Header */}
+            <div className="flex sm:hidden items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  fetchGames();
+                  fetchStockConfig();
+                }}
+                className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] bg-[var(--card)] border border-[var(--border)] cursor-pointer"
+                title="Refresh"
+              >
+                <RefreshCcw size={14} />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={saving}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-[var(--accent)] shadow-sm cursor-pointer disabled:opacity-50"
+              >
+                {saving ? (
+                  <Loader2 size={13} className="animate-spin" />
+                ) : (
+                  <Save size={13} />
+                )}
+                <span>Save</span>
+              </button>
+            </div>
           </div>
-          <p className="text-xs text-[var(--muted)] mt-1">
-            Manage global product availability. Marking a game or product out of stock applies to <strong>all user types</strong> (guests, users, members, admins).
+          <p className="text-[11px] sm:text-xs text-[var(--muted)]">
+            Manage global product availability across all user types.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Quick Stats Pill */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 text-xs text-[var(--muted)] font-medium">
+        {/* Desktop Actions */}
+        <div className="hidden sm:flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 text-xs text-[var(--muted)] font-medium">
             <span>
               <strong className="text-[var(--foreground)]">
                 {games.length - stockConfig.outOfStockGames.length}
@@ -407,7 +438,7 @@ export default function ProductCatalogTab() {
       </AnimatePresence>
 
       {/* ================= MAIN UNIFIED SURFACE ================= */}
-      <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-7 space-y-6 shadow-sm">
+      <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3 sm:p-5 lg:p-6 space-y-4 sm:space-y-6 shadow-sm">
         
         {/* ================= TOP CONTROLS: GAME PICKER ================= */}
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 pb-5 border-b border-[var(--border)]">
@@ -562,16 +593,16 @@ export default function ProductCatalogTab() {
           </div>
 
           {/* Whole Game Stock Switch & Batch Actions */}
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center gap-2.5 sm:gap-3 w-full lg:w-auto">
             {/* Whole Game Stock Toggle */}
-            <div className="flex items-center gap-3 p-2.5 px-3.5 rounded-xl border border-[var(--border)] bg-[var(--background)]">
-              <div className="min-w-0">
-                <p className="text-xs font-bold text-[var(--foreground)]">
+            <div className="flex items-center justify-between gap-3 p-2.5 px-3.5 rounded-xl border border-[var(--border)] bg-[var(--background)] flex-1 min-[480px]:flex-none">
+              <div className="min-w-0 pr-1">
+                <p className="text-xs font-bold text-[var(--foreground)] truncate">
                   Game Availability
                 </p>
-                <p className="text-[10px] text-[var(--muted)]">
+                <p className="text-[10px] text-[var(--muted)] truncate">
                   {isSelectedGameOutOfStock
-                    ? "Game is marked OUT OF STOCK"
+                    ? "Game is OUT OF STOCK"
                     : "Game is ACTIVE in store"}
                 </p>
               </div>
@@ -599,11 +630,11 @@ export default function ProductCatalogTab() {
             </div>
 
             {/* Batch Item Buttons */}
-            <div className="flex items-center gap-1.5">
+            <div className="grid grid-cols-2 gap-1.5 shrink-0">
               <button
                 type="button"
                 onClick={markAllItemsInStock}
-                className="px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 active:scale-95 transition-all cursor-pointer"
+                className="px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 active:scale-95 transition-all cursor-pointer text-center whitespace-nowrap"
                 title="Mark all items of this game in stock"
               >
                 All In Stock
@@ -611,7 +642,7 @@ export default function ProductCatalogTab() {
               <button
                 type="button"
                 onClick={markAllItemsOutOfStock}
-                className="px-3 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 active:scale-95 transition-all cursor-pointer"
+                className="px-3 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 active:scale-95 transition-all cursor-pointer text-center whitespace-nowrap"
                 title="Mark all items of this game out of stock"
               >
                 All Out of Stock
@@ -636,26 +667,26 @@ export default function ProductCatalogTab() {
         )}
 
         {/* ================= ITEMS FILTER & SEARCH ROW ================= */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3">
           {/* Stock Filter Pills */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--background)] border border-[var(--border)] overflow-x-auto">
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--background)] border border-[var(--border)] overflow-x-auto scrollbar-none">
             <button
               type="button"
               onClick={() => setStockFilter("all")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 stockFilter === "all"
                   ? "bg-[var(--foreground)] text-[var(--background)] shadow-sm"
                   : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
             >
-              <span>All Items</span>
+              <span>All <span className="hidden min-[400px]:inline">Items</span></span>
               <span className="text-[10px] opacity-75 font-mono">({counts.total})</span>
             </button>
 
             <button
               type="button"
               onClick={() => setStockFilter("inStock")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 stockFilter === "inStock"
                   ? "bg-emerald-500 text-white shadow-sm"
                   : "text-emerald-400/80 hover:text-emerald-400"
@@ -668,7 +699,7 @@ export default function ProductCatalogTab() {
             <button
               type="button"
               onClick={() => setStockFilter("outOfStock")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 stockFilter === "outOfStock"
                   ? "bg-rose-500 text-white shadow-sm"
                   : "text-rose-400/80 hover:text-rose-400"
@@ -680,7 +711,7 @@ export default function ProductCatalogTab() {
           </div>
 
           {/* Search Items */}
-          <div className="relative sm:w-72">
+          <div className="relative w-full sm:w-72">
             <Search
               size={14}
               className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]"

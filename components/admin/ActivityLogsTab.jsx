@@ -201,36 +201,32 @@ export default function ActivityLogsTab() {
   return (
     <div className="space-y-4 sm:space-y-5">
       {/* ================= HEADER & TWO MAIN TABS ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-[var(--border)]">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)]">
-              <FiActivity className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-black tracking-tight text-[var(--foreground)]">
-                Activity Logs
-              </h2>
-              <p className="text-[11px] text-[var(--muted)]">
-                Monitor live user interactions and audit owner configuration changes
-              </p>
-            </div>
+      <div className="flex items-center justify-between gap-2.5 pb-2 border-b border-[var(--border)]">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="w-8 h-8 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)] shrink-0">
+            <FiActivity className="w-4 h-4" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="text-base sm:text-lg font-black tracking-tight text-[var(--foreground)] truncate">
+              Activity Logs
+            </h2>
+            <p className="text-[11px] text-[var(--muted)] truncate max-w-[200px] sm:max-w-none">
+              Monitor live user interactions and audit owner configuration changes
+            </p>
           </div>
         </div>
 
         {/* Refresh button */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={fetchLogs}
-            disabled={loading}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.04] text-xs font-semibold text-[var(--foreground)] active:scale-95 transition-all cursor-pointer disabled:opacity-50"
-            title="Refresh logs"
-          >
-            <FiRefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[var(--accent)]" : ""}`} />
-            <span>Refresh</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={fetchLogs}
+          disabled={loading}
+          className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--foreground)]/[0.04] text-xs font-bold text-[var(--foreground)] active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+          title="Refresh logs"
+        >
+          <FiRefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[var(--accent)]" : ""}`} />
+          <span className="hidden min-[380px]:inline">Refresh</span>
+        </button>
       </div>
 
       {/* ================= TOP LEVEL TABS: NORMAL vs OWNER ================= */}
@@ -239,33 +235,37 @@ export default function ActivityLogsTab() {
         <button
           type="button"
           onClick={() => setActiveSubTab("normal")}
-          className={`flex items-center justify-between p-2.5 sm:p-3.5 rounded-xl transition-all cursor-pointer text-left ${
+          className={`flex items-center justify-between p-2 sm:p-3 rounded-xl transition-all cursor-pointer text-left min-w-0 ${
             activeSubTab === "normal"
               ? "bg-[var(--accent)] text-black shadow-md font-bold"
               : "bg-transparent text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.04]"
           }`}
         >
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+          <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
+            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 ${
               activeSubTab === "normal" ? "bg-black/15 text-black" : "bg-[var(--accent)]/10 text-[var(--accent)]"
             }`}>
-              <FiUsers className="w-4 h-4" />
+              <FiUsers className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs sm:text-sm font-black truncate">Normal Activity</span>
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
+                <span className="text-xs sm:text-sm font-black truncate">
+                  <span className="min-[440px]:hidden">Normal</span>
+                  <span className="hidden min-[440px]:inline">Normal Activity</span>
+                </span>
+                <span className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded-full hidden min-[480px]:inline-block shrink-0 ${
                   activeSubTab === "normal" ? "bg-black text-[var(--accent)]" : "bg-[var(--accent)]/20 text-[var(--accent)]"
                 }`}>
                   Users
                 </span>
               </div>
-              <p className={`text-[10px] truncate ${activeSubTab === "normal" ? "text-black/80 font-medium" : "text-[var(--muted)]"}`}>
-                Signins, logins, game topups, wallet recharges
+              <p className={`text-[9px] sm:text-[10px] truncate ${activeSubTab === "normal" ? "text-black/80 font-medium" : "text-[var(--muted)]"}`}>
+                <span className="min-[480px]:hidden">Signins & topups</span>
+                <span className="hidden min-[480px]:inline">Signins, logins, game topups, wallet recharges</span>
               </p>
             </div>
           </div>
-          <span className={`text-xs font-black px-2 py-1 rounded-lg shrink-0 ml-2 ${
+          <span className={`text-[11px] sm:text-xs font-black px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg shrink-0 ml-1.5 ${
             activeSubTab === "normal" ? "bg-black/20 text-black" : "bg-[var(--border)] text-[var(--muted)]"
           }`}>
             {stats.normalCount}
@@ -276,33 +276,37 @@ export default function ActivityLogsTab() {
         <button
           type="button"
           onClick={() => setActiveSubTab("owner")}
-          className={`flex items-center justify-between p-2.5 sm:p-3.5 rounded-xl transition-all cursor-pointer text-left ${
+          className={`flex items-center justify-between p-2 sm:p-3 rounded-xl transition-all cursor-pointer text-left min-w-0 ${
             activeSubTab === "owner"
               ? "bg-[var(--accent)] text-black shadow-md font-bold"
               : "bg-transparent text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.04]"
           }`}
         >
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+          <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
+            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 ${
               activeSubTab === "owner" ? "bg-black/15 text-black" : "bg-purple-500/10 text-purple-400"
             }`}>
-              <FiShield className="w-4 h-4" />
+              <FiShield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs sm:text-sm font-black truncate">Owner Activity</span>
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
+                <span className="text-xs sm:text-sm font-black truncate">
+                  <span className="min-[440px]:hidden">Owner</span>
+                  <span className="hidden min-[440px]:inline">Owner Activity</span>
+                </span>
+                <span className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded-full hidden min-[480px]:inline-block shrink-0 ${
                   activeSubTab === "owner" ? "bg-black text-[var(--accent)]" : "bg-purple-500/20 text-purple-400"
                 }`}>
                   Audit
                 </span>
               </div>
-              <p className={`text-[10px] truncate ${activeSubTab === "owner" ? "text-black/80 font-medium" : "text-[var(--muted)]"}`}>
-                Gmail tracking: store settings, price slabs, roles
+              <p className={`text-[9px] sm:text-[10px] truncate ${activeSubTab === "owner" ? "text-black/80 font-medium" : "text-[var(--muted)]"}`}>
+                <span className="min-[480px]:hidden">Settings & prices</span>
+                <span className="hidden min-[480px]:inline">Gmail tracking: store settings, price slabs, roles</span>
               </p>
             </div>
           </div>
-          <span className={`text-xs font-black px-2 py-1 rounded-lg shrink-0 ml-2 ${
+          <span className={`text-[11px] sm:text-xs font-black px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg shrink-0 ml-1.5 ${
             activeSubTab === "owner" ? "bg-black/20 text-black" : "bg-[var(--border)] text-[var(--muted)]"
           }`}>
             {stats.ownerCount}
@@ -311,59 +315,59 @@ export default function ActivityLogsTab() {
       </div>
 
       {/* ================= STATS SUMMARY CARDS ================= */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-        <div className="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
-          <span className="text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider">
-            {activeSubTab === "normal" ? "Total User Logs" : "Total Owner Edits"}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
+        <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
+          <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider truncate">
+            {activeSubTab === "normal" ? "Total Logs" : "Total Edits"}
           </span>
-          <div className="flex items-baseline justify-between mt-1.5">
-            <span className="text-xl font-black text-[var(--foreground)]">
+          <div className="flex items-baseline justify-between mt-1 gap-1">
+            <span className="text-lg sm:text-xl font-black text-[var(--foreground)]">
               {activeSubTab === "normal" ? stats.normalCount : stats.ownerCount}
             </span>
-            <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+            <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded shrink-0">
               All Time
             </span>
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
-          <span className="text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider">
-            {activeSubTab === "normal" ? "User Activity Today" : "Owner Changes Today"}
+        <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
+          <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider truncate">
+            {activeSubTab === "normal" ? "Today" : "Changes Today"}
           </span>
-          <div className="flex items-baseline justify-between mt-1.5">
-            <span className="text-xl font-black text-[var(--accent)]">
+          <div className="flex items-baseline justify-between mt-1 gap-1">
+            <span className="text-lg sm:text-xl font-black text-[var(--accent)]">
               {activeSubTab === "normal" ? stats.normalToday : stats.ownerToday}
             </span>
-            <span className="text-[10px] font-bold text-[var(--accent)] bg-[var(--accent)]/10 px-1.5 py-0.5 rounded">
+            <span className="text-[9px] font-bold text-[var(--accent)] bg-[var(--accent)]/10 px-1.5 py-0.5 rounded shrink-0">
               Today
             </span>
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
-          <span className="text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider">
-            {activeSubTab === "normal" ? "Active Mode" : "Audited Identity"}
+        <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
+          <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider truncate">
+            {activeSubTab === "normal" ? "Active Mode" : "Identity"}
           </span>
-          <div className="flex items-baseline justify-between mt-1.5">
-            <span className="text-xs font-black text-[var(--foreground)] truncate">
+          <div className="flex items-baseline justify-between mt-1 gap-1">
+            <span className="text-xs sm:text-sm font-black text-[var(--foreground)] truncate">
               {activeSubTab === "normal" ? "User Actions" : "Owner Gmail"}
             </span>
-            <span className="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded">
+            <span className="text-[9px] font-bold text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded shrink-0">
               Verified
             </span>
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
-          <span className="text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider">
+        <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
+          <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider truncate">
             Current Filter
           </span>
-          <div className="flex items-baseline justify-between mt-1.5">
-            <span className="text-xs font-black text-[var(--foreground)] truncate">
+          <div className="flex items-baseline justify-between mt-1 gap-1">
+            <span className="text-xs sm:text-sm font-black text-[var(--foreground)] truncate">
               {pagination.total} Matching
             </span>
-            <span className="text-[10px] font-bold text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded">
-              Page {pagination.page}/{pagination.totalPages}
+            <span className="text-[9px] font-bold text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded shrink-0">
+              {pagination.page}/{pagination.totalPages || 1}
             </span>
           </div>
         </div>
