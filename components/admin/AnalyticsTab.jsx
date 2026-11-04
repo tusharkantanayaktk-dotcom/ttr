@@ -218,157 +218,113 @@ export default function AnalyticsTab() {
         </div>
       </div>
 
-      {/* ================= COMBINED COMPACT STATS ================= */}
-      <div className="p-3 sm:p-4 rounded-xl bg-[var(--card)]/50 border border-[var(--border)] space-y-3">
-        {/* Top: Store Performance */}
-        <div>
-          <div className="flex items-center justify-between mb-2 px-0.5">
-            <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">
-              Store Performance
-            </span>
-            <span className="text-[10px] text-[var(--muted)] font-medium">
-              {summary.totalOrders || 0} Total Orders
-            </span>
+      {/* ================= COMPACT STORE & APP OVERVIEW (1 ROW, 3 CARDS) ================= */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-3.5">
+        {/* CARD 1: REVENUE & SALES */}
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[var(--card)]/60 hover:bg-[var(--card)] border border-[var(--border)] transition-all shadow-sm flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <FiDollarSign className="w-3.5 h-3.5" /> Revenue & Orders
+              </span>
+              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                {summary.successfulOrders || 0} Successful
+              </span>
+            </div>
+
+            <div className="mt-2.5">
+              <span className="text-xl sm:text-2xl font-black text-[var(--foreground)] tracking-tight">
+                ₹{(summary.totalRevenue || 0).toLocaleString("en-IN")}
+              </span>
+              <span className="text-[10px] text-[var(--muted)] block font-medium mt-0.5">
+                Total store sales across selected timeframe
+              </span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-2.5">
-            {/* Revenue */}
-            <div className="p-2.5 sm:p-3 rounded-lg bg-[var(--background)] border border-[var(--border)]">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
-                <span>Revenue</span>
-                <FiDollarSign className="w-3.5 h-3.5 text-emerald-400" />
-              </div>
-              <div className="mt-1 flex items-baseline justify-between gap-1 flex-wrap">
-                <span className="text-base sm:text-lg font-black text-[var(--foreground)] tracking-tight">
-                  ₹{(summary.totalRevenue || 0).toLocaleString("en-IN")}
-                </span>
-                <span className="text-[10px] text-emerald-400 font-bold">
-                  {summary.successfulOrders || 0} orders
-                </span>
-              </div>
-            </div>
-
-            {/* Avg Order Value */}
-            <div className="p-2.5 sm:p-3 rounded-lg bg-[var(--background)] border border-[var(--border)]">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
-                <span>Avg Order Value</span>
-                <FiTrendingUp className="w-3.5 h-3.5 text-cyan-400" />
-              </div>
-              <div className="mt-1 flex items-baseline justify-between gap-1 flex-wrap">
-                <span className="text-base sm:text-lg font-black text-[var(--foreground)] tracking-tight">
-                  ₹{summary.aov || 0}
-                </span>
-                <span className="text-[10px] text-cyan-400 font-bold">
-                  {summary.conversionRate || 0}% conv
-                </span>
-              </div>
-            </div>
-
-            {/* Busiest Hour */}
-            <div className="p-2.5 sm:p-3 rounded-lg bg-[var(--background)] border border-[var(--border)]">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
-                <span>Busiest Hour</span>
-                <FiClock className="w-3.5 h-3.5 text-amber-400" />
-              </div>
-              <div className="mt-1 flex items-baseline justify-between gap-1 flex-wrap">
-                <span className="text-base sm:text-lg font-black text-[var(--foreground)] tracking-tight">
-                  {peakHours.peakHour ? peakHours.peakHour.label : "N/A"}
-                </span>
-                <span className="text-[10px] text-amber-400 font-bold">
-                  {peakHours.peakHour?.ordersCount || 0} orders
-                </span>
-              </div>
-            </div>
-
-            {/* Repeat Buyers */}
-            <div className="p-2.5 sm:p-3 rounded-lg bg-[var(--background)] border border-[var(--border)]">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
-                <span>Repeat Buyers</span>
-                <FiRepeat className="w-3.5 h-3.5 text-purple-400" />
-              </div>
-              <div className="mt-1 flex items-baseline justify-between gap-1 flex-wrap">
-                <span className="text-base sm:text-lg font-black text-[var(--foreground)] tracking-tight">
-                  {userMetrics.returningUserRate || 0}%
-                </span>
-                <span className="text-[10px] text-purple-400 font-bold">
-                  {userMetrics.returningBuyersCount || 0} buyers
-                </span>
-              </div>
-            </div>
+          <div className="mt-3.5 pt-2.5 border-t border-[var(--border)]/60 flex items-center justify-between text-[11px] text-[var(--muted)]">
+            <span className="flex items-center gap-1">
+              <FiTrendingUp className="w-3 h-3 text-cyan-400" />
+              <span>AOV:</span>
+              <strong className="text-[var(--foreground)]">₹{summary.aov || 0}</strong>
+            </span>
+            <span>
+              Conv: <strong className="text-cyan-400">{summary.conversionRate || 0}%</strong>
+            </span>
           </div>
         </div>
 
-        {/* Bottom: App & Mobile Installs */}
-        <div className="pt-2.5 border-t border-[var(--border)]/60">
-          <div className="flex items-center justify-between mb-2 px-0.5">
-            <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center gap-1.5">
-              <FiSmartphone className="w-3 h-3 text-cyan-400" /> App & Mobile Installs
-            </span>
-            <span className="text-[10px] font-bold text-cyan-400">
-              Total Installs: {pwaStats.allTimePwaInstalls || 0}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-2.5">
-            {/* New Installs */}
-            <div className="p-2.5 sm:p-3 rounded-lg bg-[var(--background)] border border-[var(--border)]">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-cyan-400">
-                <span>New Installs</span>
-                <span className="text-[10px] text-[var(--muted)] font-normal">{pwaStats.installConversionRate || 0}% rate</span>
-              </div>
-              <p className="text-base sm:text-lg font-black text-[var(--foreground)] mt-1">
-                {pwaStats.periodPwaInstalls || 0}
-              </p>
+        {/* CARD 2: CUSTOMERS & RETENTION */}
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[var(--card)]/60 hover:bg-[var(--card)] border border-[var(--border)] transition-all shadow-sm flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
+                <FiRepeat className="w-3.5 h-3.5" /> Customer Retention
+              </span>
+              <span className="text-[10px] font-bold text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded-full">
+                {userMetrics.returningBuyersCount || 0} Repeat Buyers
+              </span>
             </div>
 
-            {/* App Opens */}
-            <div className="p-2.5 sm:p-3 rounded-lg bg-[var(--background)] border border-[var(--border)]">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                <span>App Opens</span>
-                <span className="text-[10px] text-[var(--muted)] font-normal">Launches</span>
-              </div>
-              <p className="text-base sm:text-lg font-black text-[var(--foreground)] mt-1">
-                {pwaStats.periodPwaLaunches || 0}
-              </p>
-            </div>
-
-            {/* Prompts Shown */}
-            <div className="p-2.5 sm:p-3 rounded-lg bg-[var(--background)] border border-[var(--border)]">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-purple-400">
-                <span>Prompts Shown</span>
-                <span className="text-[10px] text-[var(--muted)] font-normal">Views</span>
-              </div>
-              <p className="text-base sm:text-lg font-black text-[var(--foreground)] mt-1">
-                {pwaStats.periodPromptShown || 0}
-              </p>
-            </div>
-
-            {/* Dismissed */}
-            <div className="p-2.5 sm:p-3 rounded-lg bg-[var(--background)] border border-[var(--border)]">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-amber-400">
-                <span>Dismissed</span>
-                <span className="text-[10px] text-[var(--muted)] font-normal">Closed</span>
-              </div>
-              <p className="text-base sm:text-lg font-black text-[var(--foreground)] mt-1">
-                {pwaStats.periodPromptDismiss || 0}
-              </p>
+            <div className="mt-2.5">
+              <span className="text-xl sm:text-2xl font-black text-[var(--foreground)] tracking-tight">
+                {userMetrics.returningUserRate || 0}%
+              </span>
+              <span className="text-[10px] text-[var(--muted)] block font-medium mt-0.5">
+                Repeat purchase rate ({summary.totalOrders || 0} total orders)
+              </span>
             </div>
           </div>
 
-          {/* PWA Platform Breakdown */}
-          {pwaStats.platformBreakdown && pwaStats.platformBreakdown.length > 0 && (
-            <div className="flex items-center gap-2 pt-2 text-[10px] text-[var(--muted)] font-medium flex-wrap">
-              <span className="font-bold uppercase text-[9px]">Platforms:</span>
-              {pwaStats.platformBreakdown.map((item, idx) => (
-                <span
-                  key={idx}
-                  className="px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)] text-[10px]"
-                >
-                  {item.platform}: <strong className="text-cyan-400">{item.installs}</strong> ({item.launches} opens)
+          <div className="mt-3.5 pt-2.5 border-t border-[var(--border)]/60 flex items-center justify-between text-[11px] text-[var(--muted)]">
+            <span className="flex items-center gap-1">
+              <FiClock className="w-3 h-3 text-amber-400" />
+              <span>Busiest:</span>
+              <strong className="text-amber-400 font-bold">{peakHours.peakHour ? peakHours.peakHour.label : "N/A"}</strong>
+            </span>
+            <span>
+              Orders: <strong className="text-[var(--foreground)]">{peakHours.peakHour?.ordersCount || 0}</strong>
+            </span>
+          </div>
+        </div>
+
+        {/* CARD 3: APP & MOBILE INSTALLS (PWA) */}
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[var(--card)]/60 hover:bg-[var(--card)] border border-[var(--border)] transition-all shadow-sm flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                <FiSmartphone className="w-3.5 h-3.5" /> App & Mobile
+              </span>
+              <span className="text-[10px] font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-full">
+                {pwaStats.allTimePwaInstalls || 0} Total Installs
+              </span>
+            </div>
+
+            <div className="mt-2.5">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-xl sm:text-2xl font-black text-[var(--foreground)] tracking-tight">
+                  {pwaStats.periodPwaInstalls || 0}
                 </span>
-              ))}
+                <span className="text-xs font-bold text-cyan-400">New Installs</span>
+              </div>
+              <span className="text-[10px] text-[var(--muted)] block font-medium mt-0.5">
+                {pwaStats.periodPwaLaunches || 0} launches in this timeframe
+              </span>
             </div>
-          )}
+          </div>
+
+          <div className="mt-3.5 pt-2.5 border-t border-[var(--border)]/60 flex items-center justify-between text-[11px] text-[var(--muted)]">
+            <span>
+              Conversion: <strong className="text-cyan-400">{pwaStats.installConversionRate || 0}%</strong>
+            </span>
+            {pwaStats.platformBreakdown && pwaStats.platformBreakdown.length > 0 ? (
+              <span className="font-bold text-[10px] text-[var(--foreground)] bg-[var(--background)] px-2 py-0.5 rounded border border-[var(--border)]">
+                {pwaStats.platformBreakdown[0].platform}: {pwaStats.platformBreakdown[0].installs}
+              </span>
+            ) : (
+              <span className="text-[10px] text-[var(--muted)]">Mobile PWA</span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -385,7 +341,7 @@ export default function AnalyticsTab() {
           </div>
           {peakHours.peakHour && (
             <div className="self-start sm:self-auto inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold shrink-0">
-              <span>ðŸ”¥ Busiest: <strong>{peakHours.peakHour.label} - {(peakHours.peakHour.hour + 1) % 24}:00</strong></span>
+              <span>🔥 Busiest: <strong>{peakHours.peakHour.label} - {(peakHours.peakHour.hour + 1) % 24}:00</strong></span>
             </div>
           )}
         </div>
@@ -431,10 +387,10 @@ export default function AnalyticsTab() {
             </div>
           </div>
           <div className="flex flex-wrap justify-between items-center text-[9px] sm:text-[10px] text-[var(--muted)] mt-2.5 px-1 sm:px-2 gap-1">
-            <span>ðŸŒ™ Midnight (00:00)</span>
-            <span>ðŸŒ… Morning (08:00)</span>
-            <span>â˜€ï¸ Afternoon (14:00)</span>
-            <span>ðŸŒ† Evening / Night (20:00)</span>
+            <span>🌙 Midnight (00:00)</span>
+            <span>🌅 Morning (08:00)</span>
+            <span>☀️ Afternoon (14:00)</span>
+            <span>🌆 Evening / Night (20:00)</span>
           </div>
         </div>
       </div>
@@ -598,7 +554,7 @@ export default function AnalyticsTab() {
                 {topProducts.map((p, index) => (
                   <tr key={index} className="hover:bg-[var(--background)]/50 transition-colors">
                     <td className="py-3 px-3 font-bold text-[var(--muted)]">
-                      {index === 0 ? "ðŸ¥‡" : index === 1 ? "ðŸ¥ˆ" : index === 2 ? "ðŸ¥‰" : index + 1}
+                      {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : index + 1}
                     </td>
                     <td className="py-3 px-3 font-bold text-[var(--foreground)]">
                       {p.itemName}
@@ -695,7 +651,7 @@ export default function AnalyticsTab() {
           {topSpenders.length === 0 ? (
             <p className="text-xs text-[var(--muted)] col-span-3 text-center py-4">No customer orders recorded.</p>
           ) : (
-            topSpenders.map((user, i) => (
+            topSpenders.slice(0, 6).map((user, i) => (
               <div key={i} className="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] relative overflow-hidden">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-black uppercase text-[var(--muted)]">VIP #{i + 1}</span>

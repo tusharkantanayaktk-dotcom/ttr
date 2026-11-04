@@ -345,7 +345,7 @@ export async function GET(req) {
         },
       },
       { $sort: { totalSpent: -1 } },
-      { $limit: 10 },
+      { $limit: 6 },
     ]);
 
     /* ================= 8. TIMELINE TREND DATA ================= */
