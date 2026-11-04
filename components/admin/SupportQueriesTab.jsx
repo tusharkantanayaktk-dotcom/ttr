@@ -32,6 +32,8 @@ export default function SupportQueriesTab() {
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [tempStatusFilter, setTempStatusFilter] = useState("");
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -185,33 +187,26 @@ export default function SupportQueriesTab() {
 
         <div className="h-4 w-[1px] bg-[var(--border)]/70 mx-1 shrink-0" />
 
-        {/* Combined Filter Dropdown */}
-        <div className="relative shrink-0 flex items-center">
-          <select
-            value={statusFilter}
-            onChange={(e) => {
-              setPage(1);
-              setStatusFilter(e.target.value);
-            }}
-            className={`h-7 pl-2 pr-6 rounded-lg text-[10px] sm:text-[11px] font-bold uppercase tracking-wider outline-none appearance-none cursor-pointer transition-all ${
-              statusFilter
-                ? "bg-[var(--accent)] text-black font-extrabold shadow-xs"
-                : "bg-transparent text-[var(--foreground)]/70 hover:text-[var(--foreground)]"
-            }`}
-          >
-            <option value="" className="bg-[var(--card)] text-[var(--foreground)]"></option>
-            <option value="open" className="bg-[var(--card)] text-[var(--foreground)]">Open</option>
-            <option value="in_progress" className="bg-[var(--card)] text-[var(--foreground)]">In Progress</option>
-            <option value="resolved" className="bg-[var(--card)] text-[var(--foreground)]">Resolved</option>
-            <option value="closed" className="bg-[var(--card)] text-[var(--foreground)]">Closed</option>
-          </select>
-          <Filter
-            size={11}
-            className={`absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none ${
-              statusFilter ? "text-black" : "text-[var(--accent)]"
-            }`}
-          />
-        </div>
+        {/* Combined Filter Trigger Button */}
+        <button
+          type="button"
+          onClick={() => {
+            setTempStatusFilter(statusFilter);
+            setIsFilterOpen(true);
+          }}
+          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer shrink-0 active:scale-95 ${
+            statusFilter
+              ? "bg-[var(--accent)] text-black font-extrabold shadow-xs"
+              : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06]"
+          }`}
+          title="Filter Queries by status"
+        >
+          <Filter size={13} className={statusFilter ? "text-black" : "text-[var(--accent)]"} />
+          <span className="capitalize text-[11px] truncate max-w-[90px]">
+            {statusFilter ? statusMeta[statusFilter]?.label || statusFilter : "Filter"}
+          </span>
+          {statusFilter && <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />}
+        </button>
       </div>
 
       {/* ================= CONTENT ================= */}
@@ -384,6 +379,120 @@ export default function SupportQueriesTab() {
                     {activeQuery.message}
                   </p>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ================= FILTER BOTTOMSHEET ================= */}
+      <AnimatePresence>
+        {isFilterOpen && (
+          <div className="fixed inset-0 z-[1200] flex items-end sm:items-center justify-center p-0 sm:p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsFilterOpen(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
+            />
+
+            {/* Bottomsheet Drawer */}
+            <motion.div
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 28, stiffness: 320 }}
+              className="relative w-full max-w-md bg-[var(--card)] rounded-t-3xl sm:rounded-2xl border border-[var(--border)] p-4 sm:p-5 shadow-2xl overflow-hidden max-h-[90dvh] flex flex-col z-10 pb-6 sm:pb-5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Mobile Drag Indicator Handle */}
+              <div className="w-10 h-1 rounded-full bg-[var(--foreground)]/20 mx-auto mb-3 sm:hidden" />
+
+              {/* Header */}
+              <div className="flex justify-between items-center pb-3 border-b border-[var(--border)]">
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-[var(--foreground)]">Filter Queries</h3>
+                  <p className="text-[11px] text-[var(--muted)]">Filter customer inquiries by resolution status</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsFilterOpen(false)}
+                  className="w-8 h-8 rounded-xl bg-[var(--foreground)]/[0.05] hover:bg-[var(--foreground)]/[0.1] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-all outline-none cursor-pointer"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="py-4 space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)] block">
+                  Select Status
+                </label>
+
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { value: "", label: "All Queries", desc: "Show all tickets", icon: <Inbox size={14} className="text-[var(--muted)]" /> },
+                    { value: "open", label: "Open", desc: "Awaiting review", icon: <AlertCircle size={14} className="text-amber-400" /> },
+                    { value: "in_progress", label: "In Progress", desc: "Being processed", icon: <RefreshCcw size={14} className="text-blue-400" /> },
+                    { value: "resolved", label: "Resolved", desc: "Issue fixed", icon: <CheckCircle2 size={14} className="text-emerald-400" /> },
+                    { value: "closed", label: "Closed", desc: "Ticket closed", icon: <X size={14} className="text-rose-400" /> },
+                  ].map((option) => {
+                    const isSelected = tempStatusFilter === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setTempStatusFilter(option.value)}
+                        className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                          isSelected
+                            ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-md font-extrabold"
+                            : "bg-[var(--background)] border-[var(--border)] text-[var(--foreground)] hover:border-[var(--accent)]/40"
+                        } ${option.value === "" ? "col-span-2" : ""}`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs font-black flex items-center gap-1.5">
+                            {option.icon}
+                            {option.label}
+                          </span>
+                          {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />}
+                        </div>
+                        <span className={`text-[9px] ${isSelected ? "text-black/80 font-medium" : "text-[var(--muted)]"}`}>
+                          {option.desc}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Footer Actions */}
+              <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTempStatusFilter("");
+                    setStatusFilter("");
+                    setPage(1);
+                    setIsFilterOpen(false);
+                  }}
+                  className="px-4 py-2 rounded-xl border border-[var(--border)] text-xs font-bold text-[var(--muted)] hover:bg-[var(--foreground)]/[0.05] hover:text-[var(--foreground)] transition-all cursor-pointer"
+                >
+                  Reset
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStatusFilter(tempStatusFilter);
+                    setPage(1);
+                    setIsFilterOpen(false);
+                  }}
+                  className="px-5 py-2 rounded-xl bg-[var(--accent)] text-black text-xs font-extrabold shadow-md hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                >
+                  Apply Filter
+                </button>
               </div>
             </motion.div>
           </div>
