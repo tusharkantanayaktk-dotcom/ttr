@@ -35,7 +35,14 @@ export async function GET(req) {
 
     if (customFrom && customTo) {
       startDate = new Date(customFrom);
-      now.setTime(new Date(customTo).getTime());
+      if (typeof customFrom === "string" && customFrom.length === 10) {
+        startDate.setHours(0, 0, 0, 0);
+      }
+      const endDate = new Date(customTo);
+      if (typeof customTo === "string" && customTo.length === 10) {
+        endDate.setHours(23, 59, 59, 999);
+      }
+      now.setTime(endDate.getTime());
     } else {
       switch (range) {
         case "1d":

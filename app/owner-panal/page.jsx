@@ -296,7 +296,7 @@ export default function AdminPanalPage() {
               {isCollapsed ? (
                 <div 
                   className="hidden md:flex flex-col items-center justify-center p-2 rounded-lg border border-[var(--border)] bg-[var(--card)]/50 mb-3 relative cursor-pointer hover:border-[var(--accent)]/40 transition-colors"
-                  title={`1Game Balance: ${balance !== null ? balance : "Loadingâ€¦"}`}
+                  title={`1Game Balance: ${balance !== null ? balance : "Loading..."}`}
                 >
                   <FiCreditCard className="text-[var(--accent)] w-3.5 h-3.5" />
                   <FiCheck className="w-2.5 h-2.5 text-emerald-400 mt-1" />
@@ -311,7 +311,7 @@ export default function AdminPanalPage() {
                   <div className="min-w-0">
                     <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] block leading-none">1Game Balance</span>
                     <span className="text-xs font-black text-[var(--foreground)] truncate tracking-tight block mt-0.5">
-                      {balance !== null ? balance : "Loadingâ€¦"}
+                      {balance !== null ? balance : "Loading..."}
                     </span>
                   </div>
                 </div>

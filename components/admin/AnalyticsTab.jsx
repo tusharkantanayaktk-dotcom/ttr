@@ -17,23 +17,114 @@ import {
   FiSmartphone,
   FiDownload,
   FiLayers,
-  FiActivity
+  FiActivity,
+  FiCalendar,
+  FiFilter,
+  FiChevronDown,
+  FiX,
+  FiCheck,
 } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+function formatYMD(d) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getTodayString() {
+  return formatYMD(new Date());
+}
 
 export default function AnalyticsTab() {
   const [range, setRange] = useState("1d");
+  const [customRange, setCustomRange] = useState({ from: "", to: "" });
   const [loading, setLoading] = useState(true);
   const [analyticsData, setAnalyticsData] = useState(null);
   const [error, setError] = useState(null);
 
-  const fetchAnalytics = async (selectedRange = range) => {
+  // Bottomsheet state
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [tempRange, setTempRange] = useState("1d");
+  const [tempCustomRange, setTempCustomRange] = useState({ from: "", to: "" });
+  const [dateError, setDateError] = useState("");
+
+  const getActiveRangeLabel = () => {
+    if (range === "custom" && customRange.from && customRange.to) {
+      const f = new Date(customRange.from);
+      const t = new Date(customRange.to);
+      const fStr = f.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      const tStr = t.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      return `${fStr} – ${tStr}`;
+    }
+    switch (range) {
+      case "1d":
+        return "24H (Today)";
+      case "7d":
+        return "Last 7 Days";
+      case "30d":
+        return "Last 30 Days";
+      case "90d":
+        return "Last 90 Days";
+      case "all":
+        return "All Time";
+      default:
+        return "24H";
+    }
+  };
+
+  const openFilterSheet = () => {
+    setTempRange(range);
+    setTempCustomRange({
+      from: customRange.from || formatYMD(new Date(Date.now() - 7 * 86400000)),
+      to: customRange.to || getTodayString(),
+    });
+    setDateError("");
+    setIsFilterOpen(true);
+  };
+
+  const applyFilter = () => {
+    if (tempRange === "custom") {
+      if (!tempCustomRange.from || !tempCustomRange.to) {
+        setDateError("Please select both start and end dates.");
+        return;
+      }
+      if (new Date(tempCustomRange.from) > new Date(tempCustomRange.to)) {
+        setDateError("Start date cannot be after end date.");
+        return;
+      }
+    }
+
+    setDateError("");
+    setRange(tempRange);
+    setCustomRange(tempCustomRange);
+    setIsFilterOpen(false);
+    fetchAnalytics(tempRange, tempCustomRange);
+  };
+
+  const resetFilter = () => {
+    setTempRange("1d");
+    setTempCustomRange({ from: "", to: "" });
+    setDateError("");
+    setRange("1d");
+    setCustomRange({ from: "", to: "" });
+    setIsFilterOpen(false);
+    fetchAnalytics("1d", { from: "", to: "" });
+  };
+
+  const fetchAnalytics = async (selectedRange = range, customDates = customRange) => {
     try {
       setLoading(true);
       setError(null);
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`/api/admin/analytics?range=${selectedRange}`, {
+      let url = `/api/admin/analytics?range=${selectedRange}`;
+      if (selectedRange === "custom" && customDates?.from && customDates?.to) {
+        url = `/api/admin/analytics?from=${encodeURIComponent(customDates.from)}&to=${encodeURIComponent(customDates.to)}`;
+      }
+
+      const res = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -54,8 +145,8 @@ export default function AnalyticsTab() {
   };
 
   useEffect(() => {
-    fetchAnalytics(range);
-  }, [range]);
+    fetchAnalytics(range, customRange);
+  }, []);
 
   if (loading && !analyticsData) {
     return (
@@ -102,35 +193,27 @@ export default function AnalyticsTab() {
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">Analytics</h2>
 
-        <div className="flex items-center gap-3">
-          <div className="flex p-1 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]">
-            {[
-              { label: "24H", value: "1d" },
-              { label: "7D", value: "7d" },
-              { label: "30D", value: "30d" },
-              { label: "All", value: "all" },
-            ].map((tab) => (
-              <button
-                key={tab.value}
-                onClick={() => setRange(tab.value)}
-                className={`py-1 px-3 rounded-lg text-xs font-bold transition-all text-center ${
-                  range === tab.value
-                    ? "bg-[var(--accent)] text-white shadow-sm"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+        <div className="flex items-center gap-2">
+          {/* Filter Bottomsheet Trigger Button */}
+          <button
+            type="button"
+            onClick={openFilterSheet}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] border border-[var(--border)] hover:border-[var(--accent)]/50 text-xs font-bold text-[var(--foreground)] active:scale-95 transition-all shadow-sm cursor-pointer group"
+            title="Filter Analytics by timeframe or custom dates"
+          >
+            <FiFilter className="w-3.5 h-3.5 text-[var(--accent)] group-hover:scale-110 transition-transform" />
+            <span className="truncate max-w-[130px] sm:max-w-none">{getActiveRangeLabel()}</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" />
+            <FiChevronDown className="w-3.5 h-3.5 text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors" />
+          </button>
 
           <button
-            onClick={() => fetchAnalytics(range)}
+            onClick={() => fetchAnalytics(range, customRange)}
             disabled={loading}
-            className="p-2 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none shrink-0"
+            className="p-2 rounded-xl bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] active:scale-95 transition-all outline-none shrink-0 cursor-pointer disabled:opacity-50"
             title="Refresh Analytics"
           >
-            <FiRefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+            <FiRefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-[var(--accent)]" : ""}`} />
           </button>
         </div>
       </div>
@@ -302,7 +385,7 @@ export default function AnalyticsTab() {
           </div>
           {peakHours.peakHour && (
             <div className="self-start sm:self-auto inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold shrink-0">
-              <span>🔥 Busiest: <strong>{peakHours.peakHour.label} - {(peakHours.peakHour.hour + 1) % 24}:00</strong></span>
+              <span>ðŸ”¥ Busiest: <strong>{peakHours.peakHour.label} - {(peakHours.peakHour.hour + 1) % 24}:00</strong></span>
             </div>
           )}
         </div>
@@ -348,10 +431,10 @@ export default function AnalyticsTab() {
             </div>
           </div>
           <div className="flex flex-wrap justify-between items-center text-[9px] sm:text-[10px] text-[var(--muted)] mt-2.5 px-1 sm:px-2 gap-1">
-            <span>🌙 Midnight (00:00)</span>
-            <span>🌅 Morning (08:00)</span>
-            <span>☀️ Afternoon (14:00)</span>
-            <span>🌆 Evening / Night (20:00)</span>
+            <span>ðŸŒ™ Midnight (00:00)</span>
+            <span>ðŸŒ… Morning (08:00)</span>
+            <span>â˜€ï¸ Afternoon (14:00)</span>
+            <span>ðŸŒ† Evening / Night (20:00)</span>
           </div>
         </div>
       </div>
@@ -515,7 +598,7 @@ export default function AnalyticsTab() {
                 {topProducts.map((p, index) => (
                   <tr key={index} className="hover:bg-[var(--background)]/50 transition-colors">
                     <td className="py-3 px-3 font-bold text-[var(--muted)]">
-                      {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : index + 1}
+                      {index === 0 ? "ðŸ¥‡" : index === 1 ? "ðŸ¥ˆ" : index === 2 ? "ðŸ¥‰" : index + 1}
                     </td>
                     <td className="py-3 px-3 font-bold text-[var(--foreground)]">
                       {p.itemName}
@@ -630,6 +713,262 @@ export default function AnalyticsTab() {
           )}
         </div>
       </div>
+
+      {/* ================= FILTER BOTTOMSHEET ================= */}
+      <AnimatePresence>
+        {isFilterOpen && (
+          <div className="fixed inset-0 z-[1000] flex items-end sm:items-center justify-center p-0 sm:p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsFilterOpen(false)}
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm cursor-pointer"
+            />
+
+            {/* Bottomsheet Drawer */}
+            <motion.div
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 28, stiffness: 320 }}
+              className="relative bg-[var(--card)] w-full max-w-lg rounded-t-3xl sm:rounded-2xl border border-[var(--border)] p-4 sm:p-5 shadow-2xl overflow-hidden max-h-[85vh] flex flex-col z-10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Mobile Drag Indicator */}
+              <div className="w-10 h-1 rounded-full bg-[var(--foreground)]/20 mx-auto mb-3 sm:hidden" />
+
+              {/* Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[var(--accent)]/15 border border-[var(--accent)]/30 flex items-center justify-center text-[var(--accent)]">
+                    <FiCalendar className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-black text-[var(--foreground)]">
+                      Filter Timeframe
+                    </h3>
+                    <p className="text-[11px] text-[var(--muted)]">
+                      Select preset timeframe or pick custom date range
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsFilterOpen(false)}
+                  className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.06] transition-colors cursor-pointer"
+                >
+                  <FiX className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Body (Scrollable) */}
+              <div className="py-4 space-y-4 overflow-y-auto">
+                {/* Timeframe Presets */}
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)] block mb-2">
+                    Quick Presets
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {[
+                      { label: "24H (Today)", sub: "Last 24 hours", value: "1d" },
+                      { label: "7 Days", sub: "Last week", value: "7d" },
+                      { label: "30 Days", sub: "Last month", value: "30d" },
+                      { label: "90 Days", sub: "Last 3 months", value: "90d" },
+                      { label: "All Time", sub: "All store history", value: "all" },
+                      { label: "Custom Range", sub: "Choose from/to", value: "custom" },
+                    ].map((preset) => {
+                      const isSelected = tempRange === preset.value;
+                      return (
+                        <button
+                          key={preset.value}
+                          type="button"
+                          onClick={() => {
+                            setTempRange(preset.value);
+                            setDateError("");
+                            if (preset.value === "custom" && !tempCustomRange.from) {
+                              const today = getTodayString();
+                              const sevenDaysAgo = formatYMD(new Date(Date.now() - 7 * 86400000));
+                              setTempCustomRange({ from: sevenDaysAgo, to: today });
+                            }
+                          }}
+                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                            isSelected
+                              ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-md font-bold"
+                              : "bg-[var(--background)] border-[var(--border)] text-[var(--foreground)] hover:border-[var(--accent)]/50"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-0.5">
+                            <span className="text-xs font-black truncate">{preset.label}</span>
+                            {isSelected && <FiCheck className="w-3 h-3 text-black shrink-0" />}
+                          </div>
+                          <span className={`text-[9px] block truncate ${isSelected ? "text-black/80 font-medium" : "text-[var(--muted)]"}`}>
+                            {preset.sub}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Custom Date Range Picker */}
+                {tempRange === "custom" && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-3 pt-2 border-t border-[var(--border)]"
+                  >
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] font-black uppercase tracking-wider text-[var(--muted)]">
+                        Select Custom Date Range
+                      </label>
+                      <span className="text-[10px] text-[var(--accent)] font-semibold">
+                        Choose start & end dates
+                      </span>
+                    </div>
+
+                    {/* Inputs */}
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div>
+                        <span className="text-[10px] font-bold text-[var(--muted)] block mb-1">
+                          From (Start Date)
+                        </span>
+                        <input
+                          type="date"
+                          value={tempCustomRange.from}
+                          max={tempCustomRange.to || getTodayString()}
+                          onChange={(e) => {
+                            setTempCustomRange((prev) => ({ ...prev, from: e.target.value }));
+                            setDateError("");
+                          }}
+                          className="w-full bg-[var(--background)] border border-[var(--border)] rounded-xl px-2.5 py-2 text-xs text-[var(--foreground)] focus:outline-none focus:border-[var(--accent)] transition-colors scheme-dark"
+                        />
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] font-bold text-[var(--muted)] block mb-1">
+                          To (End Date)
+                        </span>
+                        <input
+                          type="date"
+                          value={tempCustomRange.to}
+                          min={tempCustomRange.from}
+                          max={getTodayString()}
+                          onChange={(e) => {
+                            setTempCustomRange((prev) => ({ ...prev, to: e.target.value }));
+                            setDateError("");
+                          }}
+                          className="w-full bg-[var(--background)] border border-[var(--border)] rounded-xl px-2.5 py-2 text-xs text-[var(--foreground)] focus:outline-none focus:border-[var(--accent)] transition-colors scheme-dark"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Quick Shortcuts */}
+                    <div>
+                      <span className="text-[9px] font-bold uppercase text-[var(--muted)] block mb-1.5">
+                        Date Shortcuts
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {[
+                          {
+                            label: "Today",
+                            getDates: () => {
+                              const t = getTodayString();
+                              return { from: t, to: t };
+                            },
+                          },
+                          {
+                            label: "Yesterday",
+                            getDates: () => {
+                              const y = formatYMD(new Date(Date.now() - 86400000));
+                              return { from: y, to: y };
+                            },
+                          },
+                          {
+                            label: "Last 7 Days",
+                            getDates: () => {
+                              const t = getTodayString();
+                              const f = formatYMD(new Date(Date.now() - 7 * 86400000));
+                              return { from: f, to: t };
+                            },
+                          },
+                          {
+                            label: "This Month",
+                            getDates: () => {
+                              const now = new Date();
+                              const first = formatYMD(new Date(now.getFullYear(), now.getMonth(), 1));
+                              return { from: first, to: getTodayString() };
+                            },
+                          },
+                          {
+                            label: "Last Month",
+                            getDates: () => {
+                              const now = new Date();
+                              const first = formatYMD(new Date(now.getFullYear(), now.getMonth() - 1, 1));
+                              const last = formatYMD(new Date(now.getFullYear(), now.getMonth(), 0));
+                              return { from: first, to: last };
+                            },
+                          },
+                        ].map((sc) => (
+                          <button
+                            key={sc.label}
+                            type="button"
+                            onClick={() => {
+                              setTempCustomRange(sc.getDates());
+                              setDateError("");
+                            }}
+                            className="px-2 py-1 rounded-lg text-[10px] font-bold bg-[var(--background)] hover:bg-[var(--foreground)]/[0.06] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors cursor-pointer"
+                          >
+                            {sc.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Error Notice */}
+                    {dateError && (
+                      <div className="flex items-center gap-1.5 p-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold">
+                        <FiAlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{dateError}</span>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Footer Actions */}
+              <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={resetFilter}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] transition-colors cursor-pointer"
+                >
+                  Reset to 24H
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsFilterOpen(false)}
+                    className="px-3 py-1.5 rounded-xl text-xs font-bold border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--foreground)]/[0.05] transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={applyFilter}
+                    className="px-4 py-1.5 rounded-xl text-xs font-extrabold bg-[var(--accent)] text-black hover:brightness-110 active:scale-95 transition-all shadow-md cursor-pointer"
+                  >
+                    Apply Filter
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

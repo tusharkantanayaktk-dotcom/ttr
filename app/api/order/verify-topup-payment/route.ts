@@ -70,7 +70,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Already completed â†’ safe exit
+    // Already completed -> safe exit
     if (order.status === "success") {
       return NextResponse.json({
         success: true,
