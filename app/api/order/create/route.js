@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import User from "@/models/User";
+import { logActivity } from "@/lib/activityLogger";
 
 export async function POST(req) {
   try {
@@ -71,22 +72,48 @@ export async function POST(req) {
       await user.save();
     }
 
+    // Log topup activity
+    await logActivity({
+      type: "normal",
+      action: "TOPUP_ORDER",
+      user: {
+        userId: userId || user?.userId || null,
+        email: email || user?.email || null,
+        phone: phone || user?.phone || null,
+        userType: user?.userType || "user",
+      },
+      title: "Topup Order Created",
+      description: `Topup order #${newOrder.orderId} for ${itemName || itemSlug || gameSlug} (₹${price}) created by ${email || phone || "Customer"}`,
+      target: newOrder.orderId,
+      details: {
+        orderId: newOrder.orderId,
+        gameSlug,
+        itemSlug,
+        itemName,
+        playerId,
+        zoneId,
+        price,
+        paymentMethod,
+      },
+      status: "info",
+    });
+
+    // --------------------------
+    //  RETURN RESPONSE
+    // --------------------------
     return Response.json(
       {
         success: true,
+        orderId: newOrder.orderId,
         message: "Order created successfully",
-        order: newOrder,
       },
       { status: 201 }
     );
 
   } catch (error) {
+    console.error("Order creation failed:", error);
     return Response.json(
-      {
-        success: false,
-        message: "Server error",
-        error: error.message,
-      },
+      { success: false, message: "Server error" },
       { status: 500 }
     );
   }

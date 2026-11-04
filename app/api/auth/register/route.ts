@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { generateUserId } from "@/lib/generateUserId";
+import { logActivity } from "@/lib/activityLogger";
 import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
@@ -58,6 +59,30 @@ export async function POST(request: Request) {
       userType: "user",
       lastLogin: new Date(),
       lastIp: ip,
+    });
+
+    // Log registration activity
+    await logActivity({
+      type: "normal",
+      action: "SIGNUP",
+      user: {
+        userId,
+        email: email.toLowerCase(),
+        name,
+        phone,
+        userType: "user",
+      },
+      title: "New User Registered",
+      description: `New user ${name} registered account with ${email.toLowerCase()}`,
+      target: userId,
+      details: {
+        name,
+        email: email.toLowerCase(),
+        phone,
+        provider: "local",
+      },
+      ip,
+      status: "success",
     });
 
     return Response.json(

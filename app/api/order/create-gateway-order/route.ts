@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import PricingConfig from "@/models/PricingConfig";
 import { getCatalogStock } from "@/lib/serverCatalogStock";
+import { logActivity } from "@/lib/activityLogger";
 import crypto from "crypto";
 
 /* =====================================================
@@ -244,6 +245,30 @@ export async function POST(req: Request) {
       paymentStatus: "pending",
       topupStatus: "pending",
       expiresAt,
+    });
+
+    await logActivity({
+      type: "normal",
+      action: "TOPUP_ORDER",
+      user: {
+        userId: tokenUserId || null,
+        email: email || null,
+        phone: phone || null,
+        userType: "user",
+      },
+      title: "Gateway Topup Initiated",
+      description: `Gateway topup order #${orderId} for ${itemSlug || gameSlug} (₹${price}) initiated by ${email || phone || "Customer"}`,
+      target: orderId,
+      details: {
+        orderId,
+        gameSlug,
+        itemSlug,
+        price,
+        playerId,
+        zoneId,
+        paymentMethod,
+      },
+      status: "info",
     });
 
     /* ---------- WALLET PAYMENT LOGIC (DISABLED) ---------- */

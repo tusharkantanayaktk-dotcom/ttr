@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import User from "@/models/User";
+import { logActivity } from "@/lib/activityLogger";
 
 export async function POST(req: Request) {
   try {
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
     }
 
     /* =====================================================
-       🔒 OWNERSHIP CHECK (CRITICAL)
+       ðŸ”’ OWNERSHIP CHECK (CRITICAL)
     ===================================================== */
     if (order.userId && order.userId !== tokenUserId) {
       return NextResponse.json(
@@ -69,7 +70,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Already completed → safe exit
+    // Already completed â†’ safe exit
     if (order.status === "success") {
       return NextResponse.json({
         success: true,
@@ -230,6 +231,31 @@ export async function POST(req: Request) {
       order.topupStatus = "success";
       await order.save();
 
+      // Log successful topup
+      await logActivity({
+        type: "normal",
+        action: "TOPUP_SUCCESS",
+        user: {
+          userId: order.userId || null,
+          email: order.email || null,
+          phone: order.phone || null,
+          userType: "user",
+        },
+        title: "Topup Completed Successfully",
+        description: `Topup order #${order.orderId} for ${order.itemName || order.gameSlug} (₹${order.price}) delivered successfully`,
+        target: order.orderId,
+        details: {
+          orderId: order.orderId,
+          gameSlug: order.gameSlug,
+          itemSlug: order.itemSlug,
+          itemName: order.itemName,
+          price: order.price,
+          playerId: order.playerId,
+          zoneId: order.zoneId,
+        },
+        status: "success",
+      });
+
       // Optional email
       try {
         const user = await User.findOne({ userId: order.userId });
@@ -239,6 +265,27 @@ export async function POST(req: Request) {
       order.status = "failed";
       order.topupStatus = "failed";
       await order.save();
+
+      // Log failed topup
+      await logActivity({
+        type: "normal",
+        action: "TOPUP_FAILED",
+        user: {
+          userId: order.userId || null,
+          email: order.email || null,
+          phone: order.phone || null,
+          userType: "user",
+        },
+        title: "Topup Delivery Failed",
+        description: `Topup order #${order.orderId} failed for ${order.itemName || order.gameSlug}`,
+        target: order.orderId,
+        details: {
+          orderId: order.orderId,
+          gameSlug: order.gameSlug,
+          price: order.price,
+        },
+        status: "failed",
+      });
     }
 
     return NextResponse.json({

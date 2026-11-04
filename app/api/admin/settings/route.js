@@ -1,5 +1,7 @@
 import { connectDB } from "@/lib/mongodb";
 import SystemSetting from "@/models/SystemSetting";
+import User from "@/models/User";
+import { logActivity } from "@/lib/activityLogger";
 import jwt from "jsonwebtoken";
 
 export async function GET(req) {
@@ -68,6 +70,39 @@ export async function PATCH(req) {
         });
 
         await Promise.all(updatePromises);
+
+        // Fetch owner details to log Gmail & changes
+        let ownerUser = null;
+        try {
+            ownerUser = await User.findById(decoded.userId).select("email name userId userType").lean();
+        } catch { }
+
+        const ownerEmail = ownerUser?.email || "owner";
+        const changedKeys = Object.keys(settings);
+
+        // Format a clear readable summary of what was changed
+        const summaryChanges = changedKeys.map((k) => `${k}: ${JSON.stringify(settings[k])}`).join(", ");
+
+        await logActivity({
+            type: "owner",
+            action: "SETTINGS_UPDATE",
+            user: {
+                userId: ownerUser?.userId || decoded.userId,
+                email: ownerEmail,
+                name: ownerUser?.name || "Owner",
+                userType: "owner",
+            },
+            title: "Store Settings Updated",
+            description: `Owner (${ownerEmail}) changed settings: ${changedKeys.join(", ")}`,
+            target: "System Settings",
+            details: {
+                ownerEmail,
+                changedKeys,
+                summary: summaryChanges,
+                settings,
+            },
+            status: "success",
+        });
 
         return Response.json({
             success: true,

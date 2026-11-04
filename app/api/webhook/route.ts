@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import User from "@/models/User";
 import WalletTransaction from "@/models/WalletTransaction";
+import { logActivity } from "@/lib/activityLogger";
 
 
 export async function POST(req: NextRequest) {
@@ -48,6 +49,27 @@ export async function POST(req: NextRequest) {
             transaction.balanceAfter = user.wallet;
             await transaction.save();
 
+            await logActivity({
+              type: "normal",
+              action: "WALLET_DEPOSIT",
+              user: {
+                userId: user.userId,
+                email: user.email,
+                name: user.name,
+                userType: user.userType,
+              },
+              title: "Wallet Recharge Completed",
+              description: `User ${user.name || user.email || user.userId} recharged wallet with ₹${transaction.amount}`,
+              target: order_id,
+              details: {
+                transactionId: order_id,
+                amount: transaction.amount,
+                balanceBefore: transaction.balanceBefore,
+                balanceAfter: transaction.balanceAfter,
+              },
+              status: "success",
+            });
+
             console.log(`Wallet recharged (Webhook) for user ${user.userId}: +${transaction.amount}`);
           } else {
             // Rollback transaction status if user not found
@@ -63,6 +85,29 @@ export async function POST(req: NextRequest) {
           order.paymentStatus = "success";
           order.status = "success"; // Or "processing" if you have that
           await order.save();
+
+          await logActivity({
+            type: "normal",
+            action: "TOPUP_SUCCESS",
+            user: {
+              userId: order.userId || null,
+              email: order.email || null,
+              phone: order.phone || null,
+              userType: "user",
+            },
+            title: "Topup Payment Completed",
+            description: `Topup order #${order.orderId} for ${order.itemName || order.gameSlug} (₹${order.price}) payment verified via Webhook`,
+            target: order.orderId,
+            details: {
+              orderId: order.orderId,
+              gameSlug: order.gameSlug,
+              itemSlug: order.itemSlug,
+              itemName: order.itemName,
+              price: order.price,
+            },
+            status: "success",
+          });
+
           console.log(`Order ${order_id} marked as success`);
         }
       }

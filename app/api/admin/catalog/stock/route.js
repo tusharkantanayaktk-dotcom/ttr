@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import SystemSetting from "@/models/SystemSetting";
+import User from "@/models/User";
+import { logActivity } from "@/lib/activityLogger";
 import { getCatalogStock } from "@/lib/serverCatalogStock";
 
 const requireAdminOrOwner = (req) => {
@@ -104,6 +106,34 @@ export async function PATCH(req) {
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
+
+    // Fetch owner details to log Gmail
+    let ownerUser = null;
+    try {
+      ownerUser = await User.findById(authCheck.decoded.userId).select("email name userId userType").lean();
+    } catch {}
+
+    const ownerEmail = ownerUser?.email || "owner";
+
+    await logActivity({
+      type: "owner",
+      action: "STOCK_UPDATE",
+      user: {
+        userId: ownerUser?.userId || authCheck.decoded.userId,
+        email: ownerEmail,
+        name: ownerUser?.name || "Owner",
+        userType: "owner",
+      },
+      title: "Catalog Stock Updated",
+      description: `Owner (${ownerEmail}) updated catalog stock: ${cleanGames.length} games and ${cleanItems.length} items set out-of-stock`,
+      target: "Catalog Stock",
+      details: {
+        ownerEmail,
+        outOfStockGames: cleanGames,
+        outOfStockItems: cleanItems,
+      },
+      status: "success",
+    });
 
     return NextResponse.json({
       success: true,

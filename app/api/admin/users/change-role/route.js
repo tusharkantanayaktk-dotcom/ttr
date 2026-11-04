@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import { logActivity } from "@/lib/activityLogger";
 import jwt from "jsonwebtoken";
 
 export async function PATCH(req) {
@@ -67,9 +68,42 @@ export async function PATCH(req) {
       );
     }
 
+    const oldUserType = user.userType;
+
     // ---------------- UPDATE ----------------
     user.userType = newUserType;
     await user.save();
+
+    // Fetch owner details to log Gmail
+    let ownerUser = null;
+    try {
+      ownerUser = await User.findById(decoded.userId).select("email name userId userType").lean();
+    } catch {}
+
+    const ownerEmail = ownerUser?.email || "owner";
+
+    await logActivity({
+      type: "owner",
+      action: "ROLE_CHANGE",
+      user: {
+        userId: ownerUser?.userId || decoded.userId,
+        email: ownerEmail,
+        name: ownerUser?.name || "Owner",
+        userType: "owner",
+      },
+      title: "User Role Updated",
+      description: `Owner (${ownerEmail}) changed role of ${user.name || user.email || user.userId} from '${oldUserType}' to '${newUserType}'`,
+      target: user.email || user.userId,
+      details: {
+        ownerEmail,
+        targetUserId: user.userId,
+        targetEmail: user.email,
+        targetName: user.name,
+        oldRole: oldUserType,
+        newRole: newUserType,
+      },
+      status: "success",
+    });
 
     return Response.json({
       success: true,

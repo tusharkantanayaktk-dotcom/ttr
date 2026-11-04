@@ -1,5 +1,7 @@
 import { connectDB } from "@/lib/mongodb";
 import PricingConfig from "@/models/PricingConfig";
+import User from "@/models/User";
+import { logActivity } from "@/lib/activityLogger";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
@@ -211,6 +213,46 @@ export async function PATCH(req) {
         { status: 400 } // Likely a validation or constraint error
       );
     }
+
+    // Fetch owner details to log Gmail & pricing modifications
+    let ownerUser = null;
+    try {
+      ownerUser = await User.findById(authCheck.decoded.userId).select("email name userId userType").lean();
+    } catch {}
+
+    const ownerEmail = ownerUser?.email || "owner";
+    const slabSummary = slabs.map((s) => `₹${s.min}-₹${s.max}: +${s.percent}%`).join(", ");
+    const overrideSummary = mergedOverrides
+      .filter((o) => o.useOverride)
+      .map((o) => `${o.gameSlug}/${o.itemSlug}: ₹${o.fixedPrice}`)
+      .slice(0, 5)
+      .join(", ");
+
+    await logActivity({
+      type: "owner",
+      action: "PRICING_UPDATE",
+      user: {
+        userId: ownerUser?.userId || authCheck.decoded.userId,
+        email: ownerEmail,
+        name: ownerUser?.name || "Owner",
+        userType: "owner",
+      },
+      title: "Game Pricing Updated",
+      description: `Owner (${ownerEmail}) updated pricing for '${userType}' (${slabs.length} slab tiers, ${mergedOverrides.length} price overrides)`,
+      target: `Pricing: ${userType}`,
+      details: {
+        ownerEmail,
+        userType,
+        slabsCount: slabs.length,
+        slabsSummary: slabSummary || "No slabs",
+        overridesCount: mergedOverrides.length,
+        activeOverridesCount: mergedOverrides.filter((o) => o.useOverride).length,
+        sampleOverrides: overrideSummary,
+        slabs,
+        overrides: mergedOverrides.slice(0, 30),
+      },
+      status: "success",
+    });
 
     return NextResponse.json({
       success: true,

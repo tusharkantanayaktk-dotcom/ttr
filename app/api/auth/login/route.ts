@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import { logActivity } from "@/lib/activityLogger";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
@@ -73,6 +74,29 @@ export async function POST(request: Request) {
     foundUser.lastLogin = new Date();
     foundUser.lastIp = ip;
     await foundUser.save();
+
+    // Log login activity
+    await logActivity({
+      type: "normal",
+      action: "LOGIN",
+      user: {
+        userId: foundUser.userId,
+        email: foundUser.email,
+        name: foundUser.name,
+        phone: foundUser.phone,
+        userType: foundUser.userType,
+      },
+      title: "User Logged In",
+      description: `User ${foundUser.name || foundUser.email || foundUser.phone} logged in successfully`,
+      target: foundUser.userId,
+      details: {
+        email: foundUser.email,
+        phone: foundUser.phone,
+        provider: "local",
+      },
+      ip,
+      status: "success",
+    });
 
     /* ================= JWT GENERATION ================= */
     const token = jwt.sign(

@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import WalletTransaction from "@/models/WalletTransaction";
+import { logActivity } from "@/lib/activityLogger";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
@@ -62,6 +63,39 @@ export async function POST(req) {
             status: "success",
             paymentMethod: "manual",
             description: description || `Admin ${type} credits`,
+        });
+
+        // Fetch owner details to log Gmail
+        let ownerUser = null;
+        try {
+            ownerUser = await User.findById(decoded.userId).select("email name userId userType").lean();
+        } catch {}
+
+        const ownerEmail = ownerUser?.email || "owner";
+
+        await logActivity({
+            type: "owner",
+            action: "WALLET_ADJUST",
+            user: {
+                userId: ownerUser?.userId || decoded.userId,
+                email: ownerEmail,
+                name: ownerUser?.name || "Owner",
+                userType: "owner",
+            },
+            title: `Wallet ${type === "add" ? "Credited" : "Debited"}`,
+            description: `Owner (${ownerEmail}) ${type === "add" ? "added ₹" + amountNum : "deducted ₹" + amountNum} for user ${updatedUser.name || updatedUser.email || updatedUser.userId} (New balance: ₹${balanceAfter})`,
+            target: updatedUser.email || updatedUser.userId,
+            details: {
+                ownerEmail,
+                targetUserId: updatedUser.userId,
+                targetEmail: updatedUser.email,
+                type,
+                amount: amountNum,
+                balanceBefore,
+                balanceAfter,
+                reason: description || "Manual adjustment",
+            },
+            status: "success",
         });
 
         return Response.json({

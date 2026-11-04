@@ -25,12 +25,14 @@ import {
   FiChevronLeft,
   FiCheck,
   FiHeadphones,
-  FiPackage
+  FiPackage,
+  FiClock
 } from "react-icons/fi";
 
 const logo = "/logo.svg";
 import AdminGuard from "@/components/AdminGuard";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
+import ActivityLogsTab from "@/components/admin/ActivityLogsTab";
 import UsersTab from "@/components/admin/UsersTab";
 import OrdersTab from "@/components/admin/OrdersTab";
 import PricingTab from "@/components/admin/PricingTab";
@@ -51,7 +53,8 @@ const SIDEBAR_GROUPS = [
   {
     title: "Overview",
     items: [
-      { id: "analytics", label: "Analytics", icon: FiActivity, badge: "Live" }
+      { id: "analytics", label: "Analytics", icon: FiActivity, badge: "Live" },
+      { id: "activity_logs", label: "Activity Logs", icon: FiClock, badge: "New" }
     ]
   },
   {
@@ -293,7 +296,7 @@ export default function AdminPanalPage() {
               {isCollapsed ? (
                 <div 
                   className="hidden md:flex flex-col items-center justify-center p-2 rounded-lg border border-[var(--border)] bg-[var(--card)]/50 mb-3 relative cursor-pointer hover:border-[var(--accent)]/40 transition-colors"
-                  title={`1Game Balance: ${balance !== null ? balance : "Loading…"}`}
+                  title={`1Game Balance: ${balance !== null ? balance : "Loadingâ€¦"}`}
                 >
                   <FiCreditCard className="text-[var(--accent)] w-3.5 h-3.5" />
                   <FiCheck className="w-2.5 h-2.5 text-emerald-400 mt-1" />
@@ -308,7 +311,7 @@ export default function AdminPanalPage() {
                   <div className="min-w-0">
                     <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] block leading-none">1Game Balance</span>
                     <span className="text-xs font-black text-[var(--foreground)] truncate tracking-tight block mt-0.5">
-                      {balance !== null ? balance : "Loading…"}
+                      {balance !== null ? balance : "Loadingâ€¦"}
                     </span>
                   </div>
                 </div>
@@ -412,6 +415,10 @@ export default function AdminPanalPage() {
               <div className="w-full">
                 {activeTab === "analytics" && (
                   <AnalyticsTab />
+                )}
+
+                {activeTab === "activity_logs" && (
+                  <ActivityLogsTab />
                 )}
 
                 {activeTab === "users" && (

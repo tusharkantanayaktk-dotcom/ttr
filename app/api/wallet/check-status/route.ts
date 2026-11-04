@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import WalletTransaction from "@/models/WalletTransaction";
+import { logActivity } from "@/lib/activityLogger";
 
 export async function POST(req: Request) {
   try {
@@ -136,6 +137,27 @@ export async function POST(req: Request) {
     transaction.balanceAfter = user.wallet;
     transaction.amount = amount;
     await transaction.save();
+
+    await logActivity({
+      type: "normal",
+      action: "WALLET_DEPOSIT",
+      user: {
+        userId: user.userId,
+        email: user.email,
+        name: user.name,
+        userType: user.userType,
+      },
+      title: "Wallet Recharge Completed",
+      description: `User ${user.name || user.email || user.userId} recharged wallet with ₹${amount}`,
+      target: orderId,
+      details: {
+        transactionId: orderId,
+        amount,
+        balanceBefore: transaction.balanceBefore,
+        balanceAfter: transaction.balanceAfter,
+      },
+      status: "success",
+    });
 
     return NextResponse.json({
       success: true,
