@@ -94,6 +94,60 @@ export default function AdminPanalPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // Sync activeTab with URL (?tab=...) and localStorage
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const tabFromUrl = params.get("tab");
+      const validTabs = SIDEBAR_GROUPS.flatMap((g) => g.items.map((i) => i.id));
+
+      if (tabFromUrl && validTabs.includes(tabFromUrl)) {
+        setActiveTab(tabFromUrl);
+      } else {
+        const savedTab = localStorage.getItem("owner_active_tab");
+        if (savedTab && validTabs.includes(savedTab)) {
+          setActiveTab(savedTab);
+          const url = new URL(window.location.href);
+          url.searchParams.set("tab", savedTab);
+          window.history.replaceState({ tab: savedTab }, "", url.toString());
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
+
+  // Listen for browser Back/Forward navigation
+  useEffect(() => {
+    const onPopState = () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const tabFromUrl = params.get("tab");
+        const validTabs = SIDEBAR_GROUPS.flatMap((g) => g.items.map((i) => i.id));
+        if (tabFromUrl && validTabs.includes(tabFromUrl)) {
+          setActiveTab(tabFromUrl);
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    setIsSidebarOpen(false);
+    try {
+      localStorage.setItem("owner_active_tab", tabId);
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tabId);
+      window.history.pushState({ tab: tabId }, "", url.toString());
+    } catch (e) {
+      // ignore
+    }
+  };
+
   useEffect(() => {
     const saved = localStorage.getItem("owner_sidebar_collapsed");
     if (saved !== null) {
@@ -346,10 +400,7 @@ export default function AdminPanalPage() {
                           <button
                             key={item.id}
                             title={item.label}
-                            onClick={() => {
-                              setActiveTab(item.id);
-                              setIsSidebarOpen(false);
-                            }}
+                            onClick={() => handleTabChange(item.id)}
                             className={`
                               w-full flex items-center ${isCollapsed ? "md:justify-center px-2 md:px-0 py-2" : "justify-between px-2.5 py-1.5"}
                               rounded-lg
