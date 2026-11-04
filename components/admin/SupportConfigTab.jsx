@@ -202,22 +202,46 @@ export default function SupportConfigTab() {
   return (
     <div className="w-full space-y-5 pb-12">
       {/* ================= HEADER ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)]">
-              <Headphones size={20} />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border)] pb-3.5">
+        <div className="space-y-1">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="p-1.5 sm:p-2 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
+                <Headphones size={18} />
+              </div>
+              <h2 className="text-base sm:text-xl font-bold tracking-tight text-[var(--foreground)] truncate">
+                Support &amp; Socials Config
+              </h2>
             </div>
-            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">
-              Support & Socials Config
-            </h2>
+
+            {/* Mobile Actions: Refresh & Save */}
+            <div className="flex sm:hidden items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={fetchConfig}
+                title="Refresh current settings"
+                className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] bg-[var(--card)] border border-[var(--border)] cursor-pointer"
+              >
+                <RefreshCcw size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={saving}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-white bg-[var(--accent)] hover:brightness-110 active:scale-95 disabled:opacity-50 transition-all shadow-sm cursor-pointer"
+              >
+                {saving ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
+                <span>Save</span>
+              </button>
+            </div>
           </div>
-          <p className="text-xs text-[var(--muted)] mt-1">
-            Configure customer care contacts, WhatsApp chat numbers, community links, and social handles across the store.
+          <p className="text-[11px] sm:text-xs text-[var(--muted)]">
+            Configure customer care contacts, WhatsApp chat numbers, community links, and social handles.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Desktop Actions */}
+        <div className="hidden sm:flex items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={fetchConfig}
@@ -234,7 +258,7 @@ export default function SupportConfigTab() {
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--muted)] hover:text-amber-400 bg-[var(--card)] border border-[var(--border)] hover:bg-amber-500/10 transition-all cursor-pointer"
           >
             <RotateCcw size={14} />
-            <span className="hidden sm:inline">Reset Defaults</span>
+            <span>Reset Defaults</span>
           </button>
 
           <button
@@ -283,7 +307,7 @@ export default function SupportConfigTab() {
 
       <form onSubmit={handleSave}>
         {/* ================= UNIFIED MAIN SURFACE ================= */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-7 space-y-7 shadow-sm">
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3.5 sm:p-6 space-y-5 sm:space-y-7 shadow-sm">
           {/* SECTION 1: PRIMARY CUSTOMER CONTACTS */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -329,15 +353,16 @@ export default function SupportConfigTab() {
 
             {/* WhatsApp Number (Digits only) */}
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                  <FaWhatsapp size={14} className="text-emerald-500" />
-                  <span>WhatsApp Number (Digits with Country Code)</span>
+              <div className="flex items-center justify-between gap-2">
+                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5 min-w-0">
+                  <FaWhatsapp size={14} className="text-emerald-500 shrink-0" />
+                  <span className="truncate">WhatsApp Number</span>
+                  <span className="text-[10px] text-[var(--muted)] font-normal hidden min-[360px]:inline">(Digits + Country Code)</span>
                 </label>
                 <button
                   type="button"
                   onClick={autoGenerateWhatsAppUrl}
-                  className="text-[11px] text-[var(--accent)] hover:underline font-semibold cursor-pointer"
+                  className="text-[11px] text-[var(--accent)] hover:underline font-semibold cursor-pointer shrink-0"
                 >
                   Sync URL
                 </button>
@@ -611,6 +636,36 @@ export default function SupportConfigTab() {
               />
             </div>
           </div>
+        </div>
+
+        {/* Form Bottom Actions */}
+        <div className="flex items-center justify-between gap-3 pt-3">
+          <button
+            type="button"
+            onClick={handleResetDefaults}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--muted)] hover:text-amber-400 bg-[var(--card)] border border-[var(--border)] hover:bg-amber-500/10 transition-all cursor-pointer"
+          >
+            <RotateCcw size={14} />
+            <span>Reset Defaults</span>
+          </button>
+
+          <button
+            type="submit"
+            disabled={saving}
+            className="flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-xl text-xs font-bold text-white bg-[var(--accent)] hover:brightness-110 active:scale-95 disabled:opacity-50 transition-all shadow-md shadow-[var(--accent)]/20 cursor-pointer"
+          >
+            {saving ? (
+              <>
+                <Loader2 size={14} className="animate-spin" />
+                <span>Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save size={14} />
+                <span>Save Changes</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </form>
