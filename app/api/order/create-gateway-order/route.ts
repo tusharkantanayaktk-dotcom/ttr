@@ -251,10 +251,10 @@ export async function POST(req: Request) {
       type: "normal",
       action: "TOPUP_ORDER",
       user: {
-        userId: tokenUserId || null,
+        userId: userId || null,
         email: email || null,
         phone: phone || null,
-        userType: "user",
+        userType: userType || "user",
       },
       title: "Gateway Topup Initiated",
       description: `Gateway topup order #${orderId} for ${itemSlug || gameSlug} (₹${price}) initiated by ${email || phone || "Customer"}`,

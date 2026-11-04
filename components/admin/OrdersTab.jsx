@@ -281,66 +281,97 @@ export default function OrdersTab() {
             className="space-y-3"
           >
             {/* DESKTOP TABLE */}
-            <div className="hidden lg:block rounded-[2rem] overflow-hidden border border-[var(--border)] bg-[var(--card)]">
+            <div className="hidden lg:block rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--card)]/60">
               <table className="w-full text-left text-sm">
                 <thead className="bg-[var(--foreground)]/[0.03] border-b border-[var(--border)]">
                   <tr className="text-[10px] uppercase font-bold tracking-widest text-[var(--muted)]">
-                    <th className="px-6 py-4">Game / User</th>
-                    <th className="px-6 py-4">Date/Time</th>
-                    <th className="px-6 py-4">Item</th>
-                    <th className="px-6 py-4">Method</th>
-                    <th className="px-6 py-4">Price</th>
-                    <th className="px-6 py-4">Status</th>
+                    <th className="px-5 py-3.5">Game / User</th>
+                    <th className="px-5 py-3.5">Date / Time</th>
+                    <th className="px-5 py-3.5">Item & Credentials</th>
+                    <th className="px-5 py-3.5">Method</th>
+                    <th className="px-5 py-3.5">Price</th>
+                    <th className="px-5 py-3.5">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[var(--border)]">
+                <tbody className="divide-y divide-[var(--border)]/70">
                   {orders.map((o, idx) => {
                     const meta = statusMeta[o.status] || statusMeta.pending;
                     return (
                       <motion.tr
                         key={o._id}
-                        initial={{ opacity: 0, x: -10 }}
+                        initial={{ opacity: 0, x: -6 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.03 }}
+                        transition={{ delay: idx * 0.02 }}
                         onClick={() => setSelectedOrder(o)}
-                        className="group hover:bg-[var(--foreground)]/[0.03] transition-colors cursor-pointer"
+                        className="group hover:bg-[var(--foreground)]/[0.035] transition-colors cursor-pointer"
                       >
-                        <td className="px-6 py-4">
+                        {/* 1. Game & Customer */}
+                        <td className="px-5 py-3.5">
                           <div className="flex items-center gap-2.5">
-                            <Gamepad2 size={16} className="text-[var(--accent)] shrink-0" />
-                            <div className="flex flex-col min-w-0">
-                              <span className="text-[var(--foreground)] font-bold uppercase text-[10px] tracking-tight truncate">{o.gameSlug}</span>
-                              <span className="text-[11px] text-[var(--foreground)] font-black truncate leading-tight font-mono">{o.email || "Guest User"}</span>
+                            <div className="w-8 h-8 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0 border border-[var(--accent)]/20">
+                              <Gamepad2 size={15} />
+                            </div>
+                            <div className="flex flex-col min-w-0 max-w-[210px]">
+                              <span className="text-[var(--foreground)] font-extrabold uppercase text-xs tracking-tight truncate">
+                                {o.gameSlug}
+                              </span>
+                              <span className="text-[11px] text-[var(--muted)] truncate mt-0.5 flex items-center gap-1 font-medium">
+                                <Mail size={10} className="text-[var(--accent)] shrink-0 opacity-70" />
+                                <span className="truncate">{o.email || "Guest User"}</span>
+                              </span>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+
+                        {/* 2. Date & Time */}
+                        <td className="px-5 py-3.5">
                           <div className="flex flex-col">
-                            <span className="text-[var(--foreground)] font-medium">{new Date(o.createdAt).toLocaleDateString()}</span>
-                            <span className="text-[10px] text-[var(--muted)]">{new Date(o.createdAt).toLocaleTimeString()}</span>
+                            <span className="text-xs font-semibold text-[var(--foreground)]">
+                              {new Date(o.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                            </span>
+                            <span className="text-[10px] text-[var(--muted)] font-mono mt-0.5">
+                              {new Date(o.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+                            </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 max-w-xs">
-                          <span className="text-[var(--foreground)]/80 font-medium truncate block">{o.itemName}</span>
-                          {o.playerId && (
-                            <div className="text-[10.5px] font-mono text-[var(--accent)] font-bold truncate">
-                              ID: {o.playerId} {o.zoneId ? `(${o.zoneId})` : ""}
-                            </div>
-                          )}
-                          <span className="text-[10px] text-[var(--muted)]/40 font-mono uppercase block">{o.orderId}</span>
+
+                        {/* 3. Item & Credentials */}
+                        <td className="px-5 py-3.5 max-w-xs">
+                          <div className="space-y-0.5">
+                            <span className="text-xs font-bold text-[var(--foreground)] truncate block">
+                              {o.itemName}
+                            </span>
+                            {o.playerId && (
+                              <div className="text-[11px] font-mono text-cyan-400 font-bold truncate">
+                                ID: {o.playerId} {o.zoneId ? `(${o.zoneId})` : ""}
+                              </div>
+                            )}
+                            <span className="text-[9.5px] text-[var(--muted)]/50 font-mono uppercase block truncate" title={o.orderId}>
+                              #{o.orderId}
+                            </span>
+                          </div>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="text-[10px] font-black uppercase text-[var(--muted)] bg-[var(--foreground)]/[0.05] p-1.5 rounded-lg border border-[var(--border)] tracking-widest">{o.paymentMethod || "wallet"}</span>
+
+                        {/* 4. Payment Method */}
+                        <td className="px-5 py-3.5">
+                          <span className="text-[10px] font-black uppercase text-[var(--muted)] bg-[var(--foreground)]/[0.04] px-2 py-1 rounded-md border border-[var(--border)] tracking-wider">
+                            {o.paymentMethod || "wallet"}
+                          </span>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="text-base font-black text-emerald-500 tabular-nums">
+
+                        {/* 5. Price */}
+                        <td className="px-5 py-3.5">
+                          <span className="text-base font-black text-emerald-400 tabular-nums">
                             ₹{o.price}
                           </span>
                         </td>
-                        <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+
+                        {/* 6. Status */}
+                        <td className="px-5 py-3.5" onClick={(e) => e.stopPropagation()}>
                           <StatusDropdown
                             value={o.status}
                             disabled={updating}
+                            compact
                             onChange={(v) => updateOrderStatus(o.orderId, v)}
                             options={[
                               { value: "pending", label: "Pending" },
@@ -368,57 +399,58 @@ export default function OrdersTab() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.02 }}
                     onClick={() => setSelectedOrder(o)}
-                    className="p-3 rounded-xl border border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)] active:scale-[0.99] transition-all cursor-pointer space-y-2"
+                    className="p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--card)]/70 hover:bg-[var(--card)] active:scale-[0.99] transition-all cursor-pointer space-y-2.5 shadow-sm"
                   >
-                    {/* Top Row: Game Slug + Item & Price + Payment Badge */}
+                    {/* Top Row: Game Badge on left, Price & Payment Method on right */}
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-1.5 min-w-0 flex-1">
-                        <Gamepad2 size={14} className="text-[var(--accent)] shrink-0" />
+                        <div className="w-6 h-6 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0 border border-[var(--accent)]/20">
+                          <Gamepad2 size={13} />
+                        </div>
                         <span className="font-extrabold text-[var(--foreground)] text-xs uppercase tracking-tight truncate">
                           {o.gameSlug}
-                        </span>
-                        <span className="text-[10px] text-[var(--muted)] truncate opacity-70">
-                          · {o.itemName}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-1.5 shrink-0">
-                        <span className="text-sm font-black text-emerald-500 leading-none">₹{o.price}</span>
-                        <span className="text-[8px] uppercase font-bold text-[var(--muted)] px-1.5 py-0.5 rounded bg-[var(--foreground)]/[0.04] border border-[var(--border)] leading-none">
+                        <span className="text-sm sm:text-base font-black text-emerald-400 tabular-nums leading-none">
+                          ₹{o.price}
+                        </span>
+                        <span className="text-[9px] uppercase font-extrabold text-[var(--muted)] px-1.5 py-0.5 rounded-md bg-[var(--foreground)]/[0.04] border border-[var(--border)] leading-none">
                           {o.paymentMethod || "wallet"}
                         </span>
                       </div>
                     </div>
 
-                    {/* Middle Row: Player ID & Server + Customer Gmail */}
-                    <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs">
-                      {o.playerId && (
-                        <div className="flex items-center gap-1 font-mono text-[10.5px] min-w-0">
-                          <span className="text-[var(--accent)] font-bold">ID: {o.playerId}</span>
-                          {o.zoneId && (
-                            <span className="text-[var(--muted)] opacity-80">
-                              ({o.zoneId})
-                            </span>
-                          )}
-                        </div>
-                      )}
-
-                      <div className="flex items-center gap-1 text-[10.5px] text-[var(--muted)] min-w-0 ml-auto">
-                        <Mail size={11} className="text-[var(--accent)] opacity-70 shrink-0" />
-                        <span className="text-[var(--foreground)]/80 font-medium truncate max-w-[170px] sm:max-w-[220px]">
-                          {o.email || "Guest"}
+                    {/* Middle Card: Item Name, Player Credentials & Customer Email */}
+                    <div className="p-2.5 rounded-xl bg-[var(--foreground)]/[0.025] border border-[var(--border)]/60 flex items-center justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <span className="text-xs font-bold text-[var(--foreground)] block truncate">
+                          {o.itemName}
                         </span>
+                        {o.playerId ? (
+                          <span className="text-[11px] font-mono font-bold text-cyan-400 block truncate mt-0.5">
+                            ID: {o.playerId} {o.zoneId ? `(${o.zoneId})` : ""}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-[var(--muted)] block mt-0.5">Direct Top-up</span>
+                        )}
+                      </div>
+
+                      {/* Customer Email Pill */}
+                      <div className="flex items-center gap-1 text-[10px] text-[var(--muted)] min-w-0 max-w-[140px] sm:max-w-[180px] bg-[var(--card)] px-2 py-1 rounded-lg border border-[var(--border)]/80 shrink-0">
+                        <Mail size={10} className="text-[var(--accent)] shrink-0 opacity-70" />
+                        <span className="truncate text-[var(--foreground)]/80 font-medium">{o.email || "Guest"}</span>
                       </div>
                     </div>
 
-                    {/* Bottom Row: Date & Order ID + Status Dropdown */}
-                    <div className="flex items-center justify-between pt-1.5 border-t border-[var(--border)]/30 text-[10px] text-[var(--muted)]">
-                      <div className="flex items-center gap-1.5 min-w-0 pr-2">
-                        <span className="shrink-0">
-                          {new Date(o.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} · {new Date(o.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {/* Bottom Row: Date & Order ID on Left, Status Dropdown on Right */}
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--border)]/40 text-[10px] text-[var(--muted)]">
+                      <div className="flex flex-col min-w-0 pr-1">
+                        <span className="text-[10px] font-medium text-[var(--foreground)]/80">
+                          {new Date(o.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })} · {new Date(o.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </span>
-                        <span className="opacity-30 shrink-0">·</span>
-                        <span className="font-mono text-[9px] opacity-50 truncate" title={o.orderId}>
+                        <span className="font-mono text-[9px] text-[var(--muted)]/50 truncate" title={o.orderId}>
                           #{o.orderId}
                         </span>
                       </div>
