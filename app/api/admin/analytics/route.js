@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
+import User from "@/models/User";
 import PwaStat from "@/models/PwaStat";
 import jwt from "jsonwebtoken";
 
@@ -453,6 +454,123 @@ export async function GET(req) {
       console.warn("PWA stats collection error:", e);
     }
 
+    /* ================= 10. RESELLER (B2B) vs RETAIL (B2C) SPLIT ================= */
+    let tierSplit = {
+      totalResellersRegistered: 0,
+      retail: {
+        revenue: 0,
+        ordersCount: 0,
+        aov: 0,
+        uniqueBuyers: 0,
+        revenueShare: 100,
+      },
+      reseller: {
+        revenue: 0,
+        ordersCount: 0,
+        aov: 0,
+        uniqueBuyers: 0,
+        revenueShare: 0,
+        activeResellersCount: 0,
+      },
+      topResellers: [],
+    };
+
+    try {
+      const resellers = await User.find({ userType: "admin" })
+        .select("userId email phone name")
+        .lean();
+
+      tierSplit.totalResellersRegistered = resellers.length;
+
+      const resellerUserIds = new Set(resellers.map((u) => u.userId).filter(Boolean));
+      const resellerEmails = new Set(resellers.map((u) => u.email?.toLowerCase()).filter(Boolean));
+      const resellerPhones = new Set(resellers.map((u) => u.phone).filter(Boolean));
+
+      const periodOrders = await Order.find(successMatch)
+        .select("userId email phone price gameSlug itemName createdAt")
+        .lean();
+
+      let retailRevenue = 0;
+      let retailOrders = 0;
+      const retailBuyersSet = new Set();
+
+      let resellerRevenue = 0;
+      let resellerOrders = 0;
+      const resellerBuyersSet = new Set();
+      const resellerContributorsMap = new Map();
+
+      for (const ord of periodOrders) {
+        const isReseller =
+          (ord.userId && resellerUserIds.has(ord.userId)) ||
+          (ord.email && resellerEmails.has(ord.email.toLowerCase())) ||
+          (ord.phone && resellerPhones.has(ord.phone));
+
+        const price = Number(ord.price || 0);
+
+        if (isReseller) {
+          resellerRevenue += price;
+          resellerOrders += 1;
+          const key = ord.userId || ord.email || ord.phone || "Reseller";
+          resellerBuyersSet.add(key);
+
+          if (!resellerContributorsMap.has(key)) {
+            const matchingReseller = resellers.find(
+              (r) => r.userId === ord.userId || r.email?.toLowerCase() === ord.email?.toLowerCase() || r.phone === ord.phone
+            );
+            resellerContributorsMap.set(key, {
+              id: key,
+              name: matchingReseller?.name || ord.email || ord.phone || "Reseller Partner",
+              email: matchingReseller?.email || ord.email || null,
+              phone: matchingReseller?.phone || ord.phone || null,
+              ordersCount: 0,
+              totalSpent: 0,
+            });
+          }
+          const entry = resellerContributorsMap.get(key);
+          entry.ordersCount += 1;
+          entry.totalSpent += price;
+        } else {
+          retailRevenue += price;
+          retailOrders += 1;
+          const buyerKey = ord.userId || ord.email || ord.phone || ord.orderId;
+          retailBuyersSet.add(buyerKey);
+        }
+      }
+
+      const totalPeriodRevenue = retailRevenue + resellerRevenue;
+      const retailRevenueShare = totalPeriodRevenue > 0 ? Math.round((retailRevenue / totalPeriodRevenue) * 1000) / 10 : 100;
+      const resellerRevenueShare = totalPeriodRevenue > 0 ? Math.round((resellerRevenue / totalPeriodRevenue) * 1000) / 10 : 0;
+
+      const retailAov = retailOrders > 0 ? Math.round((retailRevenue / retailOrders) * 100) / 100 : 0;
+      const resellerAov = resellerOrders > 0 ? Math.round((resellerRevenue / resellerOrders) * 100) / 100 : 0;
+
+      const topResellers = Array.from(resellerContributorsMap.values())
+        .sort((a, b) => b.totalSpent - a.totalSpent)
+        .slice(0, 5);
+
+      tierSplit = {
+        totalResellersRegistered: resellers.length,
+        retail: {
+          revenue: retailRevenue,
+          ordersCount: retailOrders,
+          aov: retailAov,
+          uniqueBuyers: retailBuyersSet.size,
+          revenueShare: retailRevenueShare,
+        },
+        reseller: {
+          revenue: resellerRevenue,
+          ordersCount: resellerOrders,
+          aov: resellerAov,
+          uniqueBuyers: resellerBuyersSet.size,
+          revenueShare: resellerRevenueShare,
+          activeResellersCount: resellerBuyersSet.size,
+        },
+        topResellers,
+      };
+    } catch (tierErr) {
+      console.warn("Tier split analytics error:", tierErr);
+    }
+
     return Response.json({
       success: true,
       data: {
@@ -477,6 +595,7 @@ export async function GET(req) {
           returningBuyersRevenue,
           avgOrdersPerUser: Math.round(avgOrdersPerUser * 100) / 100,
         },
+        tierSplit,
         peakHours: {
           peakHour: peakHour
             ? {

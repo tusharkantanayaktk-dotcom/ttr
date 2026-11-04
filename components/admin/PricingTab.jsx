@@ -683,7 +683,7 @@ export default function PricingTab({
             {/* Filter Buttons to view All vs Custom Prices Overridden */}
             {selectedGame && !loadingFixedPrices && (
               <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                <span className="text-[11px] font-semibold text-[var(--muted)] mr-1 flex items-center gap-1">
+                <span className="text-[11px] font-semibold text-[var(--muted)] mr-0.5 flex items-center gap-1">
                   <Filter size={11} /> Filter:
                 </span>
 
@@ -691,13 +691,13 @@ export default function PricingTab({
                 <button
                   type="button"
                   onClick={() => setFilterStatus("all")}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-2 sm:px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     filterStatus === "all"
                       ? "bg-[var(--foreground)] text-[var(--background)] shadow-xs"
                       : "bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
                   }`}
                 >
-                  <span>All Items</span>
+                  <span>All <span className="hidden min-[400px]:inline">Items</span></span>
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
                     filterStatus === "all" ? "bg-[var(--background)]/20 text-[var(--background)]" : "bg-[var(--foreground)]/5 text-[var(--muted)]"
                   }`}>
@@ -709,7 +709,7 @@ export default function PricingTab({
                 <button
                   type="button"
                   onClick={() => setFilterStatus("overridden")}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+                  className={`px-2 sm:px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
                     filterStatus === "overridden"
                       ? "bg-[var(--accent)] text-black border-[var(--accent)] shadow-sm font-extrabold"
                       : counts.custom > 0
@@ -719,7 +719,7 @@ export default function PricingTab({
                   title="Show only items where you set a custom fixed price override"
                 >
                   <Tag size={12} />
-                  <span>Custom Prices Set</span>
+                  <span>Custom <span className="hidden min-[440px]:inline">Prices</span></span>
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
                     filterStatus === "overridden" ? "bg-black/20 text-black" : "bg-[var(--accent)]/20 text-[var(--accent)]"
                   }`}>
@@ -731,13 +731,13 @@ export default function PricingTab({
                 <button
                   type="button"
                   onClick={() => setFilterStatus("standard")}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-2 sm:px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     filterStatus === "standard"
                       ? "bg-[var(--foreground)] text-[var(--background)] shadow-xs"
                       : "bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
                   }`}
                 >
-                  <span>Standard Pricing</span>
+                  <span>Standard <span className="hidden min-[440px]:inline">Pricing</span></span>
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
                     filterStatus === "standard" ? "bg-[var(--background)]/20 text-[var(--background)]" : "bg-[var(--foreground)]/5 text-[var(--muted)]"
                   }`}>
@@ -784,7 +784,7 @@ export default function PricingTab({
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-2.5">
+              <div className="grid grid-cols-1 min-[340px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-2.5">
                 <AnimatePresence mode="popLayout">
                   {loadingFixedPrices ? (
                     <div className="col-span-full py-16 flex flex-col items-center justify-center">
@@ -795,7 +795,7 @@ export default function PricingTab({
                     visibleOverrides.map((o) => (
                       <div
                         key={o.itemSlug}
-                        className={`p-2.5 sm:p-3 rounded-xl border transition-all space-y-2 flex flex-col justify-between ${
+                        className={`p-2.5 sm:p-3 rounded-xl border transition-all space-y-2 flex flex-col justify-between overflow-hidden ${
                           o.useOverride
                             ? "border-[var(--accent)]/60 bg-[var(--accent)]/[0.04] shadow-xs ring-1 ring-[var(--accent)]/20"
                             : "border-[var(--border)] bg-[var(--card)]/60 hover:bg-[var(--card)]"
@@ -818,9 +818,9 @@ export default function PricingTab({
 
                         {/* Custom Price Switch & Input Row */}
                         <div className="pt-2 border-t border-[var(--border)]/40 space-y-1.5">
-                          <div className="flex items-center justify-between gap-1.5">
+                          <div className="flex items-center justify-between gap-1.5 min-w-0">
                             {/* Override Toggle with clear text */}
-                            <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                            <label className="flex items-center gap-1 sm:gap-1.5 cursor-pointer select-none min-w-0 flex-1">
                               <button
                                 type="button"
                                 role="switch"
@@ -853,13 +853,13 @@ export default function PricingTab({
                                   o.useOverride ? "text-[var(--accent)]" : "text-[var(--muted)]"
                                 }`}
                               >
-                                {o.useOverride ? "Custom Price" : "Default %"}
+                                {o.useOverride ? "Custom" : "Default %"}
                               </span>
                             </label>
 
                             {/* Price input */}
-                            <div className="relative w-20 sm:w-24 shrink-0">
-                              <span className="absolute left-1.5 sm:left-2 top-1/2 -translate-y-1/2 text-[10px] text-[var(--muted)] font-mono pointer-events-none">
+                            <div className="relative w-16 min-[380px]:w-18 sm:w-22 shrink-0">
+                              <span className="absolute left-1 sm:left-1.5 top-1/2 -translate-y-1/2 text-[10px] text-[var(--muted)] font-mono pointer-events-none">
                                 ₹
                               </span>
                               <input
@@ -873,7 +873,7 @@ export default function PricingTab({
                                   );
                                   updateOverridePrice(idx, e.target.value);
                                 }}
-                                className={`w-full h-6.5 sm:h-7.5 pl-4 sm:pl-5 pr-1.5 rounded-lg border text-xs font-bold tabular-nums outline-none text-right font-mono transition-all ${
+                                className={`w-full h-6.5 sm:h-7 pl-3.5 sm:pl-4 pr-1 rounded-lg border text-[11px] sm:text-xs font-bold tabular-nums outline-none text-right font-mono transition-all ${
                                   o.useOverride
                                     ? "bg-[var(--card)] border-[var(--accent)] text-[var(--foreground)] font-black"
                                     : "bg-[var(--foreground)]/[0.03] border-[var(--border)] text-[var(--foreground)]/60 focus:border-[var(--accent)]/50"
@@ -883,14 +883,14 @@ export default function PricingTab({
                             </div>
                           </div>
 
-                          <div className="text-[9px] text-[var(--muted)]/60 flex items-center justify-between">
-                            <span>
+                          <div className="text-[9px] text-[var(--muted)]/60 flex items-center justify-between gap-1">
+                            <span className="truncate">
                               {o.useOverride
-                                ? "Selling for fixed ₹" + o.fixedPrice
-                                : "Uses default profit margin"}
+                                ? "Fixed ₹" + o.fixedPrice
+                                : "Default margin"}
                             </span>
                             {o.useOverride && (
-                              <span className="text-[9px] font-bold text-[var(--accent)]">
+                              <span className="text-[8px] sm:text-[9px] font-bold text-[var(--accent)] shrink-0">
                                 Overridden
                               </span>
                             )}

@@ -183,6 +183,7 @@ export default function AnalyticsTab() {
     paymentMethods = [],
     topSpenders = [],
     pwaStats = {},
+    tierSplit = {},
   } = analyticsData || {};
 
   const maxHourlyOrders = Math.max(...(peakHours.hourlyBreakdown?.map((h) => h.ordersCount) || [1]), 1);
@@ -190,7 +191,7 @@ export default function AnalyticsTab() {
   return (
     <div className="space-y-3.5 sm:space-y-4">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-2.5 sm:gap-3 flex-wrap">
         <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--foreground)]">Analytics</h2>
 
         <div className="flex items-center gap-2">
@@ -198,13 +199,13 @@ export default function AnalyticsTab() {
           <button
             type="button"
             onClick={openFilterSheet}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] border border-[var(--border)] hover:border-[var(--accent)]/50 text-xs font-bold text-[var(--foreground)] active:scale-95 transition-all shadow-sm cursor-pointer group"
+            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[var(--foreground)]/[0.04] hover:bg-[var(--foreground)]/[0.08] border border-[var(--border)] hover:border-[var(--accent)]/50 text-xs font-bold text-[var(--foreground)] active:scale-95 transition-all shadow-sm cursor-pointer group"
             title="Filter Analytics by timeframe or custom dates"
           >
-            <FiFilter className="w-3.5 h-3.5 text-[var(--accent)] group-hover:scale-110 transition-transform" />
-            <span className="truncate max-w-[130px] sm:max-w-none">{getActiveRangeLabel()}</span>
+            <FiFilter className="w-3.5 h-3.5 text-[var(--accent)] group-hover:scale-110 transition-transform shrink-0" />
+            <span className="truncate max-w-[110px] min-[380px]:max-w-[160px] sm:max-w-none">{getActiveRangeLabel()}</span>
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" />
-            <FiChevronDown className="w-3.5 h-3.5 text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors" />
+            <FiChevronDown className="w-3.5 h-3.5 text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors shrink-0" />
           </button>
 
           <button
@@ -481,7 +482,7 @@ export default function AnalyticsTab() {
             </p>
           </div>
 
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] text-center">
               <div className="w-7 h-7 mx-auto rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-1.5">
                 <FiCheckCircle size={14} />
@@ -520,6 +521,163 @@ export default function AnalyticsTab() {
             <span className="font-black text-[var(--foreground)] tracking-tight">{(summary.allTimeOrdersCount || 0).toLocaleString("en-IN")}</span>
           </div>
         </div>
+      </div>
+
+      {/* ================= RESELLER vs RETAIL (B2B vs B2C) SPLIT ================= */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-[var(--card)] border border-[var(--border)] space-y-4">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-black uppercase tracking-wider text-[var(--foreground)] flex items-center gap-2">
+              <FiUsers className="text-[var(--accent)] shrink-0" /> Reseller vs. Retail Split (B2B vs. B2C)
+            </h3>
+            <p className="text-[11px] text-[var(--muted)] mt-0.5">
+              Compare volume and order economics between bulk resellers and regular retail customers
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 rounded-full">
+              {tierSplit.totalResellersRegistered || 0} Registered Resellers
+            </span>
+          </div>
+        </div>
+
+        {/* Visual Revenue Ratio Progress Bar */}
+        <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-2">
+          <div className="flex flex-col min-[480px]:flex-row min-[480px]:items-center justify-between gap-1.5 text-xs font-bold">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-cyan-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shrink-0" />
+              <span>Retail (B2C): {tierSplit.retail?.revenueShare || 0}%</span>
+              <span className="text-[10px] text-[var(--muted)] font-normal">
+                (₹{(tierSplit.retail?.revenue || 0).toLocaleString("en-IN")})
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 sm:gap-2 text-purple-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-purple-400 shrink-0" />
+              <span>Reseller (B2B): {tierSplit.reseller?.revenueShare || 0}%</span>
+              <span className="text-[10px] text-[var(--muted)] font-normal">
+                (₹{(tierSplit.reseller?.revenue || 0).toLocaleString("en-IN")})
+              </span>
+            </div>
+          </div>
+
+          <div className="h-2.5 w-full bg-[var(--foreground)]/[0.08] rounded-full overflow-hidden flex">
+            <div
+              style={{ width: `${Math.max(tierSplit.retail?.revenueShare || 0, 0)}%` }}
+              className="bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-500 rounded-l-full"
+              title={`Retail: ${tierSplit.retail?.revenueShare || 0}%`}
+            />
+            <div
+              style={{ width: `${Math.max(tierSplit.reseller?.revenueShare || 0, 0)}%` }}
+              className="bg-gradient-to-r from-purple-500 to-indigo-400 transition-all duration-500 rounded-r-full"
+              title={`Reseller: ${tierSplit.reseller?.revenueShare || 0}%`}
+            />
+          </div>
+        </div>
+
+        {/* 2 Side-by-Side Comparison Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          {/* Retail Column */}
+          <div className="p-3.5 sm:p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] flex flex-col justify-between relative overflow-hidden">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <h4 className="text-xs font-black uppercase tracking-wider text-[var(--foreground)]">
+                  Retail Customers (B2C)
+                </h4>
+              </div>
+              <span className="text-[10px] font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full">
+                Regular Users
+              </span>
+            </div>
+
+            <div className="my-3">
+              <span className="text-xl sm:text-2xl font-black text-[var(--foreground)] tracking-tight">
+                ₹{(tierSplit.retail?.revenue || 0).toLocaleString("en-IN")}
+              </span>
+              <span className="text-[11px] text-[var(--muted)] block font-medium mt-0.5">
+                {tierSplit.retail?.ordersCount || 0} orders ({tierSplit.retail?.uniqueBuyers || 0} unique buyers)
+              </span>
+            </div>
+
+            <div className="pt-2.5 border-t border-[var(--border)]/60 flex items-center justify-between text-xs text-[var(--muted)]">
+              <span>Avg Order Value (AOV):</span>
+              <strong className="text-[var(--foreground)] font-bold">
+                ₹{tierSplit.retail?.aov || 0}
+              </strong>
+            </div>
+          </div>
+
+          {/* Reseller Column */}
+          <div className="p-3.5 sm:p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] flex flex-col justify-between relative overflow-hidden">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-purple-400" />
+                <h4 className="text-xs font-black uppercase tracking-wider text-[var(--foreground)]">
+                  Resellers & Admins (B2B)
+                </h4>
+              </div>
+              <span className="text-[10px] font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full">
+                Tier / Bulk Pricing
+              </span>
+            </div>
+
+            <div className="my-3">
+              <span className="text-xl sm:text-2xl font-black text-[var(--foreground)] tracking-tight">
+                ₹{(tierSplit.reseller?.revenue || 0).toLocaleString("en-IN")}
+              </span>
+              <span className="text-[11px] text-[var(--muted)] block font-medium mt-0.5">
+                {tierSplit.reseller?.ordersCount || 0} orders ({tierSplit.reseller?.activeResellersCount || 0} active resellers)
+              </span>
+            </div>
+
+            <div className="pt-2.5 border-t border-[var(--border)]/60 flex items-center justify-between text-xs text-[var(--muted)]">
+              <span>Avg Order Value (AOV):</span>
+              <strong className="text-purple-400 font-bold">
+                ₹{tierSplit.reseller?.aov || 0}
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        {/* Top Performing Resellers List (if any active) */}
+        {tierSplit.topResellers && tierSplit.topResellers.length > 0 ? (
+          <div className="space-y-2 pt-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] block">
+              Top Contributing Resellers (This Timeframe)
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {tierSplit.topResellers.map((r, idx) => (
+                <div
+                  key={idx}
+                  className="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-between text-xs"
+                >
+                  <div className="min-w-0 pr-2">
+                    <span className="font-bold text-[var(--foreground)] truncate block text-xs">
+                      {r.name || r.email || r.phone || "Reseller"}
+                    </span>
+                    <span className="text-[10px] text-[var(--muted)]">
+                      {r.ordersCount} orders placed
+                    </span>
+                  </div>
+                  <span className="text-xs font-black text-purple-400 shrink-0">
+                    ₹{r.totalSpent.toLocaleString("en-IN")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="px-3 py-2.5 rounded-xl bg-[var(--foreground)]/[0.02] border border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <span className="text-[var(--muted)] text-[11px]">
+              Tip: You can assign users to the <strong>Admin (Reseller)</strong> role in the Users tab to grant wholesale pricing slabs.
+            </span>
+            <span className="text-[10px] font-bold text-[var(--accent)] shrink-0 self-start sm:self-auto">
+              B2B Ready
+            </span>
+          </div>
+        )}
       </div>
 
       {/* ================= HIGHEST SELLING PRODUCTS ================= */}
@@ -689,7 +847,7 @@ export default function AnalyticsTab() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "100%", opacity: 0 }}
               transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className="relative bg-[var(--card)] w-full max-w-lg rounded-t-3xl sm:rounded-2xl border border-[var(--border)] p-4 sm:p-5 shadow-2xl overflow-hidden max-h-[85vh] flex flex-col z-10"
+              className="relative bg-[var(--card)] w-full max-w-lg rounded-t-3xl sm:rounded-2xl border border-[var(--border)] p-4 sm:p-5 shadow-2xl overflow-hidden max-h-[90dvh] flex flex-col z-10 pb-6 sm:pb-5"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Mobile Drag Indicator */}
@@ -786,7 +944,7 @@ export default function AnalyticsTab() {
                     </div>
 
                     {/* Inputs */}
-                    <div className="grid grid-cols-2 gap-2.5">
+                    <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-2.5">
                       <div>
                         <span className="text-[10px] font-bold text-[var(--muted)] block mb-1">
                           From (Start Date)
