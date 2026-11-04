@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getCatalogStock } from "@/lib/serverCatalogStock";
 
 /* ================= IMAGES ================= */
 const MLBB_MAIN_IMAGE =
@@ -174,12 +175,24 @@ export async function GET() {
       "where-winds-meet280"
     ];
 
-    const filteredGames =
+    const catalogStock = await getCatalogStock();
+    const oosGamesSet = new Set(catalogStock?.outOfStockGames || []);
+
+    const rawFilteredGames =
       data?.data?.games
         ?.filter(
           (game: any) => ALLOWED_GAME_SLUGS.includes(game.gameSlug)
         )
         ?.map(normalizeGame) || [];
+
+    const filteredGames = rawFilteredGames.map((game: any) => {
+      const isOOS = oosGamesSet.has(game.gameSlug);
+      return {
+        ...game,
+        gameAvailablity: isOOS ? false : game.gameAvailablity,
+        inStock: !isOOS,
+      };
+    });
 
     /* ================= FILTER CATEGORY GAMES ================= */
     const filteredCategories =
@@ -188,7 +201,15 @@ export async function GET() {
         gameId:
           cat.gameId
             ?.filter((game: any) => ALLOWED_GAME_SLUGS.includes(game.gameSlug))
-            ?.map(normalizeGame) || [],
+            ?.map(normalizeGame)
+            ?.map((game: any) => {
+              const isOOS = oosGamesSet.has(game.gameSlug);
+              return {
+                ...game,
+                gameAvailablity: isOOS ? false : game.gameAvailablity,
+                inStock: !isOOS,
+              };
+            }) || [],
       })) || [];
 
     /* ================= EXTRA SECTIONS ================= */

@@ -24,7 +24,8 @@ import {
   FiChevronRight,
   FiChevronLeft,
   FiCheck,
-  FiHeadphones
+  FiHeadphones,
+  FiPackage
 } from "react-icons/fi";
 
 const logo = "/logo.svg";
@@ -44,6 +45,7 @@ import NoticeBannerTab from "@/components/admin/NoticeBannerTab";
 import FlashSaleTab from "@/components/admin/FlashSaleTab";
 import UiSettingsTab from "@/components/admin/UiSettingsTab";
 import SupportConfigTab from "@/components/admin/SupportConfigTab";
+import ProductCatalogTab from "@/components/admin/ProductCatalogTab";
 
 const SIDEBAR_GROUPS = [
   {
@@ -60,6 +62,7 @@ const SIDEBAR_GROUPS = [
       { id: "wallet", label: "Wallet Deposits", icon: FiCreditCard },
       { id: "transactions", label: "Transactions", icon: FiList },
       { id: "queries", label: "Support Messages", icon: FiMessageSquare },
+      { id: "catalog", label: "Product Catalog", icon: FiPackage },
       { id: "pricing", label: "Game Prices", icon: FiDollarSign },
     ]
   },
@@ -433,6 +436,10 @@ export default function AdminPanalPage() {
 
                 {activeTab === "wallet" && (
                   <WalletTab />
+                )}
+
+                {activeTab === "catalog" && (
+                  <ProductCatalogTab />
                 )}
 
                 {activeTab === "pricing" && (

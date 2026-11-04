@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import PricingConfig from "@/models/PricingConfig";
+import { getCatalogStock } from "@/lib/serverCatalogStock";
 import crypto from "crypto";
 
 /* =====================================================
@@ -90,6 +91,15 @@ async function resolvePrice(
   );
 
   if (!baseItem) throw new Error("Invalid game item");
+
+  // Global Stock Check (applies to ALL user types)
+  const catalogStock = await getCatalogStock();
+  if (
+    catalogStock.outOfStockGames?.includes(gameSlug) ||
+    catalogStock.outOfStockItems?.includes(`${gameSlug}::${itemSlug}`)
+  ) {
+    throw new Error("Item is currently out of stock");
+  }
 
   let price = Number(baseItem.sellingPrice);
 

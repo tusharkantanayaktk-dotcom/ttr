@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import PricingConfig from "@/models/PricingConfig";
+import { getCatalogStock } from "@/lib/serverCatalogStock";
 
 /* ================= MEMBERSHIP CONFIG ================= */
 const MEMBERSHIPS = {
@@ -156,18 +157,35 @@ export async function GET(req, { params }) {
   const { slug } = await params;
 
   try {
+    /* ===== GLOBAL CATALOG STOCK (ALL USER TYPES) ===== */
+    const catalogStock = await getCatalogStock();
+    const isGameOOS = (catalogStock?.outOfStockGames || []).includes(slug);
+    const oosItemsSet = new Set(catalogStock?.outOfStockItems || []);
+
     /* ===== STATIC PRODUCTS ===== */
     if (OTTS[slug]) {
+      const ottData = { ...OTTS[slug] };
+      if (isGameOOS) ottData.gameAvailablity = false;
+      ottData.itemId = ottData.itemId.map((item) => ({
+        ...item,
+        itemAvailablity: isGameOOS || oosItemsSet.has(`${slug}::${item.itemSlug}`) ? false : item.itemAvailablity,
+      }));
       return NextResponse.json({
         success: true,
-        data: { gameSlug: slug, ...OTTS[slug] },
+        data: { gameSlug: slug, ...ottData },
       });
     }
 
     if (MEMBERSHIPS[slug]) {
+      const memData = { ...MEMBERSHIPS[slug] };
+      if (isGameOOS) memData.gameAvailablity = false;
+      memData.itemId = memData.itemId.map((item) => ({
+        ...item,
+        itemAvailablity: isGameOOS || oosItemsSet.has(`${slug}::${item.itemSlug}`) ? false : item.itemAvailablity,
+      }));
       return NextResponse.json({
         success: true,
-        data: { gameSlug: slug, ...MEMBERSHIPS[slug] },
+        data: { gameSlug: slug, ...memData },
       });
     }
 
@@ -209,8 +227,11 @@ export async function GET(req, { params }) {
       }).lean();
     }
 
-    /* ===== APPLY PRICING ===== */
+    /* ===== APPLY PRICING & GLOBAL STOCK ===== */
     const gameSlug = data.data.gameSlug;
+    if (isGameOOS) {
+      data.data.gameAvailablity = false;
+    }
 
     data.data.itemId = data.data.itemId
       .filter((item) => {
@@ -231,9 +252,12 @@ export async function GET(req, { params }) {
             o.itemSlug === item.itemSlug
         );
 
-        // 1. Handle Availability (In Stock)
+        // 1. Handle Availability (In Stock - GLOBAL for all user types)
         let isAvailable = item.itemAvailablity;
-        if (override && override.inStock === false) {
+        const itemKey = `${gameSlug}::${item.itemSlug}`;
+        if (isGameOOS || oosItemsSet.has(itemKey)) {
+          isAvailable = false;
+        } else if (override && override.inStock === false) {
           isAvailable = false;
         }
 

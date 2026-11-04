@@ -16,7 +16,8 @@ import {
   Tag,
   Filter,
   Sparkles,
-  Info
+  Info,
+  Check
 } from "lucide-react";
 
 const API_BASE = "https://game-off-ten.vercel.app/api/v1";
@@ -177,8 +178,6 @@ export default function PricingTab({
         if (fixedGameFilter && o.gameSlug !== fixedGameFilter) return false;
         if (filterStatus === "overridden" && !o.useOverride) return false;
         if (filterStatus === "standard" && o.useOverride) return false;
-        if (filterStatus === "inStock" && !o.inStock) return false;
-        if (filterStatus === "outOfStock" && o.inStock) return false;
         if (
           q &&
           !String(o.itemName || "").toLowerCase().includes(q) &&
@@ -205,21 +204,6 @@ export default function PricingTab({
   const selectedGame = useMemo(() => {
     return games.find((g) => g.gameSlug === fixedGameFilter) || null;
   }, [games, fixedGameFilter]);
-
-  const selectedGameAllInStock = useMemo(() => {
-    if (!fixedGameFilter) return false;
-    const gameOverrides = overrides.filter((o) => o.gameSlug === fixedGameFilter);
-    return gameOverrides.length === 0 || gameOverrides.every((o) => o.inStock);
-  }, [overrides, fixedGameFilter]);
-
-  const toggleGameStock = (gameSlug, status) => {
-    setOverrides((prev) =>
-      prev.map((o) => {
-        if (o.gameSlug === gameSlug) return { ...o, inStock: status };
-        return o;
-      })
-    );
-  };
 
   const updateOverrideField = (gameSlug, itemSlug, field, value) => {
     setOverrides((prev) =>
@@ -623,27 +607,8 @@ export default function PricingTab({
                                 </p>
                               </div>
 
-                              <div className="flex items-center gap-2 shrink-0">
-                                {/* Game Stock Switch */}
-                                <button
-                                  type="button"
-                                  role="switch"
-                                  aria-checked={allInStock}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    toggleGameStock(g.gameSlug, !allInStock);
-                                  }}
-                                  className={`relative inline-flex h-4 w-7 shrink-0 cursor-pointer rounded-full transition-colors duration-200 outline-none ${
-                                    allInStock ? "bg-emerald-500" : "bg-[var(--foreground)]/15"
-                                  }`}
-                                  title={allInStock ? "All items in stock" : "All items out of stock"}
-                                >
-                                  <span
-                                    className={`pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow-xs transition duration-200 my-auto ${
-                                      allInStock ? "translate-x-3.5" : "translate-x-0.5"
-                                    }`}
-                                  />
-                                </button>
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {isSelected && <Check size={14} className="text-[var(--accent)]" />}
                               </div>
                             </div>
                           );
@@ -708,24 +673,9 @@ export default function PricingTab({
                   )}
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-[11px] font-semibold text-[var(--muted)]">All Items In Stock:</span>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={selectedGameAllInStock}
-                    onClick={() => toggleGameStock(selectedGame.gameSlug, !selectedGameAllInStock)}
-                    className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full transition-colors duration-200 outline-none ${
-                      selectedGameAllInStock ? "bg-emerald-500" : "bg-[var(--foreground)]/15"
-                    }`}
-                    title={selectedGameAllInStock ? "Turn all items out of stock" : "Turn all items in stock"}
-                  >
-                    <span
-                      className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-xs transition duration-200 my-auto ${
-                        selectedGameAllInStock ? "translate-x-4.5" : "translate-x-0.5"
-                      }`}
-                    />
-                  </button>
+                <div className="flex items-center gap-1.5 shrink-0 text-[10px] text-[var(--muted)] bg-[var(--foreground)]/[0.03] px-2.5 py-1 rounded-lg border border-[var(--border)]/60">
+                  <span>Product stock is managed in</span>
+                  <span className="font-bold text-[var(--accent)]">Product Catalog</span>
                 </div>
               </div>
             )}
@@ -794,46 +744,6 @@ export default function PricingTab({
                     {counts.standard}
                   </span>
                 </button>
-
-                {/* In Stock */}
-                <button
-                  type="button"
-                  onClick={() => setFilterStatus("inStock")}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    filterStatus === "inStock"
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
-                  }`}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span>In Stock</span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                    filterStatus === "inStock" ? "bg-white/20 text-white" : "bg-[var(--foreground)]/5 text-[var(--muted)]"
-                  }`}>
-                    {counts.inStock}
-                  </span>
-                </button>
-
-                {/* Out of Stock */}
-                {counts.outOfStock > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => setFilterStatus("outOfStock")}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                      filterStatus === "outOfStock"
-                        ? "bg-rose-600 text-white shadow-xs"
-                        : "bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
-                    }`}
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-                    <span>Out of Stock</span>
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                      filterStatus === "outOfStock" ? "bg-white/20 text-white" : "bg-[var(--foreground)]/5 text-[var(--muted)]"
-                    }`}>
-                      {counts.outOfStock}
-                    </span>
-                  </button>
-                )}
               </div>
             )}
 
@@ -904,29 +814,6 @@ export default function PricingTab({
                               {o.itemSlug}
                             </p>
                           </div>
-
-                          {/* Stock Toggle */}
-                          <button
-                            type="button"
-                            role="switch"
-                            aria-checked={o.inStock}
-                            onClick={() =>
-                              updateOverrideField(o.gameSlug, o.itemSlug, "inStock", !o.inStock)
-                            }
-                            className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold border transition-colors cursor-pointer shrink-0 ${
-                              o.inStock
-                                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
-                                : "bg-[var(--foreground)]/5 border-[var(--border)] text-[var(--muted)]"
-                            }`}
-                            title={o.inStock ? "Item is in stock (click to mark sold out)" : "Item is sold out (click to mark in stock)"}
-                          >
-                            <span
-                              className={`w-1.5 h-1.5 rounded-full ${
-                                o.inStock ? "bg-emerald-500" : "bg-[var(--muted)]"
-                              }`}
-                            />
-                            <span>{o.inStock ? "In Stock" : "Sold Out"}</span>
-                          </button>
                         </div>
 
                         {/* Custom Price Switch & Input Row */}
