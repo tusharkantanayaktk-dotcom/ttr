@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import PricingConfig from "@/models/PricingConfig";
 import { getCatalogStock } from "@/lib/serverCatalogStock";
+import { getCustomGameImages } from "@/lib/serverGameImages";
 
 /* ================= MEMBERSHIP CONFIG ================= */
 const MEMBERSHIPS = {
@@ -157,14 +158,20 @@ export async function GET(req, { params }) {
   const { slug } = await params;
 
   try {
-    /* ===== GLOBAL CATALOG STOCK (ALL USER TYPES) ===== */
-    const catalogStock = await getCatalogStock();
+    /* ===== GLOBAL CATALOG STOCK & CUSTOM IMAGES ===== */
+    const [catalogStock, customImages] = await Promise.all([
+      getCatalogStock(),
+      getCustomGameImages(),
+    ]);
     const isGameOOS = (catalogStock?.outOfStockGames || []).includes(slug);
     const oosItemsSet = new Set(catalogStock?.outOfStockItems || []);
 
     /* ===== STATIC PRODUCTS ===== */
     if (OTTS[slug]) {
       const ottData = { ...OTTS[slug] };
+      if (customImages && customImages[slug]) {
+        ottData.gameImageId = { ...ottData.gameImageId, image: customImages[slug] };
+      }
       if (isGameOOS) ottData.gameAvailablity = false;
       ottData.itemId = ottData.itemId.map((item) => ({
         ...item,
@@ -178,6 +185,9 @@ export async function GET(req, { params }) {
 
     if (MEMBERSHIPS[slug]) {
       const memData = { ...MEMBERSHIPS[slug] };
+      if (customImages && customImages[slug]) {
+        memData.gameImageId = { ...memData.gameImageId, image: customImages[slug] };
+      }
       if (isGameOOS) memData.gameAvailablity = false;
       memData.itemId = memData.itemId.map((item) => ({
         ...item,
@@ -229,6 +239,13 @@ export async function GET(req, { params }) {
 
     /* ===== APPLY PRICING & GLOBAL STOCK ===== */
     const gameSlug = data.data.gameSlug;
+
+    // Apply custom game image override if configured by admin
+    if (customImages && customImages[gameSlug || slug]) {
+      if (!data.data.gameImageId) data.data.gameImageId = {};
+      data.data.gameImageId.image = customImages[gameSlug || slug];
+    }
+
     if (isGameOOS) {
       data.data.gameAvailablity = false;
     }

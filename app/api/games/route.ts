@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCatalogStock } from "@/lib/serverCatalogStock";
+import { getCustomGameImages } from "@/lib/serverGameImages";
 
 /* ================= IMAGES ================= */
 const MLBB_MAIN_IMAGE =
@@ -63,13 +64,16 @@ const MEMBERSHIPS = [
 /* ================= API ================= */
 export async function GET() {
   try {
-    const response = await fetch("https://game-off-ten.vercel.app/api/v1/game", {
-      method: "GET",
-      headers: {
-        "x-api-key": process.env.API_SECRET_KEY!,
-      },
-      next: { revalidate: 60 },
-    });
+    const [response, customGameImages] = await Promise.all([
+      fetch("https://game-off-ten.vercel.app/api/v1/game", {
+        method: "GET",
+        headers: {
+          "x-api-key": process.env.API_SECRET_KEY!,
+        },
+        next: { revalidate: 60 },
+      }),
+      getCustomGameImages(),
+    ]);
 
     const data = await response.json();
 
@@ -141,6 +145,14 @@ export async function GET() {
         updatedGame.gameImageId = {
           ...updatedGame.gameImageId,
           image: MONTHLY_BUNDLE,
+        };
+      }
+
+      // Apply custom game image override if set by admin
+      if (customGameImages && customGameImages[updatedGame.gameSlug]) {
+        updatedGame.gameImageId = {
+          ...updatedGame.gameImageId,
+          image: customGameImages[updatedGame.gameSlug],
         };
       }
 

@@ -21,7 +21,11 @@ import {
   Eye,
   EyeOff,
   Sparkles,
-  Gamepad2
+  Gamepad2,
+  ImageIcon,
+  Edit3,
+  Link as LinkIcon,
+  Trash2
 } from "lucide-react";
 
 const API_BASE = "https://game-off-ten.vercel.app/api/v1";
@@ -43,6 +47,13 @@ export default function ProductCatalogTab() {
     outOfStockGames: [],
     outOfStockItems: [],
   });
+
+  // Custom Game Images: { [gameSlug]: imageUrl }
+  const [customGameImages, setCustomGameImages] = useState({});
+  const [isImageEditorOpen, setIsImageEditorOpen] = useState(false);
+  const [imageUrlInput, setImageUrlInput] = useState("");
+  const [savingImage, setSavingImage] = useState(false);
+  const [imageLoadError, setImageLoadError] = useState(false);
 
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -70,10 +81,11 @@ export default function ProductCatalogTab() {
     };
   }, [isGameDropdownOpen]);
 
-  // Initial load: Fetch Games & Global Stock
+  // Initial load: Fetch Games, Global Stock & Custom Game Images
   useEffect(() => {
     fetchGames();
     fetchStockConfig();
+    fetchCustomGameImages();
   }, []);
 
   const fetchGames = async () => {
@@ -116,6 +128,21 @@ export default function ProductCatalogTab() {
     }
   };
 
+  const fetchCustomGameImages = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/admin/catalog/game-image", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (json.success && json.data) {
+        setCustomGameImages(json.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch custom game images:", err);
+    }
+  };
+
   // Fetch items for the currently selected game
   useEffect(() => {
     if (!selectedGameSlug) return;
@@ -141,6 +168,109 @@ export default function ProductCatalogTab() {
   const selectedGame = useMemo(() => {
     return games.find((g) => g.gameSlug === selectedGameSlug) || null;
   }, [games, selectedGameSlug]);
+
+  // Effective game image & custom overrides
+  const getGameImage = (g) => {
+    if (!g) return null;
+    return customGameImages[g.gameSlug] || g.gameImageId?.image || null;
+  };
+
+  const currentSelectedImage = useMemo(() => {
+    return (
+      customGameImages[selectedGameSlug] ||
+      selectedGame?.gameImageId?.image ||
+      ""
+    );
+  }, [customGameImages, selectedGameSlug, selectedGame]);
+
+  const hasCustomImage = useMemo(() => {
+    return Boolean(customGameImages[selectedGameSlug]);
+  }, [customGameImages, selectedGameSlug]);
+
+  // Sync editor input whenever selected game or custom image changes
+  useEffect(() => {
+    if (!selectedGameSlug) return;
+    const custom = customGameImages[selectedGameSlug];
+    setImageUrlInput(custom !== undefined ? custom : (selectedGame?.gameImageId?.image || ""));
+    setImageLoadError(false);
+  }, [selectedGameSlug, customGameImages, selectedGame]);
+
+  const handleSaveGameImage = async (e) => {
+    if (e) e.preventDefault();
+    if (!selectedGameSlug || savingImage) return;
+
+    try {
+      setSavingImage(true);
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/admin/catalog/game-image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          gameSlug: selectedGameSlug,
+          imageUrl: imageUrlInput.trim(),
+        }),
+      });
+
+      const json = await res.json();
+      if (json.success && json.data) {
+        setCustomGameImages(json.data);
+        setMessage({
+          type: "success",
+          text: imageUrlInput.trim()
+            ? `Game image link saved for "${selectedGame?.gameName || selectedGameSlug}"`
+            : `Game image reverted to default for "${selectedGame?.gameName || selectedGameSlug}"`,
+        });
+        setTimeout(() => setMessage({ type: "", text: "" }), 3500);
+      } else {
+        setMessage({ type: "error", text: json.message || "Failed to save game image" });
+      }
+    } catch (err) {
+      console.error("Error saving game image:", err);
+      setMessage({ type: "error", text: "Network error saving game image" });
+    } finally {
+      setSavingImage(false);
+    }
+  };
+
+  const handleRemoveGameImage = async () => {
+    if (!selectedGameSlug || savingImage) return;
+    setImageUrlInput("");
+    try {
+      setSavingImage(true);
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/admin/catalog/game-image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          gameSlug: selectedGameSlug,
+          imageUrl: "",
+        }),
+      });
+
+      const json = await res.json();
+      if (json.success && json.data) {
+        setCustomGameImages(json.data);
+        setMessage({
+          type: "success",
+          text: `Game image reverted to default for "${selectedGame?.gameName || selectedGameSlug}"`,
+        });
+        setTimeout(() => setMessage({ type: "", text: "" }), 3500);
+      } else {
+        setMessage({ type: "error", text: json.message || "Failed to revert game image" });
+      }
+    } catch (err) {
+      console.error("Error removing custom game image:", err);
+      setMessage({ type: "error", text: "Network error removing game image" });
+    } finally {
+      setSavingImage(false);
+    }
+  };
 
   const currentItems = useMemo(() => {
     return itemsByGame[selectedGameSlug] || [];
@@ -337,6 +467,7 @@ export default function ProductCatalogTab() {
                 onClick={() => {
                   fetchGames();
                   fetchStockConfig();
+                  fetchCustomGameImages();
                 }}
                 className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] bg-[var(--card)] border border-[var(--border)] cursor-pointer"
                 title="Refresh"
@@ -386,6 +517,7 @@ export default function ProductCatalogTab() {
             onClick={() => {
               fetchGames();
               fetchStockConfig();
+              fetchCustomGameImages();
             }}
             className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--foreground)] bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.04] transition-all cursor-pointer"
             title="Refresh Catalog & Stock"
@@ -445,33 +577,64 @@ export default function ProductCatalogTab() {
           
           {/* Game Dropdown */}
           <div className="relative flex-1 max-w-xl" ref={gameDropdownRef}>
-            <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-wider block mb-1.5">
-              Select Game
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-wider block">
+                Select Game
+              </label>
+              <button
+                type="button"
+                onClick={() => setIsImageEditorOpen(!isImageEditorOpen)}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold text-[var(--accent)] bg-[var(--accent)]/10 hover:bg-[var(--accent)]/20 border border-[var(--accent)]/25 transition-all cursor-pointer"
+                title="Edit or add game-level cover image link"
+              >
+                <ImageIcon size={12} />
+                <span>{hasCustomImage ? "Edit Game Image" : "Add Game Image Link"}</span>
+                {hasCustomImage && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" title="Custom image active" />
+                )}
+              </button>
+            </div>
             <div
               onClick={() => setIsGameDropdownOpen(!isGameDropdownOpen)}
               className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] hover:border-[var(--accent)]/60 cursor-pointer transition-all shadow-sm"
             >
               <div className="flex items-center gap-3 min-w-0">
-                {selectedGame?.gameImageId?.image ? (
-                  <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0 border border-[var(--border)]">
-                    <Image
-                      src={selectedGame.gameImageId.image}
-                      alt={selectedGame.gameName || "Game"}
-                      fill
-                      className="object-cover"
-                    />
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsImageEditorOpen((prev) => !prev);
+                  }}
+                  className="relative group cursor-pointer shrink-0"
+                  title="Click to edit or add game image link"
+                >
+                  {currentSelectedImage ? (
+                    <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0 border border-[var(--border)]">
+                      <Image
+                        src={currentSelectedImage}
+                        alt={selectedGame?.gameName || "Game"}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0 border border-[var(--border)]">
+                      <Gamepad2 size={16} />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity text-white">
+                    <Edit3 size={11} />
                   </div>
-                ) : (
-                  <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0">
-                    <Gamepad2 size={16} />
-                  </div>
-                )}
+                </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="text-xs sm:text-sm font-bold text-[var(--foreground)] truncate">
                       {selectedGame?.gameName || "Select a Game"}
                     </h3>
+                    {hasCustomImage && (
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                        Custom Image
+                      </span>
+                    )}
                     {isSelectedGameOutOfStock && (
                       <span className="px-1.5 py-0.2 rounded text-[9px] font-black uppercase tracking-wider bg-rose-500/15 text-rose-400 border border-rose-500/30">
                         Out of Stock
@@ -543,10 +706,10 @@ export default function ProductCatalogTab() {
                           }`}
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
-                            {g.gameImageId?.image ? (
+                            {getGameImage(g) ? (
                               <div className="relative w-6 h-6 rounded-md overflow-hidden shrink-0 border border-[var(--border)]">
                                 <Image
-                                  src={g.gameImageId.image}
+                                  src={getGameImage(g)}
                                   alt={g.gameName || "Game"}
                                   fill
                                   className="object-cover"
@@ -558,7 +721,12 @@ export default function ProductCatalogTab() {
                               </div>
                             )}
                             <div className="min-w-0">
-                              <p className="text-xs font-bold truncate">{g.gameName}</p>
+                              <div className="flex items-center gap-1.5">
+                                <p className="text-xs font-bold truncate">{g.gameName}</p>
+                                {customGameImages[g.gameSlug] && (
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" title="Custom image" />
+                                )}
+                              </div>
                               <p className="text-[10px] text-[var(--muted)] truncate font-mono">
                                 {g.gameSlug}
                               </p>
@@ -650,6 +818,152 @@ export default function ProductCatalogTab() {
             </div>
           </div>
         </div>
+
+        {/* ================= INLINE GAME IMAGE EDITOR (GAME LEVEL) ================= */}
+        <AnimatePresence>
+          {isImageEditorOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="p-3.5 sm:p-4 rounded-xl border border-[var(--accent)]/30 bg-[var(--accent)]/[0.03] space-y-3"
+            >
+              <div className="flex items-center justify-between gap-3 border-b border-[var(--accent)]/15 pb-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center shrink-0">
+                    <ImageIcon size={14} />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h4 className="text-xs font-bold text-[var(--foreground)]">
+                        Game Image Link (Game Level)
+                      </h4>
+                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[var(--foreground)]/10 text-[var(--muted)]">
+                        {selectedGame?.gameName} ({selectedGameSlug})
+                      </span>
+                      {hasCustomImage && (
+                        <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                          Custom Link Active
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-[var(--muted)]">
+                      Directly add or edit this game&apos;s cover image URL. Updates across Homepage, Games list, Details page, and Admin.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsImageEditorOpen(false)}
+                  className="p-1 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/10 transition-colors cursor-pointer"
+                  title="Close image editor"
+                >
+                  <X size={15} />
+                </button>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                {/* Live Preview Box */}
+                <div className="flex items-center gap-2.5 shrink-0">
+                  <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--background)] flex items-center justify-center shadow-xs shrink-0">
+                    {(imageUrlInput.trim() || currentSelectedImage) && !imageLoadError ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={imageUrlInput.trim() || currentSelectedImage}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                        onError={() => setImageLoadError(true)}
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center text-[var(--muted)] p-1 text-center">
+                        {imageLoadError ? (
+                          <AlertCircle size={16} className="text-rose-400" />
+                        ) : (
+                          <Gamepad2 size={18} className="text-[var(--accent)] opacity-70" />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-[10px] text-[var(--muted)] leading-tight">
+                    <span className="font-bold text-[var(--foreground)] block">Preview</span>
+                    {imageLoadError ? (
+                      <span className="text-rose-400 font-semibold">Broken Link</span>
+                    ) : (imageUrlInput.trim() || currentSelectedImage) ? (
+                      <span className="text-emerald-400 font-semibold">Active</span>
+                    ) : (
+                      <span>No image</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Input & Action Buttons */}
+                <div className="flex-1 w-full space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <div className="relative flex-1">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]">
+                        <LinkIcon size={12} />
+                      </span>
+                      <input
+                        type="url"
+                        value={imageUrlInput}
+                        onChange={(e) => {
+                          setImageUrlInput(e.target.value);
+                          setImageLoadError(false);
+                        }}
+                        placeholder="Paste image link e.g. https://... or /game-assets/..."
+                        className="w-full pl-7 pr-7 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] font-mono outline-none transition-colors"
+                      />
+                      {imageUrlInput && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setImageUrlInput("");
+                            setImageLoadError(false);
+                          }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--foreground)]"
+                          title="Clear input"
+                        >
+                          <X size={12} />
+                        </button>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleSaveGameImage}
+                      disabled={savingImage || imageUrlInput.trim() === (customGameImages[selectedGameSlug] || "")}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-white bg-[var(--accent)] hover:brightness-110 active:scale-95 disabled:opacity-50 transition-all shadow-sm cursor-pointer shrink-0"
+                    >
+                      {savingImage ? (
+                        <Loader2 size={13} className="animate-spin" />
+                      ) : (
+                        <Save size={13} />
+                      )}
+                      <span>Save Link</span>
+                    </button>
+
+                    {hasCustomImage && (
+                      <button
+                        type="button"
+                        onClick={handleRemoveGameImage}
+                        disabled={savingImage}
+                        title="Remove custom link and revert to default"
+                        className="flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-all cursor-pointer shrink-0"
+                      >
+                        <Trash2 size={12} />
+                        <span className="hidden sm:inline">Reset</span>
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-[10px] text-[var(--muted)]">
+                    Tip: Direct URL to any PNG, JPG, or WEBP image. Leave blank and click Reset to restore provider image.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Warning if Whole Game is Out of Stock */}
         {isSelectedGameOutOfStock && (
