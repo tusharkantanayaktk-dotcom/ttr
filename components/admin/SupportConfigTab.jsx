@@ -7,7 +7,6 @@ import {
   MessageCircle,
   Save,
   RefreshCcw,
-  RotateCcw,
   CheckCircle2,
   AlertCircle,
   ExternalLink,
@@ -113,25 +112,37 @@ export default function SupportConfigTab() {
     setTimeout(() => setMessage({ type: "", text: "" }), 3000);
   };
 
-  const handleResetDefaults = () => {
-    if (window.confirm("Reset all contact and support details to default configuration?")) {
-      setFormData({
-        email: DEFAULT_SUPPORT_CONFIG.email || "",
-        phone: DEFAULT_SUPPORT_CONFIG.phone || "",
-        whatsappNumber: DEFAULT_SUPPORT_CONFIG.whatsappNumber || "",
-        whatsappUrl: DEFAULT_SUPPORT_CONFIG.whatsappUrl || "",
-        whatsappChannelUrl: DEFAULT_SUPPORT_CONFIG.whatsappChannelUrl || "",
-        instagramUrl: DEFAULT_SUPPORT_CONFIG.instagramUrl || "",
-        instagramLabel: DEFAULT_SUPPORT_CONFIG.instagramLabel || "",
-        youtubeUrl: DEFAULT_SUPPORT_CONFIG.youtubeUrl || "",
-        youtubeLabel: DEFAULT_SUPPORT_CONFIG.youtubeLabel || "",
-        discordUrl: DEFAULT_SUPPORT_CONFIG.discordUrl || "",
-        twitterUrl: DEFAULT_SUPPORT_CONFIG.twitterUrl || "",
-        developerWhatsappUrl: DEFAULT_SUPPORT_CONFIG.developerWhatsappUrl || "",
-      });
-      setMessage({ type: "success", text: "Form reset to default values. Click 'Save Changes' to apply." });
-      setTimeout(() => setMessage({ type: "", text: "" }), 3000);
+  const autoGenerateInstagramUrl = () => {
+    const handle = (formData.instagramLabel || "").trim().replace(/^@/, "");
+    if (!handle) {
+      setMessage({ type: "error", text: "Please enter an Instagram username/handle first." });
+      return;
     }
+    const generatedUrl = `https://www.instagram.com/${handle}`;
+    setFormData((prev) => ({
+      ...prev,
+      instagramLabel: handle,
+      instagramUrl: generatedUrl,
+    }));
+    setMessage({ type: "success", text: `Instagram URL updated to: ${generatedUrl}` });
+    setTimeout(() => setMessage({ type: "", text: "" }), 3000);
+  };
+
+  const autoGenerateYoutubeUrl = () => {
+    const handle = (formData.youtubeLabel || "").trim().replace(/^@/, "");
+    if (!handle) {
+      setMessage({ type: "error", text: "Please enter a YouTube handle first." });
+      return;
+    }
+    const formattedLabel = `@${handle}`;
+    const generatedUrl = `https://www.youtube.com/${formattedLabel}`;
+    setFormData((prev) => ({
+      ...prev,
+      youtubeLabel: formattedLabel,
+      youtubeUrl: generatedUrl,
+    }));
+    setMessage({ type: "success", text: `YouTube URL updated to: ${generatedUrl}` });
+    setTimeout(() => setMessage({ type: "", text: "" }), 3000);
   };
 
   const handleSave = async (e) => {
@@ -253,16 +264,6 @@ export default function SupportConfigTab() {
 
           <button
             type="button"
-            onClick={handleResetDefaults}
-            title="Reset to default values"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--muted)] hover:text-amber-400 bg-[var(--card)] border border-[var(--border)] hover:bg-amber-500/10 transition-all cursor-pointer"
-          >
-            <RotateCcw size={14} />
-            <span>Reset Defaults</span>
-          </button>
-
-          <button
-            type="button"
             onClick={handleSave}
             disabled={saving}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[var(--accent)] hover:brightness-110 active:scale-95 disabled:opacity-50 transition-all shadow-md shadow-[var(--accent)]/20 cursor-pointer"
@@ -309,7 +310,7 @@ export default function SupportConfigTab() {
         {/* ================= UNIFIED MAIN SURFACE ================= */}
         <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3.5 sm:p-6 space-y-5 sm:space-y-7 shadow-sm">
           {/* SECTION 1: PRIMARY CUSTOMER CONTACTS */}
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             <div className="flex items-center gap-2">
               <ShieldCheck size={18} className="text-[var(--accent)]" />
               <h3 className="text-sm font-bold text-[var(--foreground)]">Direct Customer Support</h3>
@@ -318,120 +319,123 @@ export default function SupportConfigTab() {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-            {/* Support Email */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                <Mail size={14} className="text-[var(--accent)]" />
-                <span>Support Email / Gmail</span>
-              </label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                placeholder="zynx.anime@gmail.com"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
-              <p className="text-[11px] text-[var(--muted)]">Displayed on Contact Us page and footer links.</p>
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {/* Help Desk Email & Phone Card */}
+              <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.015] space-y-3">
+                <div className="flex items-center gap-2 pb-1 border-b border-[var(--border)]/60">
+                  <Mail size={15} className="text-[var(--accent)]" />
+                  <span className="text-xs font-bold text-[var(--foreground)]">Helpline &amp; Email Contacts</span>
+                </div>
 
-            {/* Support Phone Display */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                <Phone size={14} className="text-emerald-500" />
-                <span>Support Phone Number (Display)</span>
-              </label>
-              <input
-                type="text"
-                value={formData.phone}
-                onChange={(e) => handleChange("phone", e.target.value)}
-                placeholder="+91 96317 77559"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
-              <p className="text-[11px] text-[var(--muted)]">Formatted with spaces/plus sign for customer display.</p>
-            </div>
+                {/* Support Email */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-[var(--muted)]">Support Email / Gmail</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => handleChange("email", e.target.value)}
+                    placeholder="zynx.anime@gmail.com"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
+                  />
+                  <p className="text-[10px] text-[var(--muted)]/70">Displayed on Contact Us page and footer.</p>
+                </div>
 
-            {/* WhatsApp Number (Digits only) */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between gap-2">
-                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5 min-w-0">
-                  <FaWhatsapp size={14} className="text-emerald-500 shrink-0" />
-                  <span className="truncate">WhatsApp Number</span>
-                  <span className="text-[10px] text-[var(--muted)] font-normal hidden min-[360px]:inline">(Digits + Country Code)</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={autoGenerateWhatsAppUrl}
-                  className="text-[11px] text-[var(--accent)] hover:underline font-semibold cursor-pointer shrink-0"
-                >
-                  Sync URL
-                </button>
+                {/* Phone Display */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-[var(--muted)]">Support Phone Number (Display)</label>
+                  <input
+                    type="text"
+                    value={formData.phone}
+                    onChange={(e) => handleChange("phone", e.target.value)}
+                    placeholder="+91 96317 77559"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
+                  />
+                  <p className="text-[10px] text-[var(--muted)]/70">Formatted for customer display.</p>
+                </div>
               </div>
-              <input
-                type="text"
-                value={formData.whatsappNumber}
-                onChange={(e) => handleChange("whatsappNumber", e.target.value)}
-                placeholder="919631777559"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] font-mono outline-none transition-colors"
-              />
-              <p className="text-[11px] text-[var(--muted)]">Example: 919631777559 (Country code + 10-digit number).</p>
-            </div>
 
-            {/* WhatsApp Chat URL */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                  <MessageCircle size={14} className="text-emerald-500" />
-                  <span>Direct WhatsApp Chat URL</span>
-                </label>
-                {formData.whatsappUrl && (
-                  <a
-                    href={formData.whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-emerald-400 hover:underline"
-                  >
-                    <span>Test Link</span>
-                    <ExternalLink size={11} />
-                  </a>
-                )}
+              {/* WhatsApp Customer Care Card */}
+              <div className="p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.015] space-y-3">
+                <div className="flex items-center justify-between pb-1 border-b border-emerald-500/20">
+                  <div className="flex items-center gap-2">
+                    <FaWhatsapp size={16} className="text-emerald-500" />
+                    <span className="text-xs font-bold text-[var(--foreground)]">WhatsApp Customer Chat</span>
+                  </div>
+                  {formData.whatsappUrl && (
+                    <a
+                      href={formData.whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 hover:underline"
+                    >
+                      <span>Test Chat</span>
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
+                </div>
+
+                {/* WhatsApp Number */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] font-semibold text-[var(--muted)]">WhatsApp Number (with Country Code)</label>
+                    <button
+                      type="button"
+                      onClick={autoGenerateWhatsAppUrl}
+                      className="text-[10px] font-bold text-emerald-400 hover:text-emerald-300 hover:underline cursor-pointer"
+                    >
+                      Sync wa.me URL
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    value={formData.whatsappNumber}
+                    onChange={(e) => handleChange("whatsappNumber", e.target.value)}
+                    placeholder="919631777559"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-emerald-500 text-xs text-[var(--foreground)] font-mono outline-none transition-colors"
+                  />
+                  <p className="text-[10px] text-[var(--muted)]/70">Example: 919631777559</p>
+                </div>
+
+                {/* WhatsApp Chat URL */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-[var(--muted)]">Direct WhatsApp Chat URL</label>
+                  <input
+                    type="url"
+                    value={formData.whatsappUrl}
+                    onChange={(e) => handleChange("whatsappUrl", e.target.value)}
+                    placeholder="https://wa.me/919631777559"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-emerald-500 text-xs text-[var(--foreground)] outline-none transition-colors"
+                  />
+                  <p className="text-[10px] text-[var(--muted)]/70">Used by floating WhatsApp button &amp; support drawer.</p>
+                </div>
               </div>
-              <input
-                type="url"
-                value={formData.whatsappUrl}
-                onChange={(e) => handleChange("whatsappUrl", e.target.value)}
-                placeholder="https://wa.me/919631777559"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
-              <p className="text-[11px] text-[var(--muted)]">Direct chat link used by floating WhatsApp icon and query tab.</p>
             </div>
           </div>
-        </div>
 
-        {/* DIVIDER */}
-        <div className="w-full h-[1px] bg-[var(--border)] opacity-60" />
+          {/* DIVIDER */}
+          <div className="w-full h-[1px] bg-[var(--border)] opacity-60" />
 
           {/* SECTION 2: COMMUNITY & SERVICES */}
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             <div className="flex items-center gap-2">
               <Share2 size={18} className="text-sky-400" />
-              <h3 className="text-sm font-bold text-[var(--foreground)]">Community &amp; Custom Services</h3>
+              <h3 className="text-sm font-bold text-[var(--foreground)]">Community &amp; Services</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
               {/* WhatsApp Channel */}
-              <div className="space-y-1.5">
+              <div className="p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.015] space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                    <FaWhatsapp size={14} className="text-emerald-400" />
-                    <span>WhatsApp Channel / Community URL</span>
-                  </label>
+                  <div className="flex items-center gap-2">
+                    <FaWhatsapp size={15} className="text-emerald-400" />
+                    <span className="text-xs font-bold text-[var(--foreground)]">WhatsApp Channel / Group</span>
+                  </div>
                   {formData.whatsappChannelUrl && (
                     <a
                       href={formData.whatsappChannelUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] text-emerald-400 hover:underline"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 hover:underline"
                     >
                       <span>Test</span>
                       <ExternalLink size={11} />
@@ -442,25 +446,25 @@ export default function SupportConfigTab() {
                   type="url"
                   value={formData.whatsappChannelUrl}
                   onChange={(e) => handleChange("whatsappChannelUrl", e.target.value)}
-                  placeholder="https://whatsapp.com/channel/0029VbBZQiRFMqrUsOHKBU0T"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
+                  placeholder="https://whatsapp.com/channel/..."
+                  className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-emerald-500 text-xs text-[var(--foreground)] outline-none transition-colors"
                 />
-                <p className="text-[11px] text-[var(--muted)]">Used in Community Popups and Esports tournament registrations.</p>
+                <p className="text-[10px] text-[var(--muted)]">Community popups &amp; tournament registrations link.</p>
               </div>
 
               {/* Developer / Store Software WhatsApp */}
-              <div className="space-y-1.5">
+              <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/[0.015] space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                    <Sparkles size={14} className="text-amber-400" />
-                    <span>Software Services / Made By WhatsApp</span>
-                  </label>
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={15} className="text-amber-400" />
+                    <span className="text-xs font-bold text-[var(--foreground)]">Custom Software / Website Contact</span>
+                  </div>
                   {formData.developerWhatsappUrl && (
                     <a
                       href={formData.developerWhatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] text-amber-400 hover:underline"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-400 hover:underline"
                     >
                       <span>Test</span>
                       <ExternalLink size={11} />
@@ -472,9 +476,9 @@ export default function SupportConfigTab() {
                   value={formData.developerWhatsappUrl}
                   onChange={(e) => handleChange("developerWhatsappUrl", e.target.value)}
                   placeholder="https://wa.me/919178521537"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
+                  className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-amber-500 text-xs text-[var(--foreground)] outline-none transition-colors"
                 />
-                <p className="text-[11px] text-[var(--muted)]">Target link for "Need Your Own Website?" banners and services page.</p>
+                <p className="text-[10px] text-[var(--muted)]">Destination for &quot;Need Your Own Website?&quot; banner links.</p>
               </div>
             </div>
           </div>
@@ -483,172 +487,227 @@ export default function SupportConfigTab() {
           <div className="w-full h-[1px] bg-[var(--border)] opacity-60" />
 
           {/* SECTION 3: SOCIAL MEDIA HANDLES */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <FaInstagram size={18} className="text-pink-400" />
-              <h3 className="text-sm font-bold text-[var(--foreground)]">Social Media Profiles</h3>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-            {/* Instagram URL */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                  <FaInstagram size={14} className="text-pink-400" />
-                  <span>Instagram Profile URL</span>
-                </label>
-                {formData.instagramUrl && (
-                  <a
-                    href={formData.instagramUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-pink-400 hover:underline"
-                  >
-                    <span>Visit</span>
-                    <ExternalLink size={11} />
-                  </a>
-                )}
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FaInstagram size={18} className="text-pink-400" />
+                <h3 className="text-sm font-bold text-[var(--foreground)]">Social Media Profiles</h3>
               </div>
-              <input
-                type="url"
-                value={formData.instagramUrl}
-                onChange={(e) => handleChange("instagramUrl", e.target.value)}
-                placeholder="https://www.instagram.com/tronics_offficial"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
+              <span className="text-[11px] text-[var(--muted)]">Live store links &amp; handle tags</span>
             </div>
 
-            {/* Instagram Handle Label */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                <FaInstagram size={14} className="text-pink-400" />
-                <span>Instagram Handle (Username)</span>
-              </label>
-              <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-[var(--muted)]">@</span>
-                <input
-                  type="text"
-                  value={formData.instagramLabel}
-                  onChange={(e) => handleChange("instagramLabel", e.target.value)}
-                  placeholder="tronics_offficial"
-                  className="w-full pl-8 pr-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {/* Instagram Card */}
+              <div className="p-4 rounded-xl border border-pink-500/20 bg-pink-500/[0.02] space-y-3 transition-colors hover:border-pink-500/40">
+                <div className="flex items-center justify-between pb-1 border-b border-pink-500/15">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 flex items-center justify-center text-white shadow-xs shrink-0">
+                      <FaInstagram size={14} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-[var(--foreground)]">Instagram</h4>
+                      <p className="text-[10px] text-[var(--muted)]">Store handle &amp; profile page</p>
+                    </div>
+                  </div>
+                  {formData.instagramUrl && (
+                    <a
+                      href={formData.instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold text-pink-400 bg-pink-500/10 hover:bg-pink-500/20 border border-pink-500/20 transition-all"
+                    >
+                      <span>Visit</span>
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
+                </div>
+
+                <div className="space-y-2.5">
+                  {/* Handle with Sync URL action */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[11px] font-semibold text-[var(--muted)]">Instagram Username / Handle</label>
+                      <button
+                        type="button"
+                        onClick={autoGenerateInstagramUrl}
+                        className="text-[10px] font-bold text-pink-400 hover:text-pink-300 hover:underline cursor-pointer"
+                        title="Auto-fill profile URL from handle"
+                      >
+                        Sync URL
+                      </button>
+                    </div>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-pink-400">@</span>
+                      <input
+                        type="text"
+                        value={formData.instagramLabel}
+                        onChange={(e) => handleChange("instagramLabel", e.target.value.replace(/^@/, ""))}
+                        placeholder="tronics_offficial"
+                        className="w-full pl-7 pr-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-pink-500 text-xs text-[var(--foreground)] outline-none transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Profile URL */}
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-semibold text-[var(--muted)]">Instagram Profile URL</label>
+                    <input
+                      type="url"
+                      value={formData.instagramUrl}
+                      onChange={(e) => handleChange("instagramUrl", e.target.value)}
+                      placeholder="https://www.instagram.com/tronics_offficial"
+                      className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-pink-500 text-xs text-[var(--foreground)] outline-none transition-colors"
+                    />
+                  </div>
+                </div>
               </div>
-              <p className="text-[11px] text-[var(--muted)]">Displayed inside Support FAQ card and query tab.</p>
-            </div>
 
-            {/* YouTube URL */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                  <FaYoutube size={14} className="text-red-500" />
-                  <span>YouTube Channel URL</span>
-                </label>
-                {formData.youtubeUrl && (
-                  <a
-                    href={formData.youtubeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-red-400 hover:underline"
-                  >
-                    <span>Visit</span>
-                    <ExternalLink size={11} />
-                  </a>
-                )}
+              {/* YouTube Card */}
+              <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/[0.02] space-y-3 transition-colors hover:border-red-500/40">
+                <div className="flex items-center justify-between pb-1 border-b border-red-500/15">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-red-600 flex items-center justify-center text-white shadow-xs shrink-0">
+                      <FaYoutube size={14} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-[var(--foreground)]">YouTube</h4>
+                      <p className="text-[10px] text-[var(--muted)]">Channel &amp; video link</p>
+                    </div>
+                  </div>
+                  {formData.youtubeUrl && (
+                    <a
+                      href={formData.youtubeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-all"
+                    >
+                      <span>Visit</span>
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
+                </div>
+
+                <div className="space-y-2.5">
+                  {/* Channel Handle with Sync */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[11px] font-semibold text-[var(--muted)]">YouTube Handle / Channel Tag</label>
+                      <button
+                        type="button"
+                        onClick={autoGenerateYoutubeUrl}
+                        className="text-[10px] font-bold text-red-400 hover:text-red-300 hover:underline cursor-pointer"
+                        title="Auto-fill YouTube URL from handle"
+                      >
+                        Sync URL
+                      </button>
+                    </div>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-red-400">@</span>
+                      <input
+                        type="text"
+                        value={formData.youtubeLabel ? formData.youtubeLabel.replace(/^@/, "") : ""}
+                        onChange={(e) => handleChange("youtubeLabel", e.target.value ? `@${e.target.value.replace(/^@/, "")}` : "")}
+                        placeholder="tronics"
+                        className="w-full pl-7 pr-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-red-500 text-xs text-[var(--foreground)] outline-none transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Channel URL */}
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-semibold text-[var(--muted)]">YouTube Channel URL</label>
+                    <input
+                      type="url"
+                      value={formData.youtubeUrl}
+                      onChange={(e) => handleChange("youtubeUrl", e.target.value)}
+                      placeholder="https://www.youtube.com/@tronics"
+                      className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-red-500 text-xs text-[var(--foreground)] outline-none transition-colors"
+                    />
+                  </div>
+                </div>
               </div>
-              <input
-                type="url"
-                value={formData.youtubeUrl}
-                onChange={(e) => handleChange("youtubeUrl", e.target.value)}
-                placeholder="https://www.youtube.com/@tronics_offficial"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
-            </div>
 
-            {/* YouTube Handle */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                <FaYoutube size={14} className="text-red-500" />
-                <span>YouTube Handle / Label</span>
-              </label>
-              <input
-                type="text"
-                value={formData.youtubeLabel}
-                onChange={(e) => handleChange("youtubeLabel", e.target.value)}
-                placeholder="@tronics"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
-            </div>
+              {/* Discord Card */}
+              <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/[0.02] space-y-3 transition-colors hover:border-indigo-500/40">
+                <div className="flex items-center justify-between pb-1 border-b border-indigo-500/15">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-[#5865F2] flex items-center justify-center text-white shadow-xs shrink-0">
+                      <FaDiscord size={14} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-[var(--foreground)]">Discord Community</h4>
+                      <p className="text-[10px] text-[var(--muted)]">Gamers chat &amp; announcements</p>
+                    </div>
+                  </div>
+                  {formData.discordUrl && (
+                    <a
+                      href={formData.discordUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 transition-all"
+                    >
+                      <span>Join</span>
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
+                </div>
 
-            {/* Discord URL */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                  <FaDiscord size={14} className="text-indigo-400" />
-                  <span>Discord Community / Invite URL</span>
-                </label>
-                {formData.discordUrl && (
-                  <a
-                    href={formData.discordUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-indigo-400 hover:underline"
-                  >
-                    <span>Visit</span>
-                    <ExternalLink size={11} />
-                  </a>
-                )}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-[var(--muted)]">Discord Server Invite URL</label>
+                  <input
+                    type="url"
+                    value={formData.discordUrl}
+                    onChange={(e) => handleChange("discordUrl", e.target.value)}
+                    placeholder="https://discord.gg/your-invite-code"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-indigo-500 text-xs text-[var(--foreground)] outline-none transition-colors"
+                  />
+                  <p className="text-[10px] text-[var(--muted)]">Permanent invite link shown in footer and contact page.</p>
+                </div>
               </div>
-              <input
-                type="url"
-                value={formData.discordUrl}
-                onChange={(e) => handleChange("discordUrl", e.target.value)}
-                placeholder="https://discord.gg"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
-            </div>
 
-            {/* Twitter / X URL */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-                  <FaXTwitter size={14} className="text-[var(--foreground)]" />
-                  <span>X (Twitter) Profile URL</span>
-                </label>
-                {formData.twitterUrl && (
-                  <a
-                    href={formData.twitterUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-[var(--accent)] hover:underline"
-                  >
-                    <span>Visit</span>
-                    <ExternalLink size={11} />
-                  </a>
-                )}
+              {/* X / Twitter Card */}
+              <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--foreground)]/[0.02] space-y-3 transition-colors hover:border-[var(--foreground)]/30">
+                <div className="flex items-center justify-between pb-1 border-b border-[var(--border)]/60">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-black border border-[var(--border)] flex items-center justify-center text-white shadow-xs shrink-0">
+                      <FaXTwitter size={13} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-[var(--foreground)]">X (Twitter)</h4>
+                      <p className="text-[10px] text-[var(--muted)]">Official announcements handle</p>
+                    </div>
+                  </div>
+                  {formData.twitterUrl && (
+                    <a
+                      href={formData.twitterUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold text-[var(--foreground)] bg-[var(--foreground)]/10 hover:bg-[var(--foreground)]/20 border border-[var(--border)] transition-all"
+                    >
+                      <span>Visit</span>
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-[var(--muted)]">X (Twitter) Profile URL</label>
+                  <input
+                    type="url"
+                    value={formData.twitterUrl}
+                    onChange={(e) => handleChange("twitterUrl", e.target.value)}
+                    placeholder="https://x.com/your-store"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--foreground)] text-xs text-[var(--foreground)] outline-none transition-colors"
+                  />
+                  <p className="text-[10px] text-[var(--muted)]">Direct link to your store account.</p>
+                </div>
               </div>
-              <input
-                type="url"
-                value={formData.twitterUrl}
-                onChange={(e) => handleChange("twitterUrl", e.target.value)}
-                placeholder="https://twitter.com"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--foreground)] outline-none transition-colors"
-              />
             </div>
           </div>
         </div>
 
         {/* Form Bottom Actions */}
-        <div className="flex items-center justify-between gap-3 pt-3">
-          <button
-            type="button"
-            onClick={handleResetDefaults}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--muted)] hover:text-amber-400 bg-[var(--card)] border border-[var(--border)] hover:bg-amber-500/10 transition-all cursor-pointer"
-          >
-            <RotateCcw size={14} />
-            <span>Reset Defaults</span>
-          </button>
-
+        <div className="flex items-center justify-end gap-3 pt-3">
           <button
             type="submit"
             disabled={saving}
@@ -667,7 +726,6 @@ export default function SupportConfigTab() {
             )}
           </button>
         </div>
-      </div>
     </form>
   </div>
 );
