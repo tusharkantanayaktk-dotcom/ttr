@@ -64,7 +64,7 @@ const MEMBERSHIPS = [
 /* ================= API ================= */
 export async function GET() {
   try {
-    const [response, customGameImages] = await Promise.all([
+    const [response, customGameImages, catalogStock] = await Promise.all([
       fetch("https://game-off-ten.vercel.app/api/v1/game", {
         method: "GET",
         headers: {
@@ -73,7 +73,16 @@ export async function GET() {
         next: { revalidate: 60 },
       }),
       getCustomGameImages(),
+      getCatalogStock(),
     ]);
+
+    if (!response.ok) {
+      console.error("Upstream game API failed with status:", response.status);
+      return NextResponse.json(
+        { success: false, message: "Upstream game provider currently unavailable" },
+        { status: 502 }
+      );
+    }
 
     const data = await response.json();
 
@@ -187,7 +196,6 @@ export async function GET() {
       "where-winds-meet280"
     ];
 
-    const catalogStock = await getCatalogStock();
     const oosGamesSet = new Set(catalogStock?.outOfStockGames || []);
 
     const rawFilteredGames =

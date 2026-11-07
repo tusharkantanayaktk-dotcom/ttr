@@ -113,7 +113,12 @@ export default function SupportConfigTab() {
   };
 
   const autoGenerateInstagramUrl = () => {
-    const handle = (formData.instagramLabel || "").trim().replace(/^@/, "");
+    const handle = (formData.instagramLabel || "")
+      .trim()
+      .replace(/^https?:\/\/(www\.)?instagram\.com\//i, "")
+      .replace(/^@/, "")
+      .replace(/\/.*$/, "");
+
     if (!handle) {
       setMessage({ type: "error", text: "Please enter an Instagram username/handle first." });
       return;
@@ -129,7 +134,12 @@ export default function SupportConfigTab() {
   };
 
   const autoGenerateYoutubeUrl = () => {
-    const handle = (formData.youtubeLabel || "").trim().replace(/^@/, "");
+    const handle = (formData.youtubeLabel || "")
+      .trim()
+      .replace(/^https?:\/\/(www\.)?youtube\.com\/(@)?/i, "")
+      .replace(/^@/, "")
+      .replace(/\/.*$/, "");
+
     if (!handle) {
       setMessage({ type: "error", text: "Please enter a YouTube handle first." });
       return;

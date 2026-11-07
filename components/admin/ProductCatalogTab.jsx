@@ -187,17 +187,35 @@ export default function ProductCatalogTab() {
     return Boolean(customGameImages[selectedGameSlug]);
   }, [customGameImages, selectedGameSlug]);
 
-  // Sync editor input whenever selected game or custom image changes
+  // Sync editor input only when selected game slug changes or when customGameImages is updated
+  const currentCustomForSelected = customGameImages[selectedGameSlug];
   useEffect(() => {
     if (!selectedGameSlug) return;
-    const custom = customGameImages[selectedGameSlug];
-    setImageUrlInput(custom !== undefined ? custom : (selectedGame?.gameImageId?.image || ""));
+    const defaultImg = games.find((g) => g.gameSlug === selectedGameSlug)?.gameImageId?.image || "";
+    setImageUrlInput(currentCustomForSelected !== undefined ? currentCustomForSelected : defaultImg);
     setImageLoadError(false);
-  }, [selectedGameSlug, customGameImages, selectedGame]);
+  }, [selectedGameSlug, currentCustomForSelected]);
 
   const handleSaveGameImage = async (e) => {
     if (e) e.preventDefault();
     if (!selectedGameSlug || savingImage) return;
+
+    const trimmedUrl = imageUrlInput.trim();
+    if (trimmedUrl) {
+      const isAllowed =
+        trimmedUrl.startsWith("https://") ||
+        trimmedUrl.startsWith("http://") ||
+        trimmedUrl.startsWith("/");
+
+      if (!isAllowed) {
+        setMessage({
+          type: "error",
+          text: "Image URL must start with https://, http://, or /",
+        });
+        setTimeout(() => setMessage({ type: "", text: "" }), 4000);
+        return;
+      }
+    }
 
     try {
       setSavingImage(true);
@@ -210,7 +228,7 @@ export default function ProductCatalogTab() {
         },
         body: JSON.stringify({
           gameSlug: selectedGameSlug,
-          imageUrl: imageUrlInput.trim(),
+          imageUrl: trimmedUrl,
         }),
       });
 
@@ -219,7 +237,7 @@ export default function ProductCatalogTab() {
         setCustomGameImages(json.data);
         setMessage({
           type: "success",
-          text: imageUrlInput.trim()
+          text: trimmedUrl
             ? `Game image link saved for "${selectedGame?.gameName || selectedGameSlug}"`
             : `Game image reverted to default for "${selectedGame?.gameName || selectedGameSlug}"`,
         });

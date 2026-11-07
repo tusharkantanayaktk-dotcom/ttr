@@ -4,7 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 import SystemSetting from "@/models/SystemSetting";
 import User from "@/models/User";
 import { logActivity } from "@/lib/activityLogger";
-import { getCustomGameImages, GAME_CUSTOM_IMAGES_KEY } from "@/lib/serverGameImages";
+import { getCustomGameImages, GAME_CUSTOM_IMAGES_KEY, invalidateCustomGameImagesCache } from "@/lib/serverGameImages";
 
 const requireAdminOrOwner = (req) => {
   const auth = req.headers.get("authorization");
@@ -65,18 +65,48 @@ export async function POST(req) {
       );
     }
 
-    const body = await req.json();
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { success: false, message: "Invalid JSON in request body" },
+        { status: 400 }
+      );
+    }
+
     const { gameSlug, imageUrl } = body || {};
 
-    if (!gameSlug || typeof gameSlug !== "string") {
+    if (!gameSlug || typeof gameSlug !== "string" || !gameSlug.trim()) {
       return NextResponse.json(
-        { success: false, message: "Game slug is required" },
+        { success: false, message: "Valid game slug is required" },
         { status: 400 }
       );
     }
 
     const cleanSlug = gameSlug.trim();
-    const cleanUrl = typeof imageUrl === "string" ? imageUrl.trim() : "";
+
+    // Prevent malicious or oversized URLs
+    let cleanUrl = typeof imageUrl === "string" ? imageUrl.trim() : "";
+    if (cleanUrl) {
+      if (cleanUrl.length > 2048) {
+        return NextResponse.json(
+          { success: false, message: "Image URL is too long (max 2048 characters)" },
+          { status: 400 }
+        );
+      }
+      const isAllowedProtocol =
+        cleanUrl.startsWith("https://") ||
+        cleanUrl.startsWith("http://") ||
+        cleanUrl.startsWith("/");
+
+      if (!isAllowedProtocol) {
+        return NextResponse.json(
+          { success: false, message: "Image URL must start with https://, http://, or /" },
+          { status: 400 }
+        );
+      }
+    }
 
     await connectDB();
 
@@ -98,36 +128,43 @@ export async function POST(req) {
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
-    // Fetch user details for audit logging
-    let actorUser = null;
+    // Invalidate in-memory cache so subsequent reads get the freshest data immediately
+    invalidateCustomGameImagesCache();
+
+    // Non-blocking activity logging
     try {
-      actorUser = await User.findById(authCheck.decoded.userId)
-        .select("email name userId userType")
-        .lean();
-    } catch {}
+      let actorUser = null;
+      try {
+        actorUser = await User.findById(authCheck.decoded.userId)
+          .select("email name userId userType")
+          .lean();
+      } catch {}
 
-    const actorEmail = actorUser?.email || "admin";
+      const actorEmail = actorUser?.email || "admin";
 
-    await logActivity({
-      type: authCheck.decoded.userType === "owner" ? "owner" : "admin",
-      action: "GAME_IMAGE_UPDATE",
-      user: {
-        userId: actorUser?.userId || authCheck.decoded.userId,
-        email: actorEmail,
-        name: actorUser?.name || "Admin",
-        userType: authCheck.decoded.userType,
-      },
-      title: cleanUrl ? "Game Image Updated" : "Game Image Reverted to Default",
-      description: cleanUrl
-        ? `${actorEmail} updated custom image link for game "${cleanSlug}"`
-        : `${actorEmail} removed custom image link for game "${cleanSlug}"`,
-      target: `Game: ${cleanSlug}`,
-      details: {
-        gameSlug: cleanSlug,
-        imageUrl: cleanUrl || null,
-      },
-      status: "success",
-    });
+      await logActivity({
+        type: authCheck.decoded.userType === "owner" ? "owner" : "admin",
+        action: "GAME_IMAGE_UPDATE",
+        user: {
+          userId: actorUser?.userId || authCheck.decoded.userId,
+          email: actorEmail,
+          name: actorUser?.name || "Admin",
+          userType: authCheck.decoded.userType,
+        },
+        title: cleanUrl ? "Game Image Updated" : "Game Image Reverted to Default",
+        description: cleanUrl
+          ? `${actorEmail} updated custom image link for game "${cleanSlug}"`
+          : `${actorEmail} removed custom image link for game "${cleanSlug}"`,
+        target: `Game: ${cleanSlug}`,
+        details: {
+          gameSlug: cleanSlug,
+          imageUrl: cleanUrl || null,
+        },
+        status: "success",
+      });
+    } catch (logErr) {
+      console.warn("Non-fatal: failed to record game image activity log:", logErr);
+    }
 
     return NextResponse.json({
       success: true,
