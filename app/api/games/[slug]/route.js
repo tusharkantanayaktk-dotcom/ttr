@@ -173,10 +173,17 @@ export async function GET(req, { params }) {
         ottData.gameImageId = { ...ottData.gameImageId, image: customImages[slug] };
       }
       if (isGameOOS) ottData.gameAvailablity = false;
-      ottData.itemId = ottData.itemId.map((item) => ({
-        ...item,
-        itemAvailablity: isGameOOS || oosItemsSet.has(`${slug}::${item.itemSlug}`) ? false : item.itemAvailablity,
-      }));
+      ottData.itemId = ottData.itemId
+        .map((item) => {
+          const isItemOOS = isGameOOS || oosItemsSet.has(`${slug}::${item.itemSlug}`);
+          const isAvailable = isItemOOS ? false : item.itemAvailablity !== false;
+          return {
+            ...item,
+            itemAvailablity: isAvailable,
+            inStock: isAvailable,
+          };
+        })
+        .filter((item) => item.itemAvailablity !== false && item.inStock !== false);
       return NextResponse.json({
         success: true,
         data: { gameSlug: slug, ...ottData },
@@ -189,10 +196,17 @@ export async function GET(req, { params }) {
         memData.gameImageId = { ...memData.gameImageId, image: customImages[slug] };
       }
       if (isGameOOS) memData.gameAvailablity = false;
-      memData.itemId = memData.itemId.map((item) => ({
-        ...item,
-        itemAvailablity: isGameOOS || oosItemsSet.has(`${slug}::${item.itemSlug}`) ? false : item.itemAvailablity,
-      }));
+      memData.itemId = memData.itemId
+        .map((item) => {
+          const isItemOOS = isGameOOS || oosItemsSet.has(`${slug}::${item.itemSlug}`);
+          const isAvailable = isItemOOS ? false : item.itemAvailablity !== false;
+          return {
+            ...item,
+            itemAvailablity: isAvailable,
+            inStock: isAvailable,
+          };
+        })
+        .filter((item) => item.itemAvailablity !== false && item.inStock !== false);
       return NextResponse.json({
         success: true,
         data: { gameSlug: slug, ...memData },
@@ -239,6 +253,9 @@ export async function GET(req, { params }) {
 
     /* ===== APPLY PRICING & GLOBAL STOCK ===== */
     const gameSlug = data.data.gameSlug;
+    const isEffectiveGameOOS =
+      isGameOOS ||
+      (catalogStock?.outOfStockGames || []).includes(gameSlug);
 
     // Apply custom game image override if configured by admin
     if (customImages && customImages[gameSlug || slug]) {
@@ -246,11 +263,11 @@ export async function GET(req, { params }) {
       data.data.gameImageId.image = customImages[gameSlug || slug];
     }
 
-    if (isGameOOS) {
+    if (isEffectiveGameOOS) {
       data.data.gameAvailablity = false;
     }
 
-    data.data.itemId = data.data.itemId
+    data.data.itemId = (data.data.itemId || [])
       .filter((item) => {
         if (data.data.gameName === "MLBB SMALL/PHP") {
           const price = Number(item.sellingPrice);
@@ -270,9 +287,10 @@ export async function GET(req, { params }) {
         );
 
         // 1. Handle Availability (In Stock - GLOBAL for all user types)
-        let isAvailable = item.itemAvailablity;
+        let isAvailable = item.itemAvailablity !== false;
         const itemKey = `${gameSlug}::${item.itemSlug}`;
-        if (isGameOOS || oosItemsSet.has(itemKey)) {
+        const slugKey = `${slug}::${item.itemSlug}`;
+        if (isEffectiveGameOOS || oosItemsSet.has(itemKey) || oosItemsSet.has(slugKey)) {
           isAvailable = false;
         } else if (override && override.inStock === false) {
           isAvailable = false;
@@ -296,8 +314,10 @@ export async function GET(req, { params }) {
           ...item,
           sellingPrice: Math.ceil(finalPrice),
           itemAvailablity: isAvailable,
+          inStock: isAvailable,
         };
-      });
+      })
+      .filter((item) => item.itemAvailablity !== false && item.inStock !== false);
 
     return NextResponse.json(data);
   } catch (err) {

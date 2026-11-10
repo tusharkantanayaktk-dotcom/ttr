@@ -10,7 +10,7 @@ export default function BuyPanel({
   buyPanelRef,
   gameLogo,
 }) {
-  if (!activeItem) return null;
+  if (!activeItem || activeItem.inStock === false || activeItem.itemAvailablity === false) return null;
 
   return (
     <div

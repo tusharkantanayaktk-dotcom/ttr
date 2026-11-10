@@ -78,11 +78,12 @@ export default function GameDetailPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        const items = [...(data?.data?.itemId || [])].sort(
-          (a, b) => a.sellingPrice - b.sellingPrice
-        );
+        const rawItems = data?.data?.itemId || [];
+        const items = rawItems
+          .filter((item) => item.itemAvailablity !== false && item.inStock !== false)
+          .sort((a, b) => a.sellingPrice - b.sellingPrice);
 
-        let gameName = data.data.gameName;
+        let gameName = data?.data?.gameName || "";
         if (gameName.toUpperCase().includes("MLBB")) {
           gameName = gameName.replace(/MLBB/gi, "Mobile Legends");
         }
@@ -97,7 +98,7 @@ export default function GameDetailPage() {
       });
   }, [slug]);
 
-  if (!game || !activeItem) {
+  if (!game) {
     return (
       <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6">
         {/* ================= MODERN GAME SWITCHER SKELETON ================= */}
@@ -331,23 +332,50 @@ export default function GameDetailPage() {
         <div className="absolute top-0 left-0 w-36 h-2 bg-[var(--accent)]/25 blur-sm pointer-events-none" />
       </div>
 
-      {/* ================= ITEM GRID ================= */}
-      <ItemGrid
-        items={game.allItems}
-        gameLogo={game?.gameImageId?.image || logo}
-        activeItem={activeItem}
-        setActiveItem={setActiveItem}
-        buyPanelRef={buyPanelRef}
-      />
+      {/* ================= OUT OF STOCK / EMPTY STATE ================= */}
+      {game.allItems.length === 0 || game.gameAvailablity === false ? (
+        <div className="max-w-xl mx-auto my-12 p-8 rounded-2xl border border-[var(--border)] bg-[var(--card)]/60 text-center flex flex-col items-center justify-center gap-3 shadow-xs">
+          <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/25 text-rose-500 flex items-center justify-center">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </div>
+          <h3 className="text-base font-bold text-[var(--foreground)]">Currently Out of Stock</h3>
+          <p className="text-xs text-[var(--muted)] max-w-sm">
+            All top-up packs for {game.gameName} are currently unavailable. Please check back later.
+          </p>
+          <button
+            onClick={() => router.push("/games")}
+            className="mt-2 px-5 py-2.5 rounded-xl bg-[var(--accent)] text-white text-xs font-bold hover:opacity-90 active:scale-95 transition-all cursor-pointer"
+          >
+            Browse Other Games
+          </button>
+        </div>
+      ) : (
+        <>
+          {/* ================= ITEM GRID ================= */}
+          <ItemGrid
+            items={game.allItems}
+            gameLogo={game?.gameImageId?.image || logo}
+            activeItem={activeItem}
+            setActiveItem={setActiveItem}
+            buyPanelRef={buyPanelRef}
+          />
 
-      {/* ================= BUY PANEL ================= */}
-      <BuyPanel
-        activeItem={activeItem}
-        onBuy={goBuy}
-        redirecting={redirecting}
-        buyPanelRef={buyPanelRef}
-        gameLogo={game?.gameImageId?.image || logo}
-      />
+          {/* ================= BUY PANEL ================= */}
+          {activeItem && (
+            <BuyPanel
+              activeItem={activeItem}
+              onBuy={goBuy}
+              redirecting={redirecting}
+              buyPanelRef={buyPanelRef}
+              gameLogo={game?.gameImageId?.image || logo}
+            />
+          )}
+        </>
+      )}
 
     </section>
   );

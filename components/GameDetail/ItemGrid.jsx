@@ -9,6 +9,14 @@ export default function ItemGrid({
   activeItem,
   setActiveItem,
 }) {
+  const visibleItems = (items || []).filter(
+    (item) => item.itemAvailablity !== false && item.inStock !== false
+  );
+
+  if (visibleItems.length === 0) {
+    return null;
+  }
+
   return (
     <motion.div
       initial="hidden"
@@ -22,7 +30,7 @@ export default function ItemGrid({
       }}
       className="max-w-6xl mx-auto mb-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2.5"
     >
-      {items.map((item) => {
+      {visibleItems.map((item) => {
         const isSelected = activeItem?.itemSlug === item.itemSlug;
         const discount = item.dummyPrice
           ? Math.round(((item.dummyPrice - item.sellingPrice) / item.dummyPrice) * 100)

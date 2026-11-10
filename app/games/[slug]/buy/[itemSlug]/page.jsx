@@ -73,9 +73,9 @@ export default function BuyFlowPage() {
         if (!gameData) return;
         setGame(gameData);
 
-        const items = [...(gameData.itemId || [])].sort(
-          (a, b) => a.sellingPrice - b.sellingPrice
-        );
+        const items = [...(gameData.itemId || [])]
+          .filter((i) => i.itemAvailablity !== false && i.inStock !== false)
+          .sort((a, b) => a.sellingPrice - b.sellingPrice);
         setAllItems(items);
 
         const foundItem = items.find((i) => i.itemSlug === initialItemSlug);
@@ -83,6 +83,9 @@ export default function BuyFlowPage() {
           setActiveItem(foundItem);
         } else if (items.length > 0) {
           setActiveItem(items[0]);
+        } else {
+          setActiveItem(null);
+          setError("This game or item is currently out of stock.");
         }
       })
       .catch(() => setError("Failed to load game items"));
@@ -100,6 +103,10 @@ export default function BuyFlowPage() {
   /* ================= VALIDATE PLAYER ================= */
   const handleValidate = async () => {
     setError("");
+    if (!activeItem) {
+      setError("This item is currently out of stock.");
+      return;
+    }
     if (!playerId || (needsZoneId && !zoneId)) {
       setError(`Please enter your Player ID${needsZoneId ? " and Zone ID" : ""}`);
       return;
@@ -300,7 +307,7 @@ export default function BuyFlowPage() {
                         className="overflow-hidden pt-2"
                       >
                         <div className="flex overflow-x-auto no-scrollbar gap-1.5 pb-1 md:grid md:grid-cols-3">
-                          {allItems.map((item) => {
+                          {allItems.filter((item) => item.itemAvailablity !== false && item.inStock !== false).map((item) => {
                             const isSelected = activeItem.itemSlug === item.itemSlug;
                             return (
                               <button
