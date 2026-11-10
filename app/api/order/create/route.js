@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import User from "@/models/User";
 import { logActivity } from "@/lib/activityLogger";
+import { getCatalogStock } from "@/lib/serverCatalogStock";
 
 export async function POST(req) {
   try {
@@ -32,6 +33,18 @@ export async function POST(req) {
     if (!email ) {
       return Response.json(
         { success: false, message: "Provide either email or phone" },
+        { status: 400 }
+      );
+    }
+
+    // Global Stock Check
+    const catalogStock = await getCatalogStock();
+    if (
+      catalogStock.outOfStockGames?.includes(gameSlug) ||
+      catalogStock.outOfStockItems?.includes(`${gameSlug}::${itemSlug}`)
+    ) {
+      return Response.json(
+        { success: false, message: "This item is currently out of stock" },
         { status: 400 }
       );
     }

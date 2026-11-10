@@ -63,8 +63,24 @@ export default function GamesPage() {
     "Wuthering of Waves",
   ];
 
-  const isOutOfStock = (name: any) =>
-    outOfStockGames.includes(name);
+  const isOutOfStock = (gameOrName: any) => {
+    if (!gameOrName) return false;
+    if (typeof gameOrName === "string") {
+      const match = games.find(
+        (g) => g.gameName === gameOrName || g.gameSlug === gameOrName
+      );
+      if (match) {
+        return match.inStock === false || match.gameAvailablity === false;
+      }
+      return outOfStockGames.includes(gameOrName);
+    }
+    return (
+      gameOrName.inStock === false ||
+      gameOrName.gameAvailablity === false ||
+      outOfStockGames.includes(gameOrName.gameName) ||
+      outOfStockGames.includes(gameOrName.gameSlug)
+    );
+  };
 
   /* ================= FETCH ================= */
   useEffect(() => {
@@ -100,7 +116,7 @@ export default function GamesPage() {
     let filtered = [...games];
 
     if (hideOOS) {
-      filtered = filtered.filter((g) => !isOutOfStock(g.gameName));
+      filtered = filtered.filter((g) => !isOutOfStock(g));
     }
 
     if (searchQuery.trim()) {
@@ -131,7 +147,7 @@ export default function GamesPage() {
     );
 
     if (hideOOS) {
-      list = list.filter((g) => !isOutOfStock(g.gameName));
+      list = list.filter((g) => !isOutOfStock(g));
     }
 
     if (searchQuery.trim()) {
@@ -563,7 +579,7 @@ export default function GamesPage() {
                 <GameCard
                   key={game.gameSlug || i}
                   game={game}
-                  disabled={isOutOfStock(game.gameName)}
+                  disabled={isOutOfStock(game)}
                 />
               ))}
             </div>
@@ -579,7 +595,7 @@ export default function GamesPage() {
           />
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-5">
             {processedOtherGames.map((game: any, i: number) => (
-              <GameCard key={game.gameSlug || i} game={game} disabled={isOutOfStock(game.gameName)} />
+              <GameCard key={game.gameSlug || i} game={game} disabled={isOutOfStock(game)} />
             ))}
           </div>
         </section>

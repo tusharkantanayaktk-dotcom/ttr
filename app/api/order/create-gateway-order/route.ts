@@ -95,9 +95,14 @@ async function resolvePrice(
 
   // Global Stock Check (applies to ALL user types)
   const catalogStock = await getCatalogStock();
+  const upstreamGameSlug = data?.data?.gameSlug;
   if (
     catalogStock.outOfStockGames?.includes(gameSlug) ||
-    catalogStock.outOfStockItems?.includes(`${gameSlug}::${itemSlug}`)
+    (upstreamGameSlug && catalogStock.outOfStockGames?.includes(upstreamGameSlug)) ||
+    catalogStock.outOfStockItems?.includes(`${gameSlug}::${itemSlug}`) ||
+    (upstreamGameSlug && catalogStock.outOfStockItems?.includes(`${upstreamGameSlug}::${itemSlug}`)) ||
+    baseItem.itemAvailablity === false ||
+    baseItem.inStock === false
   ) {
     throw new Error("Item is currently out of stock");
   }
